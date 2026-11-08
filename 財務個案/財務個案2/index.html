@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>財務個案2｜Hubbard Computer, Inc.：非上市公司 WACC 估算、純業務法與資本預算抉擇 - 互動教學簡報網站</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            hbs: {
+              crimson: '#A51C30',
+              dark: '#7A1222',
+              light: '#FDECEF',
+            },
+            brand: {
+              50: '#F0F5FA',
+              100: '#E1EBF5',
+              500: '#1F4E79',
+              600: '#173B5C',
+              700: '#10283E',
+              800: '#0C1E2F',
+              900: '#07121C',
+            },
+            gold: {
+              300: '#f7d683',
+              400: '#eebf4d',
+              500: '#d99f26',
+              600: '#b87c18',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .slide-card { max-width: 1120px; width: 100%; animation: fadeIn 0.3s ease-out; }
+    .tab-active-case { background: linear-gradient(135deg, #1F4E79, #10283E) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(31, 78, 121, 0.4); }
+    .tab-active-tn { background: linear-gradient(135deg, #0f766e, #115e59) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(15, 118, 110, 0.4); }
+    .tab-active-sm { background: linear-gradient(135deg, #A51C30, #7A1222) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(165, 28, 48, 0.4); }
+    @media print {
+      header, footer, #timer-modal, #presentation-overlay, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .pillar-section { display: block !important; page-break-after: always; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col">
+
+  <!-- ============================================================== -->
+  <!-- TOP STICKY NAVIGATION BAR                                       -->
+  <!-- ============================================================== -->
+  <header class="sticky top-0 z-40 bg-slate-950/95 backdrop-blur-md text-white border-b border-slate-800 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Left Branding -->
+        <div class="flex items-center space-x-3">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-500 via-sky-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-sky-900/30 ring-2 ring-white/20">
+            <i class="fa-solid fa-server text-white text-lg"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-gold-400 bg-gold-500/10 px-2 py-0.5 rounded border border-gold-500/30">HBS Case Method ‧ 經典財務估值</span>
+              <span class="text-xs text-slate-400 hidden md:inline font-mono">HBS-FIN-11501-C02</span>
+            </div>
+            <h1 class="text-sm sm:text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
+              財務個案(二)：Hubbard Computer, Inc.
+              <span class="text-xs text-slate-400 font-normal hidden xl:inline">｜非上市公司 WACC 估算、純業務法與資本預算抉擇</span>
+            </h1>
+          </div>
+        </div>
+
+        <!-- Center 3-Pillar Switcher -->
+        <div class="hidden lg:flex items-center space-x-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+          <button id="nav-btn-case" onclick="switchPillar('case')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-2 tab-active-case">
+            <i class="fa-solid fa-book-open"></i> 區塊一：個案內容
+          </button>
+          <button id="nav-btn-tn" onclick="switchPillar('tn')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-chalkboard-user"></i> 區塊二：教學指引
+          </button>
+          <button id="nav-btn-sm" onclick="switchPillar('sm')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-calculator"></i> 區塊三：個案解析與試算
+          </button>
+        </div>
+
+        <!-- Right Quick Controls -->
+        <div class="flex items-center space-x-2 sm:space-x-2.5">
+          <button onclick="toggleTimerModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold border border-slate-700 shadow-sm transition" title="90分鐘/180分鐘課堂計時器">
+            <i class="fa-solid fa-stopwatch text-gold-400"></i>
+            <span id="timer-display-mini" class="font-mono text-gold-300">90:00</span>
+          </button>
+
+          <button onclick="openPresentationMode(1)" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-gold-500 to-amber-600 hover:from-gold-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg transition transform active:scale-95">
+            <i class="fa-solid fa-tv"></i>
+            <span>全螢幕簡報 (28頁 PPT)</span>
+          </button>
+
+          <a href="財務個案2_Hubbard_Computer_互動式財務模型.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 text-white text-xs font-extrabold shadow-lg shadow-sky-950/50 ring-1 ring-white/20 transition transform active:scale-95" title="開啟 7 頁完整互動式 Excel 財務模型網站">
+            <i class="fa-solid fa-calculator text-gold-300"></i>
+            <span>互動式財務模型</span>
+          </a>
+
+          <a href="財務個案2_Hubbard_Computer_完整解析財務模型.xlsx" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold shadow-sm transition" title="下載完整 Excel 財務模型">
+            <i class="fa-solid fa-download"></i>
+            <span class="hidden md:inline">下載 Excel</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Sub-Navigation Bar -->
+  <div class="lg:hidden bg-slate-900 border-b border-slate-800 px-4 py-2 flex justify-around">
+    <button onclick="switchPillar('case')" id="mob-btn-case" class="text-xs font-bold px-3 py-1.5 rounded-lg text-white bg-brand-500">
+      區塊一：個案內容
+    </button>
+    <button onclick="switchPillar('tn')" id="mob-btn-tn" class="text-xs font-bold px-3 py-1.5 rounded-lg text-slate-400">
+      區塊二：教學指引
+    </button>
+    <button onclick="switchPillar('sm')" id="mob-btn-sm" class="text-xs font-bold px-3 py-1.5 rounded-lg text-slate-400">
+      區塊三：解析試算
+    </button>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- CLASROOM COUNTDOWN TIMER MODAL                                  -->
+  <!-- ============================================================== -->
+  <div id="timer-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full text-white shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-stopwatch text-gold-400 text-lg"></i>
+          <h3 class="text-base font-bold">哈佛個案課堂教學計時器</h3>
+        </div>
+        <button onclick="toggleTimerModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="text-center py-4 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
+        <div id="timer-display-big" class="font-mono text-5xl sm:text-6xl font-extrabold text-gold-400 tracking-wider">90:00</div>
+        <div id="timer-stage-title" class="text-xs text-slate-400 mt-2 font-medium">90 分鐘標準個案研討模式</div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <button onclick="setTimerMinutes(90)" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold border border-slate-700">90m 標準課堂</button>
+        <button onclick="setTimerMinutes(180)" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold border border-slate-700">180m EMBA 專班</button>
+        <button onclick="setTimerMinutes(15)" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold border border-slate-700">15m 小組討論</button>
+        <button onclick="setTimerMinutes(5)" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold border border-slate-700">5m 攻防總結</button>
+      </div>
+
+      <div class="flex space-x-3 pt-2">
+        <button id="timer-start-btn" onclick="startTimer()" class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-extrabold text-sm shadow-lg shadow-emerald-900/30 transition">
+          <i class="fa-solid fa-play mr-1.5"></i>開始計時
+        </button>
+        <button onclick="pauseTimer()" class="px-5 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 font-extrabold text-sm transition">
+          <i class="fa-solid fa-pause"></i>
+        </button>
+        <button onclick="resetTimer()" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-extrabold text-sm border border-slate-700 transition">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- FULLSCREEN PPT PRESENTATION OVERLAY (28 SLIDES)                 -->
+  <!-- ============================================================== -->
+  <div id="presentation-overlay" class="fixed inset-0 z-[100] bg-slate-950 text-white hidden flex flex-col justify-between select-none">
+    
+    <!-- Top PPT Deck Bar with 3-Block Fast Jump -->
+    <div class="flex flex-wrap items-center justify-between gap-2 px-4 sm:px-6 py-3 bg-slate-900/95 border-b border-slate-800">
+      <div class="flex items-center space-x-3">
+        <span class="w-3 h-3 rounded-full bg-brand-500 animate-pulse"></span>
+        <span class="text-xs font-extrabold uppercase tracking-wider text-gold-400">Hubbard Computer (HCI) 課堂教學簡報 PPT</span>
+        
+        <div class="hidden md:flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px]">
+          <button onclick="openPresentationMode(1)" id="ppt-tab-case" class="px-2.5 py-1 rounded-lg font-bold bg-brand-500 text-white transition">① 個案內容 (P.1–10)</button>
+          <button onclick="openPresentationMode(11)" id="ppt-tab-tn" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:bg-slate-800 transition">② 教學指引 (P.11–18)</button>
+          <button onclick="openPresentationMode(19)" id="ppt-tab-sm" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:bg-slate-800 transition">③ 個案解析 (P.19–28)</button>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <select id="slide-jump-select" onchange="openPresentationMode(parseInt(this.value))" class="bg-slate-800 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono"></select>
+        <span id="slide-number-indicator" class="text-xs sm:text-sm font-mono font-bold text-slate-400 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800">Slide 1 / 28</span>
+        <button onclick="toggleNotesDrawer()" id="notes-btn" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" title="開啟/關閉教師講義備忘錄">
+          <i class="fa-solid fa-chalkboard-user mr-1"></i>備忘錄
+        </button>
+        <button onclick="closePresentationMode()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-rose-900/60 hover:text-rose-300 flex items-center justify-center text-slate-300 transition" title="結束簡報 (Esc)">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Slide Stage -->
+    <div class="flex-1 overflow-y-auto px-4 sm:px-10 py-6 flex items-center justify-center custom-scrollbar">
+      <div id="slide-content-stage" class="slide-card bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </div>
+
+    <!-- Slide Notes Drawer (Collapsible) -->
+    <div id="notes-drawer" class="hidden bg-slate-900/95 border-t border-slate-800 px-6 py-3 max-h-36 overflow-y-auto custom-scrollbar">
+      <div class="max-w-5xl mx-auto flex items-start gap-3">
+        <div class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold shrink-0 mt-0.5">
+          <i class="fa-solid fa-lightbulb mr-1"></i>教師提問叮嚀
+        </div>
+        <div id="slide-notes-text" class="text-xs text-slate-300 leading-relaxed font-sans"></div>
+      </div>
+    </div>
+
+    <!-- Bottom PPT Control Bar -->
+    <div class="px-4 sm:px-6 py-3 bg-slate-900/95 border-t border-slate-800 flex items-center justify-between">
+      <div class="flex items-center space-x-2 text-xs text-slate-400">
+        <span class="hidden sm:inline">鍵盤快速鍵：</span>
+        <kbd class="px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300 font-mono">←</kbd> 上一頁
+        <kbd class="px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300 font-mono">→</kbd> 下一頁
+        <kbd class="px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300 font-mono">Space</kbd> 前進
+      </div>
+
+      <!-- Slide Navigation Buttons -->
+      <div class="flex items-center space-x-3">
+        <button onclick="prevSlide()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-chevron-left"></i> 上一張
+        </button>
+        <button onclick="nextSlide()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-500 to-sky-600 hover:from-brand-600 hover:to-sky-500 text-white text-xs font-extrabold shadow-lg transition flex items-center gap-1.5">
+          下一張 <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MAIN WEB PORTAL CONTENT                                         -->
+  <!-- ============================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+    <!-- ============================================================ -->
+    <!-- PILLAR 1: 個案內容 (CASE NARRATIVE)                          -->
+    <!-- ============================================================ -->
+    <div id="pillar-case" class="pillar-section space-y-8 animate-fadeIn">
+      
+      <!-- Hero Card -->
+      <div class="rounded-3xl bg-gradient-to-br from-slate-950 via-brand-900 to-slate-900 text-white p-6 sm:p-12 shadow-2xl relative overflow-hidden border border-slate-800">
+        <div class="absolute -right-20 -bottom-20 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 max-w-4xl space-y-5">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-extrabold border border-sky-400/30">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>HARVARD BUSINESS SCHOOL CASE ‧ HBS-FIN-11501-C02</span>
+          </div>
+          <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+            Hubbard Computer, Inc.：<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-amber-200 to-rose-200">
+              非上市公司 WACC 估算、純業務法與資本預算抉擇
+            </span>
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            一家深耕美國中西部二十年的未上市私營伺服器解決方案廠商，正面臨攸關生死轉型的 <strong>800 萬美元</strong> 自動化組裝產線與邊緣運算資料中心擴建案。面對缺乏公開市價與股票貝塔的估值死結，財務團隊以全球伺服器龍頭 <strong>戴爾公司（Dell Inc.）</strong> 為純業務標竿，卻在執行委員會掀起會計帳面、標竿市值與私營風險溢酬的三方世紀論戰！
+          </p>
+          <div class="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center border-t border-slate-800">
+            <div class="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <span class="block text-xs text-slate-400">專案總資本支出</span>
+              <span class="text-xl font-black text-amber-400 font-mono">$8,000,000</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <span class="block text-xs text-slate-400">Dell 帳面 WACC</span>
+              <span class="text-xl font-black text-slate-400 font-mono">9.42%</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <span class="block text-xs text-slate-400">Dell 市場 WACC</span>
+              <span class="text-xl font-black text-sky-400 font-mono">10.61%</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <span class="block text-xs text-slate-400">HCI 專屬真實 WACC</span>
+              <span class="text-xl font-black text-rose-400 font-mono">13.47%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialogue Vignette Box -->
+      <div class="p-6 sm:p-8 rounded-3xl bg-amber-50/80 border-l-8 border-l-amber-500 border border-amber-200/60 shadow-sm space-y-3">
+        <div class="flex items-center space-x-2 text-amber-800 font-black text-sm">
+          <i class="fa-solid fa-quote-left text-lg text-amber-600"></i>
+          <span>週一早晨執行委員會議室的激辯現場</span>
+        </div>
+        <p class="text-slate-800 text-sm sm:text-base italic leading-relaxed">
+          「理查、馬克思，我們是一家實實在在做了二十年的私人控股公司，每一筆獲利都是我們一塊錢一塊錢打拼出來的！我們資產負債表上清清楚楚寫著：長期負債 3,000 萬美元、股東權益 4,500 萬美元，會計師上個月才完成無保留意見審計。為什麼你們非要跑去盯著華爾街每天上下亂跳的戴爾（Dell）股價？甚至還主張我們評估這筆 800 萬美元的產線投資，折現率不能用 9.4%，也不能直接用戴爾的 10.6%，而必須用高達 13.5% 的高門檻？如果折現率拉到 13.5%，這項被營運部門寄予厚望的自動化專案淨現值（NPV）立刻由正轉負！這究竟是科學的財務評估，還是自我設限的數字遊戲？」
+        </p>
+        <div class="text-right text-xs font-bold text-amber-900">
+          —— 鮑伯·哈伯德（Bob Hubbard），Hubbard Computer, Inc. 創辦人兼執行長
+        </div>
+      </div>
+
+      <!-- Three Pillars Viewpoint Cards -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-extrabold text-slate-900 flex items-center">
+            <i class="fa-solid fa-users mr-2 text-brand-500"></i>執行委員會三種針鋒相對的折現率觀點
+          </h3>
+          <span class="text-xs text-slate-500 font-medium">點擊全螢幕簡報 P.7 可展開課堂角色扮演研討</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="glass-card rounded-2xl p-6 border-t-4 border-t-amber-500 space-y-3 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">會計帳面保守派</span>
+              <span class="text-xs text-slate-400 font-mono">WACC = 9.42%</span>
+            </div>
+            <h4 class="text-base font-bold text-slate-900">創辦人 Bob Hubbard</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              主張會計帳面是審計過的客觀事實：負債 40%、股權 60%。股價波動是投機雜音。按帳面權重計算 WACC 為 9.42%，甚至可考慮股利折現模型（DDM）。
+            </p>
+            <div class="pt-2 text-xs font-bold text-amber-700 bg-amber-50 p-2 rounded-xl border border-amber-200">
+              陷阱：低估資本成本 120 bps，核准毀損股東價值專案！
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-6 border-t-4 border-t-sky-500 space-y-3 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-sky-100 text-sky-800">標竿直接套用派</span>
+              <span class="text-xs text-slate-400 font-mono">WACC = 10.61%</span>
+            </div>
+            <h4 class="text-base font-bold text-slate-900">營運副總 Dave Watson</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              既然 Dell 是對標標竿，Dell 市值負債比 26.16% 算出的市場 WACC 為 10.61%，就應直接套用。在 10.61% 下，800 萬專案 NPV = +$58 萬、IRR = 12.60%，應立即核准！
+            </p>
+            <div class="pt-2 text-xs font-bold text-sky-700 bg-sky-50 p-2 rounded-xl border border-sky-200">
+              陷阱：忽視負債結構差異、借款利差與私營小企業風險溢酬。
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-6 border-t-4 border-t-rose-500 space-y-3 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800">理論與風險調整派</span>
+              <span class="text-xs text-slate-400 font-mono">WACC = 13.47%</span>
+            </div>
+            <h4 class="text-base font-bold text-slate-900">CFO Richard & 分析師 Marcus</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              透過 Hamada 去槓桿（β_U=1.0160），按 HCI 目標負債 30% 再加槓桿（β_L=1.2991），疊加規模溢價（2.5%）與流動性溢價（1.5%），真實 WACC 為 13.47%，專案 NPV 實質為負！
+            </p>
+            <div class="pt-2 text-xs font-bold text-rose-700 bg-rose-50 p-2 rounded-xl border border-rose-200">
+              定讞：真實 NPV = -$23.5 萬，斷然否決原案，啟動採購談判！
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case Exhibits Grid -->
+      <div class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-900 flex items-center">
+          <i class="fa-solid fa-table-cells mr-2 text-brand-500"></i>個案核心財務附錄數據
+        </h3>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="glass-card rounded-2xl p-5 space-y-3 shadow-sm">
+            <h4 class="font-bold text-sm text-slate-900 border-b border-slate-200 pb-2">
+              附錄一：HCI 公司特徵與專案參數
+            </h4>
+            <div class="text-xs space-y-1.5 font-mono">
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">法律地位</span>
+                <span class="font-bold text-slate-800">未上市私營控股</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">帳面負債 / 股權</span>
+                <span class="font-bold text-slate-800">$30.0M / $45.0M</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">目標負債比 (D/V)</span>
+                <span class="font-bold text-brand-500">30.0% (D/E=42.86%)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">銀行借款利率 (Rd)</span>
+                <span class="font-bold text-slate-800">7.20% (+70 bps)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">規模溢價 (s)</span>
+                <span class="font-bold text-amber-600">+2.50%</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">流動性溢價 (i)</span>
+                <span class="font-bold text-amber-600">+1.50%</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-slate-500 font-sans">新專案預算 (8年)</span>
+                <span class="font-bold text-emerald-600">$8,000,000 (IRR=12.6%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-5 space-y-3 shadow-sm">
+            <h4 class="font-bold text-sm text-slate-900 border-b border-slate-200 pb-2">
+              附錄二：標竿 Dell Inc. 市場交易數據
+            </h4>
+            <div class="text-xs space-y-1.5 font-mono">
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">每股市價 / 股數</span>
+                <span class="font-bold text-slate-800">$35.00 / 2.5 億股</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">股權市場價值 (E)</span>
+                <span class="font-bold text-sky-600">$87.5 億美元</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">債券市場價值 (D)</span>
+                <span class="font-bold text-slate-800">$31.0 億美元</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">總資本市值 (V)</span>
+                <span class="font-bold text-slate-800">$118.5 億美元</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">市值負債比 (wd)</span>
+                <span class="font-bold text-slate-800">26.16% (D/E=35.43%)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">股票槓桿 Beta (β_L)</span>
+                <span class="font-bold text-slate-800">1.2500</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-slate-500 font-sans">債券到期殖利率 (Rd)</span>
+                <span class="font-bold text-slate-800">6.50%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-5 space-y-3 shadow-sm">
+            <h4 class="font-bold text-sm text-slate-900 border-b border-slate-200 pb-2">
+              附錄三：宏觀金融與稅率參數
+            </h4>
+            <div class="text-xs space-y-1.5 font-mono">
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">無風險利率 (Rf)</span>
+                <span class="font-bold text-slate-800">3.50% (3個月國庫券)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">市場預期報酬率 E(Rm)</span>
+                <span class="font-bold text-slate-800">11.00% (S&P 500長期)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">市場風險溢酬 (MRP)</span>
+                <span class="font-bold text-brand-500">7.50% (11.0% - 3.5%)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">綜合企業所得稅率 (Tc)</span>
+                <span class="font-bold text-slate-800">35.0% (聯邦+州稅)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-100">
+                <span class="text-slate-500 font-sans">利息稅盾折減 (1-Tc)</span>
+                <span class="font-bold text-slate-800">65.0%</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-slate-500 font-sans">決策備忘錄期限</span>
+                <span class="font-bold text-rose-600">週五下午 5:00 董事會</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PILLAR 2: 教學指引 (TEACHING NOTE & BOARD PLAN)             -->
+    <!-- ============================================================ -->
+    <div id="pillar-tn" class="pillar-section hidden space-y-8 animate-fadeIn">
+      
+      <!-- TN Banner -->
+      <div class="rounded-3xl bg-slate-900 text-white p-6 sm:p-10 shadow-2xl border border-slate-800">
+        <div class="max-w-4xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-extrabold border border-teal-500/30">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>INSTRUCTOR'S TEACHING MANUAL ‧ HBS-FIN-11501-TN02</span>
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
+            五幕教學劇本、蘇格拉底提問術與哈佛四象限板書設計
+          </h2>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            本教學指引專為商管學院碩士班（MBA/EMBA）及進階公司財務學設計，旨在破除學生誤用會計帳面價值的盲點，掌握非上市公司純業務法標竿估算標準流程。
+          </p>
+        </div>
+      </div>
+
+      <!-- 5 Pastures Choreography -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 class="text-lg font-bold text-slate-900 flex items-center">
+            <i class="fa-solid fa-stopwatch-20 mr-2 text-teal-600"></i>五幕教學牧場課堂節奏規劃（Five Pastures）
+          </h3>
+          <span class="text-xs text-slate-500">支援 90 分鐘標準課堂 ／ 180 分鐘 EMBA 深度研討</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs">
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-teal-700">第一幕</span>
+              <span class="text-slate-400">0–15m</span>
+            </div>
+            <h4 class="font-bold text-slate-900">破冰與未上市死結</h4>
+            <p class="text-slate-600">冷問點名：沒有股價如何估算？純業務法到底在比什麼？（對齊資產營運風險）</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-teal-700">第二幕</span>
+              <span class="text-slate-400">15–35m</span>
+            </div>
+            <h4 class="font-bold text-slate-900">帳面 vs. 市值大辯論</h4>
+            <p class="text-slate-600">全班投票：9.42% vs 10.61%；房貸實價登錄類比；批判科技業 DDM 模型失效。</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-teal-700">第三幕</span>
+              <span class="text-slate-400">35–55m</span>
+            </div>
+            <h4 class="font-bold text-slate-900">Hamada 方程解剖</h4>
+            <p class="text-slate-600">推導 Hamada 去槓桿（β_U=1.0160）與按 HCI 目標負債 30% 再加槓桿（β_L=1.2991）。</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-teal-700">第四幕</span>
+              <span class="text-slate-400">55–70m</span>
+            </div>
+            <h4 class="font-bold text-slate-900">私營風險溢價疊加</h4>
+            <p class="text-slate-600">擴充型 CAPM：疊加規模溢價 2.5% 與流動性溢價 1.5%，推導真實 WACC = 13.47%。</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-teal-700">第五幕</span>
+              <span class="text-slate-400">70–90m</span>
+            </div>
+            <h4 class="font-bold text-slate-900">專案 NPV 逆轉真相</h4>
+            <p class="text-slate-600">揭曉 NPV 由正轉負（-$23.5 萬）；啟動設備降價談判；總結定海神針價值。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4-Zone Board Plan Visual Display -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center">
+          <i class="fa-solid fa-chalkboard mr-2 text-teal-600"></i>哈佛標準四象限黑板板書藍圖（Board Plan）
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="p-5 rounded-2xl bg-slate-950 text-white border border-slate-800 space-y-2">
+            <div class="text-sky-400 font-bold border-b border-slate-800 pb-1 flex justify-between">
+              <span>【板書第一象限：左上】</span>
+              <span>HCI 專案困境與純業務法</span>
+            </div>
+            <p>1. 800 萬美元專案決策（自動化產線與資料中心）</p>
+            <p class="text-slate-400">2. 私營企業估值死結：無市價 P0、無歷史 Beta、帳面淨值失真</p>
+            <p class="text-amber-400">3. 純業務法標竿：選定 Dell Inc.（對齊 PC 與伺服器營運風險）</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-950 text-white border border-slate-800 space-y-2">
+            <div class="text-sky-400 font-bold border-b border-slate-800 pb-1 flex justify-between">
+              <span>【板書第二象限：右上】</span>
+              <span>Dell 資本結構與 WACC 比較</span>
+            </div>
+            <p>1. 資本結構：帳面 D=40%, E=60% ； 市值 D=26.16%, E=73.84%</p>
+            <p class="text-slate-400">2. 市淨率 P/B = 1.9444（反映無形資產與成長期權）</p>
+            <p>3. Dell WACC：帳面 9.42% vs. 市場 10.61%（差 120 bps！）</p>
+            <p class="text-emerald-400">★ 結論：資本成本為邊際機會成本，市場價值為唯一標準！</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-950 text-white border border-slate-800 space-y-2">
+            <div class="text-sky-400 font-bold border-b border-slate-800 pb-1 flex justify-between">
+              <span>【板書第三象限：左下】</span>
+              <span>Hamada 方程去槓桿與加槓桿</span>
+            </div>
+            <p>1. 去槓桿：β_U = 1.25 / [1 + 0.65 × 0.3543] = 1.0160</p>
+            <p class="text-slate-400">   （代表電腦伺服器產業純商業營運資產風險）</p>
+            <p>2. 目標加槓桿：HCI Target D/V = 30% → D/E = 42.86%</p>
+            <p class="text-sky-400">   β_L,HCI = 1.0160 × [1 + 0.65 × 0.4286] = 1.2991</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-950 text-white border border-slate-800 space-y-2">
+            <div class="text-sky-400 font-bold border-b border-slate-800 pb-1 flex justify-between">
+              <span>【板書第四象限：右下】</span>
+              <span>HCI 最終 WACC 與 NPV 逆轉</span>
+            </div>
+            <p>1. 擴充型 CAPM：Re = 3.5% + 1.2991×7.5% + 2.5%(規模) + 1.5%(流動性) = 17.24%</p>
+            <p>2. 稅後債務成本：Rd = 7.20% × (1 - 35%) = 4.68%</p>
+            <p class="text-amber-400">3. 最終專案 WACC = 70%×17.24% + 30%×4.68% = 13.47%</p>
+            <p class="text-rose-400 font-bold">4. 800 萬專案 NPV：@9.42%(+$96萬) ； @10.61%(+$58萬) ； @13.47%(-$23.5萬)</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PILLAR 3: 個案解析與試算 (SOLUTIONS & SIMULATOR)              -->
+    <!-- ============================================================ -->
+    <div id="pillar-sm" class="pillar-section hidden space-y-8 animate-fadeIn">
+      
+      <!-- Interactive Excel Financial Model Portal Card -->
+      <div class="rounded-3xl bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 shadow-2xl border-2 border-indigo-500/40 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="space-y-2">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-extrabold border border-emerald-500/30">
+            <i class="fa-solid fa-sparkles"></i>
+            <span>專屬互動財務模型網站已上線</span>
+          </div>
+          <h3 class="text-xl sm:text-2xl font-black tracking-tight text-white">
+            Hubbard Computer, Inc. 完整解析財務模型 7 大工作表全景互動網站
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
+            已將個案 Excel 活頁簿中所有 7 個 Sheet（決策總覽、Dell 資本結構與市淨率、DDM 批判與 CAPM、Dell WACC 比較、Hamada 四階段推導、8 年自由現金流逐期折現表、雙變數敏感度熱力地圖與保本談判策略）完整建置為獨立、即時動態連動重算的互動式決策平台！支援儲存格算式透視模式與一鍵匯出 Excel。
+          </p>
+        </div>
+        <a href="財務個案2_Hubbard_Computer_互動式財務模型.html" class="self-start md:self-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm shadow-xl transition transform active:scale-95 flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>進入 7 頁完整互動模型</span>
+        </a>
+      </div>
+      
+      <!-- Interactive Engine Header Banner -->
+      <div class="rounded-3xl bg-slate-900 text-white p-6 sm:p-10 shadow-2xl border border-slate-800">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+          <div>
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-extrabold border border-rose-500/30">
+              <i class="fa-solid fa-sliders"></i>
+              <span>即時動態估值引擎｜DYNAMIC VALUATION SIMULATOR</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2">
+              HCI 資本成本與 800 萬美元專案 NPV 即時試算模擬器
+            </h2>
+            <p class="text-slate-400 text-xs sm:text-sm mt-1">
+              可隨意拖曳滑桿，即時動態觀察 Hamada 去槓桿、再加槓桿、WACC 以及專案 NPV 瞬間逆轉之視覺效果。
+            </p>
+          </div>
+          <button onclick="resetSimulator()" class="self-start md:self-auto px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition">
+            <i class="fa-solid fa-rotate-left mr-1.5"></i>重置個案基準參數
+          </button>
+        </div>
+
+        <!-- Slider Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="flex justify-between font-bold">
+              <span class="text-slate-400">Dell 股票貝塔 (β_L)</span>
+              <span id="val-beta" class="text-sky-400 font-mono">1.25</span>
+            </div>
+            <input type="range" id="input-beta" min="0.80" max="1.80" step="0.05" value="1.25" oninput="runSim()" class="w-full accent-sky-500 cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500">
+              <span>0.80</span>
+              <span>基準: 1.25</span>
+              <span>1.80</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="flex justify-between font-bold">
+              <span class="text-slate-400">HCI 目標負債比 (D/V)</span>
+              <span id="val-debt" class="text-sky-400 font-mono">30%</span>
+            </div>
+            <input type="range" id="input-debt" min="10" max="60" step="5" value="30" oninput="runSim()" class="w-full accent-sky-500 cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500">
+              <span>10%</span>
+              <span>基準: 30%</span>
+              <span>60%</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="flex justify-between font-bold">
+              <span class="text-slate-400">小型規模溢價 (Size)</span>
+              <span id="val-size" class="text-amber-400 font-mono">2.5%</span>
+            </div>
+            <input type="range" id="input-size" min="0.0" max="5.0" step="0.5" value="2.5" oninput="runSim()" class="w-full accent-amber-500 cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500">
+              <span>0.0%</span>
+              <span>基準: 2.5%</span>
+              <span>5.0%</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="flex justify-between font-bold">
+              <span class="text-slate-400">初始投資預算 (I_0)</span>
+              <span id="val-capex" class="text-emerald-400 font-mono">$8.0M</span>
+            </div>
+            <input type="range" id="input-capex" min="6.5" max="9.5" step="0.1" value="8.0" oninput="runSim()" class="w-full accent-emerald-500 cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500">
+              <span>$6.5M</span>
+              <span>基準: $8.0M</span>
+              <span>$9.5M</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-time Calculated KPI Displays -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 pt-6 border-t border-slate-800 text-center font-mono">
+          <div class="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+            <span class="block text-[11px] text-slate-400 font-sans">無負債資產 Beta (β_U)</span>
+            <span id="res-bu" class="text-lg font-bold text-slate-200">1.0160</span>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+            <span class="block text-[11px] text-slate-400 font-sans">HCI 目標股權 Beta</span>
+            <span id="res-bl" class="text-lg font-bold text-sky-400">1.2991</span>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+            <span class="block text-[11px] text-slate-400 font-sans">HCI 股權成本 (Re)</span>
+            <span id="res-re" class="text-lg font-bold text-amber-400">17.24%</span>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+            <span class="block text-[11px] text-slate-400 font-sans">HCI 最終 WACC</span>
+            <span id="res-wacc" class="text-lg font-bold text-indigo-400">13.47%</span>
+          </div>
+          <div id="res-npv-box" class="col-span-2 md:col-span-1 p-3 rounded-2xl border bg-rose-950/40 border-rose-600/50">
+            <span class="block text-[11px] text-slate-300 font-sans">專案 NPV 決策結果</span>
+            <span id="res-npv" class="text-lg font-black text-rose-400">-$235,184</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart.js Visualizations Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6 space-y-4 shadow-sm">
+          <h4 class="font-bold text-sm text-slate-900 border-b border-slate-200 pb-2 flex items-center justify-between">
+            <span>圖表一：Dell 資本結構（帳面 vs. 市場）對比</span>
+            <span class="text-xs text-slate-500 font-normal">P/B = 1.9444 倍</span>
+          </h4>
+          <div class="h-64 flex items-center justify-center">
+            <canvas id="chartCapitalStructure"></canvas>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 space-y-4 shadow-sm">
+          <h4 class="font-bold text-sm text-slate-900 border-b border-slate-200 pb-2 flex items-center justify-between">
+            <span>圖表二：專案淨現值（NPV）隨折現率變動敏感度曲線</span>
+            <span class="text-xs text-rose-600 font-bold">損益平衡 IRR = 12.60%</span>
+          </h4>
+          <div class="h-64 flex items-center justify-center">
+            <canvas id="chartNpvSensitivity"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solutions Accordion Summary -->
+      <div class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-900 flex items-center">
+          <i class="fa-solid fa-graduation-cap mr-2 text-rose-600"></i>六道作業核心問題標準解析摘要
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass-card rounded-2xl p-6 space-y-3 shadow-sm border-l-4 border-l-brand-500">
+            <span class="text-xs font-bold text-brand-500">問題一至問題四解析摘要</span>
+            <h4 class="text-base font-bold text-slate-900">Dell 資本結構與 WACC 權重爭論</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              • <strong>問題一：</strong>Dell 帳面負債比 40.00%，但市場負債比為 26.16%（股權市值達 $87.5 億，P/B 達 1.94 倍）。<br>
+              • <strong>問題二：</strong>科技業因高資本支出多採零股利，不符合 DDM 固定成長率假設，且分母易出現負值奇異點，一律採 CAPM。<br>
+              • <strong>問題三：</strong>Dell 股權成本 Re = 12.875%，稅後債務成本 Rd(1-Tc) = 4.225%。<br>
+              • <strong>問題四：</strong>帳面 WACC = 9.42%，市場 WACC = 10.61%。資本成本為邊際機會成本，市場價值為唯一理論正當標準！
+            </p>
+          </div>
+
+          <div class="glass-card rounded-2xl p-6 space-y-3 shadow-sm border-l-4 border-l-rose-500">
+            <span class="text-xs font-bold text-rose-600">問題五與問題六解析摘要</span>
+            <h4 class="text-base font-bold text-slate-900">Hamada 調整與 800 萬專案生死決策</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              • <strong>問題五：</strong>Hamada 去槓桿得產業資產 Beta = 1.0160；按目標負債比 30% 再加槓桿得 β_L = 1.2991；疊加規模溢價 2.5% 與流動性溢價 1.5%，HCI 專屬真實 WACC 高達 13.47%。<br>
+              • <strong>問題六：</strong>專案 IRR 為 12.602%。若誤用 9.42%(+$96萬) 或 10.61%(+$58萬) 均為假陽性！在 13.47% 下真實 NPV = -$235,184，實質毀損財富！管理層應透過談判降價 60 萬美元以轉正 NPV。
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- FOOTER                                                          -->
+  <!-- ============================================================== -->
+  <footer class="bg-slate-950 text-white border-t border-slate-800 py-8 px-4 sm:px-6 lg:px-8 mt-auto">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <div class="flex items-center space-x-3">
+        <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+        <span class="font-bold text-slate-300">115學年度 領導與管理課程 ‧ 財務個案教學系列</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <span>個案二：Hubbard Computer, Inc. (HCI)</span>
+        <span>•</span>
+        <a href="財務個案2_Hubbard_Computer_互動式財務模型.html" class="text-emerald-400 font-bold hover:underline">【互動式財務模型網站】</a> <span>•</span> <a href="財務個案2_Hubbard_Computer_完整解析財務模型.xlsx" class="text-sky-400 hover:underline">下載 Excel 原始檔</a>
+        <span>•</span>
+        <button onclick="openPresentationMode(1)" class="text-gold-400 hover:underline">全螢幕 PPT 簡報模式</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT LOGIC & SLIDE DECK DATA (28 SLIDES)                 -->
+  <!-- ============================================================== -->
+  <script>
+    // -------------------------------------------------------------
+    // SLIDE DECK DATA: 28 SLIDES MATCHING CASE 1 PPT STRUCTURE
+    // -------------------------------------------------------------
+    const hciSlideDeck = [
+      // --- PART 1: 個案內容 (Slides 1 - 10) ---
+      {
+        num: 1, pillar: 'case', cat: '區塊一：個案內容｜封面',
+        title: 'Hubbard Computer, Inc.（HCI）',
+        sub: '非上市公司 WACC 估算、純業務法與資本預算抉擇（HBS-FIN-11501-C02）',
+        body: `<div class="text-center py-6 space-y-5 max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/20 border border-brand-500/40 text-sky-300 text-xs font-bold">
+            <i class="fa-solid fa-server"></i> HARVARD BUSINESS SCHOOL CASE METHOD ‧ 經典公司財務教案
+          </div>
+          <h3 class="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-amber-200 to-rose-200 leading-tight">
+            從印第安納車庫出發的<br>800 萬美元資本支出抉擇
+          </h3>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            企業主角：創辦人兼執行長 <strong>鮑伯·哈伯德（Bob Hubbard）</strong>｜財務總監 <strong>理查·艾文斯（Richard Evans）</strong><br>
+            評估標的：<strong>新一代模組化自動化產線暨邊緣運算資料中心擴建案</strong>（$8,000,000）
+          </p>
+        </div>`,
+        notes: '歡迎進入財務個案(二)教學簡報。全套簡報依循哈佛教學法分為三大區塊：P.1–10 個案內容、P.11–18 教學指引、P.19–28 個案解析。'
+      },
+      {
+        num: 2, pillar: 'case', cat: '區塊一：個案內容｜決策現場',
+        title: '週一早晨的執行委員會：800 萬美元專案的表決大限',
+        sub: '十月中旬 ‧ 美國中西部印第安納州 HCI 企業總部會議室',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs sm:text-sm">
+          <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <span class="text-amber-400 font-bold flex items-center gap-2"><i class="fa-solid fa-industry"></i> 800 萬美元重大資本支出專案</span>
+            <h4 class="font-bold text-white text-base">自動化產線與 Tier 3 邊緣資料中心</h4>
+            <p class="text-slate-400 leading-relaxed">引進 4 條模組化組裝產線，將工作站組裝工時壓縮 45%，並擴建邊緣運算資料中心，使 HCI 具備承接全美大型雲端商代工資格。</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <span class="text-rose-400 font-bold flex items-center gap-2"><i class="fa-solid fa-clock"></i> 週五下午五點董事會表決大限</span>
+            <h4 class="font-bold text-white text-base">專案基準折現率（WACC）的致命分歧</h4>
+            <p class="text-slate-400 leading-relaxed">私營企業缺乏市價與 Beta，財務團隊若無法拿出無懈可擊的折現率，專案淨現值（NPV）究竟是大於零還是小於零，將陷入無休止爭辯。</p>
+          </div>
+        </div>`,
+        notes: '引導學生進入情境：這是一筆關係到私營企業未來十年命運的重大資本支出，折現率的小數點變動直接決定專案生死。'
+      },
+      {
+        num: 3, pillar: 'case', cat: '區塊一：個案內容｜企業背景',
+        title: 'HCI 的利基崛起：從區域維修站到企業伺服器先驅',
+        sub: '專注中小型企業、醫療機構與地方政府之高階客製化 IT 基礎設施',
+        body: `<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-sky-400 font-bold"><i class="fa-solid fa-desktop mr-1"></i>高階工程工作站</span>
+            <p class="text-slate-400">專供汽車零件 CAD/CAM 與生醫實驗室，極限多核心運算，毛利率維持 28% 以上。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-sky-400 font-bold"><i class="fa-solid fa-server mr-1"></i>客製化機架式伺服器</span>
+            <p class="text-slate-400">為區域銀行與製造業部署內部伺服器架構，提供彈性軟硬體整合與 24hr 極速到府維護。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-sky-400 font-bold"><i class="fa-solid fa-cloud mr-1"></i>邊緣運算私有雲</span>
+            <p class="text-slate-400">成長最迅猛板塊，部署分散式邊緣運算節點，滿足工業物聯網低延遲資料即時監控需求。</p>
+          </div>
+        </div>`,
+        notes: '強調 HCI 的業務不是低毛利的消費 PC，而是高毛利、重視穩定性的企業伺服器與邊緣基礎設施。'
+      },
+      {
+        num: 4, pillar: 'case', cat: '區塊一：個案內容｜股權結構',
+        title: '非公開發行私營控股特徵（Privately Held Firm）',
+        sub: '股權高度集中於家族與早期天使投資人，從未在公開證券市場掛牌',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4 max-w-2xl mx-auto text-xs sm:text-sm">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-slate-400">創辦人 Bob Hubbard 家族持股</span>
+            <span class="font-bold text-amber-400 font-mono text-base">65.0% (絕對控股)</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-slate-400">兩位資深創業副總裁合持</span>
+            <span class="font-bold text-sky-400 font-mono text-base">20.0%</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-slate-400">創始地方天使投資人持有</span>
+            <span class="font-bold text-slate-300 font-mono text-base">15.0%</span>
+          </div>
+          <div class="pt-2 text-rose-400 font-bold text-center">
+            ★ 無公開交易股價 ‧ 無法直接計算股權市值 ‧ 股份缺乏二級市場流動性
+          </div>
+        </div>`,
+        notes: '提問學生：非上市公司股東對回報率的要求，會比公開市場投資人高還是低？引出流動性折價/溢價概念。'
+      },
+      {
+        num: 5, pillar: 'case', cat: '區塊一：個案內容｜財務困境',
+        title: '未公開發行企業折現率（WACC）估算三大死結',
+        sub: '傳統教科書標準公式面對私營企業陷入全面失靈',
+        body: `<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-5 rounded-2xl bg-rose-950/40 border border-rose-800/60 space-y-2">
+            <span class="text-rose-400 font-bold">死結一：Beta 無從迴歸</span>
+            <p class="text-slate-300">股票從未公開撮合，市場不存在歷史收益序列，無法與 S&P 500 迴歸求得 Beta 值。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-rose-950/40 border border-rose-800/60 space-y-2">
+            <span class="text-rose-400 font-bold">死結二：帳面淨值失真</span>
+            <p class="text-slate-300">資產負債表淨資產是累積歷史折舊與未分配盈餘沉沒值，完全忽略無形資產與成長機會。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-rose-950/40 border border-rose-800/60 space-y-2">
+            <span class="text-rose-400 font-bold">死結三：邊際成本差異</span>
+            <p class="text-slate-300">無法公開發債，受限於商業銀行融資，且股東面臨股份鎖定之流動性折價。</p>
+          </div>
+        </div>`,
+        notes: '讓學生理解為何必須跳出教科書單純套公式的框架，尋求替代路徑。'
+      },
+      {
+        num: 6, pillar: 'case', cat: '區塊一：個案內容｜方法論',
+        title: '破局之道：純業務法（Pure Play Approach）與標竿選取',
+        sub: '選定全球 PC 與伺服器解決方案龍頭——戴爾公司（Dell Inc.）為對標標竿',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4 max-w-2xl mx-auto text-xs sm:text-sm">
+          <div class="flex items-center space-x-3 text-sky-400 font-bold">
+            <i class="fa-solid fa-bullseye text-lg"></i>
+            <span>純業務法的核心定義：對齊產業「純營運資產風險」</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            尋找一家產品結構、營運模式與營收來源與目標公司高度相似的公開上市公司。透過數百萬投資人在公開市場撮合形成的參數，反向推導出該產業純粹資產風險。
+          </p>
+          <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-slate-400">
+            <strong>Dell Inc. 對標特徵：</strong>商用 PC、企業伺服器、邊緣運算，採接單組裝與企業直銷，業務風險吻合度達 95% 以上。
+          </div>
+        </div>`,
+        notes: '提問：Dell 是巨型跨國企業，HCI 是地方型中小企業，規模天差地遠，為什麼還能對標？（因為比的是資產營運風險特徵）。'
+      },
+      {
+        num: 7, pillar: 'case', cat: '區塊一：個案內容｜核心衝突',
+        title: '執行委員會的三方激辯：三種截然不同的折現率',
+        sub: 'Bob 的 9.42% vs. Dave 的 10.61% vs. 財務部的 13.47%',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-4 rounded-2xl bg-amber-950/40 border border-amber-800/60 space-y-2">
+            <span class="text-amber-400 font-bold">Bob：會計帳面派</span>
+            <h5 class="text-white font-bold">WACC = 9.42%</h5>
+            <p class="text-slate-300">帳面負債比 40%、股權 60%。審計數據真實客觀，甚至可採用高登 DDM 模型。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-800/60 space-y-2">
+            <span class="text-sky-400 font-bold">Dave：標竿捷徑派</span>
+            <h5 class="text-white font-bold">WACC = 10.61%</h5>
+            <p class="text-slate-300">Dell 市值負債比 26.16%，市場 WACC 10.61%。專案 NPV = +$58 萬、IRR = 12.60%，全票通過！</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-rose-950/40 border border-rose-800/60 space-y-2">
+            <span class="text-rose-400 font-bold">CFO：理論調整派</span>
+            <h5 class="text-white font-bold">WACC = 13.47%</h5>
+            <p class="text-slate-300">Hamada 去槓桿、重組目標負債 30%、加規模溢價 2.5% 與流動性溢價 1.5%，真實 NPV 為負！</p>
+          </div>
+        </div>`,
+        notes: '此頁是全案最大衝突點，授課教師可在此發起班級分組攻防辯論。'
+      },
+      {
+        num: 8, pillar: 'case', cat: '區塊一：個案內容｜附錄數據',
+        title: '個案附錄一與二核心參數對照',
+        sub: 'Hubbard Computer (HCI) 目標私營公司 vs. Dell Inc. 公開標竿企業',
+        body: `<div class="overflow-x-auto text-xs w-full">
+          <table class="w-full text-left border-collapse border border-slate-800 font-mono">
+            <thead>
+              <tr class="bg-slate-950 text-slate-300">
+                <th class="p-2.5 border border-slate-800 font-sans">評估維度 / 參數</th>
+                <th class="p-2.5 border border-slate-800 text-sky-400">Dell Inc. (公開標竿)</th>
+                <th class="p-2.5 border border-slate-800 text-amber-400">HCI (目標私營企業)</th>
+                <th class="p-2.5 border border-slate-800 font-sans">財務比較說明</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-300">
+              <tr class="border-b border-slate-800 bg-slate-900/60">
+                <td class="p-2 border border-slate-800 font-sans">股權市場價值 (E)</td>
+                <td class="p-2 border border-slate-800 text-sky-300">$87.5 億 ($35×2.5億股)</td>
+                <td class="p-2 border border-slate-800 text-slate-500">無公開市價</td>
+                <td class="p-2 border border-slate-800 font-sans">Dell 市淨率 P/B = 1.94 倍</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="p-2 border border-slate-800 font-sans">負債市場規模 (D)</td>
+                <td class="p-2 border border-slate-800 text-sky-300">$31.0 億美元</td>
+                <td class="p-2 border border-slate-800 text-slate-500">帳面面值 $30.0M</td>
+                <td class="p-2 border border-slate-800 font-sans">Dell 為公募債券市值</td>
+              </tr>
+              <tr class="border-b border-slate-800 bg-slate-900/60">
+                <td class="p-2 border border-slate-800 font-sans">負債比率 (wd)</td>
+                <td class="p-2 border border-slate-800 text-sky-300">26.16% (D/E = 35.43%)</td>
+                <td class="p-2 border border-slate-800 text-amber-300">目標 30.0% (D/E = 42.86%)</td>
+                <td class="p-2 border border-slate-800 font-sans">HCI 目標負債槓桿略高</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="p-2 border border-slate-800 font-sans">稅前債務成本 (Rd)</td>
+                <td class="p-2 border border-slate-800 text-sky-300">6.50% 年利率</td>
+                <td class="p-2 border border-slate-800 text-amber-300">7.20% 年利率</td>
+                <td class="p-2 border border-slate-800 font-sans">中小企業信用利差 +70 bps</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>`,
+        notes: '引導學生觀察 Dell 與 HCI 的兩大差異：負債比率不同、借款利率不同。'
+      },
+      {
+        num: 9, pillar: 'case', cat: '區塊一：個案內容｜宏觀參數',
+        title: '附錄三：宏觀金融市場基準與稅率參數',
+        sub: '無風險利率、市場風險溢酬與企業所得稅率設定',
+        body: `<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full text-center font-mono">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+            <span class="block text-xs text-slate-400 font-sans">無風險利率 (Rf)</span>
+            <span class="text-xl font-bold text-sky-400">3.50%</span>
+            <span class="block text-[10px] text-slate-500 mt-1 font-sans">美國 3 個月國庫券</span>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+            <span class="block text-xs text-slate-400 font-sans">市場預期回報 E(Rm)</span>
+            <span class="text-xl font-bold text-slate-200">11.00%</span>
+            <span class="block text-[10px] text-slate-500 mt-1 font-sans">S&P 500 長期均值</span>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+            <span class="block text-xs text-slate-400 font-sans">市場風險溢酬 (MRP)</span>
+            <span class="text-xl font-bold text-amber-400">7.50%</span>
+            <span class="block text-[10px] text-slate-500 mt-1 font-sans">11.0% - 3.5%</span>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+            <span class="block text-xs text-slate-400 font-sans">企業所得稅率 (Tc)</span>
+            <span class="text-xl font-bold text-rose-400">35.00%</span>
+            <span class="block text-[10px] text-slate-500 mt-1 font-sans">1-Tc = 65% 利息稅盾</span>
+          </div>
+        </div>`,
+        notes: '說明各參數的公信力來源與在 CAPM 中扮演的角色。'
+      },
+      {
+        num: 10, pillar: 'case', cat: '區塊一：個案內容｜作業任務',
+        title: '附錄四：執行長交付之決策備忘錄六大問題清單',
+        sub: '週五下午五點董事會召開前的完整量化推導指南',
+        body: `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-xs">
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300">
+            <strong class="text-sky-400">問題一：</strong>計算 Dell 帳面與市場資本結構權重，說明 13.84% 巨大背離成因。
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300">
+            <strong class="text-sky-400">問題二：</strong>批判高登股利折現模型（DDM）在電腦 IT 產業為何徹底失效。
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300">
+            <strong class="text-sky-400">問題三：</strong>使用 CAPM 計算 Dell 股權成本（Re）與稅後債務資本成本。
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300">
+            <strong class="text-sky-400">問題四：</strong>比較 Dell 帳面 WACC 與市場 WACC，深度論證市場價值之理論合法性。
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300">
+            <strong class="text-amber-400">問題五：</strong>純業務法四部曲：Hamada 去槓桿、再加槓桿、疊加規模與流動性溢價推導 HCI WACC。
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-rose-400">
+            <strong class="text-rose-400">問題六：</strong>計算 800 萬投資案 NPV 與 IRR，揭露假陽性盲點並給予董事會明確建議。
+          </div>
+        </div>`,
+        notes: '點出這六道問題是一環扣一環的縝密推導邏輯。'
+      },
+
+      // --- PART 2: 教學指引 (Slides 11 - 18) ---
+      {
+        num: 11, pillar: 'tn', cat: '區塊二：教學指引｜教學定位',
+        title: '個案教學摘要與三大核心矛盾衝突',
+        sub: '哈佛商學院個案教學法（HBS Case Method）之設計靈魂',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4 max-w-2xl mx-auto text-xs sm:text-sm">
+          <div class="text-teal-400 font-bold text-sm flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap"></i> 教學定位：MBA / EMBA 進階財務管理、企業估值與資本預算
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            本個案巧妙設計了三大認知衝突，精準投射出企業主管在未上市企業資本預算決策中最常犯的思維盲區：
+          </p>
+          <ul class="space-y-2 text-slate-400 text-xs">
+            <li>• <strong>衝突一：</strong>會計審計帳面淨值 vs. 資本市場邊際機會成本</li>
+            <li>• <strong>衝突二：</strong>直接套用公開標竿 Beta vs. Hamada 去槓桿重組</li>
+            <li>• <strong>衝突三：</strong>大型跨國巨頭流動性 vs. 私營中小企業規模脆弱性</li>
+          </ul>
+        </div>`,
+        notes: '向教師說明：這三個衝突是推動課堂討論熱度的主要引擎。'
+      },
+      {
+        num: 12, pillar: 'tn', cat: '區塊二：教學指引｜學習目標',
+        title: '五大核心學習目標（Pedagogical Objectives）',
+        sub: '培養學員具備投資銀行與企業財務長（CFO）層次之專業估值素養',
+        body: `<div class="grid grid-cols-1 sm:grid-cols-5 gap-3 w-full text-xs">
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-1">
+            <span class="text-teal-400 font-bold block text-sm">目標 1</span>
+            <span class="text-white font-bold block">突破估值盲區</span>
+            <span class="text-slate-400 block text-[11px]">掌握未上市企業純業務法標準流程</span>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-1">
+            <span class="text-teal-400 font-bold block text-sm">目標 2</span>
+            <span class="text-white font-bold block">確立市值合法性</span>
+            <span class="text-slate-400 block text-[11px]">從機會成本破除帳面價值迷思</span>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-1">
+            <span class="text-teal-400 font-bold block text-sm">目標 3</span>
+            <span class="text-white font-bold block">熟練 Hamada 方程</span>
+            <span class="text-slate-400 block text-[11px]">精確分離營運風險與財務槓桿</span>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-1">
+            <span class="text-teal-400 font-bold block text-sm">目標 4</span>
+            <span class="text-white font-bold block">擴充型 CAPM</span>
+            <span class="text-slate-400 block text-[11px]">疊加小型規模與非流動性溢價</span>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-1">
+            <span class="text-teal-400 font-bold block text-sm">目標 5</span>
+            <span class="text-white font-bold block">體會生死扭曲</span>
+            <span class="text-slate-400 block text-[11px]">量化折現率微小偏差對 NPV 之逆轉</span>
+          </div>
+        </div>`,
+        notes: '授課前可在黑板或簡報揭示這五大目標，讓學員掌握學習地圖。'
+      },
+      {
+        num: 13, pillar: 'tn', cat: '區塊二：教學指引｜文獻錨點',
+        title: '核心財務理論架構與經典文獻錨點',
+        sub: '跨越半世紀的現代公司財務學與資產定價理論基石',
+        body: `<div class="overflow-x-auto text-xs w-full">
+          <table class="w-full text-left border-collapse border border-slate-800 font-mono">
+            <thead>
+              <tr class="bg-slate-950 text-slate-300">
+                <th class="p-2 border border-slate-800 font-sans">經典學術文獻</th>
+                <th class="p-2 border border-slate-800 font-sans">核心財務理論</th>
+                <th class="p-2 border border-slate-800 font-sans">個案實務映射</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-300">
+              <tr class="border-b border-slate-800">
+                <td class="p-2 border border-slate-800 text-teal-400">Modigliani & Miller (1958, 1963)</td>
+                <td class="p-2 border border-slate-800">資本結構與利息稅盾價值</td>
+                <td class="p-2 border border-slate-800">WACC 公式乘上 (1-Tc) 之稅盾基礎</td>
+              </tr>
+              <tr class="border-b border-slate-800 bg-slate-900/60">
+                <td class="p-2 border border-slate-800 text-teal-400">Robert Hamada (1972)</td>
+                <td class="p-2 border border-slate-800">負債對股票系統性風險之影響</td>
+                <td class="p-2 border border-slate-800">去槓桿提取產業 β_U 與目標再加槓桿</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="p-2 border border-slate-800 text-teal-400">Rolf Banz (1981) / Fama-French</td>
+                <td class="p-2 border border-slate-800">小企業效應（Small-Firm Effect）</td>
+                <td class="p-2 border border-slate-800">HCI 規模溢價提列 (+2.50%)</td>
+              </tr>
+              <tr class="border-b border-slate-800 bg-slate-900/60">
+                <td class="p-2 border border-slate-800 text-teal-400">Amihud & Mendelson (1986) / Pratt</td>
+                <td class="p-2 border border-slate-800">資產流動性與 DLOM 折價</td>
+                <td class="p-2 border border-slate-800">私營企業缺乏二級流通溢價 (+1.50%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>`,
+        notes: '展示這套估值方法並非憑空捏造，而是背後有堅實的諾貝爾經濟學獎級學術文獻支撐。'
+      },
+      {
+        num: 14, pillar: 'tn', cat: '區塊二：教學指引｜節奏規劃',
+        title: '課堂五幕教學節奏表（Teaching Choreography）',
+        sub: '支援 90 分鐘精準標準課堂與 180 分鐘 EMBA 專班深度研討',
+        body: `<div class="grid grid-cols-1 sm:grid-cols-5 gap-3 w-full text-xs">
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-teal-400 font-bold">第一幕 0-15m</span>
+            <p class="text-white font-bold">破冰點名冷問</p>
+            <p class="text-slate-400 text-[11px]">未上市公司如何估值？比營運風險而非資產大小。</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-teal-400 font-bold">第二幕 15-35m</span>
+            <p class="text-white font-bold">權重爭辯與 DDM</p>
+            <p class="text-slate-400 text-[11px]">帳面 vs 市值大投票；房貸實價登錄類比；DDM 失效。</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-teal-400 font-bold">第三幕 35-55m</span>
+            <p class="text-white font-bold">Hamada 解剖</p>
+            <p class="text-slate-400 text-[11px]">洗衣機脫水去槓桿（β_U=1.0160）；加槓桿（β_L=1.2991）。</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-teal-400 font-bold">第四幕 55-70m</span>
+            <p class="text-white font-bold">私營溢價疊加</p>
+            <p class="text-slate-400 text-[11px]">擴充型 CAPM：規模 2.5% + 流動性 1.5% → WACC 13.47%。</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-teal-400 font-bold">第五幕 70-90m</span>
+            <p class="text-white font-bold">專案抉擇收斂</p>
+            <p class="text-slate-400 text-[11px]">NPV 逆轉 -$23.5 萬；假陽性批判；採購降價 60 萬後記。</p>
+          </div>
+        </div>`,
+        notes: '建議嚴格控制各幕時間，避免在第二幕爭論帳面價值過久而擠壓到後半段 Hamada 與 NPV 決策。'
+      },
+      {
+        num: 15, pillar: 'tn', cat: '區塊二：教學指引｜提問劇本',
+        title: '蘇格拉底分幕提問引導話術精華',
+        sub: '用尖銳反問激發學生認知失調，自然導向現代財務學真理',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-teal-400 font-bold">第二幕轉場反問（破除帳面迷思）</span>
+            <p class="text-slate-300 italic">『王同學，如果你今天拿著 20 年前買房的合約價去找銀行借二胎房貸，銀行會理你嗎？資本成本是今天去市場募集 1 美元新資金的邊際代價，帳面出資額早就是沉沒歷史！』</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-teal-400 font-bold">第三幕轉場反問（破除直接套用）</span>
+            <p class="text-slate-300 italic">『李同學，Dell 的股票 Beta 是 1.25，但 Dell 市值負債比才 26%，而 HCI 目標負債比是 30%。借錢比例不同，股東承受的破產風險能一樣嗎？直接套用等於忽視財務槓桿！』</p>
+          </div>
+        </div>`,
+        notes: '這兩句反問在商管課堂上屢試不爽，能迅速扭轉學生的直覺誤區。'
+      },
+      {
+        num: 16, pillar: 'tn', cat: '區塊二：教學指引｜黑板板書',
+        title: '哈佛標準四象限黑板板書設計藍圖（Board Plan）',
+        sub: '課堂結束時在黑板上留下一張嚴謹完整的決策系統圖譜',
+        body: `<div class="grid grid-cols-2 gap-3 w-full text-xs font-mono">
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-sky-400 font-bold">【左上：HCI 困境與純業務】</span>
+            <p class="text-slate-400">• $800萬專案 (IRR=12.60%)</p>
+            <p class="text-slate-400">• 私營估值三大死結</p>
+            <p class="text-slate-400">• 標竿：Dell Inc.</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-sky-400 font-bold">【右上：Dell 結構與 WACC】</span>
+            <p class="text-slate-400">• 帳面 9.42% vs 市值 10.61%</p>
+            <p class="text-slate-400">• P/B = 1.9444 市值溢價</p>
+            <p class="text-emerald-400">★ 機會成本：市值為唯一標準</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-sky-400 font-bold">【左下：Hamada 槓桿重組】</span>
+            <p class="text-slate-400">• 去槓桿: β_U = 1.0160</p>
+            <p class="text-slate-400">• Target D/E = 42.86%</p>
+            <p class="text-sky-400">• 加槓桿: β_L,HCI = 1.2991</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-sky-400 font-bold">【右下：HCI WACC 與決策】</span>
+            <p class="text-slate-400">• Re = 17.24% (+2.5% +1.5%)</p>
+            <p class="text-amber-400">• HCI WACC = 13.47%</p>
+            <p class="text-rose-400 font-bold">★ NPV: -$23.5萬 (斷然否決！)</p>
+          </div>
+        </div>`,
+        notes: '黑板板書應按照第一象限到第四象限循序漸進書寫，保持版面工整與公式邏輯貫通。'
+      },
+      {
+        num: 17, pillar: 'tn', cat: '區塊二：教學指引｜台灣實務',
+        title: '台灣在地化延伸：興櫃／創新板登錄前之估值定價',
+        sub: '台灣科技代工與伺服器周邊零組件隱形冠軍之 WACC 實務連結',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 max-w-2xl mx-auto text-xs sm:text-sm">
+          <div class="text-teal-400 font-bold text-sm">
+            <i class="fa-solid fa-map-location-dot mr-1"></i>台灣資通訊與伺服器供應鏈實務映射：
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            台灣許多未上市櫃伺服器代工廠（如廣達、緯穎周邊散熱模組或機殼廠），在登錄興櫃前辦理增資時，常直接以台股同業本益比估值。
+          </p>
+          <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5 text-xs text-slate-400">
+            <p>1. <strong>流通性折價（DLOM）：</strong>台灣證交所與櫃買中心實務上通常提列 20%~30% 之 DLOM 折價，對應本案 1.5% 流動性溢價。</p>
+            <p>2. <strong>信保基金與銀行利差：</strong>台灣中小企業取得銀行資金仰賴中小企業信保基金，借款利率介於 3.5%~4.5%。</p>
+            <p>3. <strong>所得稅率差異：</strong>台灣營利事業所得稅率為 20%（低於美國 35%），利息稅盾效果較弱。</p>
+          </div>
+        </div>`,
+        notes: '引導學生思考：若將此案搬到台灣，20% 稅率會讓 WACC 變高還是變低？'
+      },
+      {
+        num: 18, pillar: 'tn', cat: '區塊二：教學指引｜後記追蹤',
+        title: '個案後續追蹤（Case Epilogue）：談判桌上的定海神針',
+        sub: '週五下午五點董事會決策揭曉：嚴謹財務估值如何創造 45 萬美元價值',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4 max-w-2xl mx-auto text-xs sm:text-sm">
+          <div class="text-gold-400 font-bold text-sm flex items-center gap-2">
+            <i class="fa-solid fa-trophy"></i> 董事會現場紀實：暫緩全額核准，授權底線談判
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            週五下午，看到 13.47% 的 WACC 與 -$235,184 的 NPV 數字後，創辦人 Bob 否決了 800 萬全額核准案。但他並未放棄專案，而是拿著財務部的保本資本支出上限（$7,764,816）重返談判桌！
+          </p>
+          <div class="p-4 bg-emerald-950/40 rounded-xl border border-emerald-800/60 text-emerald-300 text-xs">
+            <strong>談判大逆轉：</strong>成功迫使德國自動化設備商降價 60 萬美元，並分期部署機房，修正後投資額為 720 萬美元。在 13.47% 高門檻下，NPV 重新回升至 <strong>正的 45 萬美元（+$450,000）</strong>！
+          </div>
+        </div>`,
+        notes: '於課堂結束前最後兩分鐘揭曉後記，讓學員終身銘記：財務模型不是官僚絆腳石，而是商業談判的最大利器！'
+      },
+
+      // --- PART 3: 個案解析 (Slides 19 - 28) ---
+      {
+        num: 19, pillar: 'sm', cat: '區塊三：個案解析｜決策備忘錄',
+        title: '致執行長 Bob 與董事會之財務決策備忘錄',
+        sub: 'Executive Memorandum：量化推導成果與五大核心決策結論',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 max-w-2xl mx-auto text-xs sm:text-sm font-mono">
+          <div class="text-rose-400 font-bold font-sans border-b border-slate-800 pb-2">
+            📄 財務部呈核：800 萬美元自動化產線暨資料中心投資案專案折現率
+          </div>
+          <div class="space-y-1.5 text-slate-300">
+            <p>1. 標竿 Dell 資本結構：帳面負債比 40.0% ； 市場負債比 26.16% (P/B=1.94)</p>
+            <p>2. DDM 模型在科技業徹底失效，CAPM 為唯一公認標準</p>
+            <p>3. Dell 市場 WACC 為 10.612%，帳面 WACC (9.42%) 嚴重低估 120 bps</p>
+            <p>4. Hamada 槓桿重組 + 擴充型溢價 → <strong>HCI 專屬 WACC = 13.474%</strong></p>
+            <p class="text-rose-400 font-bold font-sans">5. 800 萬專案 NPV 實質為負（-$235,184），建請暫緩推進並啟動降價談判！</p>
+          </div>
+        </div>`,
+        notes: '讓學員練習撰寫給董事會的高管摘要（Executive Summary），要求精準、不拖泥帶水。'
+      },
+      {
+        num: 20, pillar: 'sm', cat: '區塊三：個案解析｜問題一',
+        title: '問題一解析：Dell 資本結構權重計算與背離本質',
+        sub: '帳面負債 40.00% vs. 市值負債 26.16% 之深層成因解構',
+        body: `<div class="overflow-x-auto text-xs w-full">
+          <table class="w-full text-left border-collapse border border-slate-800 font-mono">
+            <thead>
+              <tr class="bg-slate-950 text-slate-300">
+                <th class="p-2 border border-slate-800 font-sans">資本結構衡量基準</th>
+                <th class="p-2 border border-slate-800">債務規模 (D)</th>
+                <th class="p-2 border border-slate-800">股權規模 (E)</th>
+                <th class="p-2 border border-slate-800">總資本 (V)</th>
+                <th class="p-2 border border-slate-800 text-sky-400">負債權重 (wd)</th>
+                <th class="p-2 border border-slate-800 text-sky-400">股權權重 (we)</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-300">
+              <tr class="border-b border-slate-800">
+                <td class="p-2 border border-slate-800 font-sans">帳面價值基準 (Book)</td>
+                <td class="p-2 border border-slate-800">$30.0 億</td>
+                <td class="p-2 border border-slate-800">$45.0 億</td>
+                <td class="p-2 border border-slate-800">$75.0 億</td>
+                <td class="p-2 border border-slate-800">40.00%</td>
+                <td class="p-2 border border-slate-800">60.00%</td>
+              </tr>
+              <tr class="border-b border-slate-800 bg-slate-900/60">
+                <td class="p-2 border border-slate-800 font-sans">市場價值基準 (Market)</td>
+                <td class="p-2 border border-slate-800">$31.0 億</td>
+                <td class="p-2 border border-slate-800">$87.5 億</td>
+                <td class="p-2 border border-slate-800">$118.5 億</td>
+                <td class="p-2 border border-slate-800 text-amber-400">26.16%</td>
+                <td class="p-2 border border-slate-800 text-amber-400">73.84%</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="p-2 border border-slate-800 font-sans">差異幅度 (Market - Book)</td>
+                <td class="p-2 border border-slate-800">+$1.0 億</td>
+                <td class="p-2 border border-slate-800">+$42.5 億</td>
+                <td class="p-2 border border-slate-800">+$43.5 億</td>
+                <td class="p-2 border border-slate-800 text-rose-400">-13.84%</td>
+                <td class="p-2 border border-slate-800 text-rose-400">+13.84%</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="text-slate-400 text-xs mt-3 font-sans leading-relaxed">
+            <strong>背離成因：</strong>市淨率高達 1.9444 倍。市場投資人賦予 Dell 高達 42.5 億美元的智慧資本與成長期權溢價，傳統資產負債表完全無法反映。
+          </p>
+        </div>`,
+        notes: '引導學生理解市淨率（P/B）對權重造成的放大效應。'
+      },
+      {
+        num: 21, pillar: 'sm', cat: '區塊三：個案解析｜問題二',
+        title: '問題二解析：高登股利折現模型（DDM）批判',
+        sub: 'Re = D1 / P0 + g 模型在科技硬體與 IT 產業之四大失效維度',
+        body: `<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <span class="text-rose-400 font-bold">1. 零股利陷阱 (D1 = 0)</span>
+            <p class="text-slate-400">科技企業將自由現金流投入研發或回購股票，普遍不發放現金股利，公式分子為零無法運算。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <span class="text-rose-400 font-bold">2. 缺乏永續恆常成長率 g</span>
+            <p class="text-slate-400">硬體換機潮與技術換代導致盈餘劇烈波動，完全違背模型永續固定成長率基本假設。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <span class="text-rose-400 font-bold">3. 分母負值奇異點</span>
+            <p class="text-slate-400">高成長期科技股 g 常大於要求報酬率 Re，分母 (Re - g) 趨近於零或為負值，導致股權成本為負或無解。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <span class="text-emerald-400 font-bold">4. CAPM 壓倒性勝出</span>
+            <p class="text-slate-400">CAPM 錨定大盤不可分散系統性協方差，不受個別企業是否發放股利之干擾，為全球唯一金標。</p>
+          </div>
+        </div>`,
+        notes: '向學生說明為何 Gordon 模型在公用事業好用，但搬到科技業卻是災難。'
+      },
+      {
+        num: 22, pillar: 'sm', cat: '區塊三：個案解析｜問題三',
+        title: '問題三解析：標竿 Dell 資本成本組件精算',
+        sub: 'CAPM 股權成本 Re = 12.875% ； 稅後債務資本成本 = 4.225%',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs sm:text-sm font-mono">
+          <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <span class="text-sky-400 font-bold font-sans">Dell 股權資本成本（CAPM 模型）</span>
+            <p class="text-slate-300">Re = Rf + β_L × [E(Rm) - Rf]</p>
+            <p class="text-slate-400">• Rf = 3.50% ； β_L = 1.2500 ； MRP = 7.50%</p>
+            <p class="text-amber-400 font-bold text-base">Re = 3.50% + 1.25 × 7.50% = 12.875%</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <span class="text-sky-400 font-bold font-sans">Dell 稅後債務成本（利息稅盾折減）</span>
+            <p class="text-slate-300">稅後 Rd = Rd × (1 - Tc)</p>
+            <p class="text-slate-400">• 稅前 Rd = 6.50% ； 綜合所得稅率 Tc = 35.0%</p>
+            <p class="text-emerald-400 font-bold text-base">稅後 Rd = 6.50% × (1 - 0.35) = 4.225%</p>
+          </div>
+        </div>`,
+        notes: '強調債務成本乘上 (1 - Tc) 的經濟意義：政府透過利息稅前扣除補助了 35% 的融資成本。'
+      },
+      {
+        num: 23, pillar: 'sm', cat: '區塊三：個案解析｜問題四',
+        title: '問題四解析：Dell 帳面 WACC vs. 市場 WACC 試算與論證',
+        sub: '9.415% vs. 10.612%：前瞻性邊際機會成本論證',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4 max-w-2xl mx-auto text-xs sm:text-sm">
+          <div class="grid grid-cols-2 gap-4 text-center font-mono">
+            <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
+              <span class="block text-slate-400 text-xs font-sans">帳面價值權重 WACC</span>
+              <span class="text-lg font-bold text-slate-300">9.4150%</span>
+              <span class="block text-[10px] text-slate-500 font-sans">60%×12.875% + 40%×4.225%</span>
+            </div>
+            <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
+              <span class="block text-slate-400 text-xs font-sans">市場價值權重 WACC</span>
+              <span class="text-lg font-bold text-emerald-400">10.6121%</span>
+              <span class="block text-[10px] text-slate-500 font-sans">73.84%×12.875% + 26.16%×4.225%</span>
+            </div>
+          </div>
+          <div class="p-3 bg-rose-950/40 rounded-xl border border-rose-800/60 text-rose-300 text-xs leading-relaxed">
+            <strong>核心理論論證：</strong>資本成本衡量募集邊際新資本必須承諾的期望報酬率。若採信帳面 9.42%，將導致公司核准 IRR 僅 10% 的專案，實質摧毀 61 bps 股東財富！
+          </div>
+        </div>`,
+        notes: '向學生總結：在現代公司財務學中，計算 WACC 唯一具有合法性的標準絕對是市場價值。'
+      },
+      {
+        num: 24, pillar: 'sm', cat: '區塊三：個案解析｜問題五 AB',
+        title: '問題五步驟 A & B：Hamada 去槓桿與目標再加槓桿',
+        sub: '資產純營運風險 β_U = 1.0160 ； 目標負債股權風險 β_L,HCI = 1.2991',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs sm:text-sm font-mono">
+          <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <span class="text-amber-400 font-bold font-sans">步驟 A：Dell 去槓桿（Unlevering）</span>
+            <p class="text-slate-300">β_U = β_L / [1 + (1 - Tc)(D/E)_Dell]</p>
+            <p class="text-slate-400">• Dell 市場 D/E = 31 / 87.5 = 0.3543</p>
+            <p class="text-slate-400">• 分母 = 1 + 0.65 × 0.3543 = 1.2303</p>
+            <p class="text-sky-300 font-bold text-base">β_U = 1.25 / 1.2303 = 1.0160</p>
+            <span class="text-[10px] text-slate-500 font-sans block">萃取出電腦伺服器產業純商業營運資產風險</span>
+          </div>
+          <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <span class="text-amber-400 font-bold font-sans">步驟 B：HCI 再加槓桿（Relevering）</span>
+            <p class="text-slate-300">β_L,HCI = β_U × [1 + (1 - Tc)(D/E)_HCI]</p>
+            <p class="text-slate-400">• HCI 目標 D/E = 30% / 70% = 0.4286</p>
+            <p class="text-slate-400">• 乘數 = 1 + 0.65 × 0.4286 = 1.2786</p>
+            <p class="text-amber-400 font-bold text-base">β_L,HCI = 1.0160 × 1.2786 = 1.2991</p>
+            <span class="text-[10px] text-slate-500 font-sans block">反映 HCI 較高目標負債槓桿下之股權風險</span>
+          </div>
+        </div>`,
+        notes: '黑板板書與簡報同步展示濱田方程的脫水與重新加水過程。'
+      },
+      {
+        num: 25, pillar: 'sm', cat: '區塊三：個案解析｜問題五 CD',
+        title: '問題五步驟 C & D：擴充型 CAPM 與 HCI 最終 WACC',
+        sub: '納入小型規模與流動性溢價，推導 HCI 專屬折現率 = 13.47%',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4 max-w-2xl mx-auto text-xs sm:text-sm font-mono">
+          <div class="space-y-1.5 border-b border-slate-800 pb-3">
+            <span class="text-sky-400 font-bold font-sans">步驟 C：擴充型 CAPM（Build-Up Model）</span>
+            <p class="text-slate-300">Re,HCI = Rf + β_L,HCI × MRP + 規模溢價(s) + 流動性溢價(i)</p>
+            <p class="text-slate-400">= 3.50% + 1.2991 × 7.50% + 2.50% + 1.50%</p>
+            <p class="text-slate-400">= 3.50% + 9.7429% + 4.00% = <strong class="text-amber-400">17.2429%</strong></p>
+          </div>
+          <div class="space-y-1.5 pt-1">
+            <span class="text-sky-400 font-bold font-sans">步驟 D：HCI 最終專案加權資金成本</span>
+            <p class="text-slate-300">WACC_HCI = we × Re,HCI + wd × 稅後 Rd,HCI</p>
+            <p class="text-slate-400">= (70% × 17.2429%) + (30% × 7.20% × 0.65)</p>
+            <p class="text-slate-400">= 12.0701% + 1.4040% = <strong class="text-rose-400 text-base">13.4741% (約 13.47%)</strong></p>
+          </div>
+        </div>`,
+        notes: '強調 13.47% 是包含規模與缺乏流動性風險後的真實門檻折現率。'
+      },
+      {
+        num: 26, pillar: 'sm', cat: '區塊三：個案解析｜問題六',
+        title: '問題六解析：800 萬美元專案資本預算 NPV / IRR 精算',
+        sub: '專案 IRR = 12.602% ； 三種折現率下 NPV 大對比與假陽性陷阱',
+        body: `<div class="overflow-x-auto text-xs w-full">
+          <table class="w-full text-left border-collapse border border-slate-800 font-mono">
+            <thead>
+              <tr class="bg-slate-950 text-slate-300">
+                <th class="p-2 border border-slate-800 font-sans">折現率評估基準</th>
+                <th class="p-2 border border-slate-800">折現率 (WACC)</th>
+                <th class="p-2 border border-slate-800">現金流入現值 (PV)</th>
+                <th class="p-2 border border-slate-800">投資預算 (I0)</th>
+                <th class="p-2 border border-slate-800 text-sky-400">專案淨現值 (NPV)</th>
+                <th class="p-2 border border-slate-800 font-sans">決策判定</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-300">
+              <tr class="border-b border-slate-800">
+                <td class="p-2 border border-slate-800 font-sans">Dell 帳面 WACC</td>
+                <td class="p-2 border border-slate-800">9.4150%</td>
+                <td class="p-2 border border-slate-800">$8,961,220</td>
+                <td class="p-2 border border-slate-800">$8,000,000</td>
+                <td class="p-2 border border-slate-800 text-emerald-400 font-bold">+$961,220</td>
+                <td class="p-2 border border-slate-800 font-sans text-rose-400">【假陽性】致命誤判</td>
+              </tr>
+              <tr class="border-b border-slate-800 bg-slate-900/60">
+                <td class="p-2 border border-slate-800 font-sans">Dell 市場 WACC</td>
+                <td class="p-2 border border-slate-800">10.6121%</td>
+                <td class="p-2 border border-slate-800">$8,580,103</td>
+                <td class="p-2 border border-slate-800">$8,000,000</td>
+                <td class="p-2 border border-slate-800 text-emerald-400 font-bold">+$580,103</td>
+                <td class="p-2 border border-slate-800 font-sans text-rose-400">【假陽性】標竿誤導</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="p-2 border border-slate-800 font-sans text-amber-300">HCI 專屬真實 WACC</td>
+                <td class="p-2 border border-slate-800 text-amber-300">13.4741%</td>
+                <td class="p-2 border border-slate-800">$7,764,816</td>
+                <td class="p-2 border border-slate-800">$8,000,000</td>
+                <td class="p-2 border border-slate-800 text-rose-400 font-bold">-$235,184</td>
+                <td class="p-2 border border-slate-800 font-sans text-emerald-400">【斷然否決】保護財富</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="text-rose-400 text-xs mt-3 font-sans leading-relaxed">
+            ★ 專案內生報酬率 IRR (12.60%) 介於 10.61% 與 13.47% 之間！若誤用 Dell 標竿將誤採毒酒專案，摧毀 23.5 萬美元股東價值！
+          </p>
+        </div>`,
+        notes: '這是全案最重要的財務推導收斂：NPV 由正轉負完全是由折現率的精確度決定的。'
+      },
+      {
+        num: 27, pillar: 'sm', cat: '區塊三：個案解析｜敏感度分析',
+        title: '敏感度矩陣與保本資本支出上限談判',
+        sub: '逆向推導：專案保本 Capex 上限為 $7,764,816，要求折讓 60 萬美元',
+        body: `<div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4 max-w-2xl mx-auto text-xs sm:text-sm">
+          <div class="text-emerald-400 font-bold text-sm">
+            <i class="fa-solid fa-handshake mr-1"></i>保本資本支出上限推導（Break-even Capex）：
+          </div>
+          <p class="text-slate-300 leading-relaxed font-mono">
+            當 WACC = 13.4741% 時，未來 8 年現金流入現值總和為 <strong>$7,764,816</strong>。<br>
+            若要使 NPV ≥ 0，初始投資預算必須小於等於 $7,764,816！
+          </p>
+          <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5 text-xs text-slate-300 font-sans">
+            <p>• <strong>目前原案預算：</strong>$8,000,000 美元（NPV = -$235,184）</p>
+            <p>• <strong>要求設備商折讓空間：</strong>至少折讓 $235,184（約 3.0% 折扣）</p>
+            <p>• <strong>建議談判目標：</strong>要求供應商降價 60 萬至 $7,400,000（NPV 轉正為 <strong>+$364,816</strong>）</p>
+          </div>
+        </div>`,
+        notes: '說明 CFO 的真正價值：不僅是給出否決結論，更要給出能轉敗為勝的建設性方案。'
+      },
+      {
+        num: 28, pillar: 'sm', cat: '區塊三：個案解析｜課程總結',
+        title: '課程總結：未上市估值與折現率的定海神針',
+        sub: '精準的財務折現率，是保護企業不在盲目樂觀中翻船的關鍵護城河',
+        body: `<div class="text-center py-6 space-y-5 max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold">
+            <i class="fa-solid fa-award"></i> HARVARD CASE TAKEAWAY ‧ 企業領導與財務管理金律
+          </div>
+          <h3 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+            折現率不是官僚的數字遊戲，<br>
+            而是企業價值創造的最後防線！
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left text-xs pt-2">
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-sky-400 block mb-1">1. 機會成本為綱</strong>
+              <span class="text-slate-400">堅決揚棄沉沒帳面淨值，以邊際融資市場價值為唯一標準。</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-amber-400 block mb-1">2. 槓桿重組去噪</strong>
+              <span class="text-slate-400">善用 Hamada 方程萃取純資產風險，精準對齊自身目標結構。</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-rose-400 block mb-1">3. 私營溢價保護</strong>
+              <span class="text-slate-400">誠實面對規模脆弱與流動性限制，守護真實股東財富！</span>
+            </div>
+          </div>
+        </div>`,
+        notes: '點擊觸發全屏彩帶動畫，恭喜學員完成本個案研討！'
+      }
+    ];
+
+    // -------------------------------------------------------------
+    // PRESENTATION MODE LOGIC
+    // -------------------------------------------------------------
+    let curSlide = 0;
+
+    function openPresentationMode(slideNum = 1) {
+      curSlide = Math.max(0, Math.min(hciSlideDeck.length - 1, slideNum - 1));
+      renderSlide();
+      document.getElementById('presentation-overlay').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePresentationMode() {
+      document.getElementById('presentation-overlay').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function nextSlide() {
+      if (curSlide < hciSlideDeck.length - 1) {
+        curSlide++;
+        renderSlide();
+        if (curSlide === hciSlideDeck.length - 1 && window.confetti) {
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+      }
+    }
+
+    function prevSlide() {
+      if (curSlide > 0) {
+        curSlide--;
+        renderSlide();
+      }
+    }
+
+    function renderSlide() {
+      const s = hciSlideDeck[curSlide];
+      document.getElementById('slide-number-indicator').innerText = `Slide ${s.num} / ${hciSlideDeck.length}`;
+      const sel = document.getElementById('slide-jump-select');
+      if (sel) sel.value = s.num;
+
+      // Update PPT top pillar tabs
+      const tCase = document.getElementById('ppt-tab-case');
+      const tTn = document.getElementById('ppt-tab-tn');
+      const tSm = document.getElementById('ppt-tab-sm');
+      if (tCase && tTn && tSm) {
+        tCase.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'case' ? 'bg-brand-500 text-white' : 'text-slate-300 hover:bg-slate-800');
+        tTn.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'tn' ? 'bg-teal-700 text-white' : 'text-slate-300 hover:bg-slate-800');
+        tSm.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'sm' ? 'bg-rose-700 text-white' : 'text-slate-300 hover:bg-slate-800');
+      }
+
+      // Render Stage HTML
+      document.getElementById('slide-content-stage').innerHTML = `
+        <div class="border-b border-slate-800 pb-4 flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-gold-400 bg-gold-500/10 px-3 py-1 rounded-full border border-gold-500/30">
+            ${s.cat}
+          </span>
+          <span class="text-xs font-mono text-slate-500">P. ${s.num} OF ${hciSlideDeck.length}</span>
+        </div>
+        <div class="space-y-1">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">${s.title}</h2>
+          <p class="text-xs sm:text-sm text-slate-400">${s.sub}</p>
+        </div>
+        <div class="pt-2">
+          ${s.body}
+        </div>
+      `;
+
+      // Render Notes
+      document.getElementById('slide-notes-text').innerText = s.notes || '無特定講義叮嚀。';
+    }
+
+    function toggleNotesDrawer() {
+      const d = document.getElementById('notes-drawer');
+      const btn = document.getElementById('notes-btn');
+      if (d.classList.contains('hidden')) {
+        d.classList.remove('hidden');
+        btn.classList.add('bg-amber-600', 'text-white');
+      } else {
+        d.classList.add('hidden');
+        btn.classList.remove('bg-amber-600', 'text-white');
+      }
+    }
+
+    // Populate Slide Jump Select Dropdown
+    function initSlideSelect() {
+      const sel = document.getElementById('slide-jump-select');
+      if (!sel) return;
+      sel.innerHTML = hciSlideDeck.map(s => `<option value="${s.num}">P.${s.num} - ${s.title.substring(0, 16)}...</option>`).join('');
+    }
+
+    // Keyboard Shortcuts Listener
+    document.addEventListener('keydown', function(e) {
+      const overlay = document.getElementById('presentation-overlay');
+      if (!overlay || overlay.classList.contains('hidden')) return;
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closePresentationMode();
+      } else if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    });
+
+    // -------------------------------------------------------------
+    // MAIN PORTAL PILLAR NAVIGATION
+    // -------------------------------------------------------------
+    function switchPillar(pillarId) {
+      document.querySelectorAll('.pillar-section').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById('pillar-' + pillarId);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Update Nav Buttons
+      const btnCase = document.getElementById('nav-btn-case');
+      const btnTn = document.getElementById('nav-btn-tn');
+      const btnSm = document.getElementById('nav-btn-sm');
+
+      if (btnCase && btnTn && btnSm) {
+        btnCase.className = 'px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-2 ' + 
+          (pillarId === 'case' ? 'tab-active-case' : 'text-slate-300 hover:text-white hover:bg-slate-800');
+        btnTn.className = 'px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-2 ' + 
+          (pillarId === 'tn' ? 'tab-active-tn' : 'text-slate-300 hover:text-white hover:bg-slate-800');
+        btnSm.className = 'px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-2 ' + 
+          (pillarId === 'sm' ? 'tab-active-sm' : 'text-slate-300 hover:text-white hover:bg-slate-800');
+      }
+
+      // Mobile Nav
+      const mobCase = document.getElementById('mob-btn-case');
+      const mobTn = document.getElementById('mob-btn-tn');
+      const mobSm = document.getElementById('mob-btn-sm');
+      if (mobCase && mobTn && mobSm) {
+        mobCase.className = 'text-xs font-bold px-3 py-1.5 rounded-lg ' + (pillarId === 'case' ? 'text-white bg-brand-500' : 'text-slate-400');
+        mobTn.className = 'text-xs font-bold px-3 py-1.5 rounded-lg ' + (pillarId === 'tn' ? 'text-white bg-teal-600' : 'text-slate-400');
+        mobSm.className = 'text-xs font-bold px-3 py-1.5 rounded-lg ' + (pillarId === 'sm' ? 'text-white bg-rose-600' : 'text-slate-400');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // -------------------------------------------------------------
+    // CLASSROOM TIMER LOGIC
+    // -------------------------------------------------------------
+    let timerTotalSeconds = 90 * 60;
+    let timerInterval = null;
+
+    function toggleTimerModal() {
+      const modal = document.getElementById('timer-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    function setTimerMinutes(m) {
+      pauseTimer();
+      timerTotalSeconds = m * 60;
+      updateTimerDisplay();
+      document.getElementById('timer-stage-title').innerText = `${m} 分鐘教學計時模式`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      document.getElementById('timer-start-btn').innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i>計時中';
+      timerInterval = setInterval(() => {
+        if (timerTotalSeconds > 0) {
+          timerTotalSeconds--;
+          updateTimerDisplay();
+        } else {
+          pauseTimer();
+          alert('課堂倒數結束！請引導學生進行總結或進入下一幕。');
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('timer-start-btn').innerHTML = '<i class="fa-solid fa-play mr-1.5"></i>繼續計時';
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      timerTotalSeconds = 90 * 60;
+      updateTimerDisplay();
+      document.getElementById('timer-start-btn').innerHTML = '<i class="fa-solid fa-play mr-1.5"></i>開始計時';
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerTotalSeconds / 60).toString().padStart(2, '0');
+      const s = (timerTotalSeconds % 60).toString().padStart(2, '0');
+      const timeStr = `${m}:${s}`;
+      document.getElementById('timer-display-mini').innerText = timeStr;
+      document.getElementById('timer-display-big').innerText = timeStr;
+    }
+
+    // -------------------------------------------------------------
+    // DYNAMIC SIMULATOR & CHART.JS ENGINE
+    // -------------------------------------------------------------
+    const projectCF = [1500000, 1620000, 1750000, 1820000, 1780000, 1680000, 1550000, 1420000];
+
+    function runSim() {
+      const betaL_dell = parseFloat(document.getElementById('input-beta').value);
+      const debt_pct = parseFloat(document.getElementById('input-debt').value) / 100;
+      const size_prem = parseFloat(document.getElementById('input-size').value) / 100;
+      const capex_m = parseFloat(document.getElementById('input-capex').value);
+      const capex = capex_m * 1000000;
+
+      // Update Labels
+      document.getElementById('val-beta').innerText = betaL_dell.toFixed(2);
+      document.getElementById('val-debt').innerText = (debt_pct * 100).toFixed(0) + '%';
+      document.getElementById('val-size').innerText = (size_prem * 100).toFixed(1) + '%';
+      document.getElementById('val-capex').innerText = '$' + capex_m.toFixed(1) + 'M';
+
+      const rf = 0.035;
+      const mrp = 0.075;
+      const tc = 0.35;
+      const illiq_prem = 0.015;
+      const rd_hci = 0.072;
+      const rd_tax_hci = rd_hci * (1 - tc);
+
+      // Dell D/E
+      const de_dell = 31.0 / 87.5; // ~0.3542857
+
+      // Hamada Unlevering
+      const bu = betaL_dell / (1 + (1 - tc) * de_dell);
+
+      // HCI Relevering
+      const eq_pct = 1 - debt_pct;
+      const de_hci = debt_pct / eq_pct;
+      const bl_hci = bu * (1 + (1 - tc) * de_hci);
+
+      // Extended CAPM
+      const re_hci = rf + bl_hci * mrp + size_prem + illiq_prem;
+
+      // Final HCI WACC
+      const wacc_hci = eq_pct * re_hci + debt_pct * rd_tax_hci;
+
+      // NPV Calculation
+      let pv_inflows = 0;
+      for (let t = 0; t < projectCF.length; t++) {
+        pv_inflows += projectCF[t] / Math.pow(1 + wacc_hci, t + 1);
+      }
+      const npv = pv_inflows - capex;
+
+      // Render Outputs
+      document.getElementById('res-bu').innerText = bu.toFixed(4);
+      document.getElementById('res-bl').innerText = bl_hci.toFixed(4);
+      document.getElementById('res-re').innerText = (re_hci * 100).toFixed(2) + '%';
+      document.getElementById('res-wacc').innerText = (wacc_hci * 100).toFixed(2) + '%';
+
+      const npvEl = document.getElementById('res-npv');
+      const npvBox = document.getElementById('res-npv-box');
+
+      if (npv >= 0) {
+        npvEl.innerText = '+$' + Math.round(npv).toLocaleString();
+        npvEl.className = 'text-lg font-black text-emerald-400';
+        npvBox.className = 'col-span-2 md:col-span-1 p-3 rounded-2xl border bg-emerald-950/40 border-emerald-600/50';
+      } else {
+        npvEl.innerText = '-$' + Math.abs(Math.round(npv)).toLocaleString();
+        npvEl.className = 'text-lg font-black text-rose-400';
+        npvBox.className = 'col-span-2 md:col-span-1 p-3 rounded-2xl border bg-rose-950/40 border-rose-600/50';
+      }
+    }
+
+    function resetSimulator() {
+      document.getElementById('input-beta').value = 1.25;
+      document.getElementById('input-debt').value = 30;
+      document.getElementById('input-size').value = 2.5;
+      document.getElementById('input-capex').value = 8.0;
+      runSim();
+    }
+
+    // Chart.js Initialization
+    let chartStructure = null;
+    let chartSensitivity = null;
+
+    function initCharts() {
+      // Chart 1: Capital Structure
+      const ctx1 = document.getElementById('chartCapitalStructure');
+      if (ctx1) {
+        chartStructure = new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: ['市場股權 ($87.5億, 73.84%)', '市場負債 ($31.0億, 26.16%)', '帳面股權 ($45.0億, 60.00%)', '帳面負債 ($30.0億, 40.00%)'],
+            datasets: [
+              {
+                label: '市場價值權重',
+                data: [73.84, 26.16],
+                backgroundColor: ['#0284C7', '#64748B']
+              },
+              {
+                label: '帳面價值權重',
+                data: [60.00, 40.00],
+                backgroundColor: ['#38BDF8', '#94A3B8']
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom', labels: { font: { family: 'Noto Sans TC', size: 10 } } }
+            }
+          }
+        });
+      }
+
+      // Chart 2: NPV Sensitivity curve
+      const ctx2 = document.getElementById('chartNpvSensitivity');
+      if (ctx2) {
+        const rates = [8.0, 9.0, 9.42, 10.0, 10.61, 11.5, 12.0, 12.60, 13.0, 13.47, 14.0, 15.0];
+        const npvVals = rates.map(r => {
+          const w = r / 100;
+          let pv = 0;
+          for (let t = 0; t < projectCF.length; t++) {
+            pv += projectCF[t] / Math.pow(1 + w, t + 1);
+          }
+          return Math.round(pv - 8000000);
+        });
+
+        chartSensitivity = new Chart(ctx2, {
+          type: 'line',
+          data: {
+            labels: rates.map(r => r + '%'),
+            datasets: [{
+              label: '專案 NPV ($)',
+              data: npvVals,
+              borderColor: '#E11D48',
+              backgroundColor: 'rgba(225, 29, 72, 0.1)',
+              fill: true,
+              tension: 0.35,
+              pointBackgroundColor: rates.map(r => r === 12.60 ? '#D97706' : (r < 12.60 ? '#10B981' : '#E11D48')),
+              pointRadius: rates.map(r => [9.42, 10.61, 12.60, 13.47].includes(r) ? 6 : 3)
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                ticks: {
+                  callback: function(v) { return '$' + (v / 1000).toLocaleString() + 'k'; },
+                  font: { family: 'JetBrains Mono', size: 9 }
+                }
+              },
+              x: {
+                grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                ticks: { font: { family: 'JetBrains Mono', size: 9 } }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(c) { return 'NPV: $' + c.raw.toLocaleString(); }
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // Window Onload
+    window.onload = function() {
+      initSlideSelect();
+      runSim();
+      initCharts();
+    };
+  </script>
+</body>
+</html>

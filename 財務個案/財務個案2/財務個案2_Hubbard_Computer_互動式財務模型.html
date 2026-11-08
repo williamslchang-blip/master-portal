@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hubbard Computer, Inc. (HCI) 完整解析財務模型｜哈佛商學院互動式決策平台</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- SheetJS (xlsx.full.min.js) for live Excel export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            hbs: {
+              crimson: '#A51C30',
+              dark: '#7A1222',
+              light: '#FDECEF',
+            },
+            brand: {
+              50: '#F0F5FA',
+              100: '#E1EBF5',
+              500: '#1F4E79',
+              600: '#173B5C',
+              700: '#10283E',
+              800: '#0C1E2F',
+              900: '#07121C',
+            },
+            gold: {
+              300: '#f7d683',
+              400: '#eebf4d',
+              500: '#d99f26',
+              600: '#b87c18',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Custom Table Styles */
+    .table-compact th { padding: 10px 12px; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .table-compact td { padding: 8px 12px; font-size: 0.8125rem; }
+    
+    /* Input Styling */
+    .num-input {
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      padding: 0.35rem 0.6rem;
+      transition: all 0.2s;
+    }
+    .num-input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+    .slider-accent {
+      accent-color: #38bdf8;
+    }
+
+    /* Formula Badge */
+    .fx-tag {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(234, 179, 8, 0.15);
+      color: #facc15;
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      padding: 1px 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 4px;
+      transition: all 0.15s;
+    }
+    .fx-tag:hover {
+      background: rgba(234, 179, 8, 0.3);
+      transform: scale(1.05);
+    }
+
+    /* Print styling */
+    @media print {
+      header, nav, #kpi-strip, #scenario-bar, #formula-modal, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .sheet-tab { display: block !important; page-break-after: always; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col">
+
+  <!-- ============================================================== -->
+  <!-- HEADER                                                         -->
+  <!-- ============================================================== -->
+  <header class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-rose-600 flex items-center justify-center shadow-lg shadow-indigo-950/50 ring-2 ring-white/10">
+            <i class="fa-solid fa-file-excel text-white text-lg sm:text-xl"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-widest text-gold-400 bg-gold-500/10 px-2 py-0.5 rounded border border-gold-500/30">
+                哈佛商學院個案精算模型
+              </span>
+              <span class="text-[10px] text-slate-400 font-mono hidden md:inline">HBS CASE 2 DYNAMIC VALUATION PLATFORM</span>
+            </div>
+            <h1 class="text-sm sm:text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
+              Hubbard Computer, Inc. (HCI) 完整解析財務模型
+            </h1>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <button id="btn-toggle-formula" onclick="toggleFormulaMode()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+            <i class="fa-solid fa-square-root-variable text-amber-400"></i>
+            <span class="hidden sm:inline">算式透視</span>
+            <span id="formula-mode-status" class="text-[10px] px-1.5 py-0.2 rounded bg-slate-900 text-slate-400">關</span>
+          </button>
+
+          <button onclick="exportLiveExcel()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-950/40">
+            <i class="fa-solid fa-file-excel"></i>
+            <span class="hidden md:inline">匯出 Excel</span>
+          </button>
+
+          <a href="index.html" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white shadow-lg shadow-sky-950/40">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span class="hidden md:inline">教學簡報</span>
+          </a>
+
+          <button onclick="resetToBaseCase()" class="p-2 sm:px-3 sm:py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" title="重置為 Excel 個案原始基準">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span class="hidden lg:inline ml-1">重置基準</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- TOP LIVE KPI STRIP                                             -->
+  <!-- ============================================================== -->
+  <section id="kpi-strip" class="bg-slate-900/90 border-b border-slate-800 px-4 py-3 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Scenario Selector -->
+      <div id="scenario-bar" class="flex items-center gap-2">
+        <span class="text-xs font-bold text-slate-400 flex items-center gap-1">
+          <i class="fa-solid fa-wand-magic-sparkles text-gold-400"></i> 情境模擬：
+        </span>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="applyScenario('base')" id="scen-base" class="scenario-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-sky-950/80 text-sky-400 border border-sky-500/50">
+            原案基準 ($8.0M)
+          </button>
+          <button onclick="applyScenario('negotiation')" id="scen-negotiation" class="scenario-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 hover:border-emerald-500/40">
+            談判折讓 ($7.4M)
+          </button>
+          <button onclick="applyScenario('bull')" id="scen-bull" class="scenario-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-amber-400 border border-slate-700 hover:border-amber-500/40">
+            樂觀放量 (+15% FCF)
+          </button>
+          <button onclick="applyScenario('bear')" id="scen-bear" class="scenario-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-rose-400 border border-slate-700 hover:border-rose-500/40">
+            升息緊縮 (Rf=5.0%)
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-time Summary Badges -->
+      <div class="flex items-center flex-wrap gap-2.5 text-xs font-mono">
+        <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+          <span class="text-slate-400 font-sans">Dell 帳面 WACC:</span>
+          <span id="strip-dell-bv" class="text-slate-200 font-bold">9.42%</span>
+        </div>
+        <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+          <span class="text-slate-400 font-sans">Dell 市場 WACC:</span>
+          <span id="strip-dell-mv" class="text-sky-300 font-bold">10.61%</span>
+        </div>
+        <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+          <span class="text-slate-400 font-sans">HCI 專屬 WACC:</span>
+          <span id="strip-hci-wacc" class="text-amber-400 font-bold">13.47%</span>
+        </div>
+        <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+          <span class="text-slate-400 font-sans">專案 IRR:</span>
+          <span id="strip-irr" class="text-indigo-300 font-bold">12.60%</span>
+        </div>
+        <div id="strip-npv-container" class="px-3 py-1.5 rounded-xl border flex items-center gap-2 bg-rose-950/70 border-rose-600/70 text-rose-300">
+          <span class="font-sans font-bold">真實專案 NPV:</span>
+          <span id="strip-npv" class="font-black text-sm">-$235,184</span>
+          <span id="strip-decision-badge" class="px-2 py-0.5 rounded text-[10px] font-sans font-extrabold bg-rose-600 text-white">斷然否決</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 7-SHEET TAB SWITCHER NAVIGATION                                -->
+  <!-- ============================================================== -->
+  <nav class="bg-slate-950 border-b border-slate-800 sticky top-16 sm:top-20 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center space-x-1 sm:space-x-2 overflow-x-auto py-2 no-scrollbar text-xs font-bold">
+      
+      <button onclick="switchTab('sheet-dash')" id="tab-btn-dash" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap bg-brand-500 text-white shadow-md">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>決策總覽與參數</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q1')" id="tab-btn-q1" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-building"></i>
+        <span>問題一：Dell 資本結構</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q23')" id="tab-btn-q23" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-scale-balanced"></i>
+        <span>問題二與三：DDM與CAPM</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q4')" id="tab-btn-q4" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>問題四：Dell WACC比較</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q5')" id="tab-btn-q5" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-arrows-split-up-and-left"></i>
+        <span>問題五：Hamada與HCI WACC</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q6')" id="tab-btn-q6" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-money-bill-trend-up"></i>
+        <span>問題六：800萬專案預算與NPV</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q7')" id="tab-btn-q7" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-table-cells"></i>
+        <span>敏感度分析與決策矩陣</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ============================================================== -->
+  <!-- MAIN WORKSPACE CONTENT                                         -->
+  <!-- ============================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+
+    <!-- ============================================================ -->
+    <!-- SHEET 1: 決策總覽與參數設定                                    -->
+    <!-- ============================================================ -->
+    <div id="sheet-dash" class="sheet-tab space-y-8 animate-fadeIn">
+      
+      <!-- Banner -->
+      <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-brand-900/60 to-slate-900 border border-slate-800 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-sky-400 pointer-events-none">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div class="max-w-3xl space-y-2">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold border border-sky-500/30">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>EXCEL SHEET 1 ｜ 決策總覽與全域參數設定</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Hubbard Computer, Inc.：非上市公司 WACC 估算、純業務法與資本預算模型
+          </h2>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            哈佛商學院教學風格個案財務模型（HBS Valuation & Capital Budgeting Model）核心解析。
+            本頁統整三大折現基準（Dell 帳面、Dell 市場、HCI 真實）之決策大逆轉，並提供完整全域參數調節面板。
+          </p>
+        </div>
+      </div>
+
+      <!-- Critical Executive Summary Table (Excel R4-R10) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-trophy text-gold-400"></i>
+              【核心財務決策與專案評估精算成果摘要】
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              對照 Dell 帳面 WACC、Dell 市場 WACC 與 HCI 真實專屬 WACC 之 NPV、IRR 及董事會審批決策
+            </p>
+          </div>
+          <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">
+            Excel 儲存格：決策總覽與參數設定!B4:F10
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact">
+            <thead class="bg-slate-950 text-slate-300 border-b border-slate-800 font-bold">
+              <tr>
+                <th class="py-3 px-4">評估維度 / 決策指標</th>
+                <th class="py-3 px-4 text-slate-300">基準 A：Dell 帳面 WACC</th>
+                <th class="py-3 px-4 text-sky-400">基準 B：Dell 市場 WACC</th>
+                <th class="py-3 px-4 text-amber-400 bg-amber-950/20 border-x border-amber-900/40">基準 C：HCI 專屬真實 WACC</th>
+                <th class="py-3 px-4 text-slate-400">財務決策重大啟示</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80 font-mono">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-slate-300">適用折現率 (Discount Rate / WACC)</td>
+                <td class="py-3.5 px-4 text-slate-200 font-bold" id="dash-wacc-a">9.42%</td>
+                <td class="py-3.5 px-4 text-sky-400 font-bold" id="dash-wacc-b">10.61%</td>
+                <td class="py-3.5 px-4 text-amber-400 font-black bg-amber-950/20 border-x border-amber-900/40" id="dash-wacc-c">13.47%</td>
+                <td class="py-3.5 px-4 font-sans text-slate-400 text-xs">HCI 專屬 WACC 較標竿高出 2.86%，較帳面高出 4.06%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-slate-300">800 萬美元專案淨現值 (NPV)</td>
+                <td class="py-3.5 px-4 text-emerald-400 font-bold" id="dash-npv-a">+$961,220</td>
+                <td class="py-3.5 px-4 text-emerald-400 font-bold" id="dash-npv-b">+$580,103</td>
+                <td class="py-3.5 px-4 text-rose-400 font-black bg-amber-950/20 border-x border-amber-900/40 text-sm" id="dash-npv-c">-$235,184</td>
+                <td class="py-3.5 px-4 font-sans text-rose-400 text-xs font-bold">在 13.47% 折現率下，NPV 崩跌轉負（-$235,184）！</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-slate-300">專案內部報酬率 (Project IRR)</td>
+                <td class="py-3.5 px-4 text-indigo-300 font-bold" id="dash-irr-a">12.60%</td>
+                <td class="py-3.5 px-4 text-indigo-300 font-bold" id="dash-irr-b">12.60%</td>
+                <td class="py-3.5 px-4 text-indigo-300 font-bold bg-amber-950/20 border-x border-amber-900/40" id="dash-irr-c">12.60%</td>
+                <td class="py-3.5 px-4 font-sans text-indigo-300 text-xs font-bold">IRR (12.60%) 介於 10.61% 與 13.47% 之間，決策大逆轉！</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-slate-300">董事會最終審批決策建議</td>
+                <td class="py-3.5 px-4 font-sans font-extrabold text-slate-400">
+                  <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">【致命誤判】大幅核准</span>
+                </td>
+                <td class="py-3.5 px-4 font-sans font-extrabold text-sky-400">
+                  <span class="px-2 py-0.5 rounded bg-sky-950/60 text-sky-300 border border-sky-800/60">【標竿誤導】欣然核准</span>
+                </td>
+                <td class="py-3.5 px-4 font-sans font-extrabold text-rose-400 bg-amber-950/20 border-x border-amber-900/40">
+                  <span class="px-2.5 py-1 rounded bg-rose-950 text-rose-300 border border-rose-600/60 shadow" id="dash-dec-badge">【斷然否決】暫緩推動</span>
+                </td>
+                <td class="py-3.5 px-4 font-sans text-rose-400 text-xs font-bold">若誤用 10.61% 將毀損股東超過 23.5 萬美元財富！</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-slate-300">專案轉正保本投資上限 (Max Capex)</td>
+                <td class="py-3.5 px-4 text-slate-200 font-bold" id="dash-capex-a">$8,961,220</td>
+                <td class="py-3.5 px-4 text-sky-300 font-bold" id="dash-capex-b">$8,580,103</td>
+                <td class="py-3.5 px-4 text-amber-400 font-bold bg-amber-950/20 border-x border-amber-900/40" id="dash-capex-c">$7,764,816</td>
+                <td class="py-3.5 px-4 font-sans text-amber-300 text-xs font-bold">第 0 期資本支出必須壓低至 776 萬美元以下（折讓 $24 萬+）</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Takeaway alert -->
+        <div class="p-4 rounded-2xl bg-rose-950/30 border border-rose-800/40 flex items-start gap-3">
+          <i class="fa-solid fa-triangle-exclamation text-rose-400 text-lg mt-0.5"></i>
+          <div class="text-xs space-y-1">
+            <span class="font-extrabold text-rose-300 uppercase tracking-wider block">哈佛個案核心警示（The Decision Paradox）</span>
+            <p class="text-slate-300 leading-relaxed">
+              若財務長便宜行事直接採用 Dell 的加權平均資金成本 (10.61%)，專案淨現值為 <strong>+$580,103</strong>，董事會將毫不猶豫通過投資案。
+              然而，HCI 是一家<strong>未上市私營小企業</strong>，面對巨頭競爭且股權毫無次級流動性，經 Hamada 純業務法去槓桿並再加槓桿，疊加規模與流動性風險溢酬後，真實資本成本高達 <strong>13.47%</strong>！
+              由於專案 IRR 僅為 <strong>12.60%</strong>，真實 NPV 為 <strong>-$235,184</strong>，該投資案運作每一天都在摧毀股東實質財富！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full Parameter Inputs & Assumptions Table (Excel R12-R31) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-sky-400"></i>
+              【個案基礎參數設定表（Model Inputs & Assumptions）】
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              修改任何輸入參數，全模型 7 個工作表、算式、IRR、NPV 與敏感度矩陣將瞬間即時連動重算
+            </p>
+          </div>
+          <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">
+            Excel 儲存格：決策總覽與參數設定!A12:F31
+          </span>
+        </div>
+
+        <!-- Grid of Input Parameters -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Card 1: 標竿市場 (Dell) -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-sky-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-building-columns"></i> 標竿市場參數（Dell Inc.）
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">NYSE 公開報價</span>
+            </div>
+
+            <!-- P0_Dell -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">Dell 每股市價 (P0)</span>
+                <span class="font-mono text-sky-400" id="lbl-p0">$35.00</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-p0" step="1" value="35" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-p0" min="20" max="60" step="1" value="35" oninput="syncRangeToNum('rng-p0', 'inp-p0'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">基準: $35.0 / 股 (NYSE 收盤均價)</p>
+            </div>
+
+            <!-- Shares_Dell -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">Dell 流通在外股數</span>
+                <span class="font-mono text-sky-400" id="lbl-shares">2.50 億股</span>
+              </div>
+              <input type="number" id="inp-shares" step="10000000" value="250000000" oninput="handleParamChange()" class="num-input w-full text-right text-xs">
+              <p class="text-[10px] text-slate-500">已發行流通在外面值普通股 (250,000,000 股)</p>
+            </div>
+
+            <!-- D_MV_Dell -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">Dell 公司債券總市值</span>
+                <span class="font-mono text-sky-400" id="lbl-dmv">$31.0 億</span>
+              </div>
+              <input type="number" id="inp-dmv" step="100000000" value="3100000000" oninput="handleParamChange()" class="num-input w-full text-right text-xs">
+              <p class="text-[10px] text-slate-500">公開市場債券報價總值 ($3,100,000,000)</p>
+            </div>
+          </div>
+
+          <!-- Card 2: 標竿財報與風險 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-indigo-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-book"></i> 標竿財報與風險參數
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">10-K 審計財報</span>
+            </div>
+
+            <!-- D_BV_Dell -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">Dell 長期負債帳面值</span>
+                <span class="font-mono text-indigo-300" id="lbl-dbv">$30.0 億</span>
+              </div>
+              <input type="number" id="inp-dbv" step="100000000" value="3000000000" oninput="handleParamChange()" class="num-input w-full text-right text-xs">
+              <p class="text-[10px] text-slate-500">資產負債表應付公司債帳面值 ($3,000,000,000)</p>
+            </div>
+
+            <!-- E_BV_Dell -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">Dell 股東權益帳面值</span>
+                <span class="font-mono text-indigo-300" id="lbl-ebv">$45.0 億</span>
+              </div>
+              <input type="number" id="inp-ebv" step="100000000" value="4500000000" oninput="handleParamChange()" class="num-input w-full text-right text-xs">
+              <p class="text-[10px] text-slate-500">資產負債表股東權益淨值 ($4,500,000,000)</p>
+            </div>
+
+            <!-- Beta_L_Dell -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">Dell 股票貝塔 (β_L)</span>
+                <span class="font-mono text-indigo-400" id="lbl-beta">1.25</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-beta" step="0.05" value="1.25" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-beta" min="0.5" max="2.0" step="0.05" value="1.25" oninput="syncRangeToNum('rng-beta', 'inp-beta'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">過去 60 個月月收益相對 S&P 500 迴歸係數</p>
+            </div>
+          </div>
+
+          <!-- Card 3: 宏觀與債務參數 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-globe"></i> 宏觀總經與債務利率
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">聯準會與稅法</span>
+            </div>
+
+            <!-- Rf -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">無風險利率 (Rf)</span>
+                <span class="font-mono text-amber-400" id="lbl-rf">3.50%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-rf" step="0.1" value="3.5" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-rf" min="1.0" max="7.0" step="0.1" value="3.5" oninput="syncRangeToNum('rng-rf', 'inp-rf'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">美國 3 個月期國庫券發行拍賣殖利率 (3.50%)</p>
+            </div>
+
+            <!-- E_Rm -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">市場預期報酬率 E(Rm)</span>
+                <span class="font-mono text-amber-400" id="lbl-erm">11.00%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-erm" step="0.25" value="11.0" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-erm" min="8.0" max="15.0" step="0.25" value="11.0" oninput="syncRangeToNum('rng-erm', 'inp-erm'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">S&P 500 長期年化回報；MRP = <span id="lbl-mrp" class="font-mono text-gold-300 font-bold">7.50%</span></p>
+            </div>
+
+            <!-- Tc -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">綜合企業所得稅率 (Tc)</span>
+                <span class="font-mono text-amber-400" id="lbl-tc">35.0%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-tc" step="1.0" value="35.0" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-tc" min="15.0" max="45.0" step="1.0" value="35.0" oninput="syncRangeToNum('rng-tc', 'inp-tc'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">聯邦與州邊際所得稅率 (35.0%)</p>
+            </div>
+          </div>
+
+          <!-- Card 4: HCI 目標資本結構與借款 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-emerald-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-crosshairs"></i> 目標企業 HCI 結構與債務
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">Hubbard 董事會政策</span>
+            </div>
+
+            <!-- Target_D_V -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">HCI 目標負債比 (Target D/V)</span>
+                <span class="font-mono text-emerald-400" id="lbl-tdv">30.0%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-tdv" step="1.0" value="30.0" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-tdv" min="10.0" max="60.0" step="5.0" value="30.0" oninput="syncRangeToNum('rng-tdv', 'inp-tdv'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">目標股權比 = <span id="lbl-tev" class="font-mono text-slate-200">70.0%</span> ； D/E = <span id="lbl-tde" class="font-mono text-slate-200">42.86%</span></p>
+            </div>
+
+            <!-- Rd_Dell vs Rd_HCI -->
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div class="space-y-1">
+                <span class="text-[11px] text-slate-400 font-bold block">Dell 債券到期殖利率</span>
+                <input type="number" id="inp-rddell" step="0.1" value="6.5" oninput="handleParamChange()" class="num-input w-full text-right text-xs">
+                <span class="text-[9px] text-slate-500">年利率 (6.50%)</span>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] text-emerald-400 font-bold block">HCI 商業銀行借款利率</span>
+                <input type="number" id="inp-rdhci" step="0.1" value="7.2" oninput="handleParamChange()" class="num-input w-full text-right text-xs border-emerald-500/40">
+                <span class="text-[9px] text-slate-500">溢價 +70 bps (7.20%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: 未上市私營小企業風險溢酬 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-rose-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-virus"></i> 私營小企業額外風險溢酬
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">Duff & Phelps / Kroll</span>
+            </div>
+
+            <!-- Size_Prem -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">小型規模風險溢酬 (Size Premium, s)</span>
+                <span class="font-mono text-rose-400" id="lbl-size">2.50%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-size" step="0.1" value="2.5" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-size" min="0.0" max="6.0" step="0.25" value="2.5" oninput="syncRangeToNum('rng-size', 'inp-size'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">補償小企業經營抗風險脆弱性 (+2.50%)</p>
+            </div>
+
+            <!-- Illiq_Prem -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">次級市場流動性折減 (Illiquidity, i)</span>
+                <span class="font-mono text-rose-400" id="lbl-illiq">1.50%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-illiq" step="0.1" value="1.5" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-illiq" min="0.0" max="4.0" step="0.25" value="1.5" oninput="syncRangeToNum('rng-illiq', 'inp-illiq'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">補償未上市私營股權無法隨時變現貼水 (+1.50%)</p>
+            </div>
+          </div>
+
+          <!-- Card 6: 專案資本預算支出 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-gold-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-server"></i> 專案投資規模參數 (Capex)
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">第 0 期資本支出</span>
+            </div>
+
+            <!-- I_0 -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">新產線暨資料中心投資預算 (I_0)</span>
+                <span class="font-mono text-gold-400 font-black text-sm" id="lbl-i0">$8,000,000</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-i0" step="100000" value="8000000" oninput="handleParamChange()" class="num-input w-28 text-right text-xs">
+                <input type="range" id="rng-i0" min="6500000" max="9500000" step="100000" value="8000000" oninput="syncRangeToNum('rng-i0', 'inp-i0'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>$6.5M</span>
+                <span>基準: $8.0M</span>
+                <span>$9.5M</span>
+              </div>
+            </div>
+
+            <!-- Break-even hint -->
+            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center text-xs">
+              <span class="text-slate-400">目前保本預算上限:</span>
+              <span id="hint-breakeven-capex" class="font-mono text-emerald-400 font-bold">$7,764,816</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 2: 問題一 Dell 資本結構與權重                           -->
+    <!-- ============================================================ -->
+    <div id="sheet-q1" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl">
+        <div>
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold border border-sky-500/30">
+            <i class="fa-solid fa-calculator"></i>
+            <span>EXCEL SHEET 2 ｜ TN EXHIBIT A</span>
+          </div>
+          <h2 class="text-2xl font-extrabold text-white mt-1.5">
+            問題一：標竿企業 Dell Inc. 資本結構計算與權重背離深度分析
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            推導公式：E_MV = P0 × 股數 ； V = D + E ； wd = D / V ； we = E / V ； P/B = E_MV / E_BV
+          </p>
+        </div>
+        <div class="p-3 bg-slate-950 rounded-2xl border border-slate-800 text-center font-mono text-xs">
+          <span class="block text-slate-400 font-sans text-[11px]">Dell 市淨率 (P/B)</span>
+          <span id="q1-pb-kpi" class="text-xl font-black text-sky-400">1.9444 倍</span>
+        </div>
+      </div>
+
+      <!-- Main Table -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-table-list text-sky-400"></i>
+          Dell 資本結構帳面與市場價值對比表
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-4">資本結構評估維度</th>
+                <th class="py-3 px-4">債務規模 (D)</th>
+                <th class="py-3 px-4">股權規模 (E)</th>
+                <th class="py-3 px-4">總資本規模 (V)</th>
+                <th class="py-3 px-4">債務權重 (wd)</th>
+                <th class="py-3 px-4">股權權重 (we)</th>
+                <th class="py-3 px-4">債股比率 (D/E)</th>
+                <th class="py-3 px-4 font-sans">權重差異評估</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-slate-300">帳面價值基準 (Book Value)</td>
+                <td class="py-3.5 px-4" id="q1-dbv">$3,000,000,000 <span class="fx-tag" onclick="showFormula('決策總覽!D17', '帳面長期借款與應付債券面值', '$30.0 億')">fx</span></td>
+                <td class="py-3.5 px-4" id="q1-ebv">$4,500,000,000 <span class="fx-tag" onclick="showFormula('決策總覽!D18', '資產負債表股東權益帳面淨值', '$45.0 億')">fx</span></td>
+                <td class="py-3.5 px-4" id="q1-vbv">$7,500,000,000</td>
+                <td class="py-3.5 px-4 font-bold text-slate-200" id="q1-wdbv">40.00%</td>
+                <td class="py-3.5 px-4 font-bold text-slate-200" id="q1-webv">60.00%</td>
+                <td class="py-3.5 px-4" id="q1-debv">66.67%</td>
+                <td class="py-3.5 px-4 font-sans text-slate-400">歷史會計沉沒出資成本</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-sky-950/20">
+                <td class="py-3.5 px-4 font-sans font-bold text-sky-300">市場價值基準 (Market Value)</td>
+                <td class="py-3.5 px-4 text-sky-200" id="q1-dmv">$3,100,000,000 <span class="fx-tag" onclick="showFormula('決策總覽!D16', '流通債券市場合約報價總值', '$31.0 億')">fx</span></td>
+                <td class="py-3.5 px-4 text-sky-200" id="q1-emv">$8,750,000,000 <span class="fx-tag" onclick="showFormula('P0 * 股數', '35.00 * 250,000,000 = $8,750,000,000', '$87.5 億')">fx</span></td>
+                <td class="py-3.5 px-4 text-sky-200 font-bold" id="q1-vmv">$11,850,000,000</td>
+                <td class="py-3.5 px-4 font-black text-rose-400" id="q1-wdmv">26.16%</td>
+                <td class="py-3.5 px-4 font-black text-emerald-400" id="q1-wemv">73.84%</td>
+                <td class="py-3.5 px-4 font-bold text-sky-300" id="q1-demv">35.43%</td>
+                <td class="py-3.5 px-4 font-sans text-emerald-400 font-bold">反映當前公允機會成本</td>
+              </tr>
+              <tr class="hover:bg-slate-850 font-bold bg-slate-950/60">
+                <td class="py-3.5 px-4 font-sans text-amber-400">差異幅度 (Market - Book)</td>
+                <td class="py-3.5 px-4 text-slate-400" id="q1-diff-d">+$100,000,000</td>
+                <td class="py-3.5 px-4 text-emerald-400" id="q1-diff-e">+$4,250,000,000</td>
+                <td class="py-3.5 px-4 text-slate-300" id="q1-diff-v">+$4,350,000,000</td>
+                <td class="py-3.5 px-4 text-rose-400" id="q1-diff-wd">-13.84%</td>
+                <td class="py-3.5 px-4 text-emerald-400" id="q1-diff-we">+13.84%</td>
+                <td class="py-3.5 px-4 text-rose-400" id="q1-diff-de">-31.24%</td>
+                <td class="py-3.5 px-4 font-sans text-amber-400 font-bold" id="q1-summary-tag">市場權重上修股權 +13.84%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- P/B and Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- P/B Ratio Box -->
+        <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+            <i class="fa-solid fa-coins text-gold-400"></i>
+            【市淨率（P/B Ratio）與無形資產市場溢價拆解】
+          </h3>
+          <div class="space-y-3 text-xs">
+            <div class="flex justify-between p-3 rounded-xl bg-slate-950 border border-slate-800">
+              <span class="text-slate-400">股權市場價值 (E_MV)</span>
+              <span class="font-mono text-sky-400 font-bold" id="q1-box-emv">$8,750,000,000</span>
+            </div>
+            <div class="flex justify-between p-3 rounded-xl bg-slate-950 border border-slate-800">
+              <span class="text-slate-400">股權帳面價值 (E_BV)</span>
+              <span class="font-mono text-slate-300 font-bold" id="q1-box-ebv">$4,500,000,000</span>
+            </div>
+            <div class="flex justify-between p-3 rounded-xl bg-slate-950 border border-slate-800">
+              <span class="text-slate-400">市場價值溢價總額 (Market Value Added, MVA)</span>
+              <span class="font-mono text-emerald-400 font-bold" id="q1-box-mva">$4,250,000,000</span>
+            </div>
+            <div class="flex justify-between p-3 rounded-xl bg-sky-950/40 border border-sky-600/40">
+              <span class="text-sky-300 font-bold">市淨率倍數 (P/B Ratio = E_MV / E_BV)</span>
+              <span class="font-mono text-sky-300 font-black text-sm" id="q1-box-pb">1.9444 倍</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            Dell 每 1 美元會計淨資產對應 1.9444 美元市場價值。公開市場給予 42.5 億美元溢價，反映其品牌商譽、全球企業伺服器直銷客戶黏著度與未來成長期權。
+          </p>
+        </div>
+
+        <!-- Donut Chart -->
+        <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-2">
+          <h3 class="text-base font-extrabold text-white flex items-center justify-between">
+            <span>Dell 資本結構比例對照圖</span>
+            <span class="text-xs text-slate-400 font-normal">帳面 vs. 市場</span>
+          </h3>
+          <div class="h-56 flex items-center justify-center">
+            <canvas id="chartCapitalStructure"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Takeaway -->
+      <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
+        <h4 class="font-extrabold text-sm text-sky-400">【問題一核心財務結論剖析】</h4>
+        <ol class="list-decimal list-inside space-y-1.5 text-slate-300 leading-relaxed">
+          <li>Dell 在帳面價值基準下之債務權重為 <strong>40.00%</strong>，股權權重為 <strong>60.00%</strong>；但在市場價值基準下，負債權重大幅下降至 <strong>26.16%</strong>，股權權重大幅上升至 <strong>73.84%</strong>。</li>
+          <li>產生 <strong>13.84 個百分點</strong> 巨大背離之根本原因，在於 Dell 的市淨率高達 <strong>1.9444 倍</strong>。公開資本市場給予 Dell 高達 42.5 億美元的市值溢價。</li>
+          <li>帳面價值嚴重扭曲了真實的資本經濟結構，若以帳面權重計算資本成本，將嚴重高估低成本負債比例，埋下低估融資成本的重大隱患！</li>
+        </ol>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 3: 問題二與三 DDM 與 CAPM 組件                           -->
+    <!-- ============================================================ -->
+    <div id="sheet-q23" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
+          <i class="fa-solid fa-scale-balanced"></i>
+          <span>EXCEL SHEET 3 ｜ TN EXHIBIT B & C</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題二與三：DDM 模型批判與標竿 Dell 資本成本組件精算
+        </h2>
+        <p class="text-xs text-slate-400">
+          推導公式：CAPM: Re = Rf + β × MRP ； 稅後債務成本: 稅後 Rd = Rd × (1 - Tc)
+        </p>
+      </div>
+
+      <!-- Part A: DDM Critique Matrix (Excel R4-R9) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-ban text-rose-400"></i>
+          【問題二：高登股利折現模型（DDM）在科技產業之適用性批判矩陣】
+        </h3>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact">
+            <thead class="bg-slate-950 text-slate-300 font-bold">
+              <tr>
+                <th class="py-3 px-4">批判維度</th>
+                <th class="py-3 px-4 text-sky-400">DDM 理論基本假設</th>
+                <th class="py-3 px-4 text-slate-300">科技硬體與 IT 產業實務真相</th>
+                <th class="py-3 px-4 text-rose-400">模型適用性判定</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-bold text-slate-200">股利發放政策</td>
+                <td class="py-3 px-4 text-slate-300">必須定期發放可預測之現金股利 (D1 > 0)</td>
+                <td class="py-3 px-4 text-slate-400">多數科技廠為零股利政策，全部利潤投入研發或回購股票</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-0.5 rounded bg-rose-950 text-rose-400 font-bold border border-rose-800/60">【致命失效】分子為零無法運算</span>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-bold text-slate-200">成長率穩定性</td>
+                <td class="py-3 px-4 text-slate-300">假設股利以恆常固定成長率 g 永續成長</td>
+                <td class="py-3 px-4 text-slate-400">科技生命週期短暫，換機潮與技術躍遷導致盈餘劇烈波動</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-400 font-bold border border-amber-800/60">【嚴重違背】不存在恆常永續 g</span>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-bold text-slate-200">分母奇異點風險</td>
+                <td class="py-3 px-4 text-slate-300">要求要求報酬率 Re 必須嚴格大於成長率 g</td>
+                <td class="py-3 px-4 text-slate-400">高成長期科技股 g 常大於 Re，導致分母為負或無解</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-0.5 rounded bg-rose-950 text-rose-400 font-bold border border-rose-800/60">【數學崩潰】易得出負股價或負成本</span>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-bold text-slate-200">定價基準來源</td>
+                <td class="py-3 px-4 text-slate-300">依賴企業內部主觀之股利發放決策</td>
+                <td class="py-3 px-4 text-slate-400">CAPM 直接錨定公開市場大盤不可分散之系統性協方差</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-800/60">【CAPM 勝出】客觀且具普適性</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Part B: Dell Cost Components (Excel R12-R22) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-calculator text-emerald-400"></i>
+          【問題三：標竿企業 Dell Inc. 資本成本組件精算】
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-4">資本成本組成要素</th>
+                <th class="py-3 px-4">參數符號</th>
+                <th class="py-3 px-4">數值 / 公式</th>
+                <th class="py-3 px-4">單位</th>
+                <th class="py-3 px-4 font-sans">財務計算邏輯說明</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-300">宏觀無風險利率基準</td>
+                <td class="py-3 px-4 text-amber-400">Rf</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="q3-rf">3.50%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">美國 3 個月期國庫券發行殖利率</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-300">標竿企業股票槓桿貝塔</td>
+                <td class="py-3 px-4 text-sky-400">Beta_L</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="q3-beta">1.25</td>
+                <td class="py-3 px-4 font-sans text-slate-400">係數 (β)</td>
+                <td class="py-3 px-4 font-sans text-slate-400">過去 60 個月相對 S&P 500 之月收益迴歸值</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-300">市場預期報酬率基準</td>
+                <td class="py-3 px-4 text-amber-400">E(Rm)</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="q3-erm">11.00%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">S&P 500 指數歷史長期平均總報酬率</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-300">市場風險溢酬</td>
+                <td class="py-3 px-4 text-amber-400">MRP</td>
+                <td class="py-3 px-4 font-bold text-gold-300" id="q3-mrp">7.50% <span class="fx-tag" onclick="showFormula('E(Rm) - Rf', '11.00% - 3.50% = 7.50%', '7.50%')">fx</span></td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">MRP = E(Rm) - Rf = 11.00% - 3.50% = 7.50%</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-sky-950/30">
+                <td class="py-3.5 px-4 font-sans font-extrabold text-sky-300">【Dell 股權資本成本】</td>
+                <td class="py-3.5 px-4 font-bold text-sky-300">Re_Dell</td>
+                <td class="py-3.5 px-4 font-black text-sky-300 text-sm" id="q3-redell">12.8750% <span class="fx-tag" onclick="showFormula('Rf + Beta_L * MRP', '3.50% + 1.25 * 7.50% = 12.875%', '12.875%')">fx</span></td>
+                <td class="py-3.5 px-4 font-sans text-sky-400">年利率</td>
+                <td class="py-3.5 px-4 font-sans text-sky-300 font-bold">Re = Rf + β_L × MRP = 3.50% + 1.25 × 7.50% = 12.875%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-300">標竿企業公司債到期殖利率</td>
+                <td class="py-3 px-4 text-slate-300">Rd_Dell</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="q3-rddell">6.50%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">流通在外高級無擔保債券加權平均到期殖利率 (YTM)</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-300">適用綜合企業所得稅率</td>
+                <td class="py-3 px-4 text-slate-300">Tc</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="q3-tc">35.0%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">稅率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">美國聯邦與州綜合企業所得邊際稅率 (35.0%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-300">利息稅盾折減因子</td>
+                <td class="py-3 px-4 text-emerald-400">1 - Tc</td>
+                <td class="py-3 px-4 font-bold text-emerald-300" id="q3-onetc">65.0%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">因子</td>
+                <td class="py-3 px-4 font-sans text-slate-400">債務利息費用於稅前扣除產生之節稅效果 (65.0%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-emerald-950/30">
+                <td class="py-3.5 px-4 font-sans font-extrabold text-emerald-300">【Dell 稅後債務資本成本】</td>
+                <td class="py-3.5 px-4 font-bold text-emerald-300">稅後 Rd</td>
+                <td class="py-3.5 px-4 font-black text-emerald-300 text-sm" id="q3-afterrd">4.2250% <span class="fx-tag" onclick="showFormula('Rd * (1 - Tc)', '6.50% * (1 - 35%) = 4.225%', '4.225%')">fx</span></td>
+                <td class="py-3.5 px-4 font-sans text-emerald-400">年利率</td>
+                <td class="py-3.5 px-4 font-sans text-emerald-300 font-bold">稅後 Rd = 6.50% × (1 - 35%) = 4.2250%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 4: 問題四 Dell WACC 計算與比較                           -->
+    <!-- ============================================================ -->
+    <div id="sheet-q4" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>EXCEL SHEET 4 ｜ TN EXHIBIT D</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題四：Dell 帳面 WACC vs. 市場 WACC 試算對照與理論論證
+        </h2>
+        <p class="text-xs text-slate-400">
+          推導公式：WACC = we × Re + wd × 稅後 Rd ； ΔWACC = WACC_MV - WACC_BV
+        </p>
+      </div>
+
+      <!-- Main Comparison Table (Excel R4-R7) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-code-compare text-indigo-400"></i>
+          加權資金成本（WACC）評估基準對照精算表
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-4">評估基準</th>
+                <th class="py-3 px-4">股權成本 (Re)</th>
+                <th class="py-3 px-4">股權權重 (we)</th>
+                <th class="py-3 px-4">股權加權成本</th>
+                <th class="py-3 px-4">稅後債務成本</th>
+                <th class="py-3 px-4">債務權重 (wd)</th>
+                <th class="py-3 px-4">債務加權成本</th>
+                <th class="py-3 px-4 text-indigo-400">最終 WACC</th>
+                <th class="py-3 px-4 font-sans">實務決策意涵</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-slate-300">帳面價值基準 (Book Value)</td>
+                <td class="py-3.5 px-4" id="q4-re-bv">12.875%</td>
+                <td class="py-3.5 px-4 font-bold" id="q4-we-bv">60.00%</td>
+                <td class="py-3.5 px-4" id="q4-were-bv">7.7250%</td>
+                <td class="py-3.5 px-4" id="q4-rd-bv">4.225%</td>
+                <td class="py-3.5 px-4 font-bold" id="q4-wd-bv">40.00%</td>
+                <td class="py-3.5 px-4" id="q4-wdrd-bv">1.6900%</td>
+                <td class="py-3.5 px-4 font-black text-slate-200 text-sm" id="q4-wacc-bv">9.4150%</td>
+                <td class="py-3.5 px-4 font-sans text-rose-400 text-[11px] font-bold">嚴重低估 120 bps；核准毀損價值專案</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-sky-950/30">
+                <td class="py-3.5 px-4 font-sans font-bold text-sky-300">市場價值基準 (Market Value)</td>
+                <td class="py-3.5 px-4 text-sky-200" id="q4-re-mv">12.875%</td>
+                <td class="py-3.5 px-4 font-bold text-emerald-400" id="q4-we-mv">73.84%</td>
+                <td class="py-3.5 px-4 text-sky-200 font-bold" id="q4-were-mv">9.5069%</td>
+                <td class="py-3.5 px-4 text-sky-200" id="q4-rd-mv">4.225%</td>
+                <td class="py-3.5 px-4 font-bold text-rose-400" id="q4-wd-mv">26.16%</td>
+                <td class="py-3.5 px-4 text-sky-200" id="q4-wdrd-mv">1.1053%</td>
+                <td class="py-3.5 px-4 font-black text-sky-400 text-sm" id="q4-wacc-mv">10.6121% <span class="fx-tag" onclick="showFormula('we * Re + wd * 稅後Rd', '73.84% * 12.875% + 26.16% * 4.225% = 10.6121%', '10.6121%')">fx</span></td>
+                <td class="py-3.5 px-4 font-sans text-sky-300 text-[11px] font-bold">唯一理論正當標準；反映邊際機會成本</td>
+              </tr>
+              <tr class="hover:bg-slate-850 font-bold bg-slate-950/80">
+                <td class="py-3.5 px-4 font-sans text-amber-400">差異幅度 (Market - Book)</td>
+                <td class="py-3.5 px-4 text-slate-500">0.00%</td>
+                <td class="py-3.5 px-4 text-emerald-400" id="q4-diff-we">+13.84%</td>
+                <td class="py-3.5 px-4 text-emerald-400" id="q4-diff-were">+1.7819%</td>
+                <td class="py-3.5 px-4 text-slate-500">0.00%</td>
+                <td class="py-3.5 px-4 text-rose-400" id="q4-diff-wd">-13.84%</td>
+                <td class="py-3.5 px-4 text-rose-400" id="q4-diff-wdrd">-0.5847%</td>
+                <td class="py-3.5 px-4 text-amber-400 text-sm" id="q4-diff-wacc">+1.1971%</td>
+                <td class="py-3.5 px-4 font-sans text-amber-300 text-[11px] font-bold">折現率門檻上修 +1.20% (+120 bps)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Theory Deep Dive -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold">
+            1
+          </div>
+          <h4 class="text-base font-extrabold text-white">資本成本是前瞻性「機會成本」</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            衡量的是企業『今天』在資本市場發行新股或新債以募集 1 美元資金，所必須付給投資人的邊際期望報酬率。
+            投資人是以市價買進證券，其要求報酬率也是建立在市值之上，歷史帳面出資額毫無約束力。
+          </p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold">
+            2
+          </div>
+          <h4 class="text-base font-extrabold text-white">避免嚴重的資本配置災難</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            若使用 9.42% 作為折現率，將導致管理層錯誤核准內部報酬率介於 9.42% 與 10.61% 之間的專案（例如 IRR = 10%）。
+            然而公司今日邊際融資成本高達 10.61%，這類專案每運作一年，就實質摧毀 61 個基點的股東真實財富！
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 5: 問題五 Hamada 調整與 HCI WACC                         -->
+    <!-- ============================================================ -->
+    <div id="sheet-q5" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
+          <i class="fa-solid fa-arrows-split-up-and-left"></i>
+          <span>EXCEL SHEET 5 ｜ TN EXHIBIT E</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題五：Hamada 去槓桿、再加槓桿與 HCI 擴充型 WACC 逐步疊加推導
+        </h2>
+        <p class="text-xs text-slate-400">
+          推導公式：去槓桿: β_U = β_L / [1 + (1-Tc)(D/E)] ； 再加槓桿: β_L,HCI = β_U × [1 + (1-Tc)(D/E)_HCI] ； Re = Rf + β_L×MRP + s + i
+        </p>
+      </div>
+
+      <!-- 4-Stage Full Hamada Table (Excel R4-R23) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-stairs text-amber-400"></i>
+          四階段純業務法（Pure-Play）逐步疊加精算全景表
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-4">推導步驟 / 調整階段</th>
+                <th class="py-3 px-4">財務模型參數</th>
+                <th class="py-3 px-4">符號</th>
+                <th class="py-3 px-4">計算公式</th>
+                <th class="py-3 px-4 text-amber-400">計算數值</th>
+                <th class="py-3 px-4 font-sans">單位</th>
+                <th class="py-3 px-4 font-sans">財務調整原理與經濟意義說明</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              
+              <!-- Stage A: Dell Unlevering -->
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-sky-400" rowspan="4">步驟 A：標竿去槓桿</td>
+                <td class="py-3 px-4 font-sans text-slate-300">Dell 市場債股比</td>
+                <td class="py-3 px-4 text-slate-400">(D/E)_Dell</td>
+                <td class="py-3 px-4 text-slate-400">問題一!G6</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-de-dell">35.43%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">比率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">Dell 當前市場真實負債槓桿比率 (35.43%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">所得稅折減因子</td>
+                <td class="py-3 px-4 text-slate-400">1 - Tc</td>
+                <td class="py-3 px-4 text-slate-400">1 - Tc</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-onetc">65.0%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">因子</td>
+                <td class="py-3 px-4 font-sans text-slate-400">企業所得稅率 35% 對應之 (1 - Tc) = 0.65</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">Dell 去槓桿分母因子</td>
+                <td class="py-3 px-4 text-slate-400">1+(1-Tc)(D/E)</td>
+                <td class="py-3 px-4 text-slate-400">1 + 0.65 × 0.3543</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-denom-dell">1.2303</td>
+                <td class="py-3 px-4 font-sans text-slate-400">因子</td>
+                <td class="py-3 px-4 font-sans text-slate-400">剝離財務槓桿利息稅盾之折減分母 (1.2303)</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-sky-950/30">
+                <td class="py-3 px-4 font-sans font-extrabold text-sky-300">【電腦產業純資產貝塔】</td>
+                <td class="py-3 px-4 font-bold text-sky-300">Beta_U</td>
+                <td class="py-3 px-4 text-sky-400">Beta_L / 1.2303</td>
+                <td class="py-3 px-4 font-black text-sky-400 text-sm" id="h-bu">1.0160 <span class="fx-tag" onclick="showFormula('Beta_L / [1 + (1-Tc)(D/E)_Dell]', '1.25 / (1 + 0.65 * 0.354286) = 1.016024', '1.0160')">fx</span></td>
+                <td class="py-3 px-4 font-sans text-sky-400">係數 (β)</td>
+                <td class="py-3 px-4 font-sans text-sky-300 font-bold">【純商業營運風險】剝離財務槓桿後之產業資產 Beta (1.0160)</td>
+              </tr>
+
+              <!-- Stage B: HCI Relevering -->
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-indigo-400" rowspan="5">步驟 B：目標再加槓桿</td>
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 目標負債比率</td>
+                <td class="py-3 px-4 text-slate-400">Target D/V</td>
+                <td class="py-3 px-4 text-slate-400">決策總覽!D25</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-tdv">30.0%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">比率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">管理層核定之長期最適負債比率 (30.0%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 目標股權比率</td>
+                <td class="py-3 px-4 text-slate-400">Target E/V</td>
+                <td class="py-3 px-4 text-slate-400">1 - Target D/V</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-tev">70.0%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">比率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">目標股權比率 = 1 - 30% = 70.0%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 目標債股比率</td>
+                <td class="py-3 px-4 text-slate-400">(D/E)_HCI</td>
+                <td class="py-3 px-4 text-slate-400">30% / 70%</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-tde">42.86%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">比率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">Target D/E = 30% / 70% ≈ 42.86% (高於 Dell 35.43%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 再加槓桿乘數因子</td>
+                <td class="py-3 px-4 text-slate-400">1+(1-Tc)(D/E)</td>
+                <td class="py-3 px-4 text-slate-400">1 + 0.65 × 0.4286</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-mult-hci">1.2786</td>
+                <td class="py-3 px-4 font-sans text-slate-400">因子</td>
+                <td class="py-3 px-4 font-sans text-slate-400">按 HCI 財務結構重組之槓桿乘數 (1.2786)</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-indigo-950/30">
+                <td class="py-3 px-4 font-sans font-extrabold text-indigo-300">【HCI 目標股權貝塔】</td>
+                <td class="py-3 px-4 font-bold text-indigo-300">Beta_L,HCI</td>
+                <td class="py-3 px-4 text-indigo-400">Beta_U × 1.2786</td>
+                <td class="py-3 px-4 font-black text-indigo-400 text-sm" id="h-bl-hci">1.2991 <span class="fx-tag" onclick="showFormula('Beta_U * [1 + (1-Tc)(D/E)_HCI]', '1.016024 * (1 + 0.65 * 0.428571) = 1.299059', '1.2991')">fx</span></td>
+                <td class="py-3 px-4 font-sans text-indigo-400">係數 (β)</td>
+                <td class="py-3 px-4 font-sans text-indigo-300 font-bold">【目標權益風險】按 HCI 30% 負債槓桿加乘後之股權 Beta (1.2991)</td>
+              </tr>
+
+              <!-- Stage C: Expanded CAPM -->
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-rose-400" rowspan="5">步驟 C：擴充型 CAPM</td>
+                <td class="py-3 px-4 font-sans text-slate-300">宏觀無風險利率基準</td>
+                <td class="py-3 px-4 text-slate-400">Rf</td>
+                <td class="py-3 px-4 text-slate-400">決策總覽!D21</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-rf">3.50%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">美國 3 個月期短期國庫券發行殖利率 (3.50%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 系統性風險溢酬</td>
+                <td class="py-3 px-4 text-slate-400">Beta × MRP</td>
+                <td class="py-3 px-4 text-slate-400">1.2991 × 7.50%</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-sys-prem">9.7429%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">1.299059 × 7.50% = 9.7429%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">小型企業規模風險溢酬</td>
+                <td class="py-3 px-4 text-amber-400">Size (s)</td>
+                <td class="py-3 px-4 text-slate-400">決策總覽!D29</td>
+                <td class="py-3 px-4 font-bold text-amber-300" id="h-size">+2.50%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">補償私營小企業面對巨頭時之經營脆弱性 (+2.50%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">缺乏次級流動性溢酬</td>
+                <td class="py-3 px-4 text-amber-400">Illiquidity (i)</td>
+                <td class="py-3 px-4 text-slate-400">決策總覽!D30</td>
+                <td class="py-3 px-4 font-bold text-amber-300" id="h-illiq">+1.50%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">補償未上市私營股東股份缺乏二級市場變現貼水 (+1.50%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-rose-950/30">
+                <td class="py-3 px-4 font-sans font-extrabold text-rose-300">【HCI 股權要求報酬率】</td>
+                <td class="py-3 px-4 font-bold text-rose-300">Re,HCI</td>
+                <td class="py-3 px-4 text-rose-400">Rf + βMRP + s + i</td>
+                <td class="py-3 px-4 font-black text-rose-400 text-sm" id="h-re-hci">17.2429% <span class="fx-tag" onclick="showFormula('Rf + Beta_L*MRP + Size + Illiq', '3.50% + 9.7429% + 2.50% + 1.50% = 17.2429%', '17.2429%')">fx</span></td>
+                <td class="py-3 px-4 font-sans text-rose-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-rose-300 font-bold">擴充型 CAPM 完整反映 HCI 股東總體要求回報 (17.2429%)</td>
+              </tr>
+
+              <!-- Stage D: Final HCI WACC -->
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-amber-400" rowspan="5">步驟 D：最終專案 WACC</td>
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 商業銀行借款利率</td>
+                <td class="py-3 px-4 text-slate-400">Rd,HCI</td>
+                <td class="py-3 px-4 text-slate-400">決策總覽!D28</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-rd-hci">7.20%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">中小企業商業銀行信用借款利率 (7.20%)</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 稅後債務成本</td>
+                <td class="py-3 px-4 text-slate-400">稅後 Rd,HCI</td>
+                <td class="py-3 px-4 text-slate-400">7.20% × 65%</td>
+                <td class="py-3 px-4 font-bold text-emerald-400" id="h-afterrd-hci">4.6800%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">稅後 Rd = 7.20% × (1 - 35%) = 4.6800%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 股權加權成本貢獻</td>
+                <td class="py-3 px-4 text-slate-400">we × Re</td>
+                <td class="py-3 px-4 text-slate-400">70% × 17.2429%</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-we-re">12.0701%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">70.0% × 17.2429% = 12.0701%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans text-slate-300">HCI 債務加權成本貢獻</td>
+                <td class="py-3 px-4 text-slate-400">wd × 稅後 Rd</td>
+                <td class="py-3 px-4 text-slate-400">30% × 4.6800%</td>
+                <td class="py-3 px-4 font-bold text-slate-200" id="h-wd-rd">1.4040%</td>
+                <td class="py-3 px-4 font-sans text-slate-400">年利率</td>
+                <td class="py-3 px-4 font-sans text-slate-400">30.0% × 4.6800% = 1.4040%</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-amber-950/40 border-t-2 border-amber-600/60">
+                <td class="py-3.5 px-4 font-sans font-black text-amber-300 text-sm">【HCI 最終加權資金成本】</td>
+                <td class="py-3.5 px-4 font-bold text-amber-300">WACC_HCI</td>
+                <td class="py-3.5 px-4 text-amber-400">12.0701% + 1.4040%</td>
+                <td class="py-3.5 px-4 font-black text-amber-400 text-base" id="h-wacc-hci">13.4741% <span class="fx-tag" onclick="showFormula('we*Re + wd*稅後Rd', '12.0701% + 1.4040% = 13.4741%', '13.4741%')">fx</span></td>
+                <td class="py-3.5 px-4 font-sans text-amber-400">年利率</td>
+                <td class="py-3.5 px-4 font-sans text-amber-300 font-black">【專案審批基準】唯有回報高於 13.47% 方能創造股東價值！</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 6: 問題六 800萬專案預算與 NPV                           -->
+    <!-- ============================================================ -->
+    <div id="sheet-q6" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-500/30">
+          <i class="fa-solid fa-money-bill-trend-up"></i>
+          <span>EXCEL SHEET 6 ｜ TN EXHIBIT F</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題六：800 萬美元新投資案 8 年自由現金流折現與 NPV / IRR 精算全景表
+        </h2>
+        <p class="text-xs text-slate-400">
+          推導公式：NPV = Σ [FCF_t / (1 + WACC)^t] - I_0 ； IRR: 使 NPV(IRR) = 0 之折現率
+        </p>
+      </div>
+
+      <!-- 8-Year FCF Table -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+            <i class="fa-solid fa-table text-rose-400"></i>
+            8 年自由現金流逐期折現對比明細（現金流數值可直接在表格中點擊修改）
+          </h3>
+          <span class="text-xs text-slate-400 font-mono">
+            可直接修改 FCF 欄位數值觀察即時聯動
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-3 text-center">年度 (t)</th>
+                <th class="py-3 px-3 font-sans">專案營運說明與進度</th>
+                <th class="py-3 px-3 text-right text-gold-400">名目現金流 (FCF)</th>
+                <th class="py-3 px-3 text-right">折現因子 (9.42%)</th>
+                <th class="py-3 px-3 text-right">現值 @ 9.42%</th>
+                <th class="py-3 px-3 text-right text-sky-400">折現因子 (10.61%)</th>
+                <th class="py-3 px-3 text-right text-sky-400">現值 @ 10.61%</th>
+                <th class="py-3 px-3 text-right text-amber-400 bg-amber-950/20">折現因子 (13.47%)</th>
+                <th class="py-3 px-3 text-right text-amber-400 bg-amber-950/20">現值 @ 13.47%</th>
+              </tr>
+            </thead>
+            <tbody id="fcf-table-body" class="divide-y divide-slate-800/80">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+            <tfoot class="border-t-2 border-slate-700 font-mono divide-y divide-slate-800">
+              <tr class="bg-slate-950/60">
+                <td colspan="2" class="py-3 px-4 font-sans font-bold text-slate-300">營運現金流入現值總和 (PV of Inflows)</td>
+                <td class="py-3 px-3 text-right font-bold text-slate-300" id="foot-sum-nominal">$13,120,000</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-bold text-slate-200" id="foot-pv-a">$8,961,220</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-bold text-sky-300" id="foot-pv-b">$8,580,103</td>
+                <td class="py-3 px-3 text-center text-slate-500 bg-amber-950/20">——</td>
+                <td class="py-3 px-3 text-right font-black text-amber-400 bg-amber-950/20" id="foot-pv-c">$7,764,816</td>
+              </tr>
+              <tr class="bg-slate-900 font-bold">
+                <td colspan="2" class="py-3 px-4 font-sans font-extrabold text-white text-sm">【專案淨現值 (NPV = PV - I_0)】</td>
+                <td class="py-3 px-3 text-right text-slate-400 font-sans text-xs">NPV 精算結果</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-black text-emerald-400 text-sm" id="foot-npv-a">+$961,220</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-black text-emerald-400 text-sm" id="foot-npv-b">+$580,103</td>
+                <td class="py-3 px-3 text-center text-slate-500 bg-amber-950/20">——</td>
+                <td class="py-3 px-3 text-right font-black text-rose-400 text-sm bg-amber-950/20" id="foot-npv-c">-$235,184</td>
+              </tr>
+              <tr class="bg-slate-950/60">
+                <td colspan="2" class="py-3 px-4 font-sans font-bold text-indigo-300">【專案內部報酬率 (Project IRR)】</td>
+                <td class="py-3 px-3 text-right text-slate-400 font-sans text-xs">使 NPV = 0</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-bold text-indigo-300" id="foot-irr-a">12.60%</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-bold text-indigo-300" id="foot-irr-b">12.60%</td>
+                <td class="py-3 px-3 text-center text-slate-500 bg-amber-950/20">——</td>
+                <td class="py-3 px-3 text-right font-bold text-indigo-300 bg-amber-950/20" id="foot-irr-c">12.60%</td>
+              </tr>
+              <tr class="bg-slate-900">
+                <td colspan="2" class="py-3 px-4 font-sans font-bold text-slate-300">超額報酬率利差 (Spread = IRR - WACC)</td>
+                <td class="py-3 px-3 text-right text-slate-400 font-sans text-xs">價值創造邊際</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-bold text-emerald-400" id="foot-spread-a">+3.19%</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-bold text-emerald-400" id="foot-spread-b">+1.99%</td>
+                <td class="py-3 px-3 text-center text-slate-500 bg-amber-950/20">——</td>
+                <td class="py-3 px-3 text-right font-black text-rose-400 bg-amber-950/20" id="foot-spread-c">-0.87%</td>
+              </tr>
+              <tr class="bg-slate-950/80">
+                <td colspan="2" class="py-3.5 px-4 font-sans font-black text-white">董事會最終審批決策建議</td>
+                <td class="py-3 px-3 text-right text-slate-400 font-sans text-xs">治理建議</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-sans font-bold text-slate-400">【假陽性】大幅核准</td>
+                <td class="py-3 px-3 text-center text-slate-500">——</td>
+                <td class="py-3 px-3 text-right font-sans font-bold text-sky-400">【假陽性】欣然核准</td>
+                <td class="py-3 px-3 text-center text-slate-500 bg-amber-950/20">——</td>
+                <td class="py-3 px-3 text-right font-sans font-black text-rose-400 bg-amber-950/20" id="foot-dec-c">【斷然否決】實質毀損價值</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 7: 敏感度分析與決策矩陣                                  -->
+    <!-- ============================================================ -->
+    <div id="sheet-q7" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold-500/20 text-gold-300 text-xs font-bold border border-gold-500/30">
+          <i class="fa-solid fa-table-cells"></i>
+          <span>EXCEL SHEET 7 ｜ TN EXHIBIT G</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          敏感度分析與決策矩陣：折現率 (WACC) × 初始投資額 (I_0) 雙變數交叉精算
+        </h2>
+        <p class="text-xs text-slate-400">
+          逆向推導保本投資額上限 (Break-even Capex) 與採購合約談判議價降價空間
+        </p>
+      </div>
+
+      <!-- Table 1: Two-Way Sensitivity Matrix (Excel R4-R12) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+            <i class="fa-solid fa-border-all text-sky-400"></i>
+            【表一：雙變數敏感度分析矩陣 —— 初始投資額 (I_0) vs. 專案折現率 (WACC) 對專案 NPV 之衝擊】
+          </h3>
+          <span class="text-xs text-slate-400 font-mono">
+            綠色: NPV > 0 (獲利) ｜ 紅色: NPV < 0 (虧損)
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-center text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-3 text-left">投資規模 (I_0) \ WACC</th>
+                <th class="py-3 px-3">
+                  <div class="text-[11px] font-mono">9.41%</div>
+                  <div class="text-[9px] text-slate-400 font-sans font-normal">(Dell 帳面)</div>
+                </th>
+                <th class="py-3 px-3">
+                  <div class="text-[11px] font-mono">10.00%</div>
+                  <div class="text-[9px] text-slate-400 font-sans font-normal">(整數基準)</div>
+                </th>
+                <th class="py-3 px-3 text-sky-400">
+                  <div class="text-[11px] font-mono">10.61%</div>
+                  <div class="text-[9px] text-sky-300 font-sans font-normal">(Dell 市場)</div>
+                </th>
+                <th class="py-3 px-3">
+                  <div class="text-[11px] font-mono">11.50%</div>
+                  <div class="text-[9px] text-slate-400 font-sans font-normal">(中繼測試)</div>
+                </th>
+                <th class="py-3 px-3 text-indigo-400">
+                  <div class="text-[11px] font-mono">12.60%</div>
+                  <div class="text-[9px] text-indigo-300 font-sans font-normal">(專案 IRR)</div>
+                </th>
+                <th class="py-3 px-3 text-amber-400 bg-amber-950/20 border-x border-amber-900/40">
+                  <div class="text-[11px] font-mono font-bold">13.47%</div>
+                  <div class="text-[9px] text-amber-300 font-sans font-bold">(HCI 真實)</div>
+                </th>
+                <th class="py-3 px-3">
+                  <div class="text-[11px] font-mono">14.50%</div>
+                  <div class="text-[9px] text-slate-400 font-sans font-normal">(升息保守)</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="matrix-tbody" class="divide-y divide-slate-800/80">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Table 2: Break-even Capex & Negotiation Strategy (Excel R15-R19) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-handshake-simple text-emerald-400"></i>
+          【表二：不同折現率下之「專案保本資本支出上限（Break-even Capex）」與談判降價空間】
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-4">折現率評估基準</th>
+                <th class="py-3 px-4">折現率 (WACC)</th>
+                <th class="py-3 px-4">現金流入現值總和</th>
+                <th class="py-3 px-4">現行投資規模 (I_0)</th>
+                <th class="py-3 px-4">專案淨現值 (NPV)</th>
+                <th class="py-3 px-4 text-emerald-400">保本投資上限</th>
+                <th class="py-3 px-4 text-rose-400">要求折讓金額</th>
+                <th class="py-3 px-4 font-sans">談判策略建議</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-slate-300">基準一：Dell 帳面 WACC</td>
+                <td class="py-3.5 px-4 font-bold text-slate-200" id="tb2-wacc-a">9.42%</td>
+                <td class="py-3.5 px-4" id="tb2-pv-a">$8,961,220</td>
+                <td class="py-3.5 px-4" id="tb2-i0-a">$8,000,000</td>
+                <td class="py-3.5 px-4 font-bold text-emerald-400" id="tb2-npv-a">+$961,220</td>
+                <td class="py-3.5 px-4 font-bold text-slate-200" id="tb2-max-a">$8,961,220</td>
+                <td class="py-3.5 px-4 text-slate-500 font-bold" id="tb2-disc-a">$0</td>
+                <td class="py-3.5 px-4 font-sans text-slate-400">【假陽性】誤信虛胖獲利，放棄降價談判</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-4 font-sans font-bold text-sky-400">基準二：Dell 市場 WACC</td>
+                <td class="py-3.5 px-4 font-bold text-sky-400" id="tb2-wacc-b">10.61%</td>
+                <td class="py-3.5 px-4" id="tb2-pv-b">$8,580,103</td>
+                <td class="py-3.5 px-4" id="tb2-i0-b">$8,000,000</td>
+                <td class="py-3.5 px-4 font-bold text-emerald-400" id="tb2-npv-b">+$580,103</td>
+                <td class="py-3.5 px-4 font-bold text-sky-400" id="tb2-max-b">$8,580,103</td>
+                <td class="py-3.5 px-4 text-slate-500 font-bold" id="tb2-disc-b">$0</td>
+                <td class="py-3.5 px-4 font-sans text-sky-300">【假陽性】自滿於 58 萬獲利，忽視小企業風險</td>
+              </tr>
+              <tr class="hover:bg-slate-850 bg-amber-950/20 border-t-2 border-amber-600/50">
+                <td class="py-3.5 px-4 font-sans font-extrabold text-amber-300">基準三：HCI 真實專屬 WACC</td>
+                <td class="py-3.5 px-4 font-black text-amber-400" id="tb2-wacc-c">13.47%</td>
+                <td class="py-3.5 px-4 font-bold text-amber-300" id="tb2-pv-c">$7,764,816</td>
+                <td class="py-3.5 px-4" id="tb2-i0-c">$8,000,000</td>
+                <td class="py-3.5 px-4 font-black text-rose-400" id="tb2-npv-c">-$235,184</td>
+                <td class="py-3.5 px-4 font-black text-emerald-400 text-sm" id="tb2-max-c">$7,764,816</td>
+                <td class="py-3.5 px-4 font-black text-rose-400 text-sm" id="tb2-disc-c">$235,184</td>
+                <td class="py-3.5 px-4 font-sans text-emerald-400 font-black">【啟動談判】要求設備降價 60 萬（降至 740 萬以內）</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- NPV Profile Curve Chart -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-3">
+        <h3 class="text-base font-extrabold text-white flex items-center justify-between">
+          <span>專案淨現值（NPV）隨折現率變動敏感度曲線圖 (NPV Profile)</span>
+          <span class="text-xs text-indigo-400 font-mono font-bold" id="lbl-chart-irr">IRR 損益平衡點 = 12.60%</span>
+        </h3>
+        <div class="h-64 flex items-center justify-center">
+          <canvas id="chartNpvSensitivity"></canvas>
+        </div>
+      </div>
+
+      <!-- Management Strategic Takeaways (Excel R22) -->
+      <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
+        <h4 class="font-extrabold text-sm text-gold-400">【敏感度分析核心管理意涵（HBS Strategic Insight）】</h4>
+        <ol class="list-decimal list-inside space-y-1.5 text-slate-300 leading-relaxed">
+          <li><strong>雙變數矩陣清楚指明：</strong>在 13.47% 的真實折現率下，原案 800 萬美元的 NPV 為 -$235,184。但若營運團隊能透過談判將設備採購總額降至 776.4 萬美元以下（例如折讓 3%~5% 至 740 萬美元），專案 NPV 將由負轉正至 <strong>+$364,816</strong>，逆轉為創造實質價值的優質方案！</li>
+          <li><strong>精確的財務折現率推導並非阻礙業務發展的障礙：</strong>而是幫助管理階層看清真實底牌、在商務談判桌上爭取最佳利益的最強大武器！</li>
+        </ol>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- FORMULA INSPECTOR MODAL                                        -->
+  <!-- ============================================================== -->
+  <div id="formula-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 max-w-lg w-full rounded-3xl p-6 shadow-2xl space-y-4 animate-fadeIn">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-square-root-variable text-amber-400 text-lg"></i>
+          <h3 class="font-extrabold text-white text-base">公式透視解析器</h3>
+        </div>
+        <button onclick="closeFormulaModal()" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <span class="text-slate-400 block mb-1 font-bold">Excel 儲存格來源引用：</span>
+          <div id="modal-formula-src" class="font-mono bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-sky-400"></div>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-1 font-bold">數學模型與數值代入：</span>
+          <div id="modal-formula-math" class="font-mono bg-slate-950 p-3 rounded-xl border border-slate-800 text-amber-300 whitespace-pre-wrap leading-relaxed"></div>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-1 font-bold">當前計算輸出數值：</span>
+          <div id="modal-formula-val" class="font-mono bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-emerald-400 font-bold text-sm"></div>
+        </div>
+      </div>
+      <button onclick="closeFormulaModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs transition">
+        關閉視窗
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- FOOTER                                                         -->
+  <!-- ============================================================== -->
+  <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 space-y-1">
+      <p>Hubbard Computer, Inc. 財務模型互動決策系統 ｜ 哈佛商學院個案教學風格</p>
+      <p class="font-mono text-[11px] text-slate-600">模型架構基於 Hamada 擴充方程、Pure Play 純業務法與 8 年動態現金流折現引擎</p>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT CALCULATION & INTERACTIVE ENGINE                    -->
+  <!-- ============================================================== -->
+  <script>
+    // --- Model State (Defaults from Case Baseline) ---
+    const BASE_STATE = {
+      P0: 35.0,
+      Shares: 250000000.0,
+      D_MV: 3100000000.0,
+      D_BV: 3000000000.0,
+      E_BV: 4500000000.0,
+      Beta_L_Dell: 1.25,
+      Rd_Dell: 0.065,
+      Rf: 0.035,
+      E_Rm: 0.11,
+      Tc: 0.35,
+      Target_D_V: 0.30,
+      Rd_HCI: 0.072,
+      Size_Prem: 0.025,
+      Illiq_Prem: 0.015,
+      I_0: 8000000.0,
+      FCFs: [
+        { y: 1, desc: '產線試車投產與邊緣伺服器代工', fcf: 1500000 },
+        { y: 2, desc: '醫療中心與地方政府訂單放量', fcf: 1620000 },
+        { y: 3, desc: '產線良率攀升與規模效應展現', fcf: 1750000 },
+        { y: 4, desc: '伺服器出貨高峰與雲端服務起飛', fcf: 1820000 },
+        { y: 5, desc: '高階工作站穩定代工階段', fcf: 1780000 },
+        { y: 6, desc: '市場成熟與部分硬體升級支出', fcf: 1680000 },
+        { y: 7, desc: '邊緣資料中心平穩營運', fcf: 1550000 },
+        { y: 8, desc: '專案結束、殘值與營運資金回收', fcf: 1420000 }
+      ]
+    };
+
+    let state = JSON.parse(JSON.stringify(BASE_STATE));
+    let formulaMode = false;
+    let chartCapStruct = null;
+    let chartNpvSens = null;
+
+    // Formatters
+    const fmtPct = (val, d = 2) => (val * 100).toFixed(d) + '%';
+    const fmtCurr = (val, d = 0) => {
+      const sign = val < 0 ? '-' : '';
+      const absVal = Math.abs(val);
+      return sign + '$' + absVal.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+    };
+    const fmtNum = (val, d = 4) => val.toFixed(d);
+
+    // Sync Slider and Number Input
+    function syncRangeToNum(rangeId, numId) {
+      document.getElementById(numId).value = document.getElementById(rangeId).value;
+    }
+
+    // Toggle Formula Mode
+    function toggleFormulaMode() {
+      formulaMode = !formulaMode;
+      const statusEl = document.getElementById('formula-mode-status');
+      const btnEl = document.getElementById('btn-toggle-formula');
+      if (formulaMode) {
+        statusEl.innerText = '開';
+        statusEl.className = 'text-[10px] px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-black';
+        btnEl.classList.add('border-amber-500', 'bg-amber-950/40');
+      } else {
+        statusEl.innerText = '關';
+        statusEl.className = 'text-[10px] px-1.5 py-0.2 rounded bg-slate-900 text-slate-400';
+        btnEl.classList.remove('border-amber-500', 'bg-amber-950/40');
+      }
+    }
+
+    function showFormula(src, math, val) {
+      document.getElementById('modal-formula-src').innerText = src;
+      document.getElementById('modal-formula-math').innerText = math;
+      document.getElementById('modal-formula-val').innerText = val;
+      document.getElementById('formula-modal').classList.remove('hidden');
+    }
+
+    function closeFormulaModal() {
+      document.getElementById('formula-modal').classList.add('hidden');
+    }
+    function attachFxBadge(elementId, textVal, src, math, val) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      el.textContent = textVal + ' ';
+      const badge = document.createElement('span');
+      badge.className = 'fx-tag';
+      badge.textContent = 'fx';
+      badge.onclick = (e) => {
+        e.stopPropagation();
+        showFormula(src, math, val);
+      };
+      el.appendChild(badge);
+    }
+
+
+    // Tab Switcher
+    function switchTab(sheetId) {
+      document.querySelectorAll('.sheet-tab').forEach(el => el.classList.add('hidden'));
+      document.getElementById(sheetId).classList.remove('hidden');
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-500', 'text-white', 'shadow-md');
+        btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+      });
+
+      const activeBtnId = {
+        'sheet-dash': 'tab-btn-dash',
+        'sheet-q1': 'tab-btn-q1',
+        'sheet-q23': 'tab-btn-q23',
+        'sheet-q4': 'tab-btn-q4',
+        'sheet-q5': 'tab-btn-q5',
+        'sheet-q6': 'tab-btn-q6',
+        'sheet-q7': 'tab-btn-q7'
+      }[sheetId];
+
+      if (activeBtnId) {
+        const btn = document.getElementById(activeBtnId);
+        btn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+        btn.classList.add('bg-brand-500', 'text-white', 'shadow-md');
+      }
+
+      // Resize charts if becoming visible
+      if (sheetId === 'sheet-q1' && chartCapStruct) chartCapStruct.resize();
+      if (sheetId === 'sheet-q7' && chartNpvSens) chartNpvSens.resize();
+    }
+
+    // Preset Scenarios
+    function applyScenario(scen) {
+      document.querySelectorAll('.scenario-btn').forEach(b => {
+        b.classList.remove('bg-sky-950/80', 'border-sky-500/50');
+        b.classList.add('bg-slate-800', 'border-slate-700');
+      });
+
+      if (scen === 'base') {
+        state = JSON.parse(JSON.stringify(BASE_STATE));
+        document.getElementById('scen-base').classList.add('bg-sky-950/80', 'border-sky-500/50');
+      } else if (scen === 'negotiation') {
+        state = JSON.parse(JSON.stringify(BASE_STATE));
+        state.I_0 = 7400000.0; // Successful vendor reduction to $7.4M
+        document.getElementById('scen-negotiation').classList.add('bg-sky-950/80', 'border-sky-500/50');
+        confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+      } else if (scen === 'bull') {
+        state = JSON.parse(JSON.stringify(BASE_STATE));
+        state.FCFs.forEach(f => f.fcf = f.fcf * 1.15); // +15% FCF
+        document.getElementById('scen-bull').classList.add('bg-sky-950/80', 'border-sky-500/50');
+      } else if (scen === 'bear') {
+        state = JSON.parse(JSON.stringify(BASE_STATE));
+        state.Rf = 0.050; // Fed rate hike to 5.0%
+        state.Rd_HCI = 0.085; // Bank borrowing rate rises to 8.5%
+        document.getElementById('scen-bear').classList.add('bg-sky-950/80', 'border-sky-500/50');
+      }
+
+      syncInputsFromState();
+      recalcAll();
+    }
+
+    function resetToBaseCase() {
+      applyScenario('base');
+    }
+
+    function syncInputsFromState() {
+      document.getElementById('inp-p0').value = state.P0;
+      document.getElementById('rng-p0').value = state.P0;
+      document.getElementById('inp-shares').value = state.Shares;
+      document.getElementById('inp-dmv').value = state.D_MV;
+      document.getElementById('inp-dbv').value = state.D_BV;
+      document.getElementById('inp-ebv').value = state.E_BV;
+      document.getElementById('inp-beta').value = state.Beta_L_Dell;
+      document.getElementById('rng-beta').value = state.Beta_L_Dell;
+      document.getElementById('inp-rf').value = (state.Rf * 100).toFixed(1);
+      document.getElementById('rng-rf').value = (state.Rf * 100).toFixed(1);
+      document.getElementById('inp-erm').value = (state.E_Rm * 100).toFixed(2);
+      document.getElementById('rng-erm').value = (state.E_Rm * 100).toFixed(2);
+      document.getElementById('inp-tc').value = (state.Tc * 100).toFixed(1);
+      document.getElementById('rng-tc').value = (state.Tc * 100).toFixed(1);
+      document.getElementById('inp-tdv').value = (state.Target_D_V * 100).toFixed(1);
+      document.getElementById('rng-tdv').value = (state.Target_D_V * 100).toFixed(1);
+      document.getElementById('inp-rddell').value = (state.Rd_Dell * 100).toFixed(1);
+      document.getElementById('inp-rdhci').value = (state.Rd_HCI * 100).toFixed(1);
+      document.getElementById('inp-size').value = (state.Size_Prem * 100).toFixed(1);
+      document.getElementById('rng-size').value = (state.Size_Prem * 100).toFixed(1);
+      document.getElementById('inp-illiq').value = (state.Illiq_Prem * 100).toFixed(1);
+      document.getElementById('rng-illiq').value = (state.Illiq_Prem * 100).toFixed(1);
+      document.getElementById('inp-i0').value = state.I_0;
+      document.getElementById('rng-i0').value = state.I_0;
+    }
+
+    function handleParamChange() {
+      state.P0 = parseFloat(document.getElementById('inp-p0').value) || 35;
+      document.getElementById('rng-p0').value = state.P0;
+      
+      state.Shares = parseFloat(document.getElementById('inp-shares').value) || 250000000;
+      state.D_MV = parseFloat(document.getElementById('inp-dmv').value) || 3100000000;
+      state.D_BV = parseFloat(document.getElementById('inp-dbv').value) || 3000000000;
+      state.E_BV = parseFloat(document.getElementById('inp-ebv').value) || 4500000000;
+      
+      state.Beta_L_Dell = parseFloat(document.getElementById('inp-beta').value) || 1.25;
+      document.getElementById('rng-beta').value = state.Beta_L_Dell;
+
+      state.Rf = (parseFloat(document.getElementById('inp-rf').value) || 3.5) / 100.0;
+      document.getElementById('rng-rf').value = (state.Rf * 100).toFixed(1);
+
+      state.E_Rm = (parseFloat(document.getElementById('inp-erm').value) || 11.0) / 100.0;
+      document.getElementById('rng-erm').value = (state.E_Rm * 100).toFixed(2);
+
+      state.Tc = (parseFloat(document.getElementById('inp-tc').value) || 35.0) / 100.0;
+      document.getElementById('rng-tc').value = (state.Tc * 100).toFixed(1);
+
+      state.Target_D_V = (parseFloat(document.getElementById('inp-tdv').value) || 30.0) / 100.0;
+      document.getElementById('rng-tdv').value = (state.Target_D_V * 100).toFixed(1);
+
+      state.Rd_Dell = (parseFloat(document.getElementById('inp-rddell').value) || 6.5) / 100.0;
+      state.Rd_HCI = (parseFloat(document.getElementById('inp-rdhci').value) || 7.2) / 100.0;
+
+      state.Size_Prem = (parseFloat(document.getElementById('inp-size').value) || 2.5) / 100.0;
+      document.getElementById('rng-size').value = (state.Size_Prem * 100).toFixed(1);
+
+      state.Illiq_Prem = (parseFloat(document.getElementById('inp-illiq').value) || 1.5) / 100.0;
+      document.getElementById('rng-illiq').value = (state.Illiq_Prem * 100).toFixed(1);
+
+      state.I_0 = parseFloat(document.getElementById('inp-i0').value) || 8000000;
+      document.getElementById('rng-i0').value = state.I_0;
+
+      recalcAll();
+    }
+
+    // Financial Engine
+    function calcFinancials() {
+      // 1. Q1: Capital Structure
+      const E_MV = state.P0 * state.Shares;
+      const V_BV = state.D_BV + state.E_BV;
+      const V_MV = state.D_MV + E_MV;
+
+      const wd_BV = state.D_BV / V_BV;
+      const we_BV = state.E_BV / V_BV;
+      const de_BV = state.D_BV / state.E_BV;
+
+      const wd_MV = state.D_MV / V_MV;
+      const we_MV = E_MV / V_MV;
+      const de_MV = state.D_MV / E_MV;
+
+      const MVA = E_MV - state.E_BV;
+      const PB = E_MV / state.E_BV;
+
+      // 2. Q2 & Q3: DDM & CAPM
+      const MRP = state.E_Rm - state.Rf;
+      const Re_Dell = state.Rf + state.Beta_L_Dell * MRP;
+      const afterTax_Rd_Dell = state.Rd_Dell * (1.0 - state.Tc);
+
+      // 3. Q4: Dell WACCs
+      const WACC_BV = we_BV * Re_Dell + wd_BV * afterTax_Rd_Dell;
+      const WACC_MV = we_MV * Re_Dell + wd_MV * afterTax_Rd_Dell;
+
+      // 4. Q5: Hamada & HCI WACC
+      const denom_Dell = 1.0 + (1.0 - state.Tc) * de_MV;
+      const Beta_U = state.Beta_L_Dell / denom_Dell;
+
+      const Target_E_V = 1.0 - state.Target_D_V;
+      const Target_D_E = state.Target_D_V / Target_E_V;
+      const mult_HCI = 1.0 + (1.0 - state.Tc) * Target_D_E;
+      const Beta_L_HCI = Beta_U * mult_HCI;
+
+      const Re_HCI = state.Rf + Beta_L_HCI * MRP + state.Size_Prem + state.Illiq_Prem;
+      const afterTax_Rd_HCI = state.Rd_HCI * (1.0 - state.Tc);
+      const WACC_HCI = Target_E_V * Re_HCI + state.Target_D_V * afterTax_Rd_HCI;
+
+      // 5. Q6: Cash Flow Discounting
+      const calcPV = (rate) => {
+        return state.FCFs.reduce((acc, cur) => acc + cur.fcf / Math.pow(1.0 + rate, cur.y), 0);
+      };
+
+      const pv_A = calcPV(WACC_BV);
+      const pv_B = calcPV(WACC_MV);
+      const pv_C = calcPV(WACC_HCI);
+
+      const npv_A = pv_A - state.I_0;
+      const npv_B = pv_B - state.I_0;
+      const npv_C = pv_C - state.I_0;
+
+      // Newton-Raphson IRR
+      const calcIRR = () => {
+        let r = 0.12;
+        for (let iter = 0; iter < 100; iter++) {
+          let val = -state.I_0;
+          let dval = 0;
+          for (let f of state.FCFs) {
+            val += f.fcf / Math.pow(1.0 + r, f.y);
+            dval -= f.y * f.fcf / Math.pow(1.0 + r, f.y + 1);
+          }
+          let next_r = r - val / dval;
+          if (Math.abs(next_r - r) < 1e-8) return next_r;
+          r = next_r;
+        }
+        return r;
+      };
+
+      const irr = calcIRR();
+
+      // Break-even Capex at HCI True WACC
+      const breakEvenCapex = pv_C;
+
+      return {
+        E_MV, V_BV, V_MV, wd_BV, we_BV, de_BV, wd_MV, we_MV, de_MV, MVA, PB,
+        MRP, Re_Dell, afterTax_Rd_Dell,
+        WACC_BV, WACC_MV,
+        denom_Dell, Beta_U, Target_E_V, Target_D_E, mult_HCI, Beta_L_HCI,
+        Re_HCI, afterTax_Rd_HCI, WACC_HCI,
+        pv_A, pv_B, pv_C,
+        npv_A, npv_B, npv_C,
+        irr, breakEvenCapex
+      };
+    }
+
+    // Update DOM
+    function recalcAll() {
+      const res = calcFinancials();
+
+      // Top KPI Strip
+      document.getElementById('strip-dell-bv').innerText = fmtPct(res.WACC_BV);
+      document.getElementById('strip-dell-mv').innerText = fmtPct(res.WACC_MV);
+      document.getElementById('strip-hci-wacc').innerText = fmtPct(res.WACC_HCI);
+      document.getElementById('strip-irr').innerText = fmtPct(res.irr);
+      document.getElementById('strip-npv').innerText = fmtCurr(res.npv_C);
+
+      const npvCont = document.getElementById('strip-npv-container');
+      const decBadge = document.getElementById('strip-decision-badge');
+      if (res.npv_C >= 0) {
+        npvCont.className = 'px-3 py-1.5 rounded-xl border flex items-center gap-2 bg-emerald-950/70 border-emerald-600/70 text-emerald-300';
+        decBadge.className = 'px-2 py-0.5 rounded text-[10px] font-sans font-extrabold bg-emerald-600 text-white';
+        decBadge.innerText = '核准通過';
+      } else {
+        npvCont.className = 'px-3 py-1.5 rounded-xl border flex items-center gap-2 bg-rose-950/70 border-rose-600/70 text-rose-300';
+        decBadge.className = 'px-2 py-0.5 rounded text-[10px] font-sans font-extrabold bg-rose-600 text-white';
+        decBadge.innerText = '斷然否決';
+      }
+
+      // Sheet 1: Dashboard Table
+      document.getElementById('dash-wacc-a').innerText = fmtPct(res.WACC_BV);
+      document.getElementById('dash-wacc-b').innerText = fmtPct(res.WACC_MV);
+      document.getElementById('dash-wacc-c').innerText = fmtPct(res.WACC_HCI);
+
+      document.getElementById('dash-npv-a').innerText = fmtCurr(res.npv_A);
+      document.getElementById('dash-npv-b').innerText = fmtCurr(res.npv_B);
+      document.getElementById('dash-npv-c').innerText = fmtCurr(res.npv_C);
+
+      document.getElementById('dash-irr-a').innerText = fmtPct(res.irr);
+      document.getElementById('dash-irr-b').innerText = fmtPct(res.irr);
+      document.getElementById('dash-irr-c').innerText = fmtPct(res.irr);
+
+      document.getElementById('dash-capex-a').innerText = fmtCurr(res.pv_A);
+      document.getElementById('dash-capex-b').innerText = fmtCurr(res.pv_B);
+      document.getElementById('dash-capex-c').innerText = fmtCurr(res.pv_C);
+
+      const dashBadge = document.getElementById('dash-dec-badge');
+      if (res.npv_C >= 0) {
+        dashBadge.innerText = '【實質獲利】欣然核准';
+        dashBadge.className = 'px-2.5 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-600/60 shadow';
+      } else {
+        dashBadge.innerText = '【斷然否決】暫緩推動';
+        dashBadge.className = 'px-2.5 py-1 rounded bg-rose-950 text-rose-300 border border-rose-600/60 shadow';
+      }
+
+      // Input labels
+      document.getElementById('lbl-p0').innerText = '$' + state.P0.toFixed(2);
+      document.getElementById('lbl-shares').innerText = (state.Shares / 1e8).toFixed(2) + ' 億股';
+      document.getElementById('lbl-dmv').innerText = '$' + (state.D_MV / 1e8).toFixed(1) + ' 億';
+      document.getElementById('lbl-dbv').innerText = '$' + (state.D_BV / 1e8).toFixed(1) + ' 億';
+      document.getElementById('lbl-ebv').innerText = '$' + (state.E_BV / 1e8).toFixed(1) + ' 億';
+      document.getElementById('lbl-beta').innerText = state.Beta_L_Dell.toFixed(2);
+      document.getElementById('lbl-rf').innerText = fmtPct(state.Rf);
+      document.getElementById('lbl-erm').innerText = fmtPct(state.E_Rm);
+      document.getElementById('lbl-mrp').innerText = fmtPct(res.MRP);
+      document.getElementById('lbl-tc').innerText = fmtPct(state.Tc);
+      document.getElementById('lbl-tdv').innerText = fmtPct(state.Target_D_V);
+      document.getElementById('lbl-tev').innerText = fmtPct(res.Target_E_V);
+      document.getElementById('lbl-tde').innerText = fmtPct(res.Target_D_E);
+      document.getElementById('lbl-size').innerText = fmtPct(state.Size_Prem);
+      document.getElementById('lbl-illiq').innerText = fmtPct(state.Illiq_Prem);
+      document.getElementById('lbl-i0').innerText = fmtCurr(state.I_0);
+      document.getElementById('hint-breakeven-capex').innerText = fmtCurr(res.breakEvenCapex);
+
+      // Sheet 2: Q1
+      document.getElementById('q1-pb-kpi').innerText = res.PB.toFixed(4) + ' 倍';
+      attachFxBadge('q1-dbv', fmtCurr(state.D_BV), '決策總覽!D17', '帳面長期借款與應付債券面值', fmtCurr(state.D_BV));
+      attachFxBadge('q1-ebv', fmtCurr(state.E_BV), '決策總覽!D18', '資產負債表股東權益帳面淨值', fmtCurr(state.E_BV));
+      document.getElementById('q1-vbv').innerText = fmtCurr(res.V_BV);
+      document.getElementById('q1-wdbv').innerText = fmtPct(res.wd_BV);
+      document.getElementById('q1-webv').innerText = fmtPct(res.we_BV);
+      document.getElementById('q1-debv').innerText = fmtPct(res.de_BV);
+
+      attachFxBadge('q1-dmv', fmtCurr(state.D_MV), '決策總覽!D16', '流通債券市場合約報價總值', fmtCurr(state.D_MV));
+      attachFxBadge('q1-emv', fmtCurr(res.E_MV), 'P0 * 股數', state.P0 + ' * ' + state.Shares.toLocaleString() + ' = ' + fmtCurr(res.E_MV), fmtCurr(res.E_MV));
+      document.getElementById('q1-vmv').innerText = fmtCurr(res.V_MV);
+      document.getElementById('q1-wdmv').innerText = fmtPct(res.wd_MV);
+      document.getElementById('q1-wemv').innerText = fmtPct(res.we_MV);
+      document.getElementById('q1-demv').innerText = fmtPct(res.de_MV);
+
+      document.getElementById('q1-diff-d').innerText = (state.D_MV >= state.D_BV ? '+' : '') + fmtCurr(state.D_MV - state.D_BV);
+      document.getElementById('q1-diff-e').innerText = (res.E_MV >= state.E_BV ? '+' : '') + fmtCurr(res.E_MV - state.E_BV);
+      document.getElementById('q1-diff-v').innerText = (res.V_MV >= res.V_BV ? '+' : '') + fmtCurr(res.V_MV - res.V_BV);
+      document.getElementById('q1-diff-wd').innerText = ((res.wd_MV - res.wd_BV) * 100).toFixed(2) + '%';
+      document.getElementById('q1-diff-we').innerText = '+' + ((res.we_MV - res.we_BV) * 100).toFixed(2) + '%';
+      document.getElementById('q1-diff-de').innerText = ((res.de_MV - res.de_BV) * 100).toFixed(2) + '%';
+      document.getElementById('q1-summary-tag').innerText = '市場權重上修股權 +' + ((res.we_MV - res.we_BV) * 100).toFixed(2) + '%';
+
+      document.getElementById('q1-box-emv').innerText = fmtCurr(res.E_MV);
+      document.getElementById('q1-box-ebv').innerText = fmtCurr(state.E_BV);
+      document.getElementById('q1-box-mva').innerText = fmtCurr(res.MVA);
+      document.getElementById('q1-box-pb').innerText = res.PB.toFixed(4) + ' 倍';
+
+      // Sheet 3: Q2 & Q3
+      document.getElementById('q3-rf').innerText = fmtPct(state.Rf);
+      document.getElementById('q3-beta').innerText = state.Beta_L_Dell.toFixed(2);
+      document.getElementById('q3-erm').innerText = fmtPct(state.E_Rm);
+      attachFxBadge('q3-mrp', fmtPct(res.MRP), 'E(Rm) - Rf', fmtPct(state.E_Rm) + ' - ' + fmtPct(state.Rf) + ' = ' + fmtPct(res.MRP), fmtPct(res.MRP));
+      attachFxBadge('q3-redell', fmtPct(res.Re_Dell, 4), 'Rf + Beta_L * MRP', fmtPct(state.Rf) + ' + ' + state.Beta_L_Dell + ' * ' + fmtPct(res.MRP) + ' = ' + fmtPct(res.Re_Dell, 4), fmtPct(res.Re_Dell, 4));
+      document.getElementById('q3-rddell').innerText = fmtPct(state.Rd_Dell);
+      document.getElementById('q3-tc').innerText = fmtPct(state.Tc);
+      document.getElementById('q3-onetc').innerText = fmtPct(1.0 - state.Tc);
+      attachFxBadge('q3-afterrd', fmtPct(res.afterTax_Rd_Dell, 4), 'Rd * (1 - Tc)', fmtPct(state.Rd_Dell) + ' * ' + fmtPct(1 - state.Tc) + ' = ' + fmtPct(res.afterTax_Rd_Dell, 4), fmtPct(res.afterTax_Rd_Dell, 4));
+
+      // Sheet 4: Q4
+      document.getElementById('q4-re-bv').innerText = fmtPct(res.Re_Dell, 3);
+      document.getElementById('q4-we-bv').innerText = fmtPct(res.we_BV);
+      document.getElementById('q4-were-bv').innerText = fmtPct(res.we_BV * res.Re_Dell, 4);
+      document.getElementById('q4-rd-bv').innerText = fmtPct(res.afterTax_Rd_Dell, 3);
+      document.getElementById('q4-wd-bv').innerText = fmtPct(res.wd_BV);
+      document.getElementById('q4-wdrd-bv').innerText = fmtPct(res.wd_BV * res.afterTax_Rd_Dell, 4);
+      document.getElementById('q4-wacc-bv').innerText = fmtPct(res.WACC_BV, 4);
+
+      document.getElementById('q4-re-mv').innerText = fmtPct(res.Re_Dell, 3);
+      document.getElementById('q4-we-mv').innerText = fmtPct(res.we_MV);
+      document.getElementById('q4-were-mv').innerText = fmtPct(res.we_MV * res.Re_Dell, 4);
+      document.getElementById('q4-rd-mv').innerText = fmtPct(res.afterTax_Rd_Dell, 3);
+      document.getElementById('q4-wd-mv').innerText = fmtPct(res.wd_MV);
+      document.getElementById('q4-wdrd-mv').innerText = fmtPct(res.wd_MV * res.afterTax_Rd_Dell, 4);
+      attachFxBadge('q4-wacc-mv', fmtPct(res.WACC_MV, 4), 'we * Re + wd * 稅後Rd', fmtPct(res.we_MV) + ' * ' + fmtPct(res.Re_Dell, 3) + ' + ' + fmtPct(res.wd_MV) + ' * ' + fmtPct(res.afterTax_Rd_Dell, 3) + ' = ' + fmtPct(res.WACC_MV, 4), fmtPct(res.WACC_MV, 4));
+
+      document.getElementById('q4-diff-we').innerText = '+' + ((res.we_MV - res.we_BV) * 100).toFixed(2) + '%';
+      document.getElementById('q4-diff-were').innerText = '+' + ((res.we_MV * res.Re_Dell - res.we_BV * res.Re_Dell) * 100).toFixed(4) + '%';
+      document.getElementById('q4-diff-wd').innerText = ((res.wd_MV - res.wd_BV) * 100).toFixed(2) + '%';
+      document.getElementById('q4-diff-wdrd').innerText = ((res.wd_MV * res.afterTax_Rd_Dell - res.wd_BV * res.afterTax_Rd_Dell) * 100).toFixed(4) + '%';
+      document.getElementById('q4-diff-wacc').innerText = '+' + ((res.WACC_MV - res.WACC_BV) * 100).toFixed(4) + '%';
+
+      // Sheet 5: Q5
+      document.getElementById('h-de-dell').innerText = fmtPct(res.de_MV);
+      document.getElementById('h-onetc').innerText = fmtPct(1.0 - state.Tc);
+      document.getElementById('h-denom-dell').innerText = res.denom_Dell.toFixed(4);
+      attachFxBadge('h-bu', res.Beta_U.toFixed(4), 'Beta_L / [1 + (1-Tc)(D/E)_Dell]', state.Beta_L_Dell + ' / (1 + ' + (1 - state.Tc) + ' * ' + res.de_MV.toFixed(6) + ') = ' + res.Beta_U.toFixed(6), res.Beta_U.toFixed(4));
+
+      document.getElementById('h-tdv').innerText = fmtPct(state.Target_D_V);
+      document.getElementById('h-tev').innerText = fmtPct(res.Target_E_V);
+      document.getElementById('h-tde').innerText = fmtPct(res.Target_D_E);
+      document.getElementById('h-mult-hci').innerText = res.mult_HCI.toFixed(4);
+      attachFxBadge('h-bl-hci', res.Beta_L_HCI.toFixed(4), 'Beta_U * [1 + (1-Tc)(D/E)_HCI]', res.Beta_U.toFixed(6) + ' * (1 + ' + (1 - state.Tc) + ' * ' + res.Target_D_E.toFixed(6) + ') = ' + res.Beta_L_HCI.toFixed(6), res.Beta_L_HCI.toFixed(4));
+
+      document.getElementById('h-rf').innerText = fmtPct(state.Rf);
+      document.getElementById('h-sys-prem').innerText = fmtPct(res.Beta_L_HCI * res.MRP, 4);
+      document.getElementById('h-size').innerText = '+' + fmtPct(state.Size_Prem);
+      document.getElementById('h-illiq').innerText = '+' + fmtPct(state.Illiq_Prem);
+      attachFxBadge('h-re-hci', fmtPct(res.Re_HCI, 4), 'Rf + Beta_L*MRP + Size + Illiq', fmtPct(state.Rf) + ' + ' + fmtPct(res.Beta_L_HCI * res.MRP, 4) + ' + ' + fmtPct(state.Size_Prem) + ' + ' + fmtPct(state.Illiq_Prem) + ' = ' + fmtPct(res.Re_HCI, 4), fmtPct(res.Re_HCI, 4));
+
+      document.getElementById('h-rd-hci').innerText = fmtPct(state.Rd_HCI);
+      document.getElementById('h-afterrd-hci').innerText = fmtPct(res.afterTax_Rd_HCI, 4);
+      document.getElementById('h-we-re').innerText = fmtPct(res.Target_E_V * res.Re_HCI, 4);
+      document.getElementById('h-wd-rd').innerText = fmtPct(state.Target_D_V * res.afterTax_Rd_HCI, 4);
+      attachFxBadge('h-wacc-hci', fmtPct(res.WACC_HCI, 4), 'we*Re + wd*稅後Rd', fmtPct(res.Target_E_V * res.Re_HCI, 4) + ' + ' + fmtPct(state.Target_D_V * res.afterTax_Rd_HCI, 4) + ' = ' + fmtPct(res.WACC_HCI, 4), fmtPct(res.WACC_HCI, 4));
+
+      // Sheet 6: Q6 Cash Flows Table
+      renderFcfTable(res);
+
+      // Sheet 7: Q7 Sensitivity Matrix & Table 2
+      renderSensitivityMatrix(res);
+      renderTable2(res);
+
+      // Update Charts
+      updateCharts(res);
+    }
+
+    function renderFcfTable(res) {
+      const tbody = document.getElementById('fcf-table-body');
+      tbody.innerHTML = '';
+
+      // Row 0: Capex
+      const tr0 = document.createElement('tr');
+      tr0.className = 'hover:bg-slate-850 font-bold bg-slate-950/40';
+      tr0.innerHTML = `
+        <td class="py-3 px-3 text-center text-slate-400">0</td>
+        <td class="py-3 px-3 font-sans text-slate-300">初始設備購置與資料中心工程</td>
+        <td class="py-3 px-3 text-right text-rose-400 font-mono">${fmtCurr(-state.I_0)}</td>
+        <td class="py-3 px-3 text-right text-slate-500 font-mono">1.0000</td>
+        <td class="py-3 px-3 text-right text-rose-400 font-mono">${fmtCurr(-state.I_0)}</td>
+        <td class="py-3 px-3 text-right text-slate-500 font-mono">1.0000</td>
+        <td class="py-3 px-3 text-right text-rose-400 font-mono">${fmtCurr(-state.I_0)}</td>
+        <td class="py-3 px-3 text-right text-slate-500 font-mono bg-amber-950/20">1.0000</td>
+        <td class="py-3 px-3 text-right text-rose-400 font-mono bg-amber-950/20">${fmtCurr(-state.I_0)}</td>
+      `;
+      tbody.appendChild(tr0);
+
+      // Rows 1-8
+      let sumNominal = 0;
+      state.FCFs.forEach((item, idx) => {
+        sumNominal += item.fcf;
+        const dfA = 1.0 / Math.pow(1.0 + res.WACC_BV, item.y);
+        const dfB = 1.0 / Math.pow(1.0 + res.WACC_MV, item.y);
+        const dfC = 1.0 / Math.pow(1.0 + res.WACC_HCI, item.y);
+
+        const pvA = item.fcf * dfA;
+        const pvB = item.fcf * dfB;
+        const pvC = item.fcf * dfC;
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-850';
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 text-center text-slate-400">${item.y}</td>
+          <td class="py-2.5 px-3 font-sans text-slate-300">${item.desc}</td>
+          <td class="py-2.5 px-3 text-right text-gold-300 font-bold">
+            <input type="number" step="10000" value="${item.fcf}" onchange="updateFcf(${idx}, this.value)" class="num-input w-28 text-right text-xs py-1 px-1.5 border-slate-700 bg-slate-900 text-gold-300">
+          </td>
+          <td class="py-2.5 px-3 text-right text-slate-400">${dfA.toFixed(4)}</td>
+          <td class="py-2.5 px-3 text-right text-slate-200">${fmtCurr(pvA)}</td>
+          <td class="py-2.5 px-3 text-right text-sky-400">${dfB.toFixed(4)}</td>
+          <td class="py-2.5 px-3 text-right text-sky-300">${fmtCurr(pvB)}</td>
+          <td class="py-2.5 px-3 text-right text-amber-400 bg-amber-950/20">${dfC.toFixed(4)}</td>
+          <td class="py-2.5 px-3 text-right text-amber-300 bg-amber-950/20 font-bold">${fmtCurr(pvC)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Update Footers
+      document.getElementById('foot-sum-nominal').innerText = fmtCurr(sumNominal);
+      document.getElementById('foot-pv-a').innerText = fmtCurr(res.pv_A);
+      document.getElementById('foot-pv-b').innerText = fmtCurr(res.pv_B);
+      document.getElementById('foot-pv-c').innerText = fmtCurr(res.pv_C);
+
+      document.getElementById('foot-npv-a').innerText = fmtCurr(res.npv_A);
+      document.getElementById('foot-npv-b').innerText = fmtCurr(res.npv_B);
+      document.getElementById('foot-npv-c').innerText = fmtCurr(res.npv_C);
+
+      document.getElementById('foot-irr-a').innerText = fmtPct(res.irr);
+      document.getElementById('foot-irr-b').innerText = fmtPct(res.irr);
+      document.getElementById('foot-irr-c').innerText = fmtPct(res.irr);
+
+      document.getElementById('foot-spread-a').innerText = ((res.irr - res.WACC_BV) * 100).toFixed(2) + '%';
+      document.getElementById('foot-spread-b').innerText = ((res.irr - res.WACC_MV) * 100).toFixed(2) + '%';
+      document.getElementById('foot-spread-c').innerText = ((res.irr - res.WACC_HCI) * 100).toFixed(2) + '%';
+
+      const footDecC = document.getElementById('foot-dec-c');
+      if (res.npv_C >= 0) {
+        footDecC.innerText = '【實質獲利】欣然核准';
+        footDecC.className = 'py-3 px-3 text-right font-sans font-black text-emerald-400 bg-amber-950/20';
+      } else {
+        footDecC.innerText = '【斷然否決】實質毀損價值';
+        footDecC.className = 'py-3 px-3 text-right font-sans font-black text-rose-400 bg-amber-950/20';
+      }
+    }
+
+    function updateFcf(idx, val) {
+      state.FCFs[idx].fcf = parseFloat(val) || 0;
+      recalcAll();
+    }
+
+    function renderSensitivityMatrix(res) {
+      const tbody = document.getElementById('matrix-tbody');
+      tbody.innerHTML = '';
+
+      const waccCols = [
+        { label: '9.41%', val: res.WACC_BV },
+        { label: '10.00%', val: 0.1000 },
+        { label: '10.61%', val: res.WACC_MV },
+        { label: '11.50%', val: 0.1150 },
+        { label: '12.60%', val: res.irr },
+        { label: '13.47%', val: res.WACC_HCI, isHci: true },
+        { label: '14.50%', val: 0.1450 }
+      ];
+
+      const capexRows = [
+        { label: '$7,000,000', capex: 7000000 },
+        { label: '$7,200,000', capex: 7200000 },
+        { label: '$7,500,000', capex: 7500000 },
+        { label: fmtCurr(res.breakEvenCapex) + ' (保本點)', capex: res.breakEvenCapex, isBreakeven: true },
+        { label: '$8,000,000 (原案)', capex: 8000000, isBase: true },
+        { label: '$8,200,000', capex: 8200000 },
+        { label: '$8,500,000', capex: 8500000 }
+      ];
+
+      capexRows.forEach(row => {
+        const tr = document.createElement('tr');
+        let rowClasses = 'hover:bg-slate-850 ';
+        if (row.isBreakeven) rowClasses += 'bg-emerald-950/30 border-y border-emerald-600/40 font-bold ';
+        if (row.isBase) rowClasses += 'bg-slate-900 border-y border-slate-700 font-bold ';
+        tr.className = rowClasses;
+
+        let html = `<td class="py-3 px-3 text-left font-sans ${row.isBreakeven ? 'text-emerald-400' : (row.isBase ? 'text-gold-300' : 'text-slate-300')}">${row.label}</td>`;
+
+        waccCols.forEach(col => {
+          const pv = state.FCFs.reduce((acc, f) => acc + f.fcf / Math.pow(1.0 + col.val, f.y), 0);
+          const npv = pv - row.capex;
+
+          let cellClass = '';
+          if (npv > 500000) {
+            cellClass = 'text-emerald-300 font-bold';
+          } else if (npv > 0) {
+            cellClass = 'text-emerald-400 font-semibold';
+          } else if (Math.abs(npv) < 100) {
+            cellClass = 'text-gold-400 font-black bg-gold-950/40';
+          } else if (npv > -500000) {
+            cellClass = 'text-rose-400 font-semibold';
+          } else {
+            cellClass = 'text-rose-500 font-bold';
+          }
+
+          if (col.isHci) cellClass += ' bg-amber-950/20 border-x border-amber-900/30';
+
+          html += `<td class="py-3 px-3 text-right ${cellClass}">${fmtCurr(npv)}</td>`;
+        });
+
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderTable2(res) {
+      document.getElementById('tb2-wacc-a').innerText = fmtPct(res.WACC_BV);
+      document.getElementById('tb2-pv-a').innerText = fmtCurr(res.pv_A);
+      document.getElementById('tb2-i0-a').innerText = fmtCurr(state.I_0);
+      document.getElementById('tb2-npv-a').innerText = fmtCurr(res.npv_A);
+      document.getElementById('tb2-max-a').innerText = fmtCurr(res.pv_A);
+      document.getElementById('tb2-disc-a').innerText = '$0';
+
+      document.getElementById('tb2-wacc-b').innerText = fmtPct(res.WACC_MV);
+      document.getElementById('tb2-pv-b').innerText = fmtCurr(res.pv_B);
+      document.getElementById('tb2-i0-b').innerText = fmtCurr(state.I_0);
+      document.getElementById('tb2-npv-b').innerText = fmtCurr(res.npv_B);
+      document.getElementById('tb2-max-b').innerText = fmtCurr(res.pv_B);
+      document.getElementById('tb2-disc-b').innerText = '$0';
+
+      document.getElementById('tb2-wacc-c').innerText = fmtPct(res.WACC_HCI);
+      document.getElementById('tb2-pv-c').innerText = fmtCurr(res.pv_C);
+      document.getElementById('tb2-i0-c').innerText = fmtCurr(state.I_0);
+      document.getElementById('tb2-npv-c').innerText = fmtCurr(res.npv_C);
+      document.getElementById('tb2-max-c').innerText = fmtCurr(res.pv_C);
+      const reqDisc = Math.max(0, state.I_0 - res.pv_C);
+      document.getElementById('tb2-disc-c').innerText = fmtCurr(reqDisc);
+
+      document.getElementById('lbl-chart-irr').innerText = 'IRR 損益平衡點 = ' + fmtPct(res.irr);
+    }
+
+    function updateCharts(res) {
+      // 1. Capital Structure Chart
+      if (document.getElementById('chartCapitalStructure')) {
+        const ctx1 = document.getElementById('chartCapitalStructure').getContext('2d');
+        if (chartCapStruct) chartCapStruct.destroy();
+
+        chartCapStruct = new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: ['Dell 帳面負債 (40%)', 'Dell 帳面股權 (60%)', 'Dell 市場負債 (26%)', 'Dell 市場股權 (74%)'],
+            datasets: [
+              {
+                label: '帳面資本結構',
+                data: [res.wd_BV * 100, res.we_BV * 100],
+                backgroundColor: ['#64748b', '#3b82f6'],
+                hoverOffset: 4
+              },
+              {
+                label: '市場資本結構',
+                data: [res.wd_MV * 100, res.we_MV * 100],
+                backgroundColor: ['#f43f5e', '#10b981'],
+                hoverOffset: 4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: '#94a3b8', font: { size: 10 } }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${ctx.label}: ${ctx.parsed.toFixed(2)}%`
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // 2. NPV Sensitivity Profile Curve
+      if (document.getElementById('chartNpvSensitivity')) {
+        const ctx2 = document.getElementById('chartNpvSensitivity').getContext('2d');
+        if (chartNpvSens) chartNpvSens.destroy();
+
+        const rates = [0.08, 0.09, 0.09415, 0.10, 0.10612, 0.115, 0.12, 0.12602, 0.13, 0.13474, 0.14, 0.15, 0.16];
+        const npvs = rates.map(r => {
+          const pv = state.FCFs.reduce((acc, f) => acc + f.fcf / Math.pow(1.0 + r, f.y), 0);
+          return Math.round(pv - state.I_0);
+        });
+
+        chartNpvSens = new Chart(ctx2, {
+          type: 'line',
+          data: {
+            labels: rates.map(r => (r * 100).toFixed(2) + '%'),
+            datasets: [
+              {
+                label: '專案 NPV ($)',
+                data: npvs,
+                borderColor: '#38bdf8',
+                backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                fill: true,
+                tension: 0.35,
+                borderWidth: 3,
+                pointRadius: rates.map(r => Math.abs(r - res.irr) < 0.002 || Math.abs(r - res.WACC_HCI) < 0.001 || Math.abs(r - res.WACC_MV) < 0.001 ? 6 : 2),
+                pointBackgroundColor: rates.map(r => Math.abs(r - res.irr) < 0.002 ? '#a855f7' : (Math.abs(r - res.WACC_HCI) < 0.001 ? '#f43f5e' : (Math.abs(r - res.WACC_MV) < 0.001 ? '#10b981' : '#38bdf8')))
+              },
+              {
+                label: '損益平衡線 (NPV = 0)',
+                data: rates.map(() => 0),
+                borderColor: '#64748b',
+                borderDash: [5, 5],
+                borderWidth: 1.5,
+                pointRadius: 0,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                ticks: { color: '#94a3b8', font: { size: 10 } },
+                grid: { color: 'rgba(51, 65, 85, 0.3)' }
+              },
+              y: {
+                ticks: {
+                  color: '#94a3b8',
+                  font: { size: 10 },
+                  callback: (val) => '$' + (val / 1000).toFixed(0) + 'k'
+                },
+                grid: { color: 'rgba(51, 65, 85, 0.3)' }
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: { color: '#94a3b8', font: { size: 11 } }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // Export Live Excel Workbook
+    function exportLiveExcel() {
+      const res = calcFinancials();
+      const wb = XLSX.utils.book_new();
+
+      // Sheet 1: Dashboard & Inputs
+      const wsDashData = [
+        ['Hubbard Computer, Inc.：非上市公司 WACC 估算、純業務法與資本預算模型'],
+        ['哈佛商學院教學風格個案財務模型（HBS Valuation Model）'],
+        [],
+        ['【核心財務決策與專案評估精算成果摘要】'],
+        ['評估維度 / 決策指標', '基準 A：Dell 帳面 WACC', '基準 B：Dell 市場 WACC', '基準 C：HCI 專屬真實 WACC', '財務決策重大啟示'],
+        ['適用折現率 (WACC)', res.WACC_BV, res.WACC_MV, res.WACC_HCI, 'HCI 專屬 WACC 較市場標竿高出 2.86%'],
+        ['800 萬美元專案淨現值 (NPV)', res.npv_A, res.npv_B, res.npv_C, res.npv_C >= 0 ? 'NPV 為正' : '在 13.47% 折現率下，NPV 崩跌轉負！'],
+        ['專案內部報酬率 (Project IRR)', res.irr, res.irr, res.irr, 'IRR (12.60%) 介於 10.61% 與 13.47% 之間，決策大逆轉！'],
+        ['董事會最終審批決策建議', '【致命誤判】大幅核准', '【標竿誤導】欣然核准', res.npv_C >= 0 ? '【核准推動】' : '【斷然否決】暫緩推動', '若誤用 10.61% 將毀損股東財富！'],
+        ['專案轉正保本投資上限 (Max Capex)', res.pv_A, res.pv_B, res.pv_C, '第 0 期資本支出必須壓低至保本點以下'],
+        [],
+        ['【個案基礎參數設定表】'],
+        ['參數分類', '參數代碼', '參數名稱', '當前設定數值', '計量單位', '財務說明'],
+        ['標竿市場', 'P0_Dell', 'Dell 普通股每股市價', state.P0, '$ / 股', 'NYSE 公開市場均價'],
+        ['標竿市場', 'Shares_Dell', 'Dell 流通在外股數', state.Shares, '股', 'Dell 已發行總股數'],
+        ['標竿市場', 'D_MV_Dell', 'Dell 公司債券總市值', state.D_MV, '美元', '公開市場公司債券市值'],
+        ['標竿財報', 'D_BV_Dell', 'Dell 長期負債帳面值', state.D_BV, '美元', '經審計之長期借款面值'],
+        ['標竿財報', 'E_BV_Dell', 'Dell 股東權益帳面值', state.E_BV, '美元', '資產負債表股東權益淨值'],
+        ['標竿風險', 'Beta_L_Dell', 'Dell 歷史槓桿貝塔值', state.Beta_L_Dell, '係數 (β)', '60 個月迴歸 Beta'],
+        ['標竿債務', 'Rd_Dell', 'Dell 公司債到期殖利率', state.Rd_Dell, '年利率', '高級無擔保債券 YTM'],
+        ['宏觀參數', 'Rf', '無風險利率基準', state.Rf, '年利率', '美國 3 個月國庫券殖利率'],
+        ['宏觀參數', 'E_Rm', '市場預期報酬率', state.E_Rm, '年利率', 'S&P 500 長期年化回報'],
+        ['宏觀參數', 'MRP', '市場風險溢酬', res.MRP, '年利率', 'MRP = E(Rm) - Rf'],
+        ['稅率參數', 'Tc', '綜合企業所得稅率', state.Tc, '稅率', '聯邦加州綜合稅率'],
+        ['目標企業', 'Target_D_V', 'HCI 目標負債比率', state.Target_D_V, '比率', '長期最適負債結構'],
+        ['目標企業', 'Target_E_V', 'HCI 目標股權比率', res.Target_E_V, '比率', '1 - Target D/V'],
+        ['目標企業', 'Target_D_E', 'HCI 目標債股比', res.Target_D_E, '比率', 'D/E = 30% / 70%'],
+        ['目標企業', 'Rd_HCI', 'HCI 銀行借款利率', state.Rd_HCI, '年利率', '商業銀行信用貸款利率'],
+        ['目標企業', 'Size_Prem', '小型企業規模風險溢酬', state.Size_Prem, '年利率', 'Duff & Phelps 小型溢價'],
+        ['目標企業', 'Illiq_Prem', '缺乏次級流動性溢酬', state.Illiq_Prem, '年利率', '私營企業股權流動性貼水'],
+        ['專案參數', 'I_0', '新產線投資預算', state.I_0, '美元', '第 0 期資本支出']
+      ];
+      const wsDash = XLSX.utils.aoa_to_sheet(wsDashData);
+      XLSX.utils.book_append_sheet(wb, wsDash, '決策總覽與參數設定');
+
+      // Sheet 6: FCF & NPV
+      const wsFcfData = [
+        ['問題六附表：800 萬美元新投資案 8 年自由現金流折現與 NPV / IRR 精算表'],
+        [],
+        ['年度 (Year)', '營運說明', '名目自由現金流 (FCF)', '折現因子 (帳面)', '折現現值 @ 帳面', '折現因子 (市場)', '折現現值 @ 市場', '折現因子 (HCI)', '折現現值 @ HCI'],
+        [0, '初始資本支出', -state.I_0, 1.0, -state.I_0, 1.0, -state.I_0, 1.0, -state.I_0]
+      ];
+      state.FCFs.forEach(f => {
+        const dfA = 1.0 / Math.pow(1.0 + res.WACC_BV, f.y);
+        const dfB = 1.0 / Math.pow(1.0 + res.WACC_MV, f.y);
+        const dfC = 1.0 / Math.pow(1.0 + res.WACC_HCI, f.y);
+        wsFcfData.push([f.y, f.desc, f.fcf, dfA, f.fcf * dfA, dfB, f.fcf * dfB, dfC, f.fcf * dfC]);
+      });
+      wsFcfData.push([]);
+      wsFcfData.push(['營運現金流入現值總和', '', '', '', res.pv_A, '', res.pv_B, '', res.pv_C]);
+      wsFcfData.push(['專案淨現值 (NPV)', '', '', '', res.npv_A, '', res.npv_B, '', res.npv_C]);
+      wsFcfData.push(['專案內部報酬率 (IRR)', '', '', '', res.irr, '', res.irr, '', res.irr]);
+      wsFcfData.push(['超額報酬率利差 (Spread)', '', '', '', res.irr - res.WACC_BV, '', res.irr - res.WACC_MV, '', res.irr - res.WACC_HCI]);
+      const wsFcf = XLSX.utils.aoa_to_sheet(wsFcfData);
+      XLSX.utils.book_append_sheet(wb, wsFcf, '專案預算與NPV精算');
+
+      XLSX.writeFile(wb, 'Hubbard_Computer_互動試算成果.xlsx');
+    }
+
+    // Initialize on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      syncInputsFromState();
+      recalcAll();
+    });
+  </script>
+
+</body>
+</html>

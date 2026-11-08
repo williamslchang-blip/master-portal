@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Portal | 115學年度 商管教學、實務個案與財務運算總門戶</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+              950: '#031726',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans TC"', 'Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0b1120;
+      color: #f1f5f9;
+      font-family: 'Noto Sans TC', Inter, sans-serif;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b1120;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    /* Tree Menu Styles */
+    .tree-node-active {
+      background: rgba(2, 132, 199, 0.18) !important;
+      color: #38bdf8 !important;
+      border-color: #0284c7 !important;
+      font-weight: 700 !important;
+    }
+    .tree-node-cases-active {
+      background: rgba(225, 29, 72, 0.18) !important;
+      color: #fb7185 !important;
+      border-color: #e11d48 !important;
+      font-weight: 700 !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- 1. Master Portal Top Bar (總門戶簡潔導航列)               -->
+  <!-- ======================================================== -->
+  <header class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-18">
+        
+        <!-- Left: Master Logo & Branding -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-sky-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/25 text-white font-black text-lg sm:text-xl">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-sky-400 bg-sky-950/80 px-2 py-0.5 rounded border border-sky-800/60">Master Portal</span>
+              <span id="envBadge"></span>
+              <span class="text-xs text-slate-400 hidden lg:inline">銘傳大學 ‧ 張書濂 教授</span>
+            </div>
+            <h1 class="text-sm sm:text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
+              115學年度 商管教學與實務個案總門戶
+            </h1>
+          </div>
+        </div>
+
+        <!-- Right: Actions (GitHub, Sidebar Toggle, External Link) -->
+        <div class="flex items-center space-x-2">
+          
+          <!-- GitHub Profile Link -->
+          <a 
+            href="https://github.com/williamslchang-blip" 
+            target="_blank" 
+            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs font-bold transition flex items-center gap-1.5"
+            title="前往 我的 GitHub (williamslchang-blip)"
+          >
+            <i class="fa-brands fa-github text-sm text-sky-400"></i>
+            <span class="hidden sm:inline">GitHub</span>
+          </a>
+
+          <!-- Tree Sidebar Toggle Button -->
+          <button 
+            onclick="toggleSidebar()" 
+            id="sidebarToggleBtn"
+            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs font-bold transition flex items-center gap-1.5"
+            title="開啟 / 摺疊左側階層樹狀選單"
+          >
+            <i class="fa-solid fa-bars-staggered"></i>
+            <span class="hidden sm:inline">選單欄</span>
+          </button>
+
+          <!-- External Portal Link -->
+          <a 
+            id="externalPortalLink" 
+            href="11501 領導與管理/index.html" 
+            target="_blank" 
+            class="px-3 py-1.5 rounded-xl bg-sky-950/80 hover:bg-sky-900 text-sky-400 hover:text-sky-300 border border-sky-800/60 text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap"
+            title="以獨立分頁開啟當前單元之子網站"
+          >
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            <span class="hidden sm:inline" id="externalPortalText">前往子網站</span>
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- 2. Master Command Bar: 3-Tier Cascading Selectors         -->
+  <!-- ======================================================== -->
+  <section class="bg-slate-900/90 border-b border-slate-800/80 px-4 sm:px-6 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-xs">
+      
+      <!-- Left: 3-Tier Cascading Dropdowns -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3 flex-grow">
+        
+        <!-- Tier 1: 第一階層 (學期 / 個案庫 / 碩論 主模組選單) -->
+        <div class="flex items-center space-x-1.5">
+          <label for="selectTier1" class="text-slate-400 font-bold whitespace-nowrap">學期／類別:</label>
+          <div class="relative">
+            <select 
+              id="selectTier1" 
+              onchange="onTier1Change(this.value)" 
+              class="bg-slate-950 border border-slate-700 hover:border-sky-500 rounded-xl px-3 py-1.5 text-xs font-extrabold text-white focus:outline-none focus:ring-1 focus:ring-sky-500 transition cursor-pointer pr-7 appearance-none"
+            >
+              <option value="sem11501">🎓 11501 學期課程主控台 (3 堂課 ‧ 47 週次)</option>
+              <option value="cases">💼 實務財務個案教學庫 (個案 1 & 2 ‧ 運算模型)</option>
+              <option value="sem11502">🌱 11502 學期課程 (三民高中 / 信託)</option>
+              <option value="theses">📚 碩士論文與實證研究 (金金併 / 0050 ETF)</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-2.5 top-2.5 text-[9px] text-slate-400 pointer-events-none"></i>
+          </div>
+        </div>
+
+        <span class="text-slate-600 hidden sm:inline">❯</span>
+
+        <!-- Tier 2: 第二階層 (課程 / 個案選單) -->
+        <div class="flex items-center space-x-1.5">
+          <label for="selectTier2" class="text-slate-400 font-bold whitespace-nowrap">子項目:</label>
+          <div class="relative">
+            <select 
+              id="selectTier2" 
+              onchange="onTier2Change(this.value)" 
+              class="bg-slate-950 border border-slate-700 hover:border-sky-500 rounded-xl px-3 py-1.5 text-xs font-bold text-sky-300 focus:outline-none focus:ring-1 focus:ring-sky-500 transition cursor-pointer pr-7 appearance-none"
+            >
+              <!-- Populated by JavaScript -->
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-2.5 top-2.5 text-[9px] text-slate-400 pointer-events-none"></i>
+          </div>
+        </div>
+
+        <span class="text-slate-600 hidden sm:inline">❯</span>
+
+        <!-- Tier 3: 第三階層 (週次單元選單) -->
+        <div class="flex items-center space-x-1.5 flex-grow sm:flex-grow-0 min-w-[220px]">
+          <label for="selectTier3" class="text-slate-400 font-bold whitespace-nowrap">單元:</label>
+          <div class="relative w-full">
+            <select 
+              id="selectTier3" 
+              onchange="onTier3Change(this.value)" 
+              class="w-full bg-slate-950 border border-slate-700 hover:border-sky-500 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 transition cursor-pointer pr-7 appearance-none truncate"
+            >
+              <!-- Populated by JavaScript -->
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-2.5 top-2.5 text-[9px] text-slate-400 pointer-events-none"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Prev / Next Fast Step Buttons -->
+      <div class="flex items-center space-x-2 shrink-0">
+        <button 
+          onclick="stepItem(-1)" 
+          id="btnPrevStep"
+          class="px-2.5 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs font-bold transition flex items-center gap-1 active:scale-95"
+          title="切換至上一個單元"
+        >
+          <i class="fa-solid fa-chevron-left text-[10px]"></i> 上單元
+        </button>
+        <button 
+          onclick="stepItem(1)" 
+          id="btnNextStep"
+          class="px-2.5 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs font-bold transition flex items-center gap-1 active:scale-95"
+          title="切換至下一個單元"
+        >
+          下單元 <i class="fa-solid fa-chevron-right text-[10px]"></i>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 3. Master Workspace: Collapsible Sidebar + Canvas Area      -->
+  <!-- ======================================================== -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 items-start">
+    
+    <!-- Left: Collapsible Hierarchical Tree Menu (階層式摺疊選單欄) -->
+    <aside id="treeSidebar" class="w-72 shrink-0 bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-4 shadow-2xl transition-all duration-300">
+      
+      <!-- Sidebar Header & Search -->
+      <div class="space-y-3 pb-3 border-b border-slate-800">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-sitemap text-sky-400"></i> Master 導航目錄
+          </span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800/40" id="treeStatusBadge">
+            全學年架構
+          </span>
+        </div>
+
+        <!-- Filter Input -->
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-500"></i>
+          <input 
+            type="text" 
+            id="treeSearchInput" 
+            oninput="handleTreeSearch()" 
+            placeholder="過濾單元關鍵字..." 
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-7 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 transition"
+          >
+          <button 
+            id="treeClearSearch" 
+            onclick="clearTreeSearch()" 
+            class="hidden absolute right-2.5 top-2 text-slate-500 hover:text-white text-xs"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tree Nodes Accordion List (手風琴樹狀選單) -->
+      <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-320px)] pr-1 text-xs" id="treeContainer">
+        <!-- Injected by JavaScript -->
+      </div>
+
+    </aside>
+
+    <!-- Right: Focused Content Canvas & Live Embedded Viewer (右側專注主畫布) -->
+    <section class="flex-grow min-w-0 space-y-4">
+      
+      <!-- Breadcrumb Bar (麵包屑導航路徑) -->
+      <div class="flex items-center space-x-2 text-xs text-slate-400 py-1" id="breadcrumbBar">
+        <span class="text-slate-500 hover:text-slate-300 cursor-pointer" onclick="selectCategory('sem11501', 'leadership', 0)">
+          <i class="fa-solid fa-house text-[10px]"></i> Master Portal
+        </span>
+        <span class="text-slate-600">/</span>
+        <span class="text-slate-400 font-semibold" id="breadTier1">11501 學期課程主控台</span>
+        <span class="text-slate-600">/</span>
+        <span class="text-sky-400 font-bold" id="breadTier2">領導與管理</span>
+        <span class="text-slate-600">/</span>
+        <span class="text-white font-extrabold truncate" id="breadTier3">W02 從管理者到領導者</span>
+      </div>
+
+      <!-- Focus Info Card (核心主題看板) -->
+      <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-5 shadow-xl relative overflow-hidden">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-lg text-xs font-black bg-sky-500 text-white shadow-sm" id="canvasBadge">
+                W02
+              </span>
+              <span class="text-xs font-bold text-slate-400" id="canvasCategoryLabel">
+                11501 領導與管理 (EMBA 碩專)
+              </span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight leading-snug" id="canvasTitle">
+              從管理者到領導者：Management vs. Leadership
+            </h2>
+          </div>
+
+          <!-- Quick Bookmark / External Open -->
+          <a 
+            id="canvasDirectWebLink" 
+            href="#" 
+            target="_blank" 
+            class="self-start md:self-center px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap"
+          >
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> 新分頁開啟
+          </a>
+        </div>
+
+        <!-- Description -->
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4" id="canvasDesc">
+          釐清管理者（管事）與領導者（帶人）本質差異，掌握領導四大面向與轉換心態。
+        </p>
+
+        <!-- Dynamic Action Buttons (針對課程、個案或未來學期自適應顯示) -->
+        <div class="pt-3 border-t border-slate-800/80" id="canvasActionsContainer">
+          <!-- Injected by JavaScript -->
+        </div>
+
+      </div>
+
+      <!-- Live Embedded Viewer Box (內嵌即時預覽視窗) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col" id="viewerWrapper">
+        
+        <!-- Viewer Header -->
+        <div class="px-4 py-2 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs">
+          <div class="flex items-center space-x-2 text-slate-400 truncate max-w-sm">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="font-bold text-slate-300" id="viewerTypeLabel">內嵌即時預覽</span>
+            <span class="text-slate-600">|</span>
+            <span class="text-[11px] truncate text-slate-400" id="viewerUrlLabel">載入中...</span>
+          </div>
+
+          <!-- Tabs for Financial Cases (簡報 vs 運算模型) -->
+          <div class="flex items-center space-x-2">
+            <div id="viewerTabsSwitch" class="hidden sm:flex items-center bg-slate-900 p-0.5 rounded-lg border border-slate-800 text-[11px]">
+              <button onclick="setViewerTab('html')" id="tabBtnHtml" class="px-2 py-0.5 rounded font-bold bg-sky-600 text-white">教學簡報</button>
+              <button onclick="setViewerTab('tool')" id="tabBtnTool" class="px-2 py-0.5 rounded font-bold text-slate-400 hover:text-white">運算工具</button>
+            </div>
+
+            <button onclick="reloadViewerFrame()" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[11px] font-semibold transition" title="重新整理預覽畫面">
+              <i class="fa-solid fa-rotate-right mr-1"></i> 重載
+            </button>
+            <a id="viewerFullscreenLink" href="#" target="_blank" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-sky-300 text-[11px] font-semibold transition" title="在獨立分頁開啟全螢幕">
+              <i class="fa-solid fa-up-right-and-down-left-from-center mr-1"></i> 全螢幕
+            </a>
+          </div>
+        </div>
+
+        <!-- The Iframe Canvas -->
+        <div class="w-full h-[650px] bg-slate-950 relative">
+          <iframe id="mainViewerFrame" src="" class="w-full h-full border-0" allow="fullscreen" loading="lazy"></iframe>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 py-6 px-4 sm:px-6 lg:px-8 mt-10 text-center text-xs text-slate-500 space-y-1">
+    <p class="font-bold text-slate-300">
+      Master Portal ‧ 115學年度 商管教學、實務個案與財務運算總門戶
+    </p>
+    <p class="text-[11px] text-slate-500">
+      跨學期架構：11501 學期課程 ‧ 11502 學期課程 (預留擴充) ‧ 哈佛實務財務個案教學庫 ‧ 碩士論文指導 ‧ 授課教師：張書濂 教授
+    </p>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- Master Hierarchical Data & Controller Script               -->
+  <!-- ======================================================== -->
+  <script>
+    const masterData = {
+      // ==========================================
+      // 1. 11501 學期課程主控台
+      // ==========================================
+      sem11501: {
+        id: 'sem11501',
+        name: '11501 學期課程主控台',
+        icon: 'fa-chalkboard-user text-sky-400',
+        homeUrl: '11501 領導與管理/index.html',
+        subCategories: {
+          leadership: {
+            id: 'leadership',
+            name: '11501 領導與管理',
+            shortName: '領導與管理',
+            badge: 'EMBA 碩專',
+            icon: 'fa-crown text-amber-400',
+            sub: 'EMBA 碩士在職專班 ‧ 11 主題',
+            homeUrl: '11501 領導與管理/index.html',
+            items: [
+              { code: 'W02', title: '從管理者到領導者：Management vs. Leadership', desc: '釐清管理者（管事）與領導者（帶人）本質差異，掌握領導四大面向與轉換心態。', html: '11501 領導與管理/第二週_從管理者到領導者_Management_vs_Leadership.html', docx: '11501 領導與管理/領導與管理_W2_第一主題_從管理者到領導者.docx' },
+              { code: 'W03', title: 'Who Am I as a Leader? 領導風格與自我認識', desc: '透過領導風格測評與真誠領導理論，建立自覺並發掘個人核心領導力。', html: '11501 領導與管理/W03_領導風格與自我認識_Who_Am_I_as_a_Leader.html', docx: '11501 領導與管理/領導與管理_W3_第二主題_領導風格與自我認識.docx' },
+              { code: 'W05', title: '領導理論與情境領導：不同的人應該怎麼帶？', desc: 'Hersey-Blanchard 情境領導模型（指令、教練、支持、授權）與部屬成熟度診斷。', html: '11501 領導與管理/W05_領導理論與情境領導_不同的人應該怎麼帶.html', docx: '11501 領導與管理/領導與管理_W5_第三主題_領導理論與情境領導.docx' },
+              { code: 'W07', title: '激勵與員工動機：為什麼部屬不再努力？', desc: '雙因子理論、期望理論、自主動機（SDT）與非金錢激勵在職場之落地實務。', html: '11501 領導與管理/W07_激勵與員工動機_為什麼部屬不再努力.html', docx: '11501 領導與管理/領導與管理_W7_第四主題_激勵與員工動機.docx' },
+              { code: 'W10', title: '領導溝通與有效傾聽：為什麼我說的和聽到的不一樣？', desc: '高難度對話技巧、同理傾聽、心理安全感營造與反饋給予（SBI模型）。', html: '11501 領導與管理/W10_領導溝通與有效傾聽_為什麼我說的和聽到的不一樣.html', docx: '11501 領導與管理/領導與管理_W10_第五主題_領導溝通與有效傾聽.docx' },
+              { code: 'W11', title: '團隊建立與團隊領導：明星員工能組成明星團隊嗎？', desc: 'Tuckman 團隊發展階段、Google Project Aristotle 心理安全感與跨功能協作。', html: '11501 領導與管理/W11_團隊建立與團隊領導_明星員工能組成明星團隊嗎.html', docx: '11501 領導與管理/領導與管理_W11_第六主題_團隊建立與團隊領導.docx' },
+              { code: 'W12', title: '衝突管理、談判與協商：好主管應該避免衝突嗎？', desc: 'Thomas-Kilmann 衝突五風格、哈佛談判專案（BATNA）與雙贏價值創造。', html: '11501 領導與管理/W12_衝突管理談判與協商_好主管應該避免衝突嗎.html', docx: '11501 領導與管理/領導與管理_W12_第七主題_衝突管理談判與協商.docx' },
+              { code: 'W13', title: '權力、影響力與組織政治：沒有職權也能領導嗎？', desc: 'French & Raven 五大權力來源、Cialdini 六大說服原則與跨部門橫向影響力。', html: '11501 領導與管理/W13_權力影響力與組織政治_沒有職權也能領導嗎.html', docx: '11501 領導與管理/領導與管理_W13_第八主題_權力影響力與組織政治.docx' },
+              { code: 'W14', title: '管理決策與決策偏誤：為什麼好主管也會做錯決策？', desc: '快思慢想雙系統、確認偏誤、沉沒成本謬誤、過度自信與群體迷思破解。', html: '11501 領導與管理/W14_管理決策與決策偏誤_為什麼好主管也會做錯決策.html', docx: '11501 領導與管理/領導與管理_W14_第九主題_管理決策與決策偏誤.docx' },
+              { code: 'W15', title: '情緒智商與領導：高EQ真的能帶出高績效嗎？', desc: 'Goleman 情緒智商四大向度、高壓自我調節、同理心與激勵性領導氛圍。', html: '11501 領導與管理/W15_情緒智商與領導_高EQ真的能帶出高績效嗎.html', docx: '11501 領導與管理/領導與管理_W15_第十主題_情緒智商與領導.docx' },
+              { code: 'W16', title: '組織文化與變革領導：為什麼員工抗拒改變？', desc: 'Edgar Schein 組織文化三層次、Kotter 八步變革領導模型與消除變革阻力。', html: '11501 領導與管理/W16_組織文化與變革領導_為什麼員工抗拒改變.html', docx: '11501 領導與管理/領導與管理_W16_第十一主題_組織文化與變革領導.docx' }
+            ]
+          },
+          ethics: {
+            id: 'ethics',
+            name: '11501 企業倫理與永續經營',
+            shortName: '企業倫理與永續',
+            badge: '商管核心 / ESG',
+            icon: 'fa-seedling text-emerald-400',
+            sub: '商管核心 ‧ 18 週完整系列',
+            homeUrl: '11501 企業倫理與永續經營/index.html',
+            items: [
+              { code: '第1週', title: '企業為何需要倫理', desc: '倫理底線與商業價值、安隆案啟示與全球企業社會責任演進。', html: '11501 企業倫理與永續經營/第1週_企業為何需要倫理.html', docx: '11501 企業倫理與永續經營/第1週_企業為何需要倫理.docx' },
+              { code: '第2週', title: '道德理論與商業決策', desc: '功利主義、義務論、德行倫理學在複雜商業情境中的思辨與應用。', html: '11501 企業倫理與永續經營/第2週_道德理論與商業決策.html', docx: '11501 企業倫理與永續經營/第2週_道德理論與商業決策.docx' },
+              { code: '第3週', title: '企業社會責任與共享價值', desc: 'Carroll 金字塔模型與 Porter 創造共享價值（CSV）之商業模式轉型。', html: '11501 企業倫理與永續經營/第3週_企業社會責任與共享價值.html', docx: '11501 企業倫理與永續經營/第3週_企業社會責任與共享價值.docx' },
+              { code: '第4週', title: 'ESG與永續發展', desc: 'ESG 三大支柱、聯合國永續發展目標（SDGs）與企業評級指標體系。', html: '11501 企業倫理與永續經營/第4週_ESG與永續發展.html', docx: '11501 企業倫理與永續經營/第4週_ESG與永續發展.docx' },
+              { code: '第5週', title: '氣候變遷與淨零排放', desc: '溫室氣體範疇一二三、碳足跡盤查、碳權交易與 2050 淨零轉型路徑。', html: '11501 企業倫理與永續經營/第5週_氣候變遷與淨零排放.html', docx: '11501 企業倫理與永續經營/第5週_氣候變遷與淨零排放.docx' },
+              { code: '第6週', title: '利害關係人管理', desc: '利害關係人理論、重大性議題矩陣評估與衝突利益之平衡機制。', html: '11501 企業倫理與永續經營/第6週_利害關係人管理.html', docx: '11501 企業倫理與永續經營/第6週_利害關係人管理.docx' },
+              { code: '第7週', title: '公司治理與企業誠信', desc: '董事會獨立性、防制貪腐內部控制、吹哨者保護機制與經理人酬金。', html: '11501 企業倫理與永續經營/第7週_公司治理與企業誠信.html', docx: '11501 企業倫理與永續經營/第7週_公司治理與企業誠信.docx' },
+              { code: '第8週', title: '永續報告與ESG揭露', desc: 'GRI 準則、SASB 行業標準、TCFD 氣候財務揭露架構與漂綠（Greenwashing）防制。', html: '11501 企業倫理與永續經營/第8週_永續報告與ESG揭露.html', docx: '11501 企業倫理與永續經營/第8週_永續報告與ESG揭露.docx' },
+              { code: '第9週', title: '永續金融與ESG投資', desc: '責任投資原則（PRI）、綠色債券、永續連結貸款與 ESG 主題基金選股。', html: '11501 企業倫理與永續經營/第9週_永續金融與ESG投資.html', docx: '11501 企業倫理與永續經營/第9週_永續金融與ESG投資.docx' },
+              { code: '第10週', title: '永續供應鏈與循環經濟', desc: '從搖籃到搖籃設計理念、供應鏈人權審查、循環再利用與零廢棄物策略。', html: '11501 企業倫理與永續經營/第10週_永續供應鏈與循環經濟.html', docx: '11501 企業倫理與永續經營/第10週_永續供應鏈與循環經濟.docx' },
+              { code: '第11週', title: 'AI與數位治理', desc: '演算法偏見、生成式 AI 著作權與責任歸屬、個人資料保護法與數位人權。', html: '11501 企業倫理與永續經營/第11週_AI與數位治理.html', docx: '11501 企業倫理與永續經營/第11週_AI與數位治理.docx' },
+              { code: '第12週', title: '永續創新與ESG策略', desc: '破壞式永續創新、綠色商業模式、企業永續轉型的競爭優勢建構。', html: '11501 企業倫理與永續經營/第12週_永續創新與ESG策略.html', docx: '11501 企業倫理與永續經營/第12週_永續創新與ESG策略.docx' },
+              { code: '第13週', title: '全球企業永續案例分析', desc: 'Patagonia、Unilever、台積電等跨國標竿企業之永續實踐與商業回報分析。', html: '11501 企業倫理與永續經營/第13週_全球企業永續案例分析.html', docx: '11501 企業倫理與永續經營/第13週_全球企業永續案例分析.docx' },
+              { code: '第14週', title: 'ESG危機管理與企業韌性', desc: '公關危機、環境違規事件應對、誠信挽回流程與長期企業韌性培育。', html: '11501 企業倫理與永續經營/第14週_ESG危機管理與企業韌性.html', docx: '11501 企業倫理與永續經營/第14週_ESG危機管理與企業韌性.docx' },
+              { code: '第15週', title: 'ESG企業顧問專題', desc: '企業診斷工具、永續轉型 Roadmap 擬定、重大性評估與顧問實戰報告撰寫。', html: '11501 企業倫理與永續經營/第15週_ESG企業顧問專題.html', docx: '11501 企業倫理與永續經營/第15週_ESG企業顧問專題.docx' },
+              { code: '第16週', title: '企業倫理與永續的未來', desc: '自然相關財務揭露（TNFD）、生物多樣性、公正轉型與未來十年新典範。', html: '11501 企業倫理與永續經營/第16週_企業倫理與永續的未來.html', docx: '11501 企業倫理與永續經營/第16週_企業倫理與永續的未來.docx' },
+              { code: '第17週', title: 'ESG董事會決策模擬', desc: '沙盤模擬演練：董事會面對獲利壓力與永續轉型投資之權衡與最終表決。', html: '11501 企業倫理與永續經營/第17週_ESG董事會決策模擬.html', docx: '11501 企業倫理與永續經營/第17週_ESG董事會決策模擬.docx' },
+              { code: '第18週', title: '負責任領導與永續未來', desc: '領導者內在價值觀、終身誠信宣言、打造具永續使命感之企業文化與大收官。', html: '11501 企業倫理與永續經營/第18週_負責任領導與永續未來.html', docx: '11501 企業倫理與永續經營/第18週_負責任領導與永續未來.docx' }
+            ]
+          },
+          explore: {
+            id: 'explore',
+            name: '11501 管理探索二NEW',
+            shortName: '管理探索二NEW',
+            badge: '大一通識核心',
+            icon: 'fa-compass text-sky-400',
+            sub: '大一通識核心 ‧ 18 週 54 小時',
+            homeUrl: '11501 管理探索二NEW/index.html',
+            items: [
+              { code: '第1週', title: '資訊爆炸時代的財經素養', desc: '資訊過載時代之財經判讀力、商業常識與假新聞辨別、個人財務思維框架。', html: '11501 管理探索二NEW/W1_資訊爆炸時代的財經素養.html', docx: '11501 管理探索二NEW/第一週_課程教學指引_資訊爆炸時代的財經素養.docx' },
+              { code: '第2週', title: '物價通膨與實質購買力', desc: 'CPI 消費者物價指數、實質購買力縮水危機、隱性通膨與資產抗通膨策略。', html: '11501 管理探索二NEW/W2_物價通膨與實質購買力.html', docx: '11501 管理探索二NEW/第二週_課程教學指引_物價通膨與實質購買力.docx' },
+              { code: '第3週', title: '利率央行貨幣政策與資產價格', desc: '中央銀行角色、升降息循環、點陣圖與利率對房市、股市、債券的連鎖反應。', html: '11501 管理探索二NEW/W3_利率央行與我們的荷包.html', docx: '11501 管理探索二NEW/第三週_課程教學指引_利率央行貨幣政策與資產價格.docx' },
+              { code: '第4週', title: '股市入門與企業價值估算', desc: '股票本質、本益比（P/E）、殖利率、杜邦分析法與基礎財報閱讀三表入門。', html: '11501 管理探索二NEW/W4_股市入門與企業價值估算.html', docx: '11501 管理探索二NEW/第四週_課程教學指引_股市入門與企業價值估算.docx' },
+              { code: '第5週', title: 'ETF狂熱主動型ETF與被動投資', desc: '指數型基金與 ETF 原理、主被動型差異、費率拖累效應與定期定額複利魔法。', html: '11501 管理探索二NEW/W5_ETF狂熱主動型ETF與被動投資.html', docx: '11501 管理探索二NEW/第五週_課程教學指引_ETF狂熱主動型ETF與被動投資.docx' },
+              { code: '第6週', title: '數位金融高利活存與銀行業變革', desc: '純網銀、數位帳戶高利活存攻略、Open Banking、支付工具與個人現金流配置。', html: '11501 管理探索二NEW/W6_數位金融高利活存與銀行業變革.html', docx: '11501 管理探索二NEW/第六週_課程教學指引_數位金融高利活存與銀行業變革.docx' },
+              { code: '第7週', title: '個人外匯匯率變動與國際貿易', desc: '匯率決定因素、強勢美元與弱勢日圓、出國旅遊換匯與台灣進出口經貿關聯。', html: '11501 管理探索二NEW/W7_個人外匯匯率變動與國際貿易.html', docx: '11501 管理探索二NEW/第七週_課程教學指引_個人外匯匯率變動與國際貿易.docx' },
+              { code: '第8週', title: '期中學習成果檢核與實戰個案總複習', desc: '前七週總體經濟、金融工具與財經概念統整檢核、生活實戰案例診斷複習。', html: '11501 管理探索二NEW/W8_期中學習成果檢核與實戰個案總複習.html', docx: '11501 管理探索二NEW/第八週_課程教學指引_期中學習成果檢核與實戰個案總複習.docx' },
+              { code: '第9週', title: '保險基礎風險管理與個人保障規劃', desc: '保險金字塔、純保障 vs 儲蓄險、醫療實支實付、產險與人生各階段風險對沖。', html: '11501 管理探索二NEW/W9_保險基礎風險管理與個人保障規劃.html', docx: '11501 管理探索二NEW/第九週_課程教學指引_保險基礎風險管理與個人保障規劃.docx' },
+              { code: '第10週', title: '不動產房地產與租買決策財務學', desc: '買房 vs 租房精算模型、房貸本息攤還、寬限期陷阱、青年安心成家貸款解析。', html: '11501 管理探索二NEW/W10_不動產房地產與租買決策財務學.html', docx: '11501 管理探索二NEW/第十週_課程教學指引_不動產房地產與租買決策財務學.docx' },
+              { code: '第11週', title: '個人綜合所得稅節稅規劃與報稅實務', desc: '台灣五級累進稅率、免稅額與各項扣除額、首報族報稅攻略與合法節稅思維。', html: '11501 管理探索二NEW/W11_個人綜合所得稅節稅規劃與報稅實務.html', docx: '11501 管理探索二NEW/第十一週_課程教學指引_個人綜合所得稅節稅規劃與報稅實務.docx' },
+              { code: '第12週', title: '個人與家庭資產負債表現金流管理與生涯理財規劃', desc: '個人資產負債表編製、緊急預備金、人生三階段理財目標（結婚、退休、購屋）。', html: '11501 管理探索二NEW/W12_個人與家庭資產負債表現金流管理與生涯理財規劃.html', docx: '11501 管理探索二NEW/第十二週_課程教學指引_個人與家庭資產負債表現金流管理與生涯理財規劃.docx' },
+              { code: '第13週', title: '半導體產業護國神山台積電與台灣科技供應鏈', desc: '晶圓代工商業模式、摩爾定律、台積電競爭護城河與台灣科技供應鏈戰略價值。', html: '11501 管理探索二NEW/W13_半導體產業護國神山台積電與台灣科技供應鏈.html', docx: '11501 管理探索二NEW/第十三週_課程教學指引_半導體產業護國神山台積電與台灣科技供應鏈.docx' },
+              { code: '第14週', title: '生成式AI革命人工智慧產業鏈與未來職場轉型', desc: 'GenAI 商業落地、AI 晶片與雲端伺服器生態、大專新鮮人未來必備之 AI 賦能。', html: '11501 管理探索二NEW/W14_生成式AI革命人工智慧產業鏈與未來職場轉型.html', docx: '11501 管理探索二NEW/第十四週_課程教學指引_生成式AI革命人工智慧產業鏈與未來職場轉型.docx' },
+              { code: '第15週', title: '綠色金融ESG永續投資與碳定價經濟學', desc: '綠色通膨（Greenflation）、歐盟 CBAM 碳關稅衝擊、碳定價與企業 ESG 轉型商機。', html: '11501 管理探索二NEW/W15_綠色金融ESG永續投資與碳定價經濟學.html', docx: '11501 管理探索二NEW/第十五週_課程教學指引_綠色金融ESG永續投資與碳定價經濟學.docx' },
+              { code: '第16週', title: '加密貨幣區塊鏈基礎Web3與數位資產風險', desc: '比特幣與以太坊本質、去中心化概念、冷溫錢包安全、詐騙防制與資產風險控管。', html: '11501 管理探索二NEW/W16_加密貨幣區塊鏈基礎Web3與數位資產風險.html', docx: '11501 管理探索二NEW/第十六週_課程教學指引_加密貨幣區塊鏈基礎Web3與數位資產風險.docx' },
+              { code: '第17週', title: '期末專案發表實戰財經簡報與總評量', desc: '分組商業企劃發表、財經簡報表達演練、課堂同儕互評與教授實戰講評。', html: '11501 管理探索二NEW/W17_期末專案發表實戰財經簡報與總評量.html', docx: '11501 管理探索二NEW/第十七週_課程教學指引_期末專案發表實戰財經簡報與總評量.docx' },
+              { code: '第18週', title: '學期總結財經探索藍圖與大一新鮮人終身宣言', desc: '全學期 18 週知識地圖閉環、大一新鮮人終身財務宣言與個人職涯起飛藍圖。', html: '11501 管理探索二NEW/W18_學期總結財經探索藍圖與大一新鮮人終身宣言.html', docx: '11501 管理探索二NEW/第十八週_課程教學指引_學期總結財經探索藍圖與大一新鮮人終身宣言.docx' }
+            ]
+          }
+        }
+      },
+
+      // ==========================================
+      // 2. 實務財務個案教學庫
+      // ==========================================
+      cases: {
+        id: 'cases',
+        name: '實務財務個案教學庫',
+        icon: 'fa-briefcase text-rose-400',
+        homeUrl: '11501 領導與管理/財務個案/財務個案1/index.html',
+        subCategories: {
+          case1: {
+            id: 'case1',
+            name: '財務個案 1：翔鷹航太科技',
+            shortName: '個案 1：翔鷹航太科技',
+            badge: '本土航太 ‧ 資本預算',
+            icon: 'fa-plane-departure text-rose-400',
+            sub: '勞退自提、員工福利信託與台幣 ETF 資產配置抉擇',
+            homeUrl: '11501 領導與管理/財務個案/財務個案1/index.html',
+            items: [
+              {
+                code: '個案 1 全套',
+                title: '翔鷹航太科技（AeroTaiwan）：新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇',
+                desc: '國防航太製造業資本預算、自由現金流估算，新進財務分析師勞退自提 6% 節稅現值分析、員工持股信託 100% 獎勵金與台幣 ETF（0050/0056/00878）長線資產配置實戰。',
+                html: '11501 領導與管理/財務個案/財務個案1/index.html',
+                htmlPresentation: '11501 領導與管理/財務個案/財務個案1/教學簡報網站：翔鷹航太科技（AeroTaiwan）.html',
+                excelModel: '11501 領導與管理/財務個案/財務個案1/財務個案1_翔鷹航太_完整解析財務模型.xlsx',
+                docxContent: '11501 領導與管理/財務個案/財務個案1/1. 個案內容：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx',
+                docxAnalysis: '11501 領導與管理/財務個案/財務個案1/1. 個案解析：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx',
+                docxGuide: '11501 領導與管理/財務個案/財務個案1/1. 教學指引：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx',
+                docx: '11501 領導與管理/財務個案/財務個案1/1. 教學指引：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx'
+              }
+            ]
+          },
+          case2: {
+            id: 'case2',
+            name: '財務個案 2：Hubbard Computer',
+            shortName: '個案 2：Hubbard Computer',
+            badge: 'WACC 估算 ‧ 純業務法',
+            icon: 'fa-laptop-code text-amber-400',
+            sub: '非上市公司 WACC 估算、純業務法與資本預算抉擇',
+            homeUrl: '11501 領導與管理/財務個案/財務個案2/index.html',
+            items: [
+              {
+                code: '個案 2 全套',
+                title: 'Hubbard Computer, Inc.：非上市公司 WACC 估算、純業務法與資本預算抉擇',
+                desc: '哈佛商學院經典財務決策模型：非上市公司加權平均資本成本（WACC）精算、純業務法（Pure Play Method）去除與還原財務槓桿、敏感度分析與實體資本預算決策。',
+                html: '11501 領導與管理/財務個案/財務個案2/index.html',
+                htmlPresentation: '11501 領導與管理/財務個案/財務個案2/教學簡報網站：Hubbard_Computer.html',
+                interactiveTool: '11501 領導與管理/財務個案/財務個案2/財務個案2_Hubbard_Computer_互動式財務模型.html',
+                excelModel: '11501 領導與管理/財務個案/財務個案2/財務個案2_Hubbard_Computer_完整解析財務模型.xlsx',
+                docxContent: '11501 領導與管理/財務個案/財務個案2/2. 個案內容：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx',
+                docxAnalysis: '11501 領導與管理/財務個案/財務個案2/2. 個案解析：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx',
+                docxGuide: '11501 領導與管理/財務個案/財務個案2/2. 教學指引：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx',
+                docx: '11501 領導與管理/財務個案/財務個案2/2. 教學指引：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx'
+              }
+            ]
+          }
+        }
+      },
+
+      // ==========================================
+      // 3. 11502 學期課程 (預留擴充接口)
+      // ==========================================
+      sem11502: {
+        id: 'sem11502',
+        name: '11502 學期課程主控台',
+        icon: 'fa-calendar-days text-emerald-400',
+        homeUrl: '11502 三民高中/115-2 三民高中財金微課程規畫.docx',
+        subCategories: {
+          sanmin: {
+            id: 'sanmin',
+            name: '11502 三民高中財金微課程',
+            shortName: '三民高中微課程',
+            badge: '高中銜接微學分',
+            icon: 'fa-school text-emerald-400',
+            sub: '高中生財金素養與商業探索微課程',
+            homeUrl: '11502 三民高中/115-2 三民高中財金微課程規畫.docx',
+            items: [
+              {
+                code: '課程規劃',
+                title: '115-2 三民高中財金微課程整體規劃與教學設計',
+                desc: '高中生生活化財務素養、大專財金系所探索與商業個案引導教案。',
+                docx: '11502 三民高中/115-2 三民高中財金微課程規畫.docx',
+                isPlaceholder: true
+              }
+            ]
+          },
+          trust: {
+            id: 'trust',
+            name: '11502 信託法規與實務',
+            shortName: '信託實務',
+            badge: '商管核心專業',
+            icon: 'fa-handshake text-teal-400',
+            sub: '金管會信託法規、安養信託與家族財富傳承',
+            homeUrl: '11502 信託/',
+            items: [
+              {
+                code: '籌備中',
+                title: '11502 信託法規與實務課程架構',
+                desc: '本課程即將於下學期正式開課，相關互動簡報與教學手冊陸續上線。',
+                isPlaceholder: true
+              }
+            ]
+          }
+        }
+      },
+
+      // ==========================================
+      // 4. 碩士論文與實證研究 (EMBA 碩論指導)
+      // ==========================================
+      theses: {
+        id: 'theses',
+        name: '碩士論文與實證研究庫',
+        icon: 'fa-book-bookmark text-purple-400',
+        homeUrl: '碩士在職專班/合併與併購 碩論/',
+        subCategories: {
+          ma: {
+            id: 'ma',
+            name: '台灣金金併與金融整併碩論',
+            shortName: '金金併碩論',
+            badge: 'TEJ 實證研究',
+            icon: 'fa-chart-line text-purple-400',
+            sub: '公司治理、ESG 差距與價值創造實證研究',
+            homeUrl: '碩士在職專班/合併與併購 碩論/',
+            items: [
+              {
+                code: '實證研究',
+                title: '台灣金金併與金融整併：公司治理、ESG差距與價值創造',
+                desc: '含 19 支全自動化 R 實證分析腳本、TEJ 實證資料集與論文實證正文完整整編。',
+                isPlaceholder: true
+              }
+            ]
+          },
+          etf50: {
+            id: 'etf50',
+            name: '元大台灣50 ETF成分股調整碩論',
+            shortName: '0050 ETF碩論',
+            badge: '事件研究法 (Event Study)',
+            icon: 'fa-chart-pie text-indigo-400',
+            sub: '成分股調整對股價與流動性影響實證研究',
+            homeUrl: '碩士在職專班/成分股更換 碩論/',
+            items: [
+              {
+                code: '實證研究',
+                title: '元大台灣50 ETF 成分股調整對股價與流動性影響',
+                desc: '包含 2003–2026 年完整定審事件研究、日行情資料集與回歸分析實證模型。',
+                isPlaceholder: true
+              }
+            ]
+          }
+        }
+      }
+    };
+
+    // Environment & URL Resolver (支援 GitHub Pages 與本機離線雙模運作)
+    const isOnline = window.location.protocol.startsWith('http');
+
+    const GITHUB_PAGES_BASE = {
+      leadership: 'https://williamslchang-blip.github.io/11501-leadership-and-management/',
+      ethics: 'https://williamslchang-blip.github.io/11501-business-ethics-sustainability/',
+      explore: 'https://williamslchang-blip.github.io/11501-management-discovery-2/',
+      case1: 'https://williamslchang-blip.github.io/11501-leadership-and-management/',
+      case2: 'https://williamslchang-blip.github.io/11501-leadership-and-management/'
+    };
+
+    const GITHUB_RAW_BASE = {
+      leadership: 'https://raw.githubusercontent.com/williamslchang-blip/11501-leadership-and-management/main/',
+      ethics: 'https://raw.githubusercontent.com/williamslchang-blip/11501-business-ethics-sustainability/main/',
+      explore: 'https://raw.githubusercontent.com/williamslchang-blip/11501-management-discovery-2/main/',
+      case1: 'https://raw.githubusercontent.com/williamslchang-blip/11501-leadership-and-management/main/',
+      case2: 'https://raw.githubusercontent.com/williamslchang-blip/11501-leadership-and-management/main/'
+    };
+
+    function resolveUrl(path, courseId) {
+      if (!path) return '';
+      if (path.startsWith('http://') || path.startsWith('https://')) return path;
+
+      if (!isOnline) {
+        return path; // 本機離線模式：保持相對路徑
+      }
+
+      const id = courseId || currentTier2;
+      const isDownload = path.endsWith('.docx') || path.endsWith('.xlsx');
+      const base = isDownload ? (GITHUB_RAW_BASE[id] || GITHUB_PAGES_BASE[id]) : GITHUB_PAGES_BASE[id];
+
+      if (!base) return path;
+
+      let cleanPath = path;
+      if (cleanPath.startsWith('11501 領導與管理/')) {
+        cleanPath = cleanPath.slice('11501 領導與管理/'.length);
+      } else if (cleanPath.startsWith('11501 企業倫理與永續經營/')) {
+        cleanPath = cleanPath.slice('11501 企業倫理與永續經營/'.length);
+      } else if (cleanPath.startsWith('11501 管理探索二NEW/')) {
+        cleanPath = cleanPath.slice('11501 管理探索二NEW/'.length);
+      }
+
+      return base + cleanPath;
+    }
+
+    function initEnvBadge() {
+      const badge = document.getElementById('envBadge');
+      if (!badge) return;
+      if (isOnline) {
+        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/50 bg-emerald-950/80 text-emerald-300 flex items-center gap-1';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 雲端連線版';
+      } else {
+        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full border border-sky-500/50 bg-sky-950/80 text-sky-300 flex items-center gap-1';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span> 本機離線版';
+      }
+    }
+
+    // State Variables
+    let currentTier1 = 'sem11501';
+    let currentTier2 = 'leadership';
+    let currentTier3Index = 0;
+    let currentViewerTab = 'html';
+    let isSidebarOpen = true;
+    let treeSearchQuery = '';
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initEnvBadge();
+      syncTier1Dropdown();
+      syncTier2Dropdown();
+      syncTier3Dropdown();
+      renderTreeMenu();
+      renderCanvas();
+    });
+
+    // Tier 1 Change
+    function onTier1Change(t1) {
+      currentTier1 = t1;
+      const subKeys = Object.keys(masterData[t1].subCategories);
+      currentTier2 = subKeys[0];
+      currentTier3Index = 0;
+      currentViewerTab = 'html';
+
+      syncTier2Dropdown();
+      syncTier3Dropdown();
+      renderTreeMenu();
+      renderCanvas();
+    }
+
+    // Tier 2 Change
+    function onTier2Change(t2) {
+      currentTier2 = t2;
+      currentTier3Index = 0;
+      currentViewerTab = 'html';
+
+      syncTier3Dropdown();
+      renderTreeMenu();
+      renderCanvas();
+    }
+
+    // Tier 3 Change
+    function onTier3Change(idxStr) {
+      const idx = parseInt(idxStr, 10);
+      if (!isNaN(idx)) {
+        currentTier3Index = idx;
+        currentViewerTab = 'html';
+        renderTreeMenu();
+        renderCanvas();
+      }
+    }
+
+    // Select Category
+    function selectCategory(t1, t2, t3Idx = 0) {
+      currentTier1 = t1;
+      currentTier2 = t2;
+      currentTier3Index = t3Idx;
+      currentViewerTab = 'html';
+
+      syncTier1Dropdown();
+      syncTier2Dropdown();
+      syncTier3Dropdown();
+      renderTreeMenu();
+      renderCanvas();
+    }
+
+    function syncTier1Dropdown() {
+      document.getElementById('selectTier1').value = currentTier1;
+    }
+
+    function syncTier2Dropdown() {
+      const select = document.getElementById('selectTier2');
+      const lvl1 = masterData[currentTier1];
+      let html = '';
+      Object.values(lvl1.subCategories).forEach(sub => {
+        html += `<option value="${sub.id}" ${sub.id === currentTier2 ? 'selected' : ''}>${sub.shortName || sub.name}</option>`;
+      });
+      select.innerHTML = html;
+    }
+
+    function syncTier3Dropdown() {
+      const select = document.getElementById('selectTier3');
+      const lvl2 = masterData[currentTier1].subCategories[currentTier2];
+      let html = '';
+      lvl2.items.forEach((item, index) => {
+        html += `<option value="${index}" ${index === currentTier3Index ? 'selected' : ''}>${item.code} - ${item.title}</option>`;
+      });
+      select.innerHTML = html;
+    }
+
+    function stepItem(delta) {
+      const lvl2 = masterData[currentTier1].subCategories[currentTier2];
+      const targetIdx = currentTier3Index + delta;
+      if (targetIdx >= 0 && targetIdx < lvl2.items.length) {
+        currentTier3Index = targetIdx;
+        currentViewerTab = 'html';
+        syncTier3Dropdown();
+        renderTreeMenu();
+        renderCanvas();
+      }
+    }
+
+    function toggleSidebar() {
+      isSidebarOpen = !isSidebarOpen;
+      const sidebar = document.getElementById('treeSidebar');
+      const toggleText = document.getElementById('sidebarToggleBtn').querySelector('span');
+
+      if (isSidebarOpen) {
+        sidebar.classList.remove('hidden');
+        if (toggleText) toggleText.textContent = '選單欄';
+      } else {
+        sidebar.classList.add('hidden');
+        if (toggleText) toggleText.textContent = '展開選單';
+      }
+    }
+
+    function renderTreeMenu() {
+      const container = document.getElementById('treeContainer');
+      const q = treeSearchQuery.toLowerCase();
+      let html = '';
+
+      Object.values(masterData).forEach(pillar => {
+        const isPillarActive = pillar.id === currentTier1;
+
+        html += `
+          <div class="border border-slate-800 rounded-xl overflow-hidden bg-slate-950/40">
+            <!-- Pillar Header -->
+            <div class="p-2.5 bg-slate-950 flex items-center justify-between font-extrabold text-slate-200 border-b border-slate-850">
+              <span class="flex items-center gap-2 truncate">
+                <i class="fa-solid ${pillar.icon}"></i>
+                <span class="truncate">${pillar.name}</span>
+              </span>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">
+                ${Object.keys(pillar.subCategories).length} 類
+              </span>
+            </div>
+
+            <!-- Second Tier Nodes -->
+            <div class="p-1 space-y-1">
+        `;
+
+        Object.values(pillar.subCategories).forEach(sub => {
+          const isSubActive = isPillarActive && sub.id === currentTier2;
+
+          html += `
+            <div class="space-y-0.5">
+              <button 
+                onclick="selectCategory('${pillar.id}', '${sub.id}', 0)" 
+                class="w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between font-bold transition ${isSubActive ? 'text-sky-400 bg-sky-950/40' : 'text-slate-300 hover:text-white hover:bg-slate-900'}"
+              >
+                <span class="flex items-center gap-1.5 truncate">
+                  <i class="fa-solid ${sub.icon} text-[11px]"></i>
+                  <span class="truncate">${sub.shortName || sub.name}</span>
+                </span>
+                <span class="text-[10px] font-semibold text-slate-500">${sub.items.length}</span>
+              </button>
+
+              <!-- Level 3 Leaf Items -->
+              ${(isSubActive || q) ? `
+                <div class="pl-5 pr-1 py-1 space-y-0.5 border-l border-slate-800 ml-3">
+                  ${sub.items.map((item, idx) => {
+                    const match = !q || item.title.toLowerCase().includes(q) || item.code.toLowerCase().includes(q);
+                    if (!match) return '';
+
+                    const isItemActive = isSubActive && idx === currentTier3Index;
+                    const activeClass = isItemActive ? 'tree-node-active' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60';
+
+                    return `
+                      <button 
+                        onclick="selectCategory('${pillar.id}', '${sub.id}', ${idx})" 
+                        class="w-full text-left px-2 py-1 rounded-md text-[11px] truncate transition flex items-center justify-between ${activeClass}"
+                        title="${item.title}"
+                      >
+                        <span class="truncate font-medium">${item.code} ${item.title}</span>
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function renderCanvas() {
+      const lvl1 = masterData[currentTier1];
+      const lvl2 = lvl1.subCategories[currentTier2];
+      const item = lvl2.items[currentTier3Index];
+      if (!item) return;
+
+      const isCases = lvl1.id === 'cases';
+
+      // Breadcrumbs
+      document.getElementById('breadTier1').textContent = lvl1.name;
+      document.getElementById('breadTier2').textContent = lvl2.name;
+      document.getElementById('breadTier3').textContent = `${item.code} - ${item.title}`;
+
+      // Canvas Header
+      document.getElementById('canvasBadge').textContent = item.code;
+      document.getElementById('canvasBadge').className = `px-2.5 py-0.5 rounded-lg text-xs font-black text-white shadow-sm ${isCases ? 'bg-rose-600' : 'bg-sky-600'}`;
+      document.getElementById('canvasCategoryLabel').textContent = `${lvl1.name} ❯ ${lvl2.name} (${lvl2.badge})`;
+      document.getElementById('canvasTitle').textContent = item.title;
+      document.getElementById('canvasDesc').textContent = item.desc;
+      
+      const directWebLink = document.getElementById('canvasDirectWebLink');
+      const directUrl = resolveUrl(item.htmlPresentation || item.html, currentTier2);
+      if (directUrl) {
+        directWebLink.href = directUrl;
+        directWebLink.classList.remove('hidden');
+      } else {
+        directWebLink.classList.add('hidden');
+      }
+
+      // External Link in Header
+      document.getElementById('externalPortalLink').href = resolveUrl(lvl2.homeUrl, currentTier2);
+      document.getElementById('externalPortalText').textContent = isCases ? '個案專區' : '專區總入口';
+
+      // Dynamic Action Buttons
+      const actionsBox = document.getElementById('canvasActionsContainer');
+      const viewerWrapper = document.getElementById('viewerWrapper');
+
+      if (item.isPlaceholder) {
+        // Placeholder for future semesters (11502 or theses)
+        actionsBox.innerHTML = `
+          <div class="flex items-center space-x-3">
+            ${item.docx ? `
+              <a href="${resolveUrl(item.docx, currentTier2)}" download class="py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                <i class="fa-regular fa-file-word"></i> 下載規劃文件 (.docx)
+              </a>
+            ` : ''}
+            <span class="text-xs text-slate-500 font-medium">📌 本單元教材陸續上線中，即將隨新學期同步更新。</span>
+          </div>
+        `;
+        viewerWrapper.classList.add('hidden');
+        return;
+      }
+
+      viewerWrapper.classList.remove('hidden');
+
+      if (isCases) {
+        // Case Assets Actions
+        const casePresUrl = resolveUrl(item.htmlPresentation || item.html, currentTier2);
+        const caseToolUrl = item.interactiveTool ? resolveUrl(item.interactiveTool, currentTier2) : '';
+        const caseExcelUrl = item.excelModel ? resolveUrl(item.excelModel, currentTier2) : '';
+        const caseDoc1 = item.docxContent ? resolveUrl(item.docxContent, currentTier2) : '';
+        const caseDoc2 = item.docxAnalysis ? resolveUrl(item.docxAnalysis, currentTier2) : '';
+        const caseDoc3 = item.docxGuide ? resolveUrl(item.docxGuide, currentTier2) : '';
+
+        actionsBox.innerHTML = `
+          <div class="space-y-2.5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+              <a href="${casePresUrl}" target="_blank" class="py-2 px-3 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                <i class="fa-solid fa-chalkboard-user"></i>
+                <span>開啟教學簡報網站</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+              </a>
+
+              ${caseToolUrl ? `
+                <a href="${caseToolUrl}" target="_blank" class="py-2 px-3 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-solid fa-calculator"></i>
+                  <span>互動運算小工具 (網頁)</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              ` : `
+                <a href="${caseExcelUrl}" download class="py-2 px-3 rounded-xl bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/80 font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-regular fa-file-excel"></i>
+                  <span>Excel 完整財務模型</span>
+                  <i class="fa-solid fa-download text-[9px]"></i>
+                </a>
+              `}
+
+              ${caseExcelUrl && caseToolUrl ? `
+                <a href="${caseExcelUrl}" download class="py-2 px-3 rounded-xl bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/80 font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-regular fa-file-excel"></i>
+                  <span>Excel 完整財務模型</span>
+                  <i class="fa-solid fa-download text-[9px]"></i>
+                </a>
+              ` : ''}
+            </div>
+
+            <!-- Documents Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-slate-800/60 text-xs">
+              <a href="${caseDoc1}" download class="py-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-center transition flex items-center justify-center gap-1">
+                <i class="fa-regular fa-file-lines text-sky-400"></i> 個案內容.docx
+              </a>
+              <a href="${caseDoc2}" download class="py-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-center transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-magnifying-glass-chart text-amber-400"></i> 個案解析.docx
+              </a>
+              <a href="${caseDoc3}" download class="py-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-center transition flex items-center justify-center gap-1">
+                <i class="fa-regular fa-file-word text-emerald-400"></i> 教學指引.docx
+              </a>
+            </div>
+          </div>
+        `;
+
+        const tabSwitch = document.getElementById('viewerTabsSwitch');
+        if (item.interactiveTool) {
+          tabSwitch.classList.remove('hidden');
+        } else {
+          tabSwitch.classList.add('hidden');
+        }
+
+      } else {
+        // Standard Course Actions
+        const courseHtmlUrl = resolveUrl(item.html, currentTier2);
+        const courseDocxUrl = resolveUrl(item.docx, currentTier2);
+
+        actionsBox.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a 
+              href="${courseHtmlUrl}" 
+              target="_blank" 
+              class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-extrabold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 shadow-lg shadow-sky-600/30 active:scale-95"
+              title="在新分頁開啟全螢幕 16:9 互動簡報網站"
+            >
+              <i class="fa-solid fa-chalkboard-user"></i>
+              <span>開啟全螢幕教學網站</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
+            </a>
+
+            <a 
+              href="${courseDocxUrl}" 
+              download 
+              class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 hover:text-emerald-300 border border-slate-700 font-extrabold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 shadow-sm active:scale-95"
+              title="直接下載或以 Word 開啟教師授課指引手冊 (.docx)"
+            >
+              <i class="fa-regular fa-file-word text-emerald-400"></i>
+              <span>下載教師教學指引 (.docx)</span>
+              <i class="fa-solid fa-download text-[10px] ml-1"></i>
+            </a>
+          </div>
+        `;
+        document.getElementById('viewerTabsSwitch').classList.add('hidden');
+      }
+
+      // Update Viewer
+      updateViewerSource(item);
+
+      // Step Buttons state
+      document.getElementById('btnPrevStep').disabled = currentTier3Index === 0;
+      document.getElementById('btnPrevStep').classList.toggle('opacity-40', currentTier3Index === 0);
+
+      document.getElementById('btnNextStep').disabled = currentTier3Index === lvl2.items.length - 1;
+      document.getElementById('btnNextStep').classList.toggle('opacity-40', currentTier3Index === lvl2.items.length - 1);
+    }
+
+    function updateViewerSource(item) {
+      if (!item.html && !item.interactiveTool) return;
+
+      let rawTargetUrl = item.html;
+      if (currentTier1 === 'cases' && currentViewerTab === 'tool' && item.interactiveTool) {
+        rawTargetUrl = item.interactiveTool;
+        document.getElementById('viewerTypeLabel').textContent = '運算模型工具預覽';
+      } else {
+        document.getElementById('viewerTypeLabel').textContent = '教學簡報網站預覽';
+      }
+
+      const targetUrl = resolveUrl(rawTargetUrl, currentTier2);
+      const frame = document.getElementById('mainViewerFrame');
+      if (frame.getAttribute('src') !== targetUrl) {
+        frame.src = targetUrl;
+      }
+      document.getElementById('viewerUrlLabel').textContent = targetUrl;
+      document.getElementById('viewerFullscreenLink').href = targetUrl;
+    }
+
+    function setViewerTab(tab) {
+      currentViewerTab = tab;
+      const btnH = document.getElementById('tabBtnHtml');
+      const btnT = document.getElementById('tabBtnTool');
+
+      if (tab === 'html') {
+        btnH.className = 'px-2 py-0.5 rounded font-bold bg-sky-600 text-white';
+        btnT.className = 'px-2 py-0.5 rounded font-bold text-slate-400 hover:text-white';
+      } else {
+        btnH.className = 'px-2 py-0.5 rounded font-bold text-slate-400 hover:text-white';
+        btnT.className = 'px-2 py-0.5 rounded font-bold bg-amber-600 text-white';
+      }
+
+      const item = masterData[currentTier1].subCategories[currentTier2].items[currentTier3Index];
+      if (item) updateViewerSource(item);
+    }
+
+    function reloadViewerFrame() {
+      const frame = document.getElementById('mainViewerFrame');
+      const s = frame.src;
+      frame.src = '';
+      setTimeout(() => { frame.src = s; }, 50);
+    }
+
+    function handleTreeSearch() {
+      const input = document.getElementById('treeSearchInput');
+      treeSearchQuery = input.value.trim();
+      document.getElementById('treeClearSearch').classList.toggle('hidden', !treeSearchQuery);
+      renderTreeMenu();
+    }
+
+    function clearTreeSearch() {
+      document.getElementById('treeSearchInput').value = '';
+      treeSearchQuery = '';
+      document.getElementById('treeClearSearch').classList.add('hidden');
+      renderTreeMenu();
+    }
+  </script>
+</body>
+</html>

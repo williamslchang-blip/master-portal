@@ -1,0 +1,2865 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>財務個案1（台灣本土版）｜翔鷹航太科技：勞退自提、持股信託與台幣 ETF 資產配置決策 - 互動教學簡報網站</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            hbs: {
+              crimson: '#A51C30',
+              dark: '#7A1222',
+              light: '#FDECEF',
+            },
+            gold: {
+              300: '#f7d683',
+              400: '#eebf4d',
+              500: '#d99f26',
+              600: '#b87c18',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+            serif: ['"Playfair Display"', '"Noto Sans TC"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .slide-card { max-width: 1120px; width: 100%; animation: fadeIn 0.3s ease-out; }
+    .tab-active-case { background: linear-gradient(135deg, #A51C30, #7A1222) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(165, 28, 48, 0.4); }
+    .tab-active-tn { background: linear-gradient(135deg, #0f766e, #115e59) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(15, 118, 110, 0.4); }
+    .tab-active-sm { background: linear-gradient(135deg, #1d4ed8, #1e3a8a) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(29, 78, 216, 0.4); }
+    @media print {
+      header, footer, #timer-modal, #presentation-overlay, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .pillar-section { display: block !important; page-break-after: always; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-hbs-crimson selection:text-white min-h-screen flex flex-col">
+
+  <!-- Top Sticky Navigation & Control Bar -->
+  <header class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md text-white border-b border-slate-800 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Left HBS Case Branding -->
+        <div class="flex items-center space-x-3">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#A51C30] via-rose-700 to-amber-600 flex items-center justify-center shadow-lg shadow-rose-900/30 ring-2 ring-white/20">
+            <i class="fa-solid fa-plane-up text-white text-lg"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-gold-400 bg-gold-500/10 px-2 py-0.5 rounded border border-gold-500/30">HBS Case Method ‧ 台灣本土版</span>
+              <span class="text-xs text-slate-400 hidden md:inline font-mono">HBS-FIN-11501-TW</span>
+            </div>
+            <h1 class="text-sm sm:text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
+              財務個案(一)：翔鷹航太科技 (AeroTaiwan)
+              <span class="text-xs text-slate-400 font-normal hidden xl:inline">｜勞退自提、持股信託與台幣 ETF 資產配置</span>
+            </h1>
+          </div>
+        </div>
+
+        <!-- Center Main 3-Block Switcher -->
+        <div class="hidden lg:flex items-center space-x-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+          <button id="nav-btn-case" onclick="switchPillar('case')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-2 tab-active-case">
+            <i class="fa-solid fa-book-open"></i> 區塊一：個案內容
+          </button>
+          <button id="nav-btn-tn" onclick="switchPillar('tn')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-chalkboard-user"></i> 區塊二：教學指引
+          </button>
+          <button id="nav-btn-sm" onclick="switchPillar('sm')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-calculator"></i> 區塊三：個案解析與試算
+          </button>
+        </div>
+
+        <!-- Right Action Controls -->
+        <div class="flex items-center space-x-2 sm:space-x-2.5">
+          <button onclick="toggleTimerModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold border border-slate-700 shadow-sm transition" title="90分鐘個案課堂計時器">
+            <i class="fa-solid fa-stopwatch text-gold-400"></i>
+            <span id="timer-display-mini" class="font-mono text-gold-300">90:00</span>
+          </button>
+
+          <button onclick="openPresentationMode(1)" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-gold-500 to-amber-600 hover:from-gold-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg transition transform active:scale-95">
+            <i class="fa-solid fa-tv"></i>
+            <span>全螢幕簡報 (28頁 PPT)</span>
+          </button>
+
+          <a href="index.html" class="hidden sm:inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-800 transition" title="返回領導與管理課程主門戶">
+            <i class="fa-solid fa-house"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile 3-Block Switcher Bar -->
+    <div class="lg:hidden bg-slate-900 border-t border-slate-800 px-3 py-2 grid grid-cols-3 gap-2">
+      <button id="mob-btn-case" onclick="switchPillar('case')" class="py-2 rounded-xl text-xs font-extrabold text-center tab-active-case">
+        ① 個案內容
+      </button>
+      <button id="mob-btn-tn" onclick="switchPillar('tn')" class="py-2 rounded-xl text-xs font-extrabold text-center text-slate-300 bg-slate-800/70">
+        ② 教學指引
+      </button>
+      <button id="mob-btn-sm" onclick="switchPillar('sm')" class="py-2 rounded-xl text-xs font-extrabold text-center text-slate-300 bg-slate-800/70">
+        ③ 個案解析
+      </button>
+    </div>
+
+    <!-- Contextual Sub-Navigation Strip -->
+    <div class="bg-slate-950/90 border-t border-slate-800/80 px-4 py-2 overflow-x-auto no-scrollbar">
+      <!-- Sub-nav for Pillar 1: Case Content -->
+      <div id="subnav-case" class="max-w-7xl mx-auto flex items-center space-x-2 text-xs whitespace-nowrap">
+        <span class="text-rose-400 font-extrabold uppercase tracking-wider pr-1 flex items-center gap-1">
+          <i class="fa-solid fa-file-lines"></i> 個案章節:
+        </span>
+        <a href="#case-hero" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">開場決策情境</a>
+        <a href="#case-company" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">1. 翔鷹航太背景</a>
+        <a href="#case-pension" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">2. 台灣勞退與相對提撥</a>
+        <a href="#case-vehicles" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">3. 五大台幣投資標的</a>
+        <a href="#case-exhibits" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">4. 附表 Exhibits 1–4</a>
+        <a href="#case-questions" class="px-2.5 py-1 rounded-md text-gold-400 font-bold bg-gold-500/10 border border-gold-500/20">5. 決策問題 Q1–Q6</a>
+        <button onclick="openPresentationMode(1)" class="ml-auto px-2.5 py-1 rounded-md bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-700/50 font-semibold">
+          <i class="fa-solid fa-play text-[10px]"></i> 放映本區簡報 (P.1–10)
+        </button>
+      </div>
+
+      <!-- Sub-nav for Pillar 2: Teaching Note -->
+      <div id="subnav-tn" class="hidden max-w-7xl mx-auto flex items-center space-x-2 text-xs whitespace-nowrap">
+        <span class="text-teal-400 font-extrabold uppercase tracking-wider pr-1 flex items-center gap-1">
+          <i class="fa-solid fa-compass-drafting"></i> 教案導引:
+        </span>
+        <a href="#tn-synopsis" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">1. 教案摘要與教學目標</a>
+        <a href="#tn-plan" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">2. 90分鐘五階段課堂流程</a>
+        <a href="#tn-board" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">3. 三欄式黑板板書設計</a>
+        <a href="#tn-socratic" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">4. 常見迷思與蘇格拉底反詰</a>
+        <a href="#tn-exhibits" class="px-2.5 py-1 rounded-md text-gold-400 font-bold bg-gold-500/10 border border-gold-500/20">5. 教案附表 TN Exhibits A–B</a>
+        <button onclick="openPresentationMode(11)" class="ml-auto px-2.5 py-1 rounded-md bg-teal-900/60 hover:bg-teal-800 text-teal-200 border border-teal-700/50 font-semibold">
+          <i class="fa-solid fa-play text-[10px]"></i> 放映本區簡報 (P.11–18)
+        </button>
+      </div>
+
+      <!-- Sub-nav for Pillar 3: Case Solutions -->
+      <div id="subnav-sm" class="hidden max-w-7xl mx-auto flex items-center space-x-2 text-xs whitespace-nowrap">
+        <span class="text-blue-400 font-extrabold uppercase tracking-wider pr-1 flex items-center gap-1">
+          <i class="fa-solid fa-square-root-variable"></i> 個案解析:
+        </span>
+        <a href="#sm-q1" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">Q1 相對提撥與稅盾(+127%)</a>
+        <a href="#sm-q2" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">Q2 43年複利與早鳥晚鳥</a>
+        <a href="#sm-q3" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">Q3 未上市股雙重風險</a>
+        <a href="#sm-q4" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">Q4 主動基金 vs 0050 ETF</a>
+        <a href="#sm-q5" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">Q5 22/42/58歲最適配置</a>
+        <a href="#sm-q6" class="px-2.5 py-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition">Q6 行為財務 SMarT 建議</a>
+        <a href="#sm-simulator" class="px-2.5 py-1 rounded-md text-gold-400 font-bold bg-gold-500/10 border border-gold-500/20">🧮 動態退休金試算儀表板</a>
+        <button onclick="openPresentationMode(19)" class="ml-auto px-2.5 py-1 rounded-md bg-blue-900/60 hover:bg-blue-800 text-blue-200 border border-blue-700/50 font-semibold">
+          <i class="fa-solid fa-play text-[10px]"></i> 放映本區簡報 (P.19–28)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+    <!-- ===================================================================== -->
+    <!-- PILLAR 1: 區塊一：個案內容 (HBS Case Content - HBS-FIN-11501-TW-C01) -->
+    <!-- ===================================================================== -->
+    <div id="pillar-case" class="pillar-section space-y-12 animate-fadeIn">
+
+      <!-- HBS Official Document Header Banner -->
+      <section id="case-hero" class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-950 via-[#4A0D16] to-slate-900 text-white p-6 sm:p-12 shadow-2xl border border-rose-900/40">
+        <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-20 -top-20 w-80 h-80 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
+            <div class="flex items-center space-x-3">
+              <span class="px-3 py-1 rounded-full bg-rose-800/80 border border-rose-500/40 text-gold-300 text-xs font-extrabold uppercase tracking-widest">
+                HARVARD BUSINESS SCHOOL CASE STYLE
+              </span>
+              <span class="text-xs font-mono text-slate-300">編號：HBS-FIN-11501-TW-C01</span>
+            </div>
+            <div class="text-xs text-slate-300 font-medium">
+              115學年度 第1學期｜碩士在職專班 (EMBA) 領導與管理 ‧ 財務個案(一) 台灣本土版
+            </div>
+          </div>
+
+          <div class="max-w-4xl space-y-4">
+            <h2 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+              翔鷹航太科技（AeroTaiwan Corp.）：<br>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-amber-200 to-rose-200 font-serif">
+                台灣勞退自提、員工持股信託與台幣 ETF 退休資產配置決策
+              </span>
+            </h2>
+            <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+              2026 年 10 月的一個週一早晨，剛從國立大學財務金融學系畢業、年僅 <strong>22 歲</strong>的<strong>林宥辰（Yu-Chen Lin）</strong>走進位於<strong>台中市精密機械科技創新園區</strong>的<strong>翔鷹航太科技股份有限公司（AeroTaiwan Corp.）</strong>總部大樓。這是他擔任初級財務分析師（Junior Financial Analyst）的第一週，卻立即面臨一項影響自己未來 <strong>43 年（516 個月）</strong>財富命運、以及全廠 85 名員工退休福祉的關鍵決策。
+            </p>
+          </div>
+
+          <!-- Key Protagonist & Financial Snapshot Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur">
+              <div class="text-[11px] text-gold-400 font-bold uppercase tracking-wider">主角與年齡視角</div>
+              <div class="text-lg sm:text-xl font-extrabold text-white mt-1">林宥辰 (22歲)</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">65歲退休 ‧ <strong>43年 (516月)</strong> 複利期</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur">
+              <div class="text-[11px] text-emerald-400 font-bold uppercase tracking-wider">起薪與邊際稅率</div>
+              <div class="text-lg sm:text-xl font-extrabold text-white mt-1">NT$600,000 /年</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">月薪 <strong>NT$50,000</strong> ‧ 綜所稅率 <strong>12%</strong></div>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur">
+              <div class="text-[11px] text-cyan-400 font-bold uppercase tracking-wider">稅前自提與雇主對等提撥</div>
+              <div class="text-lg sm:text-xl font-extrabold text-white mt-1">最高自提 15%</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">雇主前 <strong>5% 提供 1:1 全額相對提撥</strong></div>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur">
+              <div class="text-[11px] text-rose-400 font-bold uppercase tracking-wider">自選平台台幣標的</div>
+              <div class="text-lg sm:text-xl font-extrabold text-white mt-1">5 大新台幣標的</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">貨幣 / 債券 / 0050 / 中小動能 / 未上市股</div>
+            </div>
+          </div>
+
+          <!-- Opening Quote Box -->
+          <div class="p-5 rounded-2xl bg-black/40 border-l-4 border-gold-400 text-xs sm:text-sm text-slate-200 italic leading-relaxed">
+            <i class="fa-solid fa-quote-left text-gold-400 mr-2"></i>
+            「宥辰，歡迎加入翔鷹航太！在開始負責無人機產線成本分析之前，你有一個更迫切的任務。本週五前，你必須填妥自己的『員工福利儲蓄暨退休金自選平台』提撥與投資配置表；同時，兩位創辦人希望你下週一為全廠 85 位同仁主持一場 30 分鐘的簡報，用台灣最真實的稅制與台幣 ETF 數據告訴大家：<strong>到底該不該參加自願提繳？又該如何在這五檔台幣標的中做配置？</strong>」
+            <div class="not-italic font-bold text-gold-300 mt-2 text-right">—— 張凱文（Kevin Chang），翔鷹航太財務部資深副理</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: 企業背景與營運模式 -->
+      <section id="case-company" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#A51C30] text-white flex items-center justify-center font-extrabold text-sm shadow">01</div>
+            <div>
+              <span class="text-[11px] font-bold text-[#A51C30] uppercase tracking-wider">Company Background & Operations</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">一、企業背景：翔鷹航太科技（AeroTaiwan Corp.）</h3>
+            </div>
+          </div>
+          <button onclick="openPresentationMode(2)" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-[#A51C30] font-semibold border border-slate-200 transition">
+            <i class="fa-solid fa-tv mr-1"></i> 對應投影片 P.2–3
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-4 text-sm leading-relaxed text-slate-700">
+            <p>
+              <strong>翔鷹航太科技股份有限公司（AeroTaiwan Corp.）</strong>於六年前創立於<strong>台中市南屯區精密機械科技創新園區</strong>，由兩位前漢翔航空工業（AIDC）資深工程師與試飛員<strong>林振翔（Sean Lin）</strong>與<strong>陳冠廷（Tim Chen）</strong>共同創辦。林振翔與陳冠廷看準亞太區商用高階無人機（UAV）、國防軍工巡檢載具與輕型複合材料航空器市場的爆發性成長，結合中台灣精密機械聚落（大肚山黃金縱谷）的供應鏈優勢，打造出台灣少數具備整機研發與碳纖維機體製造能力的航太新創企業。
+            </p>
+            <p>
+              翔鷹航太旗下擁有兩大主力機型：第一款為單座長程商用巡檢無人機<strong>「蒼鷹號（The Falcon）」</strong>，標準售價為 <strong>NT$1,500,000（新台幣 150 萬元）</strong>，廣泛應用於離岸風電葉片巡檢、高山電塔監測與海巡偵蒐；第二款為雙座複合材料輕型運動與教練機體模組<strong>「藍鵲號（The Magpie）」</strong>，標準售價為 <strong>NT$2,400,000（新台幣 240 萬元）</strong>，主攻東南亞與澳洲飛行學校市場。
+            </p>
+            <p>
+              不同於傳統大型航太廠動輒半年的交貨期，翔鷹航太採行高度模組化的<strong>「接單後生產（Build-to-Order, BTO）」</strong>精實製造模式。客戶透過區域經銷商或總部直銷下單並選配航電雷達套件後，台中廠區可在<strong>五週（5 weeks）</strong>內完成機體組裝、風洞與地面共振測試並交付驗收。憑藉卓越的可靠度與高性價比，公司過去三年營收複合年均成長率（CAGR）高達 <strong>28%</strong>，全公司員工由創立初期的 18 人擴編至目前的 <strong>85 人</strong>。
+            </p>
+            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-950 space-y-1">
+              <div class="font-bold flex items-center gap-1.5 text-amber-900">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> 創辦人 IPO 願景 vs. 營運集中風險
+              </div>
+              <p>
+                目前翔鷹航太仍為<strong>未上市櫃之公開發行前公司（Private Company）</strong>，全數股權由兩位創辦人、天使投資人及內部員工持有。林振翔與陳冠廷計畫在未來 <strong>3 至 4 年內申請登錄興櫃並轉台灣創新板（TIB）或上市櫃掛牌（IPO）</strong>；然而，航太產業高度受景氣循環、碳纖維原物料報價、飛安法規認證及地緣政治標案影響，單一機型若發生飛安瑕疵或認證延宕，公司現金流與估值將面臨劇烈波動。
+              </p>
+            </div>
+          </div>
+
+          <!-- Company Profile Side Card -->
+          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-lg border border-slate-800 flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-gold-400">企業營運檔案卡</span>
+                <span class="px-2 py-0.5 rounded text-[10px] bg-rose-600 text-white font-bold">台中精密園區</span>
+              </div>
+              <div class="space-y-3 text-xs">
+                <div class="flex justify-between py-1.5 border-b border-slate-800/80">
+                  <span class="text-slate-400">共同創辦人</span>
+                  <span class="font-bold text-white">林振翔 (Sean) ‧ 陳冠廷 (Tim)</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-slate-800/80">
+                  <span class="text-slate-400">主力機型 ①</span>
+                  <span class="font-bold text-gold-300">蒼鷹號 (NT$150 萬)</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-slate-800/80">
+                  <span class="text-slate-400">主力機型 ②</span>
+                  <span class="font-bold text-gold-300">藍鵲號 (NT$240 萬)</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-slate-800/80">
+                  <span class="text-slate-400">生產模式與交期</span>
+                  <span class="font-bold text-emerald-400">BTO 接單生產 (5 週交機)</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-slate-800/80">
+                  <span class="text-slate-400">近三年營收 CAGR</span>
+                  <span class="font-bold text-cyan-400">+28.0% / 年</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-slate-800/80">
+                  <span class="text-slate-400">目前員工規模</span>
+                  <span class="font-bold text-white">85 名全職同仁</span>
+                </div>
+                <div class="flex justify-between py-1.5">
+                  <span class="text-slate-400">資本市場狀態</span>
+                  <span class="font-bold text-rose-400">未上市 (預計 3–4 年後 IPO)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-2">
+              <div class="text-gold-400 font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-users-gear"></i> 員工結構與理財痛點
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                全廠 85 名員工橫跨 22 歲新進工程師、42 歲中生代產線組長、到 58 歲資深塗裝技師。多數理工背景同仁對「勞退自提稅盾」與「台股 ETF 複利」毫無概念，甚至將退休金全數閒置於 2.5% 貨幣市場基金，或盲目重押未上市內部公司股。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: 台灣退休金雙層架構與相對提撥機制 -->
+      <section id="case-pension" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#A51C30] text-white flex items-center justify-center font-extrabold text-sm shadow">02</div>
+            <div>
+              <span class="text-[11px] font-bold text-[#A51C30] uppercase tracking-wider">Taiwan Pension System & Corporate Match</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">二、台灣勞退新制與翔鷹航太「企業福儲暨退休自選平台」</h3>
+            </div>
+          </div>
+          <button onclick="openPresentationMode(4)" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-[#A51C30] font-semibold border border-slate-200 transition">
+            <i class="fa-solid fa-tv mr-1"></i> 對應投影片 P.4–5
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+          <p class="text-sm text-slate-700 leading-relaxed">
+            為留任高階航太工程人才並強化企業競爭力，翔鷹航太委託國內金控信託部建置<strong>「企業員工福利儲蓄信託暨勞退自願提繳自選平台（Corporate Employee Retirement & Savings Trust Platform）」</strong>，結合《勞工退休金條例》與企業相對提撥激勵機制，形成雙層退休保障：
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Pillar Card 1 -->
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-200 text-slate-800">第一層：法定基礎</span>
+                <i class="fa-solid fa-shield-halved text-slate-600 text-lg"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">法定勞退新制雇主提撥 (6%)</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                依台灣《勞工退休金條例》第 14 條，公司每月依法按員工月提繳工資分級表，額外提撥 <strong>6.0%</strong> 至勞保局個人退休金專戶（由勞動基金運用局統籌操盤，享銀行兩年期定存利率保證收益）。
+              </p>
+            </div>
+
+            <!-- Pillar Card 2 -->
+            <div class="p-5 rounded-2xl bg-rose-50/60 border border-rose-200 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#A51C30] text-white">第二層：員工稅前自提</span>
+                <i class="fa-solid fa-piggy-bank text-[#A51C30] text-lg"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">員工稅前自願提繳 (最高 15%)</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                結合法定勞退自提（6%）與企業福儲信託自提（9%），員工可選擇提撥月薪之 <strong>0% 至最高 15.0%</strong>（以林宥辰月薪 NT$50,000 計，每月最高可自提 <strong>NT$7,500</strong>，全年最高 <strong>NT$90,000</strong>）。自提金額<strong>全數自當年度個人綜合所得總額中扣除（免納當期綜所稅）</strong>！
+              </p>
+            </div>
+
+            <!-- Pillar Card 3 -->
+            <div class="p-5 rounded-2xl bg-amber-50/70 border border-amber-300 space-y-2.5 shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-600 text-white">核心誘因：1:1 對等提撥</span>
+                <i class="fa-solid fa-gift text-amber-600 text-lg"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">雇主相對提撥 (最高 5% Match)</h4>
+              <p class="text-xs text-slate-700 leading-relaxed">
+                只要員工自願提繳，翔鷹航太針對員工自提之<strong>前 5.0% 薪資提供 100%（1:1）等額相對提撥</strong>！當宥辰自提滿 <strong>5%（每月 NT$2,500）</strong>時，公司每月額外免費存入 <strong>NT$2,500</strong>（每年多拿 <strong>NT$30,000</strong> 免費獎勵金）。若員工自提超過 5%，雇主相對提撥上限維持為月薪之 5%。
+              </p>
+            </div>
+          </div>
+
+          <!-- Lin Yu-Chen Personal Tax & Cash Flow Parameters -->
+          <div class="p-5 rounded-2xl bg-slate-900 text-white grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div class="space-y-2">
+              <div class="text-xs font-bold uppercase tracking-wider text-gold-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-user-tie"></i> 林宥辰（Yu-Chen Lin）個人薪資與稅務設定
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                林宥辰剛滿 <strong>22 歲</strong>，起薪年薪為 <strong>NT$600,000</strong>（折合月薪 <strong>NT$50,000</strong>）。依台灣現行綜合所得稅累進稅率級距與其家庭申報結構，林宥辰適用之個人綜合所得稅<strong>邊際稅率（Marginal Tax Rate, $T$）為 12.0%</strong>。為聚焦分析退休自提與稅盾效果，假設每兩週／每月發薪時僅考慮綜合所得稅預扣與退休金自提扣款，且帳戶內之股息、債息與資本利得在 65 歲退休請領前均享<strong>遞延課稅（Tax-Deferred Compounding）</strong>。
+              </p>
+            </div>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs font-mono space-y-1.5">
+              <div class="text-gold-300 font-bold mb-1">📌 關鍵數學關係預覽（詳見區塊三 Q1 解析）：</div>
+              <div class="flex justify-between text-slate-300"><span>未自提 (0%) 每月應納稅額 (12%)：</span><span class="text-white font-bold">NT$6,000</span></div>
+              <div class="flex justify-between text-slate-300"><span>未自提 (0%) 每月實領月薪：</span><span class="text-white font-bold">NT$44,000</span></div>
+              <div class="flex justify-between text-emerald-400"><span>自提 5% (NT$2,500) 每月節省綜所稅：</span><span class="font-bold">+NT$300 /月</span></div>
+              <div class="flex justify-between text-gold-300"><span>自提 5% 實領僅少 NT$2,200，帳戶卻存入：</span><span class="font-bold">NT$5,000 /月！</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: 五大新台幣投資標的剖析 -->
+      <section id="case-vehicles" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#A51C30] text-white flex items-center justify-center font-extrabold text-sm shadow">03</div>
+            <div>
+              <span class="text-[11px] font-bold text-[#A51C30] uppercase tracking-wider">Five TWD Investment Vehicles</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">三、自選平台五大新台幣投資標的深度剖析</h3>
+            </div>
+          </div>
+          <button onclick="openPresentationMode(6)" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-[#A51C30] font-semibold border border-slate-200 transition">
+            <i class="fa-solid fa-tv mr-1"></i> 對應投影片 P.6–7
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Vehicle 1 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-4 hover:border-slate-400 transition">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-slate-100 text-slate-700">標的 ①｜極低風險現金</span>
+                <span class="text-xs font-mono font-bold text-slate-500">費率 0.12%</span>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">元大台幣貨幣市場基金<br><span class="text-xs font-normal text-slate-500">Yuanta TWD Money Market Fund</span></h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                主要投資於台灣短期商業本票（RP）、銀行定期存單與拆款市場。本金幾無波動，但長期報酬率僅略高於台灣 CPI 通膨率（約 2.0%），實質購買力成長極微。
+              </p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-600">預期年化報酬: <strong class="text-slate-900">2.50%</strong></span>
+              <span class="text-slate-500">標準差 σ: <strong>0.50%</strong></span>
+            </div>
+          </div>
+
+          <!-- Vehicle 2 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-4 hover:border-blue-400 transition">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-blue-700">標的 ②｜固定收益債券</span>
+                <span class="text-xs font-mono font-bold text-blue-600">費率 0.20%</span>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">元大台灣投資級公司債與公債傘型<br><span class="text-xs font-normal text-slate-500">對應 00679B / 00720B 等級債券 ETF</span></h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                配置台灣政府公債、台電／中油／台積電公司債及 BBB 級以上投資等級債券 ETF，提供穩定配息現金流與股市重挫時之防禦緩衝。
+              </p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-600">預期年化報酬: <strong class="text-blue-700">5.00%</strong></span>
+              <span class="text-slate-500">標準差 σ: <strong>6.00%</strong></span>
+            </div>
+          </div>
+
+          <!-- Vehicle 3 -->
+          <div class="bg-white rounded-2xl p-6 shadow-md border-2 border-emerald-500/70 flex flex-col justify-between space-y-4 relative">
+            <div class="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wider shadow">
+              核心被動指數標竿
+            </div>
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700">標的 ③｜台股大型權值</span>
+                <span class="text-xs font-mono font-bold text-emerald-700">超低費率 0.10%</span>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">元大台灣卓越 50 指數基金<br><span class="text-xs font-normal text-slate-500">對應 0050 / 006208 台股大盤市值型 ETF</span></h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                採<strong>完全被動式指數追蹤（Passive Indexing）</strong>複製「臺灣 50 指數」，涵蓋台積電、鴻海、聯發科、富邦金、台達電等前 50 大上市龍頭（占台股總市值約 70%）。機構法人專案內扣費率僅 <strong>0.10%</strong>！
+              </p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-600">預期年化報酬: <strong class="text-emerald-700">10.00%</strong></span>
+              <span class="text-slate-500">標準差 σ: <strong>16.00%</strong></span>
+            </div>
+          </div>
+
+          <!-- Vehicle 4 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-4 hover:border-purple-400 transition">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-purple-50 text-purple-700">標的 ④｜中小型高動能衛星</span>
+                <span class="text-xs font-mono font-bold text-purple-600">費率 0.55%</span>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">富邦台灣中小動能高成長基金<br><span class="text-xs font-normal text-slate-500">對應 00733 / 0051 中小型成長股組合</span></h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                聚焦排除臺灣 50 成分股後具備高營收爆發力與 Alpha 動能因子的台灣上市櫃中小型科技、AI 伺服器零組件、精密機械與生技成長股。長期期望報酬最高，但景氣修正時回撤亦大。
+              </p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-600">預期年化報酬: <strong class="text-purple-700">12.50%</strong></span>
+              <span class="text-slate-500">標準差 σ: <strong>24.00%</strong></span>
+            </div>
+          </div>
+
+          <!-- Vehicle 5 -->
+          <div class="bg-rose-50/50 rounded-2xl p-6 shadow-sm border-2 border-rose-300 flex flex-col justify-between space-y-4 md:col-span-2 lg:col-span-2">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-rose-600 text-white">標的 ⑤｜未上市內部員工認股權信託（高爭議標的）</span>
+                <span class="text-xs font-mono font-bold text-rose-700">帳面 8 折認購 (20% Discount)</span>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">翔鷹航太科技未上市內部員工持股信託（AeroTaiwan Private Stock）</h4>
+              <p class="text-xs text-slate-700 leading-relaxed">
+                兩位創辦人特別開放員工將自提與相對提撥資金配置於<strong>「翔鷹航太未上市普通股信託專戶」</strong>。由於公司尚未上市櫃，無公開次級市場報價，每年底由外部獨立會計師事務所依淨資產與折現現金流量法（DCF）進行年度每股公允價值鑑價。為鼓勵同仁與公司共創未來 IPO 財富，員工透過退休信託認購公司股票享有<strong>會計師鑑價 8 折（20% 折價，即每 NT$80 可認購鑑價 NT$100 之股份）</strong>優惠，且無內扣管理費！
+              </p>
+              <div class="p-3 rounded-xl bg-white border border-rose-200 text-xs text-rose-900">
+                <strong>⚠️ 現場員工熱議焦點：</strong>產線許多年輕工程師興奮地表示：<em>「買公司股票直接打 8 折，等於買進瞬間現賺 25%（$100/80 - 1$），而且 3 年後如果成功上市櫃 IPO 股價翻倍就財富自由了！應該把 100% 退休金都重押翔鷹航太股票！」</em>——但財務副理張凱文卻提醒宥辰：<strong>未上市股票缺乏流動性（僅每年底由公司依鑑價買回），且一旦公司訂單衰退，員工將同時面臨什麼風險？</strong>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-rose-200 flex flex-wrap items-center justify-between text-xs font-mono text-rose-800 gap-2">
+              <span>預期報酬: <strong>視公司營運與 IPO 成敗而定</strong></span>
+              <span>個別公司波動率 σ: <strong>&gt; 40%～50%</strong></span>
+              <span>流動性限制: <strong>極低 (DLOM 折價 20%–35%)</strong></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: HBS Case Exhibits 1–4 & Visual Chart -->
+      <section id="case-exhibits" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#A51C30] text-white flex items-center justify-center font-extrabold text-sm shadow">04</div>
+            <div>
+              <span class="text-[11px] font-bold text-[#A51C30] uppercase tracking-wider">HBS Case Exhibits 1–4</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">四、個案附表（Exhibits 1–4）與風險收益視覺化分析</h3>
+            </div>
+          </div>
+          <button onclick="openPresentationMode(8)" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-[#A51C30] font-semibold border border-slate-200 transition">
+            <i class="fa-solid fa-tv mr-1"></i> 對應投影片 P.8–9
+          </button>
+        </div>
+
+        <!-- Exhibit 1 & Exhibit 2 Table Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Exhibit 1 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-extrabold text-slate-900 text-sm">Exhibit 1｜林宥辰基本財務參數與翔鷹航太自選平台制度</h4>
+              <span class="text-[11px] font-mono text-slate-400">HBS-FIN-TW-Ex1</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-900 text-white">
+                    <th class="p-2.5 rounded-tl-lg">項目名稱</th>
+                    <th class="p-2.5">個案設定數值</th>
+                    <th class="p-2.5 rounded-tr-lg">台灣法規與實務說明</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                  <tr><td class="p-2.5 font-semibold">分析師年齡 / 退休年齡</td><td class="p-2.5 font-mono font-bold">22歲 / 65歲 (43年)</td><td class="p-2.5">共 516 個月複利投資期</td></tr>
+                  <tr class="bg-slate-50"><td class="p-2.5 font-semibold">起薪年薪 / 折合月薪</td><td class="p-2.5 font-mono font-bold text-emerald-700">NT$600,000 / NT$50,000</td><td class="p-2.5">以固定實質購買力基期試算</td></tr>
+                  <tr><td class="p-2.5 font-semibold">個人綜所稅邊際稅率 ($T$)</td><td class="p-2.5 font-mono font-bold text-rose-700">12.0%</td><td class="p-2.5">自提金額全額免納當期綜所稅</td></tr>
+                  <tr class="bg-slate-50"><td class="p-2.5 font-semibold">法定勞退新制雇主提撥</td><td class="p-2.5 font-mono font-bold">月薪之 6.0% (NT$3,000)</td><td class="p-2.5">依法撥入勞保局個人專戶</td></tr>
+                  <tr><td class="p-2.5 font-semibold">平台員工稅前自提上限</td><td class="p-2.5 font-mono font-bold">月薪之 15.0% (NT$7,500)</td><td class="p-2.5">全年最高自提 NT$90,000</td></tr>
+                  <tr class="bg-amber-50/70"><td class="p-2.5 font-bold text-amber-900">雇主相對提撥 (Match)</td><td class="p-2.5 font-mono font-extrabold text-amber-800">前 5% 享 100% 1:1 提撥</td><td class="p-2.5 font-semibold text-amber-900">每月最高免費送 NT$2,500</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Exhibit 2 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-extrabold text-slate-900 text-sm">Exhibit 2｜自選平台五大新台幣投資標的風險收益參數表</h4>
+              <span class="text-[11px] font-mono text-slate-400">HBS-FIN-TW-Ex2</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-900 text-white">
+                    <th class="p-2.5 rounded-tl-lg">投資標的名稱</th>
+                    <th class="p-2.5 text-center">期望報酬 E(R)</th>
+                    <th class="p-2.5 text-center">標準差 (σ)</th>
+                    <th class="p-2.5 text-center">內扣費率</th>
+                    <th class="p-2.5 rounded-tr-lg">夏普比率*</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700 font-mono">
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">1. 元大台幣貨幣市場基金</td>
+                    <td class="p-2.5 text-center font-bold">2.50%</td>
+                    <td class="p-2.5 text-center">0.50%</td>
+                    <td class="p-2.5 text-center">0.12%</td>
+                    <td class="p-2.5 text-slate-400">0.00 (基準)</td>
+                  </tr>
+                  <tr class="bg-slate-50">
+                    <td class="p-2.5 font-sans font-semibold">2. 元大台灣投資級債券傘型</td>
+                    <td class="p-2.5 text-center font-bold text-blue-700">5.00%</td>
+                    <td class="p-2.5 text-center">6.00%</td>
+                    <td class="p-2.5 text-center">0.20%</td>
+                    <td class="p-2.5 font-bold text-blue-700">0.42</td>
+                  </tr>
+                  <tr class="bg-emerald-50/60">
+                    <td class="p-2.5 font-sans font-bold text-emerald-900">3. 元大台灣 50 指數 (0050)</td>
+                    <td class="p-2.5 text-center font-extrabold text-emerald-700">10.00%</td>
+                    <td class="p-2.5 text-center">16.00%</td>
+                    <td class="p-2.5 text-center font-bold text-emerald-700">0.10%</td>
+                    <td class="p-2.5 font-extrabold text-emerald-700">0.47 (最高)</td>
+                  </tr>
+                  <tr class="bg-slate-50">
+                    <td class="p-2.5 font-sans font-semibold">4. 富邦台灣中小動能高成長</td>
+                    <td class="p-2.5 text-center font-bold text-purple-700">12.50%</td>
+                    <td class="p-2.5 text-center">24.00%</td>
+                    <td class="p-2.5 text-center">0.55%</td>
+                    <td class="p-2.5 font-bold text-purple-700">0.42</td>
+                  </tr>
+                  <tr class="bg-rose-50/70">
+                    <td class="p-2.5 font-sans font-bold text-rose-900">5. 翔鷹航太未上市內部股</td>
+                    <td class="p-2.5 text-center font-sans text-rose-700">不確定(8折認購)</td>
+                    <td class="p-2.5 text-center text-rose-700">&gt;45.0%</td>
+                    <td class="p-2.5 text-center">0.00%</td>
+                    <td class="p-2.5 font-sans text-rose-700">雙重暴露極高危</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-[11px] text-slate-500">*註：夏普比率 $SR = (E(R) - R_f) / \sigma$，以台幣貨幣市場基金 $R_f = 2.50\%$ 為無風險利率基準。</p>
+          </div>
+        </div>
+
+        <!-- Exhibit 3 & Exhibit 4 + Interactive Risk-Return Chart -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Exhibit 3: Active vs Passive -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-extrabold text-slate-900 text-sm">Exhibit 3｜台股主動式基金 vs. 臺灣50指數 (10年實證)</h4>
+              <span class="text-[11px] font-mono text-slate-400">Ex3</span>
+            </div>
+            <table class="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-800 text-white">
+                  <th class="p-2">比較維度</th>
+                  <th class="p-2">一般台股主動基金</th>
+                  <th class="p-2 text-gold-300">台灣50指數(0050)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 text-slate-700">
+                <tr><td class="p-2 font-semibold">每年內扣管理保管費</td><td class="p-2 font-mono text-rose-600 font-bold">1.60% – 2.20%</td><td class="p-2 font-mono text-emerald-700 font-bold">0.10% (機構專案)</td></tr>
+                <tr class="bg-slate-50"><td class="p-2 font-semibold">含周轉摩擦總成本</td><td class="p-2 font-mono text-rose-600">約 2.50% / 年</td><td class="p-2 font-mono text-emerald-700">約 0.15% / 年</td></tr>
+                <tr><td class="p-2 font-semibold">10年落後大盤比例</td><td class="p-2 font-bold text-rose-700">約 78% 落後指數</td><td class="p-2 font-bold text-emerald-700">緊貼大盤無偏離</td></tr>
+                <tr class="bg-slate-50"><td class="p-2 font-semibold">43年費用侵蝕終值比</td><td class="p-2 font-bold text-rose-700">侵蝕高達 45.7%！</td><td class="p-2 font-bold text-emerald-700">完整保留複利果實</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Exhibit 4: Three Employee Personas -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-extrabold text-slate-900 text-sm">Exhibit 4｜翔鷹航太三位代表性員工抽樣訪談</h4>
+              <span class="text-[11px] font-mono text-slate-400">Ex4</span>
+            </div>
+            <div class="space-y-2.5 text-xs">
+              <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                <div class="font-bold text-emerald-950">① 林宥辰（22歲，新進財務分析師｜距退休 43 年）</div>
+                <p class="text-slate-600 mt-0.5">月薪 NT$50,000，單身無房貸，抗波動能力極強，但猶豫是否該自提滿 15% 或只提 5%。</p>
+              </div>
+              <div class="p-3 rounded-xl bg-blue-50/70 border border-blue-200">
+                <div class="font-bold text-blue-950">② 陳建宏（42歲，無人機組裝產線組長｜距退休 23 年）</div>
+                <p class="text-slate-600 mt-0.5">月薪 NT$78,000，育有兩名國中子女與台中房貸，已累積退休金 NT$240 萬，需兼顧成長與波動控制。</p>
+              </div>
+              <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
+                <div class="font-bold text-amber-950">③ 吳美玲（58歲，資深複合材料塗裝技師｜距退休 7 年）</div>
+                <p class="text-slate-600 mt-0.5">月薪 NT$65,000，已累積退休專戶 NT$520 萬，7 年後即將退休領取，極度恐懼退休前夕遭遇台股崩盤。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart.js Risk-Return Visual Card -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-extrabold text-slate-900 text-sm">風險與預期報酬效率前緣圖 (Risk vs. Return)</h4>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Chart.js 互動圖表</span>
+            </div>
+            <div class="relative h-52 w-full">
+              <canvas id="caseRiskReturnChart"></canvas>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-2 text-center">移至圓點可檢視各台幣標的之年化報酬率 $E(R)$ 與標準差 $\sigma$。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: 哈佛個案六大決策討論問題 (Q1-Q6) -->
+      <section id="case-questions" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#A51C30] text-white flex items-center justify-center font-extrabold text-sm shadow">05</div>
+            <div>
+              <span class="text-[11px] font-bold text-[#A51C30] uppercase tracking-wider">Case Discussion Questions</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">五、個案決策分析與課堂討論問題（Q1–Q6）</h3>
+            </div>
+          </div>
+          <button onclick="switchPillar('sm')" class="text-xs px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold shadow transition">
+            <i class="fa-solid fa-calculator mr-1"></i> 前往區塊三查看完整解析 →
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#A51C30] transition flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-rose-100 text-[#A51C30]">Question 1｜雇主相對提撥與台灣綜所稅盾</span>
+              <h4 class="font-bold text-slate-900 text-sm">為什麼放棄公司 5% 相對提撥等於放棄「免費的午餐」？</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                在翔鷹航太「前 5% 薪資 1:1 對等提撥」與林宥辰邊際稅率 $T=12\%$ 下，他自提 5%（月扣 NT$2,500）的<strong>名目瞬間報酬率</strong>與<strong>稅後實質瞬間報酬率</strong>各為多少？比較自提 0%、5%、10%、15% 四種方案對每月實領薪資與退休專戶總存入金額之差異。
+              </p>
+            </div>
+            <button onclick="jumpToSolution('sm-q1')" class="text-left text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 pt-2 border-t border-slate-100">
+              <span>查看 Q1 完整數學推導與現金流表</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#A51C30] transition flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-rose-100 text-[#A51C30]">Question 2｜43年時間價值與早鳥 vs. 晚鳥</span>
+              <h4 class="font-bold text-slate-900 text-sm">43 年（516 個月）複利能創造多少千萬台幣財富？</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                若林宥辰自 22 歲起持續提撥至 65 歲退休（共 43 年），在年化報酬率 $8\%$ 與 $10\%$ 下，分別以「年度複利（$n=43$）」與「按月複利（$N=516$）」計算自提 5%、10%、15%（含雇主 5% Match）之退休終值。若晚 10 年（32 歲才開始存 33 年）會損失多少機會成本？
+              </p>
+            </div>
+            <button onclick="jumpToSolution('sm-q2')" class="text-left text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 pt-2 border-t border-slate-100">
+              <span>查看 Q2 43年複利矩陣與早鳥晚鳥實證</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#A51C30] transition flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-rose-100 text-[#A51C30]">Question 3｜未上市內部股與雙重風險暴露</span>
+              <h4 class="font-bold text-slate-900 text-sm">8 折認購翔鷹航太未上市股票，真的是穩賺不賠的鑽石機會嗎？</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                從現代投資組合管理理論（MPT）之「人力資本與財務資本相關性（Human Capital vs. Financial Capital Correlation）」及「未上市股票缺乏流通性折價（DLOM）」，剖析為何不應將退休金重押自家未上市股票，並以安隆案（Enron）借鏡說明。
+              </p>
+            </div>
+            <button onclick="jumpToSolution('sm-q3')" class="text-left text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 pt-2 border-t border-slate-100">
+              <span>查看 Q3 雙重風險暴露與 8 折價值陷阱拆解</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#A51C30] transition flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-rose-100 text-[#A51C30]">Question 4｜效率市場假說與台股 0050 ETF</span>
+              <h4 class="font-bold text-slate-900 text-sm">高收費台股主動式基金 vs. 低成本台灣 50 指數（0050 / 006208）？</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                為何台灣近八成主動型台股基金在 10 年期落後臺灣 50 指數？試量化計算每年 $1.50\%$ 的管理費差距（$0.10\%$ vs. $1.60\%$），在 43 年複利下會吞噬林宥辰多少新台幣退休財富？
+              </p>
+            </div>
+            <button onclick="jumpToSolution('sm-q4')" class="text-left text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 pt-2 border-t border-slate-100">
+              <span>查看 Q4 費用率侵蝕 1,625 萬之量化證明</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#A51C30] transition flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-rose-100 text-[#A51C30]">Question 5｜生命週期與三世代核心—衛星配置</span>
+              <h4 class="font-bold text-slate-900 text-sm">22 歲林宥辰、42 歲陳建宏、58 歲吳美玲該如何配置五大台幣標的？</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                針對 Exhibit 4 三位不同年齡階段的員工，設計具體的「核心—衛星（Core-Satellite）」配置權重百分比，計算各自組合之預期年化報酬率 $E(R_p)$，並解釋 58 歲吳美玲為何必須防範「報酬順序風險（Sequence of Returns Risk）」。
+              </p>
+            </div>
+            <button onclick="jumpToSolution('sm-q5')" class="text-left text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 pt-2 border-t border-slate-100">
+              <span>查看 Q5 三世代精準權重表與圓餅圖</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#A51C30] transition flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-rose-100 text-[#A51C30]">Question 6｜行為財務學與 SMarT 制度設計</span>
+              <h4 class="font-bold text-slate-900 text-sm">如何運用諾貝爾獎行為財務學幫助全廠 85 名員工克服人性弱點？</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                結合 Richard Thaler 與 Shlomo Benartzi 的「明天再多存（Save More Tomorrow™, SMarT）」機制與自動再平衡（Auto-Rebalancing），為林宥辰擬定下週一全廠簡報的四大核心管理建議。
+              </p>
+            </div>
+            <button onclick="jumpToSolution('sm-q6')" class="text-left text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 pt-2 border-t border-slate-100">
+              <span>查看 Q6 四大行為財務管理實務建議</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- PILLAR 2: 區塊二：教學指引 (HBS Teaching Note - HBS-FIN-11501-TW-TN1) -->
+    <!-- ===================================================================== -->
+    <div id="pillar-tn" class="pillar-section hidden space-y-12 animate-fadeIn">
+
+      <!-- Teaching Note Hero Banner -->
+      <section id="tn-synopsis" class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-950 via-teal-950 to-slate-900 text-white p-6 sm:p-12 shadow-2xl border border-teal-800/50">
+        <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
+            <div class="flex items-center space-x-3">
+              <span class="px-3 py-1 rounded-full bg-teal-800/80 border border-teal-500/40 text-gold-300 text-xs font-extrabold uppercase tracking-widest">
+                FOR INSTRUCTOR USE ONLY ‧ 哈佛教學指引
+              </span>
+              <span class="text-xs font-mono text-slate-300">編號：HBS-FIN-11501-TW-TN1</span>
+            </div>
+            <button onclick="openPresentationMode(11)" class="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow transition">
+              <i class="fa-solid fa-tv mr-1"></i> 開啟教學指引投影片 (P.11–18)
+            </button>
+          </div>
+
+          <div class="max-w-4xl space-y-3">
+            <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
+              翔鷹航太科技（AeroTaiwan Corp.）｜教師教學指引 (Teaching Note)
+            </h2>
+            <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+              本教案旨在協助授課教師透過台灣本土企業「勞退自願提繳 ＋ 企業福儲信託相對提撥 ＋ 台幣 ETF 自選平台」之實戰情境，引導 EMBA 高階經理人與財金學員掌握<strong>稅盾槓桿（Tax-Shield Leverage）</strong>、<strong>長天期複利終值（TVM）</strong>、<strong>人力資本與財務資本去相關化（Decoupling Human & Financial Capital）</strong>、<strong>被動指數投資（0050/006208）成本優勢</strong>及<strong>生命週期資產配置（Lifecycle Glide Path）</strong>。
+            </p>
+          </div>
+
+          <!-- 6 Pedagogical Objectives Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2 text-xs">
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-teal-500/30 space-y-1.5">
+              <div class="text-gold-400 font-extrabold uppercase">教學目標 01｜相對提撥與台灣稅盾</div>
+              <p class="text-slate-300 leading-relaxed">量化證明雇主 5% 1:1 相對提撥創造 +100% 名目瞬間報酬，加計台灣綜所稅盾（$T=12\%\sim 40\%$）後實質瞬間報酬高達 <strong>+127.27% 至 +233.33%</strong>。</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-teal-500/30 space-y-1.5">
+              <div class="text-gold-400 font-extrabold uppercase">教學目標 02｜43年(516月)複利指數威能</div>
+              <p class="text-slate-300 leading-relaxed">對比年度複利与按月複利模型，並透過「22歲早鳥存10年 vs. 32歲晚鳥存33年」實證展示拖延 10 年的巨大機會成本。</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-teal-500/30 space-y-1.5">
+              <div class="text-gold-400 font-extrabold uppercase">教學目標 03｜未上市股雙重風險暴露</div>
+              <p class="text-slate-300 leading-relaxed">拆解「8折認購自家未上市股票」背後的缺乏流通性折價（DLOM）與「薪資＋退休金綁定同一雇主」之雙重毀滅風險。</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-teal-500/30 space-y-1.5">
+              <div class="text-gold-400 font-extrabold uppercase">教學目標 04｜效率市場與 0050 低費率優勢</div>
+              <p class="text-slate-300 leading-relaxed">運用算術必然律證明台股主動型基金（1.60%費率）在 43 年複利下將侵蝕高達 <strong>45.7%（1,625萬元）</strong> 的終值財富。</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-teal-500/30 space-y-1.5">
+              <div class="text-gold-400 font-extrabold uppercase">教學目標 05｜三世代核心—衛星動態配置</div>
+              <p class="text-slate-300 leading-relaxed">為 22 歲（全股成長）、42 歲（70/30 股債穩健）、58 歲（30/70 防禦抗序列風險）量身打造台幣 ETF 投資組合。</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-teal-500/30 space-y-1.5">
+              <div class="text-gold-400 font-extrabold uppercase">教學目標 06｜行為財務學與 SMarT 助推</div>
+              <p class="text-slate-300 leading-relaxed">應用 Thaler「明天再多存（Save More Tomorrow™）」與預設自提機制，協助企業 HR 與主管解決員工惰性與追高殺低。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: 90分鐘哈佛蘇格拉底式五階段課堂流程 (5 Pastures) -->
+      <section id="tn-plan" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-teal-700 text-white flex items-center justify-center font-extrabold text-sm shadow">02</div>
+            <div>
+              <span class="text-[11px] font-bold text-teal-700 uppercase tracking-wider">90-Minute Socratic Orchestration</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">二、90 分鐘哈佛蘇格拉底式課堂教學流程設計（5 Pastures）</h3>
+            </div>
+          </div>
+          <button onclick="setTimerDuration(90, '90分鐘哈佛個案討論全程'); toggleTimerModal();" class="text-xs px-3 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold border border-teal-200 transition">
+            <i class="fa-solid fa-stopwatch mr-1"></i> 啟動 90 分鐘計時
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Pasture 1 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:border-teal-500 transition">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="px-3 py-1 rounded-lg bg-teal-700 text-white text-xs font-mono font-extrabold">00–10 min (10分鐘)</span>
+                <h4 class="font-extrabold text-slate-900 text-base">Pasture 1｜開場冷點名與台灣退休現實破冰（Cold Call & Taiwan Context）</h4>
+              </div>
+              <button onclick="setTimerDuration(10, 'Pasture 1：開場冷點名與破冰'); startTimer(); toggleTimerModal();" class="text-xs px-2.5 py-1 rounded bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 font-semibold transition">
+                <i class="fa-solid fa-play text-[10px]"></i> 計時 10 分鐘
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div class="font-bold text-teal-800"><i class="fa-solid fa-bolt mr-1"></i> 開場冷點名提問（Opening Cold Call）：</div>
+                <p>「請全班舉手投票：目前你在自己的公司有勾選『勞退自願提繳 6%』或參加『員工持股信託』的人請舉手？沒舉手的同學，請問你為什麼把每年 12%～40% 的節稅紅包和雇主對等補助留在桌上？」</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-teal-50/50 border border-teal-200 space-y-1">
+                <div class="font-bold text-teal-900"><i class="fa-solid fa-bullseye mr-1"></i> 教學節奏控管要點：</div>
+                <p>點出台灣勞動部統計：全台灣僅約 14%～15% 勞工參與勞退自提，年輕族群更不到 10%！迅速將全班帶入 22 歲林宥辰在台中精密園區翔鷹航太的決策現場。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pasture 2 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:border-teal-500 transition">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="px-3 py-1 rounded-lg bg-teal-700 text-white text-xs font-mono font-extrabold">10–25 min (15分鐘)</span>
+                <h4 class="font-extrabold text-slate-900 text-base">Pasture 2｜免費午餐的量化解剖：雇主相對提撥與台灣綜所稅盾（對應 Q1）</h4>
+              </div>
+              <button onclick="setTimerDuration(15, 'Pasture 2：相對提撥與稅盾試算'); startTimer(); toggleTimerModal();" class="text-xs px-2.5 py-1 rounded bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 font-semibold transition">
+                <i class="fa-solid fa-play text-[10px]"></i> 計時 15 分鐘
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div class="font-bold text-teal-800"><i class="fa-solid fa-comments mr-1"></i> 蘇格拉底提問鏈：</div>
+                <p>①「宥辰月薪 50,000 元，自提 5%（2,500元）後，他的實領薪資袋真的少了 2,500 元嗎？」<br>②「口袋只少拿 2,200 元，退休帳戶卻瞬間多出 5,000 元，這筆交易的第一天實質報酬率是多少？（+127.27%！）若你是 30% 或 40% 稅率的高階主管，報酬率更飆升到多少？」</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-teal-50/50 border border-teal-200 space-y-1">
+                <div class="font-bold text-teal-900"><i class="fa-solid fa-chalkboard mr-1"></i> 板書重點（寫入左板 Board 1）：</div>
+                <p>在左板完整寫出 0% / 5% / 10% / 15% 四種方案的月薪現金流拆解公式：$	ext{實質瞬間報酬率} = rac{1 + m}{1 - T} - 1$。強調：<strong>在金融市場上，沒有任何合法無風險資產能在第一天打敗 +127.27%！</strong></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pasture 3 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:border-teal-500 transition">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="px-3 py-1 rounded-lg bg-teal-700 text-white text-xs font-mono font-extrabold">25–45 min (20分鐘)</span>
+                <h4 class="font-extrabold text-slate-900 text-base">Pasture 3｜43 年（516 個月）複利威力與「早鳥 vs. 晚鳥」對決（對應 Q2）</h4>
+              </div>
+              <button onclick="setTimerDuration(20, 'Pasture 3：43年複利與早鳥晚鳥'); startTimer(); toggleTimerModal();" class="text-xs px-2.5 py-1 rounded bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 font-semibold transition">
+                <i class="fa-solid fa-play text-[10px]"></i> 計時 20 分鐘
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div class="font-bold text-teal-800"><i class="fa-solid fa-comments mr-1"></i> 蘇格拉底提問鏈：</div>
+                <p>①「每月存 5,000 元（自提5%+公司5%），43 年下來自己口袋實際只少花 113.5 萬元，在 0050 指數年化 10% 按月複利下會變成多少錢？（<strong>4,284 萬新台幣！</strong>）」<br>②「如果宥辰說『我 22 到 32 歲想先買車享樂，32 歲再開始連存 33 年到 65 歲』，他的終值會少多少？」</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-teal-50/50 border border-teal-200 space-y-1">
+                <div class="font-bold text-teal-900"><i class="fa-solid fa-chalkboard mr-1"></i> 板書重點（寫入中板 Board 2）：</div>
+                <p>對比「早鳥（22–32歲只存10年，本金60萬 ➔ 65歲終值 <strong>2,221 萬</strong>）」vs.「晚鳥（32–65歲連存33年，本金198萬 ➔ 65歲終值僅 <strong>1,334 萬</strong>）」。讓全班震撼體會：<strong>時間是指數，本金只是乘數！</strong></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pasture 4 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:border-teal-500 transition">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="px-3 py-1 rounded-lg bg-teal-700 text-white text-xs font-mono font-extrabold">45–70 min (25分鐘)</span>
+                <h4 class="font-extrabold text-slate-900 text-base">Pasture 4｜高潮辯論：8 折未上市內部股陷阱 vs. 台股 0050 被動指數（對應 Q3 & Q4）</h4>
+              </div>
+              <button onclick="setTimerDuration(25, 'Pasture 4：未上市股與0050核心辯論'); startTimer(); toggleTimerModal();" class="text-xs px-2.5 py-1 rounded bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 font-semibold transition">
+                <i class="fa-solid fa-play text-[10px]"></i> 計時 25 分鐘
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div class="font-bold text-teal-800"><i class="fa-solid fa-fire mr-1"></i> 課堂正反交鋒設計：</div>
+                <p>先請支持「8折買翔鷹航太未上市股票（現賺25%+博IPO翻倍）」的學員發言，再請反方用<strong>「人力資本與財務資本正相關（Enron 安隆慘劇）」</strong>與<strong>「未上市缺乏流通性折價（DLOM 20%~35%）」</strong>反擊。接著算給全班看：1.60% 主動基金費率如何在 43 年吃掉 1,625 萬退休金！</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-teal-50/50 border border-teal-200 space-y-1">
+                <div class="font-bold text-teal-900"><i class="fa-solid fa-lightbulb mr-1"></i> 核心管理金句提煉：</div>
+                <p><strong>「當你的薪水、年終獎金與職涯升遷已經 100% 押在翔鷹航太這艘船上時，你的退休金絕對不能再買同一艘船的船票！」</strong></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pasture 5 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:border-teal-500 transition">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="px-3 py-1 rounded-lg bg-teal-700 text-white text-xs font-mono font-extrabold">70–90 min (20分鐘)</span>
+                <h4 class="font-extrabold text-slate-900 text-base">Pasture 5｜三世代核心—衛星配置與行為財務 SMarT 收束（對應 Q5 & Q6）</h4>
+              </div>
+              <button onclick="setTimerDuration(20, 'Pasture 5：三世代配置與總結'); startTimer(); toggleTimerModal();" class="text-xs px-2.5 py-1 rounded bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 font-semibold transition">
+                <i class="fa-solid fa-play text-[10px]"></i> 計時 20 分鐘
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div class="font-bold text-teal-800"><i class="fa-solid fa-users-rays mr-1"></i> 角色扮演（Role Play）：</div>
+                <p>指派三組學員分別代表 22 歲林宥辰、42 歲陳建宏組長、58 歲吳美玲技師，上台發表資產配置比例，並解釋為何 58 歲必須將股票降至 30% 以規避<strong>報酬順序風險（Sequence of Returns Risk）</strong>。</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-teal-50/50 border border-teal-200 space-y-1">
+                <div class="font-bold text-teal-900"><i class="fa-solid fa-flag-checkered mr-1"></i> 教師總結（Wrap-up）：</div>
+                <p>從個人理財昇華至<strong>企業領導者的制度設計責任（Choice Architecture）</strong>：好主管與 HR 應透過「預設自提 5%（Opt-out）」與「Save More Tomorrow™ 加薪自動轉增提」幫助員工達成財務安全。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: 哈佛三欄式黑板板書設計 (Three-Board Choreography) -->
+      <section id="tn-board" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-teal-700 text-white flex items-center justify-center font-extrabold text-sm shadow">03</div>
+            <div>
+              <span class="text-[11px] font-bold text-teal-700 uppercase tracking-wider">Harvard Three-Board Choreography</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">三、哈佛三欄式黑板板書規劃（Blackboard Plan）</h3>
+            </div>
+          </div>
+          <button onclick="openPresentationMode(15)" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-800 font-semibold border border-slate-200 transition">
+            <i class="fa-solid fa-tv mr-1"></i> 對應投影片 P.15
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <!-- Board 1 -->
+          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border-2 border-slate-700 space-y-4 font-mono text-xs">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-2.5">
+              <span class="text-gold-400 font-extrabold uppercase">【左板 Board 1】現金流、Match 與稅盾</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">Q1 核心板書</span>
+            </div>
+            <div class="space-y-2 text-slate-200">
+              <div class="text-emerald-400 font-bold">● 基本參數：月薪 $50,000｜稅率 T = 12%</div>
+              <div>• 0% 自提：稅 $6,000 ➔ 實領 <strong class="text-white">$44,000</strong> (存入 $0)</div>
+              <div>• 5% 自提 ($2,500) + 雇主 Match ($2,500)：</div>
+              <div class="pl-3 text-gold-300">
+                - 應稅薪資降至 $47,500 ➔ 稅 $5,700 (節稅 $300)<br>
+                - 實領月薪 = $41,800 (口袋僅少 <strong class="underline">$2,200</strong>)<br>
+                - 專戶總存入 = <strong class="underline">$5,000 /月 ($60,000 /年)</strong>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-amber-300">
+                ★ 名目瞬間報酬 = $2,500 / $2,500 = <strong>+100.00%</strong><br>
+                ★ 稅後實質瞬間報酬 = ($5,000 / $2,200) - 1 = <strong>+127.27%</strong><br>
+                ★ 若 T=20% ➔ <strong>+150%</strong>｜T=30% ➔ <strong>+185.7%</strong>｜T=40% ➔ <strong>+233.3%</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Board 2 -->
+          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border-2 border-slate-700 space-y-4 font-mono text-xs">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-2.5">
+              <span class="text-cyan-400 font-extrabold uppercase">【中板 Board 2】43年複利與早鳥晚鳥</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">Q2 核心板書</span>
+            </div>
+            <div class="space-y-2 text-slate-200">
+              <div class="text-cyan-300 font-bold">● 43年 (516個月) 終值矩陣 (按月複利)：</div>
+              <div>• 5%+5% (月存 $5,000｜43年實付僅 $113.5萬)：</div>
+              <div class="pl-3">
+                - @ 8% 報酬率 ➔ <strong class="text-white">NT$22,374,715 (2,237萬)</strong><br>
+                - @ 10% 報酬率 ➔ <strong class="text-gold-300">NT$42,838,955 (4,284萬)</strong>
+              </div>
+              <div>• 15%+5% (月存 $10,000｜年存 $120,000)：</div>
+              <div class="pl-3">
+                - @ 8% 報酬率 ➔ <strong class="text-white">NT$44,749,431 (4,475萬)</strong><br>
+                - @ 10% 報酬率 ➔ <strong class="text-gold-300">NT$85,677,911 (8,568萬)</strong>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-emerald-300">
+                ★ 早鳥 (22–32歲存10年，本金60萬) vs 晚鳥 (32–65歲存33年，本金198萬) @10%年複利：<br>
+                <strong>早鳥 2,221 萬 &gt; 晚鳥 1,334 萬 (多贏 887 萬！)</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Board 3 -->
+          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border-2 border-slate-700 space-y-4 font-mono text-xs">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-2.5">
+              <span class="text-rose-400 font-extrabold uppercase">【右板 Board 3】標的剖析與三代配置</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">Q3–Q6 板書</span>
+            </div>
+            <div class="space-y-2 text-slate-200">
+              <div class="text-rose-400 font-bold">● 翔鷹未上市股 8 折陷阱：</div>
+              <div class="pl-3">
+                1. 雙重風險 (Human + Financial Capital 綁定)<br>
+                2. 缺乏流通性折價 (DLOM 20%–35% 抵銷 8折優惠)<br>
+                3. 單一航太新創非系統性風險 σ &gt; 45% ➔ <strong>配置 0%！</strong>
+              </div>
+              <div class="text-amber-300 font-bold">● 主動基金費率侵蝕 (43年 @年存6萬)：</div>
+              <div class="pl-3">
+                0050 (費率0.1%) <strong>3,554萬</strong> vs 主動 (費率1.6%) <strong>1,929萬</strong> ➔ 費用吃掉 <strong>1,625萬 (45.7%)</strong>！
+              </div>
+              <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-200">
+                ★ 22歲林宥辰：<strong>70% 0050 + 30% 中小動能</strong> (E(R)=10.75%)<br>
+                ★ 42歲陳建宏：<strong>50% 0050 + 20% 中小 + 25% 債 + 5% 現</strong> (9.0%)<br>
+                ★ 58歲吳美玲：<strong>30% 0050 + 50% 債 + 20% 現</strong> (6.0% 防崩盤)
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: 常見學生迷思與蘇格拉底反詰話術庫 -->
+      <section id="tn-socratic" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-teal-700 text-white flex items-center justify-center font-extrabold text-sm shadow">04</div>
+            <div>
+              <span class="text-[11px] font-bold text-teal-700 uppercase tracking-wider">Common Misconceptions & Socratic Rebuttals</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">四、常見學員迷思診斷與教師蘇格拉底反詰話術庫</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center gap-2 text-rose-700 font-extrabold text-sm">
+              <i class="fa-solid fa-circle-xmark"></i> 迷思一：「翔鷹航太未上市股票打 8 折，買進現賺 25%（$100/80-1$），當然要 100% 壓滿！」
+            </div>
+            <div class="p-4 rounded-xl bg-teal-50/70 border border-teal-200 text-xs text-slate-700 space-y-1.5 leading-relaxed">
+              <div class="font-bold text-teal-900"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> 教師蘇格拉底反詰話術：</div>
+              <p>
+                「請問這個 $100 元的鑑價是你隨時可以在台灣證交所按市價賣掉的現金嗎？在未上市股權評價中，<strong>缺乏流通性折價（DLOM）通常高達 20%～35%</strong>，所以 8 折只是補償你『賣不掉的流動性風險』，根本不是白送的套利！更重要的是，如果 2 年後主力機型『蒼鷹號』遭遇飛安停飛或訂單斷崖，你在同一週內同時失去工作薪水（人力資本歸零），而退休金專戶裡的翔鷹股票也暴跌 80%（財務資本歸零），你該怎麼辦？」
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center gap-2 text-rose-700 font-extrabold text-sm">
+              <i class="fa-solid fa-circle-xmark"></i> 迷思二：「退休金是救命老本，絕對不能承受股市波動，應該 100% 放台幣貨幣市場基金（2.5%）保本！」
+            </div>
+            <div class="p-4 rounded-xl bg-teal-50/70 border border-teal-200 text-xs text-slate-700 space-y-1.5 leading-relaxed">
+              <div class="font-bold text-teal-900"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> 教師蘇格拉底反詰話術：</div>
+              <p>
+                「對於 22 歲的林宥辰而言，最大的風險是『今年台股跌 15%』，還是『65 歲退休時帳戶只有 458 萬（購買力還被 2% 通膨吃掉一半），對比投資 0050 的同事擁有 4,284 萬』？<strong>短期波動率（Volatility）不等於長期購買力枯竭風險（Longevity & Inflation Risk）</strong>！22 歲年輕人擁有 516 個月的定期定額微笑曲線，股市下跌反而是在幫他累積便宜單位數！」
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center gap-2 text-rose-700 font-extrabold text-sm">
+              <i class="fa-solid fa-circle-xmark"></i> 迷思三：「富邦台灣中小動能基金預期報酬率 12.5% 最高，那 22 歲甚至 58 歲都應該 100% 買中小型股！」
+            </div>
+            <div class="p-4 rounded-xl bg-teal-50/70 border border-teal-200 text-xs text-slate-700 space-y-1.5 leading-relaxed">
+              <div class="font-bold text-teal-900"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> 教師蘇格拉底反詰話術：</div>
+              <p>
+                「讓我們算一下風險調整後的<strong>夏普比率（Sharpe Ratio）</strong>：元大台灣 50（0050）的夏普比率是 $(10.0\%-2.5\%)/16\% = \mathbf{0.469}$，而中小型動能基金是 $(12.5\%-2.5\%)/24\% = \mathbf{0.417}$！0050 每承擔一單位波動所換取的超額報酬更高，且涵蓋台積電等占台股 70% 市值龍頭；因此必須以 <strong>70% 台灣 50 作為核心（Core）、30% 中小動能作為衛星（Satellite）</strong>。至於 58 歲吳美玲只剩 7 年退休，若全押 σ=24% 的中小型股，退休前夕遇上金融海嘯腰斬 50% 將永無翻身之日！」
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center gap-2 text-rose-700 font-extrabold text-sm">
+              <i class="fa-solid fa-circle-xmark"></i> 迷思四：「年輕人起薪才 5 萬，等 32 歲升官加薪後再開始自提存退休金就好了！」
+            </div>
+            <div class="p-4 rounded-xl bg-teal-50/70 border border-teal-200 text-xs text-slate-700 space-y-1.5 leading-relaxed">
+              <div class="font-bold text-teal-900"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> 教師蘇格拉底反詰話術：</div>
+              <p>
+                「請看中板的數學鐵證：22 歲開始每月含雇主提撥存 5,000 元，只存 10 年（32 歲停扣，總投入本金 60 萬），放到 65 歲會滾出 <strong>2,221 萬</strong>；反觀 32 歲才開始每年存 6 萬、苦存 33 年到 65 歲（總投入本金 198 萬，是早鳥的 3.3 倍），終值卻只有 <strong>1,334 萬</strong>！晚 10 年起步，等於親手燒掉 <strong>2,221 萬</strong> 的複利資產！」
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: TN Exhibits A & B -->
+      <section id="tn-exhibits" class="scroll-mt-28 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-teal-700 text-white flex items-center justify-center font-extrabold text-sm shadow">05</div>
+            <div>
+              <span class="text-[11px] font-bold text-teal-700 uppercase tracking-wider">Teaching Note Exhibits A & B</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">五、教案專屬附表（TN Exhibit A：台灣退休三支柱 ＆ TN Exhibit B：稅率級距敏感度）</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- TN Exhibit A -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <h4 class="font-extrabold text-slate-900 text-sm">TN Exhibit A｜台灣退休金制度三支柱與本個案教學映射表</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr class="bg-teal-900 text-white">
+                    <th class="p-2.5">世界銀行三支柱</th>
+                    <th class="p-2.5">台灣對應法規制度</th>
+                    <th class="p-2.5">本個案 (翔鷹航太) 映射設計</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                  <tr>
+                    <td class="p-2.5 font-bold">第一支柱：社會保險</td>
+                    <td class="p-2.5">勞工保險（勞保老年年金）</td>
+                    <td class="p-2.5">確定給付制（DB），面臨少子化破產與所得替代率不足風險，凸顯自提必要性。</td>
+                  </tr>
+                  <tr class="bg-slate-50">
+                    <td class="p-2.5 font-bold text-teal-900">第二支柱：職業退休金</td>
+                    <td class="p-2.5">勞退新制（雇主6%+自提6%）＋ 企業員工福儲／持股信託</td>
+                    <td class="p-2.5 font-semibold text-teal-900">本個案核心舞台：稅前自提上限 15% + 雇主前 5% 提供 1:1 相對提撥，開放五大台幣標的。</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-bold">第三支柱：個人儲蓄投資</td>
+                    <td class="p-2.5">個人台股 ETF 定期定額、TISA 個人投資儲蓄帳戶</td>
+                    <td class="p-2.5">課堂延伸討論：當勞退自選尚未全面立法開放時，如何用個人證券戶買 0050/006208 實踐相同配置。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TN Exhibit B -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+            <h4 class="font-extrabold text-slate-900 text-sm">TN Exhibit B｜台灣綜所稅不同邊際稅率級距下「自提 5% + 雇主 Match 5%」瞬間實質報酬率</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse font-mono">
+                <thead>
+                  <tr class="bg-teal-900 text-white font-sans">
+                    <th class="p-2.5">台灣綜所稅邊際稅率 (T)</th>
+                    <th class="p-2.5 text-center">自提 $2,500 節稅</th>
+                    <th class="p-2.5 text-center">實領薪資減少</th>
+                    <th class="p-2.5 text-center">專戶總存入</th>
+                    <th class="p-2.5 text-right">稅後實質瞬間報酬率</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">5% 級距 (基層新鮮人)</td>
+                    <td class="p-2.5 text-center text-emerald-700">+$125</td>
+                    <td class="p-2.5 text-center">$2,375</td>
+                    <td class="p-2.5 text-center font-bold">$5,000</td>
+                    <td class="p-2.5 text-right font-bold text-teal-700">+110.53% (2.11x)</td>
+                  </tr>
+                  <tr class="bg-amber-50/70">
+                    <td class="p-2.5 font-sans font-extrabold text-amber-900">12% 級距 (林宥辰本案設定)</td>
+                    <td class="p-2.5 text-center font-bold text-emerald-700">+$300</td>
+                    <td class="p-2.5 text-center font-bold">$2,200</td>
+                    <td class="p-2.5 text-center font-extrabold text-amber-900">$5,000</td>
+                    <td class="p-2.5 text-right font-extrabold text-rose-700">+127.27% (2.27x)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">20% 級距 (資深工程師/副理)</td>
+                    <td class="p-2.5 text-center text-emerald-700">+$500</td>
+                    <td class="p-2.5 text-center">$2,000</td>
+                    <td class="p-2.5 text-center font-bold">$5,000</td>
+                    <td class="p-2.5 text-right font-bold text-teal-700">+150.00% (2.50x)</td>
+                  </tr>
+                  <tr class="bg-slate-50">
+                    <td class="p-2.5 font-sans font-semibold">30% 級距 (處長/高階主管)</td>
+                    <td class="p-2.5 text-center text-emerald-700">+$750</td>
+                    <td class="p-2.5 text-center">$1,750</td>
+                    <td class="p-2.5 text-center font-bold">$5,000</td>
+                    <td class="p-2.5 text-right font-bold text-teal-700">+185.71% (2.86x)</td>
+                  </tr>
+                  <tr class="bg-emerald-50/70">
+                    <td class="p-2.5 font-sans font-extrabold text-emerald-950">40% 級距 (EMBA高階經理/總經理)</td>
+                    <td class="p-2.5 text-center font-bold text-emerald-700">+$1,000</td>
+                    <td class="p-2.5 text-center font-bold">$1,500</td>
+                    <td class="p-2.5 text-center font-extrabold text-emerald-950">$5,000</td>
+                    <td class="p-2.5 text-right font-extrabold text-emerald-800">+233.33% (3.33x)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-[11px] text-slate-500">公式：$	ext{稅後實質瞬間報酬率} = rac{	ext{員工自提} + 	ext{雇主相對提撥}}{	ext{員工自提} 	imes (1 - T)} - 1 = rac{2}{1 - T} - 1$。對 EMBA 高所得學員（$T=30\%\sim 40\%$）極具震撼力！</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- PILLAR 3: 區塊三：個案解析與互動試算 (Case Solutions - HBS-FIN-11501-TW-SM1) -->
+    <!-- ===================================================================== -->
+    <div id="pillar-sm" class="pillar-section hidden space-y-12 animate-fadeIn">
+
+      <!-- Solutions Manual Hero Banner -->
+      <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white p-6 sm:p-12 shadow-2xl border border-blue-800/50">
+        <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
+            <div class="flex items-center space-x-3">
+              <span class="px-3 py-1 rounded-full bg-blue-800/80 border border-blue-500/40 text-gold-300 text-xs font-extrabold uppercase tracking-widest">
+                COMPREHENSIVE SOLUTIONS & INTERACTIVE SIMULATOR
+              </span>
+              <span class="text-xs font-mono text-slate-300">編號：HBS-FIN-11501-TW-SM1</span>
+            </div>
+            <button onclick="openPresentationMode(19)" class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow transition">
+              <i class="fa-solid fa-tv mr-1"></i> 開啟個案解析投影片 (P.19–28)
+            </button>
+          </div>
+
+          <div class="max-w-4xl space-y-3">
+            <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
+              翔鷹航太科技（AeroTaiwan Corp.）｜個案完整解析與動態財務模型
+            </h2>
+            <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+              本區完整呈現 Q1 至 Q6 六大個案決策問題之<strong>嚴謹財務數學推導（Step-by-Step Quantitative Proofs）</strong>、<strong>現金流與複利終值敏感度矩陣</strong>、<strong>現代投資組合理論（MPT）剖析</strong>，並於頁末提供可即時拉動調整的<strong>「台灣勞退自提 ＆ 台幣 ETF 複利互動試算儀表板」</strong>供課堂現場實證。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution Q1 -->
+      <section id="sm-q1" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 rounded-xl bg-blue-700 text-white font-mono font-extrabold text-xs">Q1 解析</span>
+            <h3 class="text-lg sm:text-2xl font-extrabold text-slate-900">雇主 5% 相對提撥之「免費午餐」效應與台灣綜所稅盾（$T=12\%$）現金流試算</h3>
+          </div>
+          <button onclick="openPresentationMode(19)" class="text-xs px-3 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-blue-700 font-semibold border border-slate-200">
+            <i class="fa-solid fa-tv mr-1"></i> 投影片 P.19–20
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 bg-slate-900 text-white rounded-2xl p-5 space-y-4 text-xs">
+            <div class="text-gold-400 font-extrabold uppercase tracking-wider border-b border-slate-800 pb-2">
+              <i class="fa-solid fa-square-root-variable mr-1"></i> 瞬間報酬率雙重推導
+            </div>
+            <div class="space-y-2">
+              <div class="font-bold text-emerald-400">1. 名目瞬間報酬率 (Nominal Instant Return)：</div>
+              <p class="text-slate-300 leading-relaxed">
+                林宥辰自提月薪 5%（$	ext{NT\$2,500}$），翔鷹航太立即 1:1 對等撥入 $	ext{NT\$2,500}$，退休帳戶瞬間總額達 $	ext{NT\$5,000}$：
+              </p>
+              <div class="p-2.5 rounded-lg bg-slate-950 font-mono text-gold-300 text-center">
+                R_nominal = $2,500 / $2,500 = +100.00%
+              </div>
+            </div>
+            <div class="space-y-2 pt-2 border-t border-slate-800">
+              <div class="font-bold text-cyan-400">2. 稅後實質瞬間報酬率 (Tax-Adjusted Return)：</div>
+              <p class="text-slate-300 leading-relaxed">
+                因自提金額免納當期 12% 綜所稅，每月節省稅款 $	ext{NT\$2,500} 	imes 12\% = 	ext{NT\$300}$。故實領薪資僅減少 $	ext{NT\$2,200}$：
+              </p>
+              <div class="p-2.5 rounded-lg bg-slate-950 font-mono text-emerald-300 text-center">
+                R_effective = ($5,000 - $2,200) / $2,200 = +127.27%
+              </div>
+              <p class="text-[11px] text-slate-400">亦即每犧牲 NT$1.00 的當期可支配現金，退休專戶立即獲得 <strong>NT$2.2727</strong> 的資產！</p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">表 SM-1｜林宥辰月薪 NT$50,000（年薪 NT$600,000）四種自提方案之薪資單與稅盾對照表</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse font-mono">
+                <thead>
+                  <tr class="bg-slate-900 text-white font-sans">
+                    <th class="p-2.5">現金流與稅務項目 (每月 / 每年)</th>
+                    <th class="p-2.5 text-center">方案 A：自提 0%</th>
+                    <th class="p-2.5 text-center bg-amber-600 text-slate-950 font-extrabold">方案 B：自提 5% (最佳門檻)</th>
+                    <th class="p-2.5 text-center">方案 C：自提 10%</th>
+                    <th class="p-2.5 text-center bg-blue-800">方案 D：自提 15% (上限)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">1. 每月稅前總月薪</td>
+                    <td class="p-2.5 text-center">$50,000</td>
+                    <td class="p-2.5 text-center bg-amber-50/60 font-bold">$50,000</td>
+                    <td class="p-2.5 text-center">$50,000</td>
+                    <td class="p-2.5 text-center bg-blue-50/40 font-bold">$50,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">2. 員工稅前自提金額 (月 / 年)</td>
+                    <td class="p-2.5 text-center text-slate-400">$0 / $0</td>
+                    <td class="p-2.5 text-center bg-amber-50/60 font-bold text-amber-900">$2,500 / $30,000</td>
+                    <td class="p-2.5 text-center">$5,000 / $60,000</td>
+                    <td class="p-2.5 text-center bg-blue-50/40 font-bold text-blue-900">$7,500 / $90,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">3. 雇主 1:1 相對提撥 (最高 5%)</td>
+                    <td class="p-2.5 text-center text-rose-600 font-bold">$0 (白白放棄!)</td>
+                    <td class="p-2.5 text-center bg-amber-50/60 font-extrabold text-emerald-700">+$2,500 / +$30,000</td>
+                    <td class="p-2.5 text-center text-emerald-700 font-bold">+$2,500 / +$30,000</td>
+                    <td class="p-2.5 text-center bg-blue-50/40 text-emerald-700 font-bold">+$2,500 / +$30,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">4. 課稅所得基數 (月薪 - 自提)</td>
+                    <td class="p-2.5 text-center">$50,000</td>
+                    <td class="p-2.5 text-center bg-amber-50/60">$47,500</td>
+                    <td class="p-2.5 text-center">$45,000</td>
+                    <td class="p-2.5 text-center bg-blue-50/40">$42,500</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">5. 每月應納綜所稅 (T=12%) [節稅盾]</td>
+                    <td class="p-2.5 text-center">$6,000 [$0]</td>
+                    <td class="p-2.5 text-center bg-amber-50/60 font-bold">$5,700 [省 $300/月]</td>
+                    <td class="p-2.5 text-center">$5,400 [省 $600/月]</td>
+                    <td class="p-2.5 text-center bg-blue-50/40 font-bold">$5,100 [省 $900/月]</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-sans font-semibold">6. 每月實領可支配月薪 (Take-Home)</td>
+                    <td class="p-2.5 text-center font-bold">$44,000</td>
+                    <td class="p-2.5 text-center bg-amber-50/60 font-bold">$41,800 (僅少 $2,200)</td>
+                    <td class="p-2.5 text-center">$39,600 (少 $4,400)</td>
+                    <td class="p-2.5 text-center bg-blue-50/40 font-bold">$37,400 (少 $6,600)</td>
+                  </tr>
+                  <tr class="bg-slate-900 text-white">
+                    <td class="p-2.5 font-sans font-extrabold text-gold-300">7. 退休專戶總存入 (每月 / 每年)</td>
+                    <td class="p-2.5 text-center text-slate-400">$0 / $0</td>
+                    <td class="p-2.5 text-center font-extrabold text-gold-300">$5,000 / $60,000</td>
+                    <td class="p-2.5 text-center font-bold text-white">$7,500 / $90,000</td>
+                    <td class="p-2.5 text-center font-extrabold text-cyan-300">$10,000 / $120,000</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution Q2 -->
+      <section id="sm-q2" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 rounded-xl bg-blue-700 text-white font-mono font-extrabold text-xs">Q2 解析</span>
+            <h3 class="text-lg sm:text-2xl font-extrabold text-slate-900">43 年（516 個月）複利終值矩陣與「22歲早鳥 vs. 32歲晚鳥」機會成本實證</h3>
+          </div>
+          <button onclick="openPresentationMode(21)" class="text-xs px-3 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-blue-700 font-semibold border border-slate-200">
+            <i class="fa-solid fa-tv mr-1"></i> 投影片 P.21–22
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse font-mono">
+            <thead>
+              <tr class="bg-slate-900 text-white font-sans">
+                <th class="p-3">提撥組合方案 (22歲至65歲，共43年)</th>
+                <th class="p-3 text-center">每月/每年總存入</th>
+                <th class="p-3 text-center">43年實質自付淨成本</th>
+                <th class="p-3 text-right">8% 年度複利 (n=43)</th>
+                <th class="p-3 text-right bg-slate-800">8% 按月複利 (N=516)</th>
+                <th class="p-3 text-right">10% 年度複利 (n=43)</th>
+                <th class="p-3 text-right bg-amber-600 text-slate-950 font-extrabold">10% 按月複利 (N=516)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-700">
+              <tr>
+                <td class="p-3 font-sans font-bold">方案 B：自提 5% + 雇主 5% (共10%)</td>
+                <td class="p-3 text-center">$5,000 / $60,000</td>
+                <td class="p-3 text-center text-emerald-700 font-bold">NT$1,135,200 (113.5萬)</td>
+                <td class="p-3 text-right font-bold">NT$19,774,980</td>
+                <td class="p-3 text-right bg-slate-50 font-bold">NT$22,374,715</td>
+                <td class="p-3 text-right font-bold text-blue-700">NT$35,544,041</td>
+                <td class="p-3 text-right bg-amber-50/70 font-extrabold text-rose-700">NT$42,838,955 (4,284萬)</td>
+              </tr>
+              <tr class="bg-slate-50/70">
+                <td class="p-3 font-sans font-bold">方案 C：自提 10% + 雇主 5% (共15%)</td>
+                <td class="p-3 text-center">$7,500 / $90,000</td>
+                <td class="p-3 text-center text-emerald-700 font-bold">NT$2,270,400 (227.0萬)</td>
+                <td class="p-3 text-right font-bold">NT$29,662,470</td>
+                <td class="p-3 text-right bg-slate-100/70 font-bold">NT$33,562,073</td>
+                <td class="p-3 text-right font-bold text-blue-700">NT$53,316,062</td>
+                <td class="p-3 text-right bg-amber-50/70 font-extrabold text-rose-700">NT$64,258,433 (6,426萬)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-sans font-bold">方案 D：自提 15% + 雇主 5% (共20%)</td>
+                <td class="p-3 text-center">$10,000 / $120,000</td>
+                <td class="p-3 text-center text-emerald-700 font-bold">NT$3,405,600 (340.6萬)</td>
+                <td class="p-3 text-right font-bold">NT$39,549,961</td>
+                <td class="p-3 text-right bg-slate-50 font-bold">NT$44,749,431</td>
+                <td class="p-3 text-right font-bold text-blue-700">NT$71,088,083</td>
+                <td class="p-3 text-right bg-amber-50/70 font-extrabold text-rose-700">NT$85,677,911 (8,568萬)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Early Bird vs Late Starter Callout Box -->
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <div class="md:col-span-2 space-y-2 text-xs leading-relaxed">
+            <div class="text-gold-400 font-extrabold text-sm flex items-center gap-2">
+              <i class="fa-solid fa-hourglass-half"></i> 「22 歲早鳥只存 10 年」vs.「32 歲晚鳥苦存 33 年」交叉對決（以 10% 年度複利、年存 NT$60,000 計）
+            </div>
+            <p class="text-slate-200">
+              • <strong>早鳥宥辰（22–32 歲只提撥 10 年，32 歲後完全停扣，讓帳戶原封不動複利滾動 33 年至 65 歲）</strong>：<br>
+              　32 歲累積 $	ext{FV}_{32} = 	ext{NT\$60,000} 	imes rac{1.10^{10}-1}{0.10} = 	ext{NT\$956,245}$；再滾動 33 年 $	ext{FV}_{65} = 956,245 	imes 1.10^{33} =$ <strong class="text-gold-300 text-sm">NT$22,208,949（約 2,221 萬元，總投入僅 60 萬元！）</strong>
+            </p>
+            <p class="text-slate-200">
+              • <strong>晚鳥同事（22–32 歲花光薪水 0 提撥，32 歲才開始每年存 NT$60,000 連續苦存 33 年至 65 歲）</strong>：<br>
+              　65 歲終值 $	ext{FV}_{65} = 	ext{NT\$60,000} 	imes rac{1.10^{33}-1}{0.10} =$ <strong class="text-rose-300 text-sm">NT$13,335,093（約 1,334 萬元，總投入高達 198 萬元！）</strong>
+            </p>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-gold-500/30 text-center space-y-1">
+            <div class="text-[11px] text-slate-400">晚 10 年起步之機會成本損失</div>
+            <div class="text-2xl font-mono font-extrabold text-gold-400">-NT$2,221 萬</div>
+            <div class="text-[11px] text-emerald-400 font-semibold">早鳥少存 23 年，終值卻多贏 887 萬！</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution Q3 & Q4 Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Solution Q3 -->
+        <section id="sm-q3" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+            <div class="flex items-center space-x-2.5">
+              <span class="px-3 py-1 rounded-xl bg-blue-700 text-white font-mono font-extrabold text-xs">Q3 解析</span>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900">翔鷹航太未上市股「雙重風險暴露」與 8 折迷思</h3>
+            </div>
+            <button onclick="openPresentationMode(23)" class="text-xs px-2.5 py-1 rounded bg-slate-100 hover:bg-blue-50 text-blue-700 font-semibold">P.23</button>
+          </div>
+
+          <div class="space-y-3 text-xs text-slate-700 leading-relaxed">
+            <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 space-y-1">
+              <div class="font-extrabold text-rose-900">1. 人力資本與財務資本高度正相關（Double Jeopardy）：</div>
+              <p>
+                依現代投資組合理論（MPT），個人總財富 $	ext{Total Wealth} = 	ext{人力資本 (Human Capital)} + 	ext{財務資本 (Financial Capital)}$。林宥辰的薪資、年終與升遷已 100% 綁定翔鷹航太（$ho pprox +1.0$）。若重押自家未上市股票，一旦主力機型「蒼鷹號」遭遇飛安事故或國防標案落選，員工將同時面臨<strong>「失業無薪 ＋ 退休金歸零」</strong>之雙重毀滅（借鏡 2001 年美國安隆 Enron 破產案，員工 62% 退休金配置自家股票，瞬間蒸發 20 億美元）。
+              </p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 space-y-1">
+              <div class="font-extrabold text-amber-900">2. 破解「8 折認購現賺 25%」之價值陷阱（DLOM 缺乏流通性折價）：</div>
+              <p>
+                表面上以 $	ext{NT\$80}$ 買入會計師鑑價 $	ext{NT\$100}$ 股票似乎帳面獲利 $+25\%$，但翔鷹航太尚未上市櫃，無公開次級市場可隨時變現。在財務鑑價實務上，未上市少數股權之<strong>缺乏流通性折價（Discount for Lack of Marketability, DLOM）高達 20%～35%</strong>！因此 8 折僅是合理補償「無法隨時變現的流動性凍結風險」，絕非無風險套利。
+              </p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-200 space-y-1">
+              <div class="font-extrabold text-slate-900">3. 單一未上市新創之非系統性風險（Unsystematic Risk）：</div>
+              <p>
+                單一中小型航太廠年化波動率 $\sigma > 45\%$，根據 CAPM，市場不會為「可透過購買 0050 分散卻未分散之個別公司風險」提供額外風險溢酬。故建議林宥辰在退休金專戶對翔鷹未上市股票配置比例為 <strong>0%</strong>（若極度看好 IPO，至多不超過總資產之 5% 娛樂倉位）。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Solution Q4 -->
+        <section id="sm-q4" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+            <div class="flex items-center space-x-2.5">
+              <span class="px-3 py-1 rounded-xl bg-blue-700 text-white font-mono font-extrabold text-xs">Q4 解析</span>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900">主動式台股基金 vs. 台灣 50 指數 (0050) 費用侵蝕實證</h3>
+            </div>
+            <button onclick="openPresentationMode(24)" class="text-xs px-2.5 py-1 rounded bg-slate-100 hover:bg-blue-50 text-blue-700 font-semibold">P.24</button>
+          </div>
+
+          <div class="space-y-3 text-xs text-slate-700 leading-relaxed">
+            <p>
+              依據諾貝爾經濟學獎得主 William Sharpe 之<strong>「主動管理算術必然律（The Arithmetic of Active Management）」</strong>與效率市場假說（EMH），扣除高昂費用前，全體主動投資人的平均報酬必然等於大盤指數；一旦扣除台灣主動式台股基金每年 <strong>1.60%～2.20%</strong> 的內扣經理費、保管費與高周轉率證交稅摩擦成本，長期高達 <strong>78%</strong> 的主動型基金必然落後臺灣 50 指數（0050 / 006208）。
+            </p>
+            <div class="p-4 rounded-2xl bg-slate-900 text-white font-mono space-y-2">
+              <div class="text-gold-400 font-sans font-bold">📊 43 年費用率複利侵蝕量化證明（年存 NT$60,000、市場毛報酬 10.10%）：</div>
+              <div class="flex justify-between text-emerald-300">
+                <span>• 元大台灣 50 指數 (費率 0.10% ➔ 淨報酬 10.00%)：</span>
+                <span class="font-extrabold">NT$35,544,041</span>
+              </div>
+              <div class="flex justify-between text-rose-300">
+                <span>• 傳統主動式台股基金 (費率 1.60% ➔ 淨報酬 8.50%)：</span>
+                <span class="font-extrabold">NT$19,290,486</span>
+              </div>
+              <div class="pt-2 border-t border-slate-700 flex justify-between text-gold-300 font-bold">
+                <span>⚠️ 僅 1.50% 年費差，43年吞噬退休金：</span>
+                <span>-NT$16,253,555 (被吃掉 45.7%！)</span>
+              </div>
+            </div>
+            <p class="text-slate-600">
+              <strong>管理意涵：</strong>投資人無法控制明年台股漲跌，但可以 100% 控制自己付出的內扣費用率！選擇費率僅 0.10% 的元大台灣 50 指數基金（或 0050 / 006208 ETF），直接為林宥辰守住 <strong>1,625 萬新台幣</strong>的退休資產。
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Solution Q5: Three Generations Asset Allocation -->
+      <section id="sm-q5" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 rounded-xl bg-blue-700 text-white font-mono font-extrabold text-xs">Q5 解析</span>
+            <h3 class="text-lg sm:text-2xl font-extrabold text-slate-900">22 歲、42 歲、58 歲三世代「核心—衛星（Core-Satellite）」最適資產配置模型</h3>
+          </div>
+          <button onclick="openPresentationMode(25)" class="text-xs px-3 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-blue-700 font-semibold border border-slate-200">
+            <i class="fa-solid fa-tv mr-1"></i> 投影片 P.25–26
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-900 text-white">
+                <th class="p-3">員工代表與生命週期特徵</th>
+                <th class="p-3 text-center">① 台幣貨幣市場<br>(E=2.5%, σ=0.5%)</th>
+                <th class="p-3 text-center">② 台灣投資級債券<br>(E=5.0%, σ=6.0%)</th>
+                <th class="p-3 text-center bg-emerald-900">③ 台灣50指數 0050<br>(E=10.0%, σ=16%)</th>
+                <th class="p-3 text-center">④ 富邦中小動能<br>(E=12.5%, σ=24%)</th>
+                <th class="p-3 text-center">⑤ 翔鷹未上市股<br>(高集中風險)</th>
+                <th class="p-3 text-right bg-slate-800 text-gold-300">組合預期年化報酬 E(Rp)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-700 font-mono">
+              <tr class="bg-emerald-50/40">
+                <td class="p-3 font-sans">
+                  <strong class="text-slate-900 block">1. 林宥辰 (22歲，新進分析師)</strong>
+                  <span class="text-[11px] text-slate-500">距退休 43 年｜100% 股票成長型</span>
+                </td>
+                <td class="p-3 text-center text-slate-400">0%</td>
+                <td class="p-3 text-center text-slate-400">0%</td>
+                <td class="p-3 text-center font-extrabold text-emerald-700 bg-emerald-100/60">70% (核心)</td>
+                <td class="p-3 text-center font-bold text-purple-700">30% (衛星)</td>
+                <td class="p-3 text-center text-rose-600 font-bold">0%</td>
+                <td class="p-3 text-right font-extrabold text-emerald-800 text-sm">10.75% / 年</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-sans">
+                  <strong class="text-slate-900 block">2. 陳建宏 (42歲，產線製造組長)</strong>
+                  <span class="text-[11px] text-slate-500">距退休 23 年｜70% 股 / 30% 債現穩健型</span>
+                </td>
+                <td class="p-3 text-center font-semibold">5%</td>
+                <td class="p-3 text-center font-bold text-blue-700">25% (防禦)</td>
+                <td class="p-3 text-center font-extrabold text-emerald-700 bg-emerald-50">50% (核心)</td>
+                <td class="p-3 text-center font-bold text-purple-700">20% (衛星)</td>
+                <td class="p-3 text-center text-rose-600 font-bold">0%</td>
+                <td class="p-3 text-right font-extrabold text-blue-800 text-sm">9.00% / 年</td>
+              </tr>
+              <tr class="bg-amber-50/40">
+                <td class="p-3 font-sans">
+                  <strong class="text-slate-900 block">3. 吳美玲 (58歲，資深塗裝技師)</strong>
+                  <span class="text-[11px] text-slate-500">距退休 7 年｜30% 股 / 70% 債現保本型</span>
+                </td>
+                <td class="p-3 text-center font-bold text-slate-800">20% (流動準備)</td>
+                <td class="p-3 text-center font-extrabold text-blue-700">50% (核心收息)</td>
+                <td class="p-3 text-center font-bold text-emerald-700 bg-emerald-50">30% (抗通膨)</td>
+                <td class="p-3 text-center text-slate-400">0%</td>
+                <td class="p-3 text-center text-rose-600 font-bold">0%</td>
+                <td class="p-3 text-right font-extrabold text-amber-900 text-sm">6.00% / 年</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-950 leading-relaxed">
+          <strong>📌 為什麼 58 歲吳美玲必須嚴格防範「報酬順序風險（Sequence of Returns Risk）」？</strong><br>
+          吳美玲已累積 NT$520 萬退休金且僅剩 7 年即將退休提領。若仍維持 100% 股票配置，一旦在 63～65 歲退休前夕遭遇類似 2000 年網路泡沫或 2008 年金融海嘯（台股單年重挫 40%～50%），其帳戶將瞬間縮水至 260 萬，且因即將失去工作薪資流入，<strong>沒有時間等待股市復甦，甚至被迫在底部變現支應生活費</strong>。透過「70% 台灣投資級債券與貨幣市場 ＋ 30% 台灣 50 指數」，既能鎖住 520 萬本金安全，又能享有 6.00% 穩健報酬對抗通膨！
+        </div>
+      </section>
+
+      <!-- Solution Q6: Behavioral Finance & SMarT Recommendations -->
+      <section id="sm-q6" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 rounded-xl bg-blue-700 text-white font-mono font-extrabold text-xs">Q6 解析</span>
+            <h3 class="text-lg sm:text-2xl font-extrabold text-slate-900">行為財務學（Behavioral Finance）與全廠制度設計四大管理建議</h3>
+          </div>
+          <button onclick="openPresentationMode(27)" class="text-xs px-3 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-blue-700 font-semibold border border-slate-200">
+            <i class="fa-solid fa-tv mr-1"></i> 投影片 P.27–28
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center">01</div>
+            <h4 class="font-extrabold text-slate-900 text-sm">鐵律一：全員至少自提滿 5%</h4>
+            <p class="text-slate-600 leading-relaxed">
+              建議 HR 將新進員工預設為<strong>「自動自提 5%（Opt-out 預設加入制）」</strong>，確保 100% 員工拿滿公司 1:1 對等提撥與綜所稅盾（+127.27% 至 +233.33% 瞬間報酬）。
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white font-extrabold flex items-center justify-center">02</div>
+            <h4 class="font-extrabold text-slate-900 text-sm">鐵律二：導入 SMarT 階梯增提</h4>
+            <p class="text-slate-600 leading-relaxed">
+              應用諾貝爾獎得主 Thaler <strong>「明天再多存（Save More Tomorrow™）」</strong>機制：設定每年隨年度調薪（如加薪 4%），自動將自提率上調 2%，無痛克服「損失趨避（Loss Aversion）」直達 15% 上限。
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="w-8 h-8 rounded-xl bg-purple-600 text-white font-extrabold flex items-center justify-center">03</div>
+            <h4 class="font-extrabold text-slate-900 text-sm">鐵律三：年度自動再平衡機制</h4>
+            <p class="text-slate-600 leading-relaxed">
+              啟動平台每年底<strong>「自動再平衡（Auto-Rebalancing）」</strong>與年齡目標日期滑降路徑（Glide Path），強制「逢高調節漲多資產、逢低買進低估標的」，杜絕散戶追高殺低。
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="w-8 h-8 rounded-xl bg-rose-600 text-white font-extrabold flex items-center justify-center">04</div>
+            <h4 class="font-extrabold text-slate-900 text-sm">鐵律四：設定內部股 10% 上限</h4>
+            <p class="text-slate-600 leading-relaxed">
+              基於受託人責任（Fiduciary Duty），建議管理層在自選平台設定<strong>「未上市本公司股票配置不得超過個人專戶 10%」</strong>之防呆上限，保護員工免於雙重風險暴露。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- INTERACTIVE TWD RETIREMENT & TAX SHIELD SIMULATOR                     -->
+      <!-- ===================================================================== -->
+      <section id="sm-simulator" class="scroll-mt-28 bg-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-slate-800 space-y-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div class="space-y-1">
+            <span class="px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/30 text-[11px] font-extrabold uppercase tracking-wider">
+              Interactive Financial Sandbox
+            </span>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-gold-400"></i> 台灣勞退自提、雇主相對提撥與台幣 ETF 複利動態試算儀表板
+            </h3>
+          </div>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <button onclick="loadPresetPersona('yuchen')" class="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition">
+              載入：22歲林宥辰 (預設)
+            </button>
+            <button onclick="loadPresetPersona('jianhong')" class="px-3 py-1.5 rounded-xl bg-blue-700 hover:bg-blue-600 text-white font-bold transition">
+              載入：42歲陳建宏組長
+            </button>
+            <button onclick="loadPresetPersona('meiling')" class="px-3 py-1.5 rounded-xl bg-amber-700 hover:bg-amber-600 text-white font-bold transition">
+              載入：58歲吳美玲技師
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Controls (5 cols) -->
+          <div class="lg:col-span-5 bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-5 text-xs">
+            <div>
+              <div class="flex justify-between font-bold mb-1.5">
+                <span class="text-slate-300">1. 目前每月稅前月薪 (NT$)：</span>
+                <span id="sim-salary-val" class="font-mono text-gold-400 text-sm">NT$50,000</span>
+              </div>
+              <input id="sim-salary" type="range" min="30000" max="200000" step="5000" value="50000" oninput="updateSimulator()" class="w-full accent-amber-500 cursor-pointer">
+            </div>
+
+            <div>
+              <div class="flex justify-between font-bold mb-1.5">
+                <span class="text-slate-300">2. 員工稅前自願提繳比例 (0%–15%)：</span>
+                <span id="sim-emp-rate-val" class="font-mono text-emerald-400 text-sm">5.0% (NT$2,500/月)</span>
+              </div>
+              <input id="sim-emp-rate" type="range" min="0" max="15" step="1" value="5" oninput="updateSimulator()" class="w-full accent-emerald-500 cursor-pointer">
+            </div>
+
+            <div>
+              <div class="flex justify-between font-bold mb-1.5">
+                <span class="text-slate-300">3. 雇主 1:1 相對提撥上限 (Match Cap)：</span>
+                <span id="sim-match-cap-val" class="font-mono text-cyan-400 text-sm">5.0%</span>
+              </div>
+              <input id="sim-match-cap" type="range" min="0" max="10" step="1" value="5" oninput="updateSimulator()" class="w-full accent-cyan-500 cursor-pointer">
+            </div>
+
+            <div>
+              <div class="flex justify-between font-bold mb-1.5">
+                <span class="text-slate-300">4. 台灣個人綜所稅邊際稅率 ($T$)：</span>
+                <span id="sim-tax-val" class="font-mono text-rose-400 text-sm">12%</span>
+              </div>
+              <select id="sim-tax" onchange="updateSimulator()" class="w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-semibold">
+                <option value="0.05">5% 級距（青年起薪階級）</option>
+                <option value="0.12" selected>12% 級距（林宥辰本案設定）</option>
+                <option value="0.20">20% 級距（中階主管／資深工程師）</option>
+                <option value="0.30">30% 級距（處長／協理級主管）</option>
+                <option value="0.40">40% 級距（EMBA 高階經理人／總經理）</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="flex justify-between font-bold mb-1.5">
+                <span class="text-slate-300">5. 距離 65 歲退休投資年數 ($n$)：</span>
+                <span id="sim-years-val" class="font-mono text-gold-400 text-sm">43 年 (516 個月)</span>
+              </div>
+              <input id="sim-years" type="range" min="5" max="45" step="1" value="43" oninput="updateSimulator()" class="w-full accent-amber-500 cursor-pointer">
+            </div>
+
+            <div>
+              <div class="flex justify-between font-bold mb-1.5">
+                <span class="text-slate-300">6. 投資組合預期年化報酬率 $E(R)$：</span>
+                <span id="sim-return-val" class="font-mono text-emerald-400 text-sm">10.0%</span>
+              </div>
+              <input id="sim-return" type="range" min="2.5" max="12.5" step="0.25" value="10.0" oninput="updateSimulator()" class="w-full accent-emerald-500 cursor-pointer">
+            </div>
+          </div>
+
+          <!-- Right Outputs & Chart (7 cols) -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+                <div class="text-[11px] text-slate-400">每月實領僅減少</div>
+                <div id="sim-out-pocket" class="text-lg font-mono font-extrabold text-white mt-1">NT$2,200</div>
+                <div id="sim-tax-saved" class="text-[11px] text-emerald-400 mt-0.5">每月節稅 +NT$300</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+                <div class="text-[11px] text-slate-400">每月專戶總存入</div>
+                <div id="sim-total-monthly" class="text-lg font-mono font-extrabold text-gold-400 mt-1">NT$5,000</div>
+                <div id="sim-instant-roi" class="text-[11px] text-amber-300 mt-0.5">瞬間報酬 +127.3%</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+                <div class="text-[11px] text-slate-400">退休總終值 (年度複利)</div>
+                <div id="sim-fv-annual" class="text-lg font-mono font-extrabold text-cyan-400 mt-1">NT$3,554萬</div>
+                <div id="sim-out-total" class="text-[11px] text-slate-400 mt-0.5">總實付本金 113.5萬</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-500/20 to-rose-500/20 border border-gold-500/40">
+                <div class="text-[11px] text-gold-300 font-bold">退休總終值 (按月複利)</div>
+                <div id="sim-fv-monthly" class="text-lg font-mono font-extrabold text-gold-300 mt-1">NT$4,284萬</div>
+                <div id="sim-multiplier" class="text-[11px] text-emerald-300 font-bold mt-0.5">資產放大 37.7 倍！</div>
+              </div>
+            </div>
+
+            <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-slate-300">📈 退休專戶複利成長軌跡 vs. 個人實質自付淨本金 (單位：新台幣萬元)</span>
+                <span class="text-[11px] font-mono text-gold-400">即時動態繪製</span>
+              </div>
+              <div class="relative h-64 w-full">
+                <canvas id="simGrowthChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 text-slate-400 border-t border-slate-800 py-8 mt-12 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-[#A51C30] text-white flex items-center justify-center font-extrabold">HBS</div>
+        <div>
+          <div class="font-bold text-white">碩士在職專班 (EMBA)｜11501 領導與管理 ‧ 財務個案(一) 台灣本土制度與台幣 ETF 版</div>
+          <div>翔鷹航太科技（AeroTaiwan Corp.）｜個案內容 (C01) ‧ 教學指引 (TN1) ‧ 個案解析 (SM1) 三合一教學簡報系統</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="openPresentationMode(1)" class="px-3.5 py-1.5 rounded-lg bg-gold-500 hover:bg-gold-400 text-slate-950 font-extrabold transition">
+          <i class="fa-solid fa-tv mr-1"></i> 啟動 28 頁全螢幕 PPT
+        </button>
+        <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition">
+          <i class="fa-solid fa-print mr-1"></i> 列印講義
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Live Classroom Timer Modal -->
+  <div id="timer-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full text-white shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-stopwatch text-gold-400 text-lg"></i>
+          <h3 class="text-base font-bold">哈佛個案課堂倒數計時器</h3>
+        </div>
+        <button onclick="toggleTimerModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="text-center py-4 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
+        <div id="timer-display-big" class="font-mono text-5xl sm:text-6xl font-extrabold text-gold-400 tracking-wider">90:00</div>
+        <div id="timer-stage-title" class="text-xs text-slate-400 mt-2 font-medium">哈佛個案 90 分鐘標準授課時程</div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-xs">
+        <button onclick="setTimerDuration(10, 'Pasture 1：開場冷點名破冰 (10m)')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">10分 破冰</button>
+        <button onclick="setTimerDuration(15, 'Pasture 2：免費午餐與稅盾 (15m)')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">15分 稅盾</button>
+        <button onclick="setTimerDuration(20, 'Pasture 3：43年複利與早鳥 (20m)')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">20分 複利</button>
+        <button onclick="setTimerDuration(25, 'Pasture 4：未上市股vs 0050 (25m)')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">25分 辯論</button>
+        <button onclick="setTimerDuration(20, 'Pasture 5：三代配置與總結 (20m)')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">20分 配置</button>
+        <button onclick="setTimerDuration(90, '90分鐘哈佛個案討論全程')" class="p-2 rounded-lg bg-[#A51C30] hover:bg-rose-700 text-white font-bold">90分 全程</button>
+      </div>
+      <div class="flex items-center space-x-3 pt-2">
+        <button id="timer-toggle-btn" onclick="toggleTimerRunning()" class="flex-1 py-3 rounded-xl bg-gold-500 hover:bg-gold-400 text-slate-950 font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-play" id="timer-btn-icon"></i> <span id="timer-btn-label">開始計時</span>
+        </button>
+        <button onclick="resetTimer()" class="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm border border-slate-700 transition">
+          <i class="fa-solid fa-rotate-left"></i> 重設
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- 28-SLIDE FULLSCREEN WEB PPT PRESENTATION OVERLAY                      -->
+  <!-- ===================================================================== -->
+  <div id="presentation-overlay" class="fixed inset-0 z-[100] bg-slate-950 text-white hidden flex flex-col justify-between select-none">
+    <!-- Top PPT Deck Bar with 3-Block Fast Jump -->
+    <div class="flex flex-wrap items-center justify-between gap-2 px-4 sm:px-6 py-3 bg-slate-900/95 border-b border-slate-800">
+      <div class="flex items-center space-x-3">
+        <span class="w-3 h-3 rounded-full bg-[#A51C30]"></span>
+        <span class="text-xs font-extrabold uppercase tracking-wider text-gold-400">翔鷹航太 (AeroTaiwan) 教學簡報 PPT</span>
+        <div class="hidden md:flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px]">
+          <button onclick="openPresentationMode(1)" id="ppt-tab-case" class="px-2.5 py-1 rounded-lg font-bold bg-[#A51C30] text-white transition">① 個案內容 (P.1–10)</button>
+          <button onclick="openPresentationMode(11)" id="ppt-tab-tn" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:bg-slate-800 transition">② 教學指引 (P.11–18)</button>
+          <button onclick="openPresentationMode(19)" id="ppt-tab-sm" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:bg-slate-800 transition">③ 個案解析 (P.19–28)</button>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <select id="slide-jump-select" onchange="openPresentationMode(parseInt(this.value))" class="bg-slate-800 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono"></select>
+        <span id="slide-number-indicator" class="text-xs sm:text-sm font-mono font-bold text-gold-300">Slide 1 / 28</span>
+        <button onclick="closePresentationMode()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-700 text-slate-200 hover:text-white text-xs font-bold border border-slate-700 transition">
+          <i class="fa-solid fa-xmark"></i> 結束放映 (ESC)
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Slide Stage -->
+    <div class="flex-grow flex items-center justify-center p-4 sm:p-8 overflow-y-auto" id="slide-content-stage"></div>
+
+    <!-- Bottom PPT Controls -->
+    <div class="px-6 py-3.5 bg-slate-900/95 border-t border-slate-800 flex items-center justify-between">
+      <div class="text-xs text-slate-400 hidden sm:flex items-center gap-2">
+        <span>鍵盤快捷鍵：<kbd class="px-2 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">←</kbd> 上一頁 <kbd class="px-2 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">→</kbd> / <kbd class="px-2 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">Space</kbd> 下一頁 <kbd class="px-2 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">ESC</kbd> 離開</span>
+      </div>
+      <div class="flex items-center space-x-3 ml-auto">
+        <button onclick="prevSlide()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700 transition">
+          <i class="fa-solid fa-chevron-left"></i> 上一張
+        </button>
+        <button onclick="nextSlide()" class="px-5 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-slate-950 text-xs font-extrabold shadow transition">
+          下一張 <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION SCRIPTS & 28-SLIDE HBS DECK DATA                          -->
+  <!-- ===================================================================== -->
+  <script>
+    // ================= 28-Slide Fullscreen Presentation Deck =================
+    const twCaseSlideDeck = [
+      // --- PART 1: 個案內容 (Slides 1-10) ---
+      {
+        num: 1, pillar: 'case', cat: '區塊一：個案內容｜封面',
+        title: '翔鷹航太科技（AeroTaiwan Corp.）',
+        sub: '台灣勞退自提、員工持股信託與台幣 ETF 退休資產配置決策（HBS-FIN-11501-TW-C01）',
+        body: `<div class="text-center py-6 space-y-5 max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-900/60 border border-rose-500/40 text-gold-300 text-xs font-bold">
+            <i class="fa-solid fa-plane-up"></i> HARVARD BUSINESS SCHOOL CASE METHOD ‧ 台灣本土制度版
+          </div>
+          <h3 class="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-amber-200 to-rose-200 leading-tight">
+            從台中精密園區出發的<br>千萬台幣退休財富決策
+          </h3>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            主角：22 歲初級財務分析師 <strong>林宥辰（Yu-Chen Lin）</strong>｜起薪年薪 <strong>NT$600,000（月薪 NT$50,000）</strong><br>
+            投資期間：<strong>43 年（516 個月）</strong>｜台灣綜所稅邊際稅率：<strong>12.0%</strong>
+          </p>
+        </div>`,
+        notes: '歡迎進入財務個案(一)台灣本土版。本簡報分為三大區塊：P.1–10 個案內容、P.11–18 教學指引、P.19–28 個案解析。'
+      },
+      {
+        num: 2, pillar: 'case', cat: '區塊一：個案內容｜決策現場',
+        title: '週一早晨的雙重任務：個人自選與全廠 85 人簡報',
+        sub: '2026 年 10 月 ‧ 台中市南屯區精密機械科技創新園區',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs sm:text-sm">
+          <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <div class="text-gold-400 font-extrabold text-base"><i class="fa-solid fa-user-graduate mr-1"></i> 主角：林宥辰（22歲，國立大學財金系畢）</div>
+            <ul class="space-y-2 text-slate-300 list-disc pl-4">
+              <li>剛入職翔鷹航太科技擔任初級財務分析師（Junior Financial Analyst）第一週。</li>
+              <li>直屬主管：財務部資深副理 <strong>張凱文（Kevin Chang）</strong>。</li>
+              <li><strong>任務一（個人決策）</strong>：本週五前填妥自己的「企業福利儲蓄暨勞退自願提繳自選平台」提撥率與台幣標的權重。</li>
+              <li><strong>任務二（管理溝通）</strong>：下週一為全廠 85 位理工與產線同仁主持 30 分鐘退休金配置指南簡報。</li>
+            </ul>
+          </div>
+          <div class="p-6 rounded-2xl bg-rose-950/40 border border-rose-800/60 space-y-3 flex flex-col justify-center">
+            <div class="text-rose-300 font-bold text-sm">💬 財務副理張凱文的叮嚀：</div>
+            <p class="text-slate-200 italic leading-relaxed">
+              「宥辰，我們廠裡八成以上是航太與機械工程師，大家懂流體力學跟碳纖維複合材料，但對台灣勞退自提稅盾和台幣 ETF 幾乎一知半解。有人把錢全放 2.5% 貨幣基金，有人想把退休金 100% 拿去買公司 8 折未上市股票博 IPO！你要用最精確的財務數學算給大家看！」
+            </p>
+          </div>
+        </div>`,
+        notes: '強調林宥辰面臨的不只是個人理財，更是向全公司 85 名不同年齡層員工進行財務領導與制度溝通的挑戰。'
+      },
+      {
+        num: 3, pillar: 'case', cat: '區塊一：個案內容｜企業背景',
+        title: '翔鷹航太科技（AeroTaiwan Corp.）營運與未上市風險',
+        sub: '中台灣精密機械聚落之新創航太製造商',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="text-gold-400 font-extrabold text-sm">1. 創辦團隊與主力產品</div>
+            <p class="text-slate-300 leading-relaxed">由前漢翔航空資深工程師與試飛員 <strong>林振翔 (Sean)</strong> 與 <strong>陳冠廷 (Tim)</strong> 創立 6 年：</p>
+            <ul class="text-slate-200 space-y-1 font-mono pt-1">
+              <li>• 蒼鷹號 (The Falcon)：商用長程巡檢無人機，售價 <strong class="text-gold-300">NT$150 萬</strong></li>
+              <li>• 藍鵲號 (The Magpie)：雙座複合材料輕型機，售價 <strong class="text-gold-300">NT$240 萬</strong></li>
+            </ul>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="text-emerald-400 font-extrabold text-sm">2. BTO 精實製造與高成長</div>
+            <p class="text-slate-300 leading-relaxed">採「接單後生產（Build-to-Order）」模式，客戶下單選配後 <strong>5 週內</strong> 完成組裝測試交機。近三年營收 CAGR 高達 <strong>+28%</strong>，員工擴編至 <strong>85 人</strong>。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-rose-950/40 border border-rose-700/50 space-y-2">
+            <div class="text-rose-400 font-extrabold text-sm">3. 未上市狀態與產業集中風險</div>
+            <p class="text-slate-300 leading-relaxed">目前為<strong>未上市櫃公開發行前公司</strong>，預計 3–4 年後申請台灣創新板（TIB）或上市櫃 IPO。惟受飛安認證、原物料與單一機型成敗影響極巨（個別波動率 σ &gt; 45%）。</p>
+          </div>
+        </div>`,
+        notes: '鋪陳公司高成長背後的高度營運波動性，為 Q3「為何不該重押自家未上市股票」埋下伏筆。'
+      },
+      {
+        num: 4, pillar: 'case', cat: '區塊一：個案內容｜台灣退休制度',
+        title: '台灣勞退新制 ＋ 翔鷹企業福儲暨自選平台雙層架構',
+        sub: '結合《勞工退休金條例》稅前扣除與企業 1:1 對等相對提撥',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-bold">第一層：法定保障</span>
+            <h4 class="text-base font-extrabold text-white">勞退新制雇主法定提撥 6%</h4>
+            <p class="text-slate-300 leading-relaxed">公司每月依法按月提繳工資額外提撥 6%（宥辰為 NT$3,000/月）至勞保局個人專戶，享兩年期定存保證收益。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-950 border border-rose-500/50 space-y-2">
+            <span class="px-2 py-0.5 rounded bg-[#A51C30] text-white font-bold">第二層：員工稅前自提</span>
+            <h4 class="text-base font-extrabold text-white">自願提繳上限 15% (免當期綜所稅)</h4>
+            <p class="text-slate-300 leading-relaxed">結合法定自提與企業福儲信託，員工可稅前自提 <strong>0%～15%</strong>（宥辰最高月提 NT$7,500／年提 NT$90,000），全數免納當年度綜所稅！</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-amber-950/40 border-2 border-gold-400 space-y-2">
+            <span class="px-2 py-0.5 rounded bg-gold-500 text-slate-950 font-extrabold">核心誘因：雇主 1:1 Match</span>
+            <h4 class="text-base font-extrabold text-gold-300">前 5% 薪資享 100% 等額相對提撥</h4>
+            <p class="text-slate-200 leading-relaxed">只要宥辰自提滿 <strong>5%（NT$2,500/月）</strong>，公司每月免費對等撥入 <strong>NT$2,500（每年白送 NT$30,000）</strong>！超過 5% 部分雇主維持上限 5%。</p>
+          </div>
+        </div>`,
+        notes: '向學生說明台灣真實制度如何透過「勞退自提 6% + 企業福利儲蓄信託相對提撥」實現與美國 401(k) 完全一致的激勵結構。'
+      },
+      {
+        num: 5, pillar: 'case', cat: '區塊一：個案內容｜主角參數',
+        title: 'Exhibit 1｜林宥辰個人財務與稅務基準參數',
+        sub: '22 歲起點 ‧ 43 年（516 個月）複利期 ‧ 台灣綜所稅邊際稅率 12%',
+        body: `<div class="w-full max-w-3xl mx-auto bg-slate-950 rounded-2xl border border-slate-800 p-5 text-xs font-mono space-y-2">
+          <div class="grid grid-cols-2 py-2 border-b border-slate-800"><span class="text-slate-400 font-sans">目前年齡 / 法定退休年齡：</span><span class="text-white font-bold text-right">22 歲 / 65 歲（共 43 年 = 516 個月）</span></div>
+          <div class="grid grid-cols-2 py-2 border-b border-slate-800"><span class="text-slate-400 font-sans">目前起薪年薪 / 每月月薪：</span><span class="text-emerald-400 font-bold text-right">NT$600,000 / 年（NT$50,000 / 月）</span></div>
+          <div class="grid grid-cols-2 py-2 border-b border-slate-800"><span class="text-slate-400 font-sans">台灣個人綜合所得稅邊際稅率 (T)：</span><span class="text-rose-400 font-bold text-right">12.0%（自提金額全額免納當期綜所稅）</span></div>
+          <div class="grid grid-cols-2 py-2 border-b border-slate-800"><span class="text-slate-400 font-sans">未自提 (0%) 時每月應納稅額與實領月薪：</span><span class="text-white font-bold text-right">預扣稅 NT$6,000 ➔ 實領 NT$44,000 / 月</span></div>
+          <div class="grid grid-cols-2 py-2"><span class="text-slate-400 font-sans">員工稅前自提上限與雇主 1:1 對等上限：</span><span class="text-gold-300 font-bold text-right">自提最高 15% ($7,500)｜雇主 1:1 對等最高 5% ($2,500)</span></div>
+        </div>`,
+        notes: '提醒學生記住這組核心數字：月薪 5 萬、稅率 12%、未自提實領 44,000 元、距離退休 43 年（516 個月）。'
+      },
+      {
+        num: 6, pillar: 'case', cat: '區塊一：個案內容｜五大台幣標的 (1/2)',
+        title: '自選平台五大新台幣投資標的剖析（標的 ①～③）',
+        sub: '從台幣貨幣市場、台灣投資級債券到元大台灣 50 指數（0050 / 006208）',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="text-slate-400 font-bold">標的 ①｜現金管理工具</div>
+            <h4 class="text-base font-extrabold text-white">元大台幣貨幣市場基金</h4>
+            <p class="text-slate-300">投資短期商業本票與定存。本金無波動，但長期實質購買力僅能勉強打平台灣 2% 通膨。</p>
+            <div class="pt-2 border-t border-slate-800 font-mono text-gold-300">E(R) = 2.50%｜σ = 0.50%｜費率 0.12%</div>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-950 border border-blue-800/60 space-y-2">
+            <div class="text-blue-400 font-bold">標的 ②｜固定收益防禦核心</div>
+            <h4 class="text-base font-extrabold text-white">元大台灣投資級債券傘型</h4>
+            <p class="text-slate-300">對應 00679B / 00720B 等級之公債與台積電/台電高評等公司債，提供穩定配息與股市下跌緩衝。</p>
+            <div class="pt-2 border-t border-slate-800 font-mono text-blue-300">E(R) = 5.00%｜σ = 6.00%｜費率 0.20%</div>
+          </div>
+          <div class="p-5 rounded-2xl bg-emerald-950/40 border-2 border-emerald-500 space-y-2">
+            <div class="text-emerald-400 font-bold">標的 ③｜台股大盤被動核心</div>
+            <h4 class="text-base font-extrabold text-white">元大台灣卓越 50 指數 (0050)</h4>
+            <p class="text-slate-200">完全複製臺灣 50 指數（涵蓋台積電、鴻海、聯發科等前 50 大龍頭，占台股市值 70%），法人專案費率極低！</p>
+            <div class="pt-2 border-t border-emerald-800 font-mono text-emerald-300 font-bold">E(R) = 10.00%｜σ = 16.00%｜費率 0.10%</div>
+          </div>
+        </div>`,
+        notes: '特別強調標的 ③（0050/006208）在機構法人專案下內扣費率僅 0.10%，且夏普比率高達 0.47，為五大標的最高。'
+      },
+      {
+        num: 7, pillar: 'case', cat: '區塊一：個案內容｜五大台幣標的 (2/2)',
+        title: '自選平台五大新台幣投資標的剖析（標的 ④～⑤）',
+        sub: '高爆發中小型動能股 vs. 備受爭議的「8折認購翔鷹未上市內部股票」',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs">
+          <div class="p-6 rounded-2xl bg-slate-950 border border-purple-700/50 space-y-3">
+            <div class="text-purple-400 font-bold">標的 ④｜高成長積極衛星（對應 00733 / 0051）</div>
+            <h4 class="text-lg font-extrabold text-white">富邦台灣中小動能高成長基金</h4>
+            <p class="text-slate-300 leading-relaxed">聚焦排除臺灣 50 後具高營收爆發力與 Alpha 動能之上市櫃中小型科技、AI 零組件與精密機械股。長期預期報酬率最高（12.50%），但景氣修正時波動劇烈（σ = 24.00%）。</p>
+            <div class="pt-2 border-t border-slate-800 font-mono text-purple-300 font-bold">E(R) = 12.50%｜σ = 24.00%｜費率 0.55%｜SR = 0.42</div>
+          </div>
+          <div class="p-6 rounded-2xl bg-rose-950/40 border-2 border-rose-500 space-y-3">
+            <div class="text-rose-400 font-bold">標的 ⑤｜未上市內部員工持股信託（全場辯論焦點）</div>
+            <h4 class="text-lg font-extrabold text-white">翔鷹航太未上市內部股票（享鑑價 8 折認購）</h4>
+            <p class="text-slate-200 leading-relaxed">無公開市場報價，每年底由會計師事務所進行每股淨值與 DCF 鑑價。員工可以 <strong>8 折（20% 折價，即 NT$80 買鑑價 NT$100 股票）</strong> 認購，免管理費。年輕工程師瘋傳「買進現賺 25% + 博 3 年後 IPO 翻倍」！</p>
+            <div class="pt-2 border-t border-rose-800 font-mono text-rose-300 font-bold">缺乏次級市場流動性 (DLOM)｜個別波動 σ &gt; 45%｜雙重風險暴露</div>
+          </div>
+        </div>`,
+        notes: '請學生思考：為什麼年輕工程師覺得「8折買公司股票現賺25%」是個天大的誘惑？背後隱藏了哪三個致命陷阱？'
+      },
+      {
+        num: 8, pillar: 'case', cat: '區塊一：個案內容｜附表 Ex2 & Ex3',
+        title: 'Exhibit 2 & 3｜五大台幣標的參數與台股主動 vs. 被動實證',
+        sub: '夏普比率（Sharpe Ratio）比較與台灣共同基金 10 年期績效落後率',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full text-xs font-mono">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="font-sans font-bold text-gold-400 mb-1">Exhibit 2：五大台幣標的風險收益與夏普比率 (Rf=2.5%)</div>
+            <div class="flex justify-between py-1 border-b border-slate-800"><span>1. 元大台幣貨幣市場</span><span>E=2.5% | σ=0.5% | SR=0.00</span></div>
+            <div class="flex justify-between py-1 border-b border-slate-800 text-blue-300"><span>2. 元大台灣投資級債券</span><span>E=5.0% | σ=6.0% | SR=0.42</span></div>
+            <div class="flex justify-between py-1 border-b border-slate-800 text-emerald-300 font-bold"><span>3. 元大台灣50指數(0050)</span><span>E=10.0%| σ=16%  | SR=0.47★</span></div>
+            <div class="flex justify-between py-1 border-b border-slate-800 text-purple-300"><span>4. 富邦台灣中小動能</span><span>E=12.5%| σ=24%  | SR=0.42</span></div>
+            <div class="flex justify-between py-1 text-rose-400"><span>5. 翔鷹航太未上市股</span><span>8折認購 | σ&gt;45%  | 雙重高危</span></div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 font-sans">
+            <div class="font-bold text-cyan-400 mb-1">Exhibit 3：台灣主動式台股基金 vs. 臺灣50指數 (10年實證)</div>
+            <ul class="space-y-2 text-slate-300">
+              <li>• <strong>內扣費用率差距</strong>：一般主動式台股基金每年內扣 <strong>1.60%～2.20%</strong>（加計高周轉交易成本達 2.5%），而自選平台台灣 50 指數僅 <strong>0.10%</strong>。</li>
+              <li>• <strong>10 年落後比例</strong>：根據 SPIVA 與投信投顧公會長期統計，高達 <strong>78%</strong> 的台股主動型基金在扣除費用後落後臺灣 50 指數！</li>
+            </ul>
+          </div>
+        </div>`,
+        notes: '引導學生觀察 Exhibit 2：雖然中小動能預期報酬 12.5% 最高，但台灣 50 指數的夏普比率（0.47）才是全場第一。'
+      },
+      {
+        num: 9, pillar: 'case', cat: '區塊一：個案內容｜附表 Ex4 三代員工',
+        title: 'Exhibit 4｜翔鷹航太三個不同世代員工的生命週期畫像',
+        sub: '為什麼同一套投資組合絕對不能套用在全廠 85 名員工身上？',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-5 rounded-2xl bg-emerald-950/30 border border-emerald-600/50 space-y-2">
+            <div class="text-emerald-400 font-extrabold text-sm">① 林宥辰（22歲，新進財務分析師）</div>
+            <div class="font-mono text-gold-300">月薪 $50,000｜距退休 43 年</div>
+            <p class="text-slate-300 leading-relaxed">單身無房貸、人力資本極長（516個月定期定額），能承受短期股市劇烈波動以換取最高長期複利成長。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-blue-950/30 border border-blue-600/50 space-y-2">
+            <div class="text-blue-400 font-extrabold text-sm">② 陳建宏（42歲，無人機產線組長）</div>
+            <div class="font-mono text-gold-300">月薪 $78,000｜距退休 23 年</div>
+            <p class="text-slate-300 leading-relaxed">育有兩名國中子女與台中房貸，已累積退休金 NT$240 萬。追求資產穩步增值，但無法承受資產腰斬風險。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-amber-950/30 border border-amber-600/50 space-y-2">
+            <div class="text-amber-400 font-extrabold text-sm">③ 吳美玲（58歲，資深塗裝技師）</div>
+            <div class="font-mono text-gold-300">月薪 $65,000｜距退休僅剩 7 年</div>
+            <p class="text-slate-300 leading-relaxed">已累積退休專戶 NT$520 萬，7 年後即須提領養老。極度恐懼退休前夕台股崩盤（報酬順序風險）。</p>
+          </div>
+        </div>`,
+        notes: '這三位代表性人物將成為課堂後半段（Pasture 5 與 Q5）分組角色扮演的核心對象。'
+      },
+      {
+        num: 10, pillar: 'case', cat: '區塊一：個案內容｜六大討論問題',
+        title: '哈佛個案課堂討論問題總覽（Q1–Q6）',
+        sub: '林宥辰必須在週五前解開的六道核心財務課題',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full text-xs">
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800"><strong class="text-gold-400">Q1 相對提撥與台灣稅盾：</strong>自提 5% 搭配雇主 1:1 Match 與 12% 綜所稅盾之名目（+100%）與稅後實質瞬間報酬率（+127.27%）為何？</div>
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800"><strong class="text-gold-400">Q2 43年複利與早鳥效應：</strong>自提 5%/10%/15% 在 8% 與 10% 報酬率下滾動 43 年（516個月）終值為何？晚 10 年開始損失多少？</div>
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800"><strong class="text-gold-400">Q3 未上市股雙重風險：</strong>為何 8 折認購翔鷹未上市股票並非無風險套利？何謂人力資本與財務資本雙重暴露（Double Jeopardy）？</div>
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800"><strong class="text-gold-400">Q4 主動基金 vs. 0050 ETF：</strong>每年 1.50% 的管理費差距在 43 年複利下會吞噬多少千萬台幣退休財富？</div>
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800"><strong class="text-gold-400">Q5 三世代核心—衛星配置：</strong>如何為 22 歲林宥辰、42 歲陳建宏、58 歲吳美玲設計精準台幣標的權重與預期報酬？</div>
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800"><strong class="text-gold-400">Q6 行為財務與 SMarT 助推：</strong>如何應用 Save More Tomorrow™ 與自動再平衡機制幫助全廠 85 名員工克服惰性？</div>
+        </div>`,
+        notes: '以上為第一區塊「個案內容」10頁簡報。接下來第 11 頁進入第二區塊「教學指引（Teaching Note）」。'
+      },
+
+      // --- PART 2: 教學指引 (Slides 11-18) ---
+      {
+        num: 11, pillar: 'tn', cat: '區塊二：教學指引｜教案定位',
+        title: '教師教學指引（Teaching Note）總覽與六大教學目標',
+        sub: '教案編號：HBS-FIN-11501-TW-TN1｜適用：EMBA 領導與管理、財務管理、投資學',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-4 rounded-2xl bg-teal-950/40 border border-teal-600/40 space-y-1.5">
+            <div class="text-gold-400 font-bold">目標 1：稅盾與相對提撥槓桿</div>
+            <p class="text-slate-300">證明雇主 1:1 Match + 台灣綜所稅盾創造 +127.27%～+233.33% 無風險瞬間報酬。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-teal-950/40 border border-teal-600/40 space-y-1.5">
+            <div class="text-gold-400 font-bold">目標 2：43年時間價值指數律</div>
+            <p class="text-slate-300">透過早鳥（存10年滾出2,221萬）擊敗晚鳥（存33年僅1,334萬）破除拖延症。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-teal-950/40 border border-teal-600/40 space-y-1.5">
+            <div class="text-gold-400 font-bold">目標 3：去相關化與分散風險</div>
+            <p class="text-slate-300">拆解未上市股缺乏流通性折價（DLOM）與人力／財務資本綁定之安隆慘劇。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-teal-950/40 border border-teal-600/40 space-y-1.5">
+            <div class="text-gold-400 font-bold">目標 4：被動指數成本優勢</div>
+            <p class="text-slate-300">量化證明 1.5% 主動基金費率差在 43 年侵蝕 45.7%（1,625萬元）終值。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-teal-950/40 border border-teal-600/40 space-y-1.5">
+            <div class="text-gold-400 font-bold">目標 5：生命週期滑降路徑</div>
+            <p class="text-slate-300">掌握 22 歲、42 歲、58 歲三階段股債配置與「報酬順序風險」防禦。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-teal-950/40 border border-teal-600/40 space-y-1.5">
+            <div class="text-gold-400 font-bold">目標 6：行為財務選擇架構</div>
+            <p class="text-slate-300">將個人理財昇華為管理者的制度設計：Opt-out 預設自提與 SMarT 機制。</p>
+          </div>
+        </div>`,
+        notes: '本區塊專供教師備課與課堂控場使用，遵循哈佛商學院蘇格拉底式提問教學法（Socratic Method）。'
+      },
+      {
+        num: 12, pillar: 'tn', cat: '區塊二：教學指引｜90分鐘課堂流程 (上)',
+        title: '90 分鐘課堂時間配置：Pasture 1 至 Pasture 3（0–45 min）',
+        sub: '從台灣勞退自提冷點名破冰，推進至 43 年複利震撼教育',
+        body: `<div class="space-y-3 w-full text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-teal-700/50 flex flex-col sm:flex-row justify-between gap-4">
+            <div class="space-y-1">
+              <span class="text-teal-400 font-mono font-bold">Pasture 1 (00–10 min｜10分鐘)：開場冷點名與台灣自提現況調查</span>
+              <p class="text-slate-300">現場舉手調查全班誰有自提勞退 6%？點出全台灣僅 14.5% 勞工自提的盲點，引出林宥辰的決策困境。</p>
+            </div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-teal-700/50 flex flex-col sm:flex-row justify-between gap-4">
+            <div class="space-y-1">
+              <span class="text-gold-400 font-mono font-bold">Pasture 2 (10–25 min｜15分鐘)：免費午餐與台灣綜所稅盾拆解 (Q1)</span>
+              <p class="text-slate-300">引導學員算出「自提 2,500 元 ➔ 節稅 300 元 ➔ 實領僅少 2,200 元 ➔ 專戶存入 5,000 元」之 +127.27% 瞬間實質報酬率，並延伸至 EMBA 30%/40% 稅率級距（+185.7% / +233.3%）。</p>
+            </div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-teal-700/50 flex flex-col sm:flex-row justify-between gap-4">
+            <div class="space-y-1">
+              <span class="text-cyan-400 font-mono font-bold">Pasture 3 (25–45 min｜20分鐘)：43 年複利矩陣與早鳥 vs. 晚鳥對決 (Q2)</span>
+              <p class="text-slate-300">在黑板中欄寫出 4,284 萬至 8,568 萬終值，並用「22歲只存10年 (2,221萬) vs 32歲存33年 (1,334萬)」引爆全場認知衝擊。</p>
+            </div>
+          </div>
+        </div>`,
+        notes: '教師可隨時點擊右上角「計時器」按鈕，啟動 10 分鐘、15 分鐘或 20 分鐘的段落倒數。'
+      },
+      {
+        num: 13, pillar: 'tn', cat: '區塊二：教學指引｜90分鐘課堂流程 (下)',
+        title: '90 分鐘課堂時間配置：Pasture 4 至 Pasture 5（45–90 min）',
+        sub: '全場高潮正反辯論（未上市股 vs. 0050）與三世代角色扮演收束',
+        body: `<div class="space-y-4 w-full text-xs">
+          <div class="p-5 rounded-2xl bg-rose-950/30 border border-rose-600/50 space-y-2">
+            <div class="text-rose-400 font-mono font-extrabold text-sm">Pasture 4 (45–70 min｜25分鐘)：全場正反交鋒——8折未上市內部股 vs. 0050 被動指數 (Q3 & Q4)</div>
+            <p class="text-slate-200 leading-relaxed">
+              • <strong>上半場（12分鐘）</strong>：讓看好「8折買翔鷹未上市股現賺 25%」的學員與反對派交鋒，教師導入<strong>人力資本正相關（Enron 案例）</strong>與<strong>缺乏流通性折價（DLOM 20%–35%）</strong>。<br>
+              • <strong>下半場（13分鐘）</strong>：比較台股主動基金（費率 1.60%）與台灣 50 指數（費率 0.10%），現場算出 43 年被吞噬的 <strong>1,625 萬新台幣</strong>！
+            </p>
+          </div>
+          <div class="p-5 rounded-2xl bg-teal-950/30 border border-teal-600/50 space-y-2">
+            <div class="text-teal-300 font-mono font-extrabold text-sm">Pasture 5 (70–90 min｜20分鐘)：三世代核心—衛星配置 Role Play 與行為財務收束 (Q5 & Q6)</div>
+            <p class="text-slate-200 leading-relaxed">
+              • 請三組學員分別扮演 22 歲林宥辰、42 歲陳建宏、58 歲吳美玲提出配置表，深度剖析 58 歲之<strong>報酬順序風險（Sequence of Returns Risk）</strong>。<br>
+              • 以諾貝爾獎得主 Thaler 的 <strong>Save More Tomorrow™ (SMarT)</strong> 作為企業領導者制度設計的完美收官。
+            </p>
+          </div>
+        </div>`,
+        notes: 'Pasture 4 是整堂課情緒與思辨最高潮，務必先讓支持買公司未上市股的同學暢所欲言，再進行蘇格拉底式拆解。'
+      },
+      {
+        num: 14, pillar: 'tn', cat: '區塊二：教學指引｜蘇格拉底反詰庫',
+        title: '常見學員四大迷思與教師蘇格拉底反詰錦囊',
+        sub: '如何用精準提問擊破直覺偏誤？',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <div class="text-rose-400 font-bold">❌ 迷思1：「8折買公司未上市股等於現賺25%無風險套利！」</div>
+            <p class="text-slate-300">💡 <strong>反詰：</strong>「未上市股票能隨時在證交所按 $100 賣掉嗎？20%～35% 的缺乏流通性折價（DLOM）剛好抵銷 8 折優惠！且若公司倒閉，你同時失業又失去退休金，這叫分散投資嗎？」</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <div class="text-rose-400 font-bold">❌ 迷思2：「退休金不能虧，22歲也該100%放台幣貨幣市場基金！」</div>
+            <p class="text-slate-300">💡 <strong>反詰：</strong>「22歲放 2.5% 貨幣基金 43 年只有 458 萬（扣通膨剩一半購買力），放 0050 有 4,284 萬！對年輕人而言，『通膨侵蝕與購買力枯竭』才是比短期波動更致命的風險！」</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <div class="text-rose-400 font-bold">❌ 迷思3：「中小動能預期報酬12.5%最高，應該100%全押！」</div>
+            <p class="text-slate-300">💡 <strong>反詰：</strong>「0050 的夏普比率（0.47）高於中小動能（0.42），且占台股市值 70%。以 70% 0050 為核心、30% 中小動能為衛星，才能兼顧效率前緣與超額成長！」</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <div class="text-rose-400 font-bold">❌ 迷思4：「等32歲升官加薪再開始自提存退休金就好！」</div>
+            <p class="text-slate-300">💡 <strong>反詰：</strong>「22–32歲只存10年（本金60萬）滾到65歲是 2,221萬；32–65歲連存33年（本金198萬）卻只有 1,334萬！晚10年開始，你付3.3倍本金卻少拿 887萬！」</p>
+          </div>
+        </div>`,
+        notes: '這四組反詰話術可直接用於課堂回應學員舉手發言。'
+      },
+      {
+        num: 15, pillar: 'tn', cat: '區塊二：教學指引｜三欄板書規劃',
+        title: '哈佛三欄式黑板板書設計（Three-Board Choreography）',
+        sub: '課堂結束時黑板呈現的完整視覺結構',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs font-mono">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-amber-500/40 space-y-1.5">
+            <div class="text-gold-400 font-bold font-sans">【左板 Board 1】現金流與稅盾</div>
+            <div>• 月薪 $50k｜T = 12%</div>
+            <div>• 0%自提：實領 $44,000 (存入 $0)</div>
+            <div>• 5%自提 ($2,500) + Match ($2,500)</div>
+            <div class="text-emerald-400">➔ 節稅 +$300｜實領只少 $2,200</div>
+            <div class="text-gold-300 font-bold">➔ 專戶存入 $5,000 (+127.27%！)</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-cyan-500/40 space-y-1.5">
+            <div class="text-cyan-400 font-bold font-sans">【中板 Board 2】43年複利與早鳥</div>
+            <div>• 5%+5% ($5k/月) @10%月複利：</div>
+            <div class="text-gold-300 font-bold">➔ NT$42,838,955 (4,284萬)</div>
+            <div>• 15%+5% ($10k/月) @10%月複利：</div>
+            <div class="text-gold-300 font-bold">➔ NT$85,677,911 (8,568萬)</div>
+            <div class="text-emerald-400">• 早鳥存10年(2,221萬) &gt; 晚鳥存33年(1,334萬)</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-rose-500/40 space-y-1.5">
+            <div class="text-rose-400 font-bold font-sans">【右板 Board 3】標的與三代配置</div>
+            <div>• 未上市股：雙重暴露+DLOM ➔ 0%</div>
+            <div>• 主動費率1.6% vs 0050 0.1% ➔ 差1,625萬</div>
+            <div class="text-emerald-300">• 22歲：70% 0050 + 30% 中小 (10.75%)</div>
+            <div class="text-blue-300">• 42歲：50% 0050+20%中小+25%債+5%現</div>
+            <div class="text-amber-300">• 58歲：30% 0050+50%債+20%現 (6.0%)</div>
+          </div>
+        </div>`,
+        notes: '建議教師在白板或電子白板上依此三欄結構書寫，讓量化邏輯一目了然。'
+      },
+      {
+        num: 16, pillar: 'tn', cat: '區塊二：教學指引｜TN Exhibit A',
+        title: 'TN Exhibit A｜台灣退休金三支柱與本個案教學映射',
+        sub: '連結世界銀行框架與台灣真實法規環境',
+        body: `<div class="w-full max-w-4xl mx-auto bg-slate-950 rounded-2xl border border-slate-800 p-5 text-xs space-y-3">
+          <div class="grid grid-cols-3 font-bold text-gold-400 border-b border-slate-800 pb-2">
+            <div>世界銀行退休三支柱</div><div>台灣現行法規制度</div><div>本個案（翔鷹航太）教學映射</div>
+          </div>
+          <div class="grid grid-cols-3 py-1.5 border-b border-slate-800/80 text-slate-300">
+            <div class="font-bold text-white">第一支柱：法定社會保險</div>
+            <div>勞工保險（勞保老年年金）</div>
+            <div>面臨少子化財務壓力與所得替代率不足，凸顯個人與企業第二、三支柱之迫切性。</div>
+          </div>
+          <div class="grid grid-cols-3 py-1.5 border-b border-slate-800/80 text-emerald-300">
+            <div class="font-bold">第二支柱：企業職業退休金</div>
+            <div>勞退新制（雇主6%+自提6%）＋ 企業員工福利儲蓄／持股信託</div>
+            <div>本案核心：稅前自提上限 15% + 雇主前 5% 提供 1:1 相對提撥，連結五大台幣標的。</div>
+          </div>
+          <div class="grid grid-cols-3 py-1.5 text-slate-300">
+            <div class="font-bold text-white">第三支柱：個人自願投資</div>
+            <div>個人台股 ETF 定期定額（0050/006208/00679B）、TISA 專戶</div>
+            <div>延伸實務：即便任職企業無自選平台，學員亦可在勞退自提 6% 領滿稅盾後，於個人證券戶複製本案配置。</div>
+          </div>
+        </div>`,
+        notes: '向 EMBA 學員說明：無論公司是否已導入福儲自選信託，這套「勞退自提領稅盾 + 台股 ETF 核心衛星配置」明天就能在個人帳戶執行。'
+      },
+      {
+        num: 17, pillar: 'tn', cat: '區塊二：教學指引｜TN Exhibit B',
+        title: 'TN Exhibit B｜台灣綜所稅不同稅率級距下之瞬間實質報酬率',
+        sub: '為什麼所得稅率越高的 EMBA 高階主管，越應該全額自提？',
+        body: `<div class="w-full max-w-3xl mx-auto bg-slate-950 rounded-2xl border border-slate-800 p-5 text-xs font-mono space-y-2">
+          <div class="grid grid-cols-4 font-sans font-bold text-gold-400 border-b border-slate-800 pb-2">
+            <div>台灣綜所稅邊際稅率 (T)</div><div class="text-center">自提 $2,500 節稅</div><div class="text-center">實領薪資僅減少</div><div class="text-right">含雇主 Match 瞬間報酬率</div>
+          </div>
+          <div class="grid grid-cols-4 py-1.5 border-b border-slate-800/80 text-slate-300">
+            <div class="font-sans">5% 級距 (青年起薪)</div><div class="text-center text-emerald-400">+$125</div><div class="text-center">$2,375</div><div class="text-right font-bold">+110.53% (2.11倍)</div>
+          </div>
+          <div class="grid grid-cols-4 py-1.5 border-b border-slate-800/80 text-gold-300 font-bold bg-amber-950/30 px-2 rounded">
+            <div class="font-sans">12% 級距 (林宥辰本案)</div><div class="text-center text-emerald-400">+$300</div><div class="text-center">$2,200</div><div class="text-right">+127.27% (2.27倍)</div>
+          </div>
+          <div class="grid grid-cols-4 py-1.5 border-b border-slate-800/80 text-slate-300">
+            <div class="font-sans">20% 級距 (資深工程師/副理)</div><div class="text-center text-emerald-400">+$500</div><div class="text-center">$2,000</div><div class="text-right font-bold text-cyan-300">+150.00% (2.50倍)</div>
+          </div>
+          <div class="grid grid-cols-4 py-1.5 border-b border-slate-800/80 text-slate-300">
+            <div class="font-sans">30% 級距 (處長/協理級)</div><div class="text-center text-emerald-400">+$750</div><div class="text-center">$1,750</div><div class="text-right font-bold text-cyan-300">+185.71% (2.86倍)</div>
+          </div>
+          <div class="grid grid-cols-4 py-1.5 text-emerald-300 font-extrabold">
+            <div class="font-sans">40% 級距 (EMBA高管/總經理)</div><div class="text-center">+$1,000</div><div class="text-center">$1,500</div><div class="text-right">+233.33% (3.33倍！)</div>
+          </div>
+        </div>`,
+        notes: '這張表在 EMBA 班級效果極佳！40% 稅率的高管每犧牲 1,500 元實領現金，專戶就進帳 5,000 元，瞬間報酬率高達 +233.33%！'
+      },
+      {
+        num: 18, pillar: 'tn', cat: '區塊二：教學指引｜課堂評量標準',
+        title: '學員課堂參與評量規準（Grading Rubric）與延伸討論',
+        sub: '如何評估學員在哈佛個案討論中的表現？',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="text-gold-400 font-extrabold text-sm">A+ 卓越表現（40%）</div>
+            <p class="text-slate-300 leading-relaxed">能精準推導稅後實質瞬間報酬率（+127.27%）、區分年度與按月複利差異，並以人力資本相關性與 DLOM 深度批判未上市內部股票風險。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="text-cyan-400 font-extrabold text-sm">A 優良表現（40%）</div>
+            <p class="text-slate-300 leading-relaxed">能正確計算各方案終值與夏普比率（0.47 vs 0.42），並針對 22/42/58 歲三位員工提出合乎生命週期邏輯之核心—衛星配置。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="text-emerald-400 font-extrabold text-sm">延伸思考：領導者的責任（20%）</div>
+            <p class="text-slate-300 leading-relaxed">能從財務分析師視角躍升至企業經營者視角，提出預設加入（Opt-out）、SMarT 自動增提與內部股 10% 防呆上限等制度設計建議。</p>
+          </div>
+        </div>`,
+        notes: '以上為第二區塊「教學指引」8頁簡報。接下來第 19 頁進入第三區塊「個案解析（Case Solutions）」。'
+      },
+
+      // --- PART 3: 個案解析 (Slides 19-28) ---
+      {
+        num: 19, pillar: 'sm', cat: '區塊三：個案解析｜Q1 解答 (1/2)',
+        title: 'Q1 解析｜雇主 5% 相對提撥與 12% 綜所稅盾之瞬間報酬率推導',
+        sub: '為什麼自提滿 5% 是全世界報酬率最高的無風險投資？',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs">
+          <div class="p-6 rounded-2xl bg-slate-950 border border-blue-500/40 space-y-3">
+            <div class="text-gold-400 font-extrabold text-sm">1. 名目瞬間報酬率（Nominal Instant Return）</div>
+            <p class="text-slate-300 leading-relaxed">林宥辰每月自提 5%（NT$2,500），翔鷹航太立即 1:1 對等撥入 NT$2,500，退休帳戶瞬間總額達 NT$5,000：</p>
+            <div class="p-3 rounded-xl bg-slate-900 font-mono text-base text-gold-300 text-center font-bold">
+              R_nominal = NT$2,500 / NT$2,500 = +100.00%
+            </div>
+          </div>
+          <div class="p-6 rounded-2xl bg-slate-950 border border-emerald-500/40 space-y-3">
+            <div class="text-emerald-400 font-extrabold text-sm">2. 稅後實質瞬間報酬率（Tax-Adjusted Return）</div>
+            <p class="text-slate-300 leading-relaxed">因稅前自提免納 12% 綜所稅，每月節稅 $	ext{NT\$2,500} 	imes 12\% = 	ext{NT\$300}$，實領月薪僅減少 $	ext{NT\$2,200}$：</p>
+            <div class="p-3 rounded-xl bg-slate-900 font-mono text-base text-emerald-300 text-center font-bold">
+              R_effective = ($5,000 - $2,200) / $2,200 = +127.27%
+            </div>
+          </div>
+        </div>`,
+        notes: '結論：每犧牲 1 元當期消費，退休帳戶瞬間獲得 2.2727 元資產，實質瞬間報酬率高達 +127.27%！'
+      },
+      {
+        num: 20, pillar: 'sm', cat: '區塊三：個案解析｜Q1 解答 (2/2)',
+        title: 'Q1 解析｜四種自提方案（0% / 5% / 10% / 15%）薪資現金流對照表',
+        sub: '林宥辰月薪 NT$50,000、邊際稅率 T = 12% 下之精確試算',
+        body: `<div class="w-full max-w-4xl mx-auto bg-slate-950 rounded-2xl border border-slate-800 p-4 text-xs font-mono space-y-1.5">
+          <div class="grid grid-cols-5 font-sans font-bold text-gold-400 border-b border-slate-800 pb-2">
+            <div>項目 (每月)</div><div class="text-center">0% 自提</div><div class="text-center text-amber-300">5% 自提 (最佳門檻)</div><div class="text-center">10% 自提</div><div class="text-center text-cyan-300">15% 自提 (上限)</div>
+          </div>
+          <div class="grid grid-cols-5 py-1 border-b border-slate-800/80"><span class="font-sans text-slate-400">員工稅前自提</span><span class="text-center">$0</span><span class="text-center font-bold text-amber-300">$2,500</span><span class="text-center">$5,000</span><span class="text-center font-bold text-cyan-300">$7,500</span></div>
+          <div class="grid grid-cols-5 py-1 border-b border-slate-800/80"><span class="font-sans text-slate-400">雇主 1:1 Match</span><span class="text-center text-rose-400">$0 (棄領)</span><span class="text-center font-bold text-emerald-400">+$2,500</span><span class="text-center text-emerald-400">+$2,500</span><span class="text-center text-emerald-400">+$2,500</span></div>
+          <div class="grid grid-cols-5 py-1 border-b border-slate-800/80"><span class="font-sans text-slate-400">應納綜所稅 (12%)</span><span class="text-center">$6,000</span><span class="text-center">$5,700 (省$300)</span><span class="text-center">$5,400 (省$600)</span><span class="text-center">$5,100 (省$900)</span></div>
+          <div class="grid grid-cols-5 py-1 border-b border-slate-800/80"><span class="font-sans text-slate-400">實領可支配月薪</span><span class="text-center font-bold">$44,000</span><span class="text-center font-bold text-amber-300">$41,800 (-$2,200)</span><span class="text-center">$39,600 (-$4,400)</span><span class="text-center">$37,400 (-$6,600)</span></div>
+          <div class="grid grid-cols-5 py-1.5 bg-slate-900 rounded px-1 font-bold text-gold-300"><span class="font-sans">專戶每月/年總存入</span><span class="text-center text-slate-500">$0 / $0</span><span class="text-center">$5,000 / $6萬</span><span class="text-center">$7,500 / $9萬</span><span class="text-center text-cyan-300">$10,000 / $12萬</span></div>
+        </div>`,
+        notes: '引導學生看最後兩行：5% 方案每月實領只少 2,200 元，專戶卻存進 5,000 元（每年 6 萬元）！'
+      },
+      {
+        num: 21, pillar: 'sm', cat: '區塊三：個案解析｜Q2 解答 (1/2)',
+        title: 'Q2 解析｜43 年（516 個月）複利終值完整矩陣（8% vs. 10%）',
+        sub: '年度複利（n = 43 年）vs. 按月複利（N = 516 個月）之千萬台幣財富規模',
+        body: `<div class="w-full max-w-4xl mx-auto bg-slate-950 rounded-2xl border border-slate-800 p-4 text-xs font-mono space-y-2">
+          <div class="grid grid-cols-6 font-sans font-bold text-gold-400 border-b border-slate-800 pb-2">
+            <div>提撥方案</div><div class="text-center">43年實付淨本金</div><div class="text-right">8% 年度複利</div><div class="text-right">8% 按月複利</div><div class="text-right">10% 年度複利</div><div class="text-right text-amber-300">10% 按月複利</div>
+          </div>
+          <div class="grid grid-cols-6 py-2 border-b border-slate-800/80 items-center">
+            <span class="font-sans font-bold text-white">5%+5% (月存$5k)</span>
+            <span class="text-center text-emerald-400">NT$113.5萬</span>
+            <span class="text-right">NT$1,977萬</span>
+            <span class="text-right font-bold">NT$2,237萬</span>
+            <span class="text-right text-cyan-300">NT$3,554萬</span>
+            <span class="text-right font-extrabold text-gold-300">NT$4,284萬</span>
+          </div>
+          <div class="grid grid-cols-6 py-2 border-b border-slate-800/80 items-center">
+            <span class="font-sans font-bold text-white">10%+5% (月存$7.5k)</span>
+            <span class="text-center text-emerald-400">NT$227.0萬</span>
+            <span class="text-right">NT$2,966萬</span>
+            <span class="text-right font-bold">NT$3,356萬</span>
+            <span class="text-right text-cyan-300">NT$5,332萬</span>
+            <span class="text-right font-extrabold text-gold-300">NT$6,426萬</span>
+          </div>
+          <div class="grid grid-cols-6 py-2 items-center">
+            <span class="font-sans font-bold text-white">15%+5% (月存$10k)</span>
+            <span class="text-center text-emerald-400">NT$340.6萬</span>
+            <span class="text-right">NT$3,955萬</span>
+            <span class="text-right font-bold">NT$4,475萬</span>
+            <span class="text-right text-cyan-300">NT$7,109萬</span>
+            <span class="text-right font-extrabold text-gold-300">NT$8,568萬</span>
+          </div>
+        </div>`,
+        notes: '在 5%+5% 方案下，宥辰 43 年自己口袋僅付出 113.5 萬元，卻能在 10% 按月複利下滾出 4,284 萬元（放大 37.7 倍）！'
+      },
+      {
+        num: 22, pillar: 'sm', cat: '區塊三：個案解析｜Q2 解答 (2/2)',
+        title: 'Q2 解析｜「22歲早鳥只存10年」vs.「32歲晚鳥苦存33年」',
+        sub: '為什麼拖延 10 年才開始投資是最昂貴的財務錯誤？（以 10% 年度複利、年存 6 萬計）',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs">
+          <div class="p-6 rounded-2xl bg-emerald-950/40 border-2 border-emerald-500 space-y-2">
+            <div class="text-emerald-400 font-extrabold text-base">🐦 早鳥宥辰（22–32歲只存 10 年，之後停扣 33 年）</div>
+            <p class="text-slate-200 leading-relaxed">
+              • 總投入本金：$	ext{NT\$60,000} 	imes 10	ext{年} = \mathbf{	ext{NT\$600,000}}$（自己實付僅 26.4 萬）<br>
+              • 32 歲累積金額：$	ext{NT\$60,000} 	imes rac{1.10^{10}-1}{0.10} = 	ext{NT\$956,245}$<br>
+              • 32 歲至 65 歲複利滾動 33 年：$	ext{NT\$956,245} 	imes 1.10^{33}$
+            </p>
+            <div class="p-3 rounded-xl bg-slate-950 font-mono text-xl font-extrabold text-gold-300 text-center">
+              65 歲終值 = NT$22,208,949 (2,221 萬！)
+            </div>
+          </div>
+          <div class="p-6 rounded-2xl bg-rose-950/40 border border-rose-500/50 space-y-2">
+            <div class="text-rose-400 font-extrabold text-base">🐢 晚鳥同事（22–32歲0提撥，32–65歲連存 33 年）</div>
+            <p class="text-slate-200 leading-relaxed">
+              • 總投入本金：$	ext{NT\$60,000} 	imes 33	ext{年} = \mathbf{	ext{NT\$1,980,000}}$（早鳥的 3.3 倍！）<br>
+              • 32 歲至 65 歲連續 33 年定期定額：$	ext{NT\$60,000} 	imes rac{1.10^{33}-1}{0.10}$
+            </p>
+            <div class="p-3 rounded-xl bg-slate-950 font-mono text-xl font-extrabold text-rose-300 text-center mt-5">
+              65 歲終值 = NT$13,335,093 (僅 1,334 萬！)
+            </div>
+          </div>
+        </div>`,
+        notes: '早鳥投入本金不到晚鳥的三分之一（60萬 vs 198萬），65歲終值卻多贏 887 萬元！若宥辰 43 年不間斷，更比晚鳥多出 2,221 萬元！'
+      },
+      {
+        num: 23, pillar: 'sm', cat: '區塊三：個案解析｜Q3 解答',
+        title: 'Q3 解析｜翔鷹航太未上市股「雙重風險暴露」與 8 折迷思拆解',
+        sub: '現代投資組合理論（MPT）之三大鐵證：為何退休金配置自家未上市股應為 0%？',
+        body: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-xs">
+          <div class="p-5 rounded-2xl bg-slate-950 border border-rose-500/50 space-y-2">
+            <div class="text-rose-400 font-extrabold text-sm">1. 雙重風險暴露 (Double Jeopardy)</div>
+            <p class="text-slate-300 leading-relaxed">員工的「人力資本（未來薪資與獎金）」已 100% 綁定翔鷹航太。若「財務資本（退休金）」再重押公司股票，一旦發生飛安意外或訂單斷崖，將重演 2001 年安隆案（Enron）<strong>「同時失業＋退休金歸零」</strong>的悲劇。</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-950 border border-amber-500/50 space-y-2">
+            <div class="text-amber-400 font-extrabold text-sm">2. 缺乏流通性折價 (DLOM 20%–35%)</div>
+            <p class="text-slate-300 leading-relaxed">未上市股票無公開次級市場可隨時變現。財務鑑價實務中，未上市少數股權之缺乏流通性折價（DLOM）高達 20%～35%，<strong>完全抵銷帳面 8 折認購優惠</strong>，絕非無風險現賺 25%！</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-950 border border-cyan-500/50 space-y-2">
+            <div class="text-cyan-400 font-extrabold text-sm">3. 單一新創非系統性風險 (σ &gt; 45%)</div>
+            <p class="text-slate-300 leading-relaxed">根據 CAPM，市場不會為「可分散卻未分散之個別公司風險（Idiosyncratic Risk）」提供額外報酬補償。故退休專戶配置翔鷹未上市股應為 <strong>0%</strong>！</p>
+          </div>
+        </div>`,
+        notes: '提醒學員：即便公司給 8 折認購優惠，在退休金帳戶裡也絕不應超過 5%，最佳配置為 0%。'
+      },
+      {
+        num: 24, pillar: 'sm', cat: '區塊三：個案解析｜Q4 解答',
+        title: 'Q4 解析｜效率市場假說與台股主動基金 1.5% 費率之複利侵蝕',
+        sub: '0.10% 台灣 50 指數（0050）vs. 1.60% 傳統台股主動基金之 43 年對決',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs items-center">
+          <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <div class="text-gold-400 font-extrabold text-sm">William Sharpe「主動管理算術必然律」</div>
+            <p class="text-slate-300 leading-relaxed">
+              在扣除管理費與交易摩擦成本前，全市場主動型基金的平均報酬必然等於大盤指數；一旦扣除每年 <strong>1.60%～2.20%</strong> 的內扣經理費、保管費與高周轉證交稅，台灣高達 <strong>78%</strong> 的主動型基金長期落後臺灣 50 指數！
+            </p>
+          </div>
+          <div class="p-6 rounded-2xl bg-slate-950 border-2 border-rose-500/60 font-mono space-y-2.5">
+            <div class="font-sans font-bold text-white">📊 43 年費用侵蝕試算（年存 NT$60,000，毛報酬 10.1%）：</div>
+            <div class="flex justify-between text-emerald-400"><span>• 0050 指數 (費率0.1% ➔ 淨10.0%)：</span><span class="font-bold">NT$35,544,041</span></div>
+            <div class="flex justify-between text-rose-400"><span>• 主動台股基金 (費率1.6% ➔ 淨8.5%)：</span><span class="font-bold">NT$19,290,486</span></div>
+            <div class="pt-2 border-t border-slate-800 flex justify-between text-gold-300 font-extrabold text-sm">
+              <span>⚠️ 43 年被內扣費吃掉的財富：</span><span>-NT$16,253,555 (45.7%！)</span>
+            </div>
+          </div>
+        </div>`,
+        notes: '每年看似微不足道的 1.5% 管理費差距，在 43 年複利下竟吃掉近一半（1,625 萬元）的退休金！'
+      },
+      {
+        num: 25, pillar: 'sm', cat: '區塊三：個案解析｜Q5 解答 (1/2)',
+        title: 'Q5 解析｜22 歲、42 歲、58 歲三世代「核心—衛星」最適資產配置表',
+        sub: '依生命週期（Lifecycle Glide Path）動態調整股債比與預期報酬率',
+        body: `<div class="w-full max-w-4xl mx-auto bg-slate-950 rounded-2xl border border-slate-800 p-4 text-xs font-mono space-y-2">
+          <div class="grid grid-cols-7 font-sans font-bold text-gold-400 border-b border-slate-800 pb-2">
+            <div class="col-span-2">員工代表與距離退休年數</div><div class="text-center">貨幣(2.5%)</div><div class="text-center">債券(5%)</div><div class="text-center text-emerald-400">0050(10%)</div><div class="text-center">中小(12.5%)</div><div class="text-right">預期報酬 E(Rp)</div>
+          </div>
+          <div class="grid grid-cols-7 py-2 border-b border-slate-800/80 items-center">
+            <div class="col-span-2 font-sans"><strong class="text-emerald-400">1. 林宥辰 (22歲｜43年)</strong><br><span class="text-[10px] text-slate-400">100% 股票成長型</span></div>
+            <div class="text-center text-slate-500">0%</div><div class="text-center text-slate-500">0%</div><div class="text-center font-extrabold text-emerald-400">70%</div><div class="text-center font-bold text-purple-300">30%</div><div class="text-right font-extrabold text-gold-300">10.75% /年</div>
+          </div>
+          <div class="grid grid-cols-7 py-2 border-b border-slate-800/80 items-center">
+            <div class="col-span-2 font-sans"><strong class="text-blue-400">2. 陳建宏 (42歲｜23年)</strong><br><span class="text-[10px] text-slate-400">70% 股 / 30% 債現穩健型</span></div>
+            <div class="text-center">5%</div><div class="text-center font-bold text-blue-300">25%</div><div class="text-center font-extrabold text-emerald-400">50%</div><div class="text-center font-bold text-purple-300">20%</div><div class="text-right font-extrabold text-cyan-300">9.00% /年</div>
+          </div>
+          <div class="grid grid-cols-7 py-2 items-center">
+            <div class="col-span-2 font-sans"><strong class="text-amber-400">3. 吳美玲 (58歲｜7年)</strong><br><span class="text-[10px] text-slate-400">30% 股 / 70% 債現防禦型</span></div>
+            <div class="text-center font-bold">20%</div><div class="text-center font-extrabold text-blue-300">50%</div><div class="text-center font-bold text-emerald-400">30%</div><div class="text-center text-slate-500">0%</div><div class="text-right font-extrabold text-amber-300">6.00% /年</div>
+          </div>
+        </div>`,
+        notes: '注意三人的翔鷹航太未上市股票配置皆為 0%！且隨著年齡增長，台灣 50 指數與中小型股權重逐步移往台灣投資級債券與貨幣市場。'
+      },
+      {
+        num: 26, pillar: 'sm', cat: '區塊三：個案解析｜Q5 解答 (2/2)',
+        title: 'Q5 解析｜為什麼 58 歲吳美玲必須嚴防「報酬順序風險」？',
+        sub: 'Sequence of Returns Risk：退休前夕最後 5～7 年的致命殺手',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs">
+          <div class="p-6 rounded-2xl bg-rose-950/40 border border-rose-500/50 space-y-2.5">
+            <div class="text-rose-400 font-extrabold text-sm"><i class="fa-solid fa-skull-crossbones mr-1"></i> 錯誤示範：58 歲仍維持 100% 股票配置</div>
+            <p class="text-slate-200 leading-relaxed">
+              吳美玲已累積 NT$520 萬退休金，距 65 歲退休僅剩 7 年。若在 63～64 歲遭遇類似 2008 年金融海嘯（台股重挫 45%），其資產將瞬間腰斬至 286 萬元；且因退休後失去薪資現金流並開始每月提領生活費，<strong>被迫在股市最低點變現股票，永遠失去翻本機會</strong>！
+            </p>
+          </div>
+          <div class="p-6 rounded-2xl bg-emerald-950/40 border border-emerald-500/50 space-y-2.5">
+            <div class="text-emerald-400 font-extrabold text-sm"><i class="fa-solid fa-shield-heart mr-1"></i> 正確防禦：50% 台灣投資級債 + 20% 貨幣 + 30% 0050</div>
+            <p class="text-slate-200 leading-relaxed">
+              70% 的高評等債券與貨幣市場基金鎖住 NT$364 萬以上的核心養老本金並提供穩定債息；30% 的元大台灣 50 指數（0050）則提供 10% 成長動能以對抗 65 歲至 85 歲的長壽通膨風險，整體組合預期報酬 <strong>6.00%</strong>、波動率僅約 <strong>5.7%</strong>！
+            </p>
+          </div>
+        </div>`,
+        notes: '強調年輕人怕的是「通膨與買太保守」，而準退休族怕的是「退休前夕崩盤（Sequence of Returns Risk）」。'
+      },
+      {
+        num: 27, pillar: 'sm', cat: '區塊三：個案解析｜Q6 解答',
+        title: 'Q6 解析｜行為財務學（SMarT 機制）與企業制度設計四大建議',
+        sub: '結合諾貝爾經濟學獎得主 Richard Thaler 助推理論（Nudge Theory）',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-gold-400 font-bold">1. 鐵律一：預設自提 5%（Opt-out 預設加入制）</div>
+            <p class="text-slate-300">改變預設選項，新進員工入職自動勾選自提 5%，100% 鎖定雇主 1:1 對等提撥與綜所稅盾（+127.27% 瞬間報酬）。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-emerald-400 font-bold">2. 鐵律二：Save More Tomorrow™ (SMarT 階梯增提)</div>
+            <p class="text-slate-300">綁定未來每年調薪（如加薪 4% 時自動將自提率調升 2%），讓員工在實領月薪不減反增下，5 年內無痛達標 15% 自提上限。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-cyan-400 font-bold">3. 鐵律三：年度自動再平衡（Auto-Rebalancing）</div>
+            <p class="text-slate-300">每年底由系統自動將偏離目標權重之股債比例校正回歸，機械化執行「買低賣高」，克服散戶追高殺低心魔。</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-rose-400 font-bold">4. 鐵律四：未上市內部股 10% 硬性防呆上限</div>
+            <p class="text-slate-300">履行企業受託人責任（Fiduciary Duty），在平台設定單一員工配置翔鷹航太未上市股票不得逾專戶 10%。</p>
+          </div>
+        </div>`,
+        notes: '這四點正是林宥辰下週一向全廠 85 名同仁與兩位創辦人簡報的完美行動方案。'
+      },
+      {
+        num: 28, pillar: 'sm', cat: '區塊三：個案解析｜終極收官',
+        title: '全案核心管理洞見收束（Executive Takeaways）',
+        sub: '財務個案(一) 台灣本土版：從個人財務紀律到組織制度領導',
+        body: `<div class="text-center py-4 space-y-5 max-w-3xl mx-auto">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-left">
+            <div class="p-4 rounded-2xl bg-slate-950 border border-gold-500/40">
+              <div class="text-gold-400 font-extrabold mb-1">① 絕不放棄免費午餐</div>
+              <p class="text-slate-300">雇主 Match + 台灣綜所稅盾 = 首日無風險報酬 +127.27%～+233.33%。</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-950 border border-emerald-500/40">
+              <div class="text-emerald-400 font-extrabold mb-1">② 擁抱低成本被動指數</div>
+              <p class="text-slate-300">以 0.10% 費率之台灣 50 (0050) 為核心，43 年省下 1,625 萬管理費侵蝕。</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-950 border border-cyan-500/40">
+              <div class="text-cyan-400 font-extrabold mb-1">③ 解耦人力與財務資本</div>
+              <p class="text-slate-300">拒絕重押未上市自家股票，依生命週期動態滑降股債配置。</p>
+            </div>
+          </div>
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-[#A51C30]/40 via-slate-900 to-blue-900/40 border border-white/15 text-sm font-serif italic text-gold-300">
+            「時間是指數，費用是漏斗，分散是盾牌，而良好的制度設計（Choice Architecture）則是領導者給員工最珍貴的禮物。」
+          </div>
+        </div>`,
+        notes: '簡報放映完畢！可點擊右上角 ESC 返回網頁操作「動態退休金試算儀表板」。'
+      }
+    ];
+
+    // ================= Pillar Switching & Navigation =================
+    function switchPillar(p) {
+      ['case', 'tn', 'sm'].forEach(k => {
+        document.getElementById('pillar-' + k).classList.toggle('hidden', k !== p);
+        document.getElementById('subnav-' + k).classList.toggle('hidden', k !== p);
+        const btn = document.getElementById('nav-btn-' + k);
+        const mob = document.getElementById('mob-btn-' + k);
+        if (btn) {
+          btn.className = 'px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-2 ' +
+            (k === p ? ('tab-active-' + k) : 'text-slate-300 hover:text-white hover:bg-slate-800');
+        }
+        if (mob) {
+          mob.className = 'py-2 rounded-xl text-xs font-extrabold text-center ' +
+            (k === p ? ('tab-active-' + k) : 'text-slate-300 bg-slate-800/70');
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (p === 'sm') {
+        setTimeout(updateSimulator, 60);
+      }
+    }
+
+    function jumpToSolution(anchorId) {
+      switchPillar('sm');
+      setTimeout(() => {
+        const el = document.getElementById(anchorId);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 120);
+    }
+
+    // ================= Fullscreen Presentation Controller =================
+    let curSlide = 0;
+    function populateSlideSelect() {
+      const sel = document.getElementById('slide-jump-select');
+      if (!sel) return;
+      sel.innerHTML = twCaseSlideDeck.map(s => `<option value="${s.num}">P.${s.num}｜${s.title.substring(0, 18)}...</option>`).join('');
+    }
+
+    function openPresentationMode(slideNum = 1) {
+      curSlide = Math.max(0, Math.min(twCaseSlideDeck.length - 1, slideNum - 1));
+      renderSlide();
+      document.getElementById('presentation-overlay').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePresentationMode() {
+      document.getElementById('presentation-overlay').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function nextSlide() { if (curSlide < twCaseSlideDeck.length - 1) { curSlide++; renderSlide(); } }
+    function prevSlide() { if (curSlide > 0) { curSlide--; renderSlide(); } }
+
+    function renderSlide() {
+      const s = twCaseSlideDeck[curSlide];
+      document.getElementById('slide-number-indicator').innerText = `Slide ${s.num} / ${twCaseSlideDeck.length}`;
+      const sel = document.getElementById('slide-jump-select');
+      if (sel) sel.value = s.num;
+
+      // Highlight active PPT pillar tab
+      const tCase = document.getElementById('ppt-tab-case');
+      const tTn = document.getElementById('ppt-tab-tn');
+      const tSm = document.getElementById('ppt-tab-sm');
+      if (tCase && tTn && tSm) {
+        tCase.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'case' ? 'bg-[#A51C30] text-white' : 'text-slate-300 hover:bg-slate-800');
+        tTn.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'tn' ? 'bg-teal-700 text-white' : 'text-slate-300 hover:bg-slate-800');
+        tSm.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'sm' ? 'bg-blue-700 text-white' : 'text-slate-300 hover:bg-slate-800');
+      }
+
+      document.getElementById('slide-content-stage').innerHTML = `
+        <div class="slide-card p-6 sm:p-10 rounded-3xl bg-slate-900/95 border border-slate-800 shadow-2xl flex flex-col justify-between space-y-6">
+          <div>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+              <span class="text-xs font-mono font-extrabold text-gold-400 uppercase tracking-wider">${s.cat}</span>
+              <span class="text-xs font-mono text-slate-400">Slide ${s.num} of ${twCaseSlideDeck.length}</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">${s.title}</h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">${s.sub}</p>
+          </div>
+          <div class="flex-grow flex items-center justify-center py-2">${s.body}</div>
+          <div class="pt-3 border-t border-slate-800 text-xs text-amber-300/90 flex items-center gap-2">
+            <i class="fa-solid fa-chalkboard-user text-gold-400"></i>
+            <span><strong>講者備忘提示（Speaker Notes）：</strong>${s.notes}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const overlay = document.getElementById('presentation-overlay');
+      if (!overlay || overlay.classList.contains('hidden')) return;
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
+      else if (e.key === 'Escape') { closePresentationMode(); }
+    });
+
+    // ================= Classroom Timer =================
+    let timerSec = 90 * 60;
+    let timerRun = false;
+    let timerInt = null;
+
+    function toggleTimerModal() { document.getElementById('timer-modal').classList.toggle('hidden'); }
+    function setTimerDuration(m, title = '') {
+      pauseTimer();
+      timerSec = m * 60;
+      if (title) document.getElementById('timer-stage-title').innerText = title;
+      updateTimerDisplay();
+    }
+    function toggleTimerRunning() { if (timerRun) pauseTimer(); else startTimer(); }
+    function startTimer() {
+      if (timerInt) clearInterval(timerInt);
+      timerRun = true;
+      document.getElementById('timer-btn-label').innerText = '暫停計時';
+      document.getElementById('timer-btn-icon').className = 'fa-solid fa-pause';
+      timerInt = setInterval(() => {
+        if (timerSec > 0) { timerSec--; updateTimerDisplay(); }
+        else { pauseTimer(); alert('⏰ 課堂段落時間已到！'); }
+      }, 1000);
+    }
+    function pauseTimer() {
+      timerRun = false;
+      if (timerInt) clearInterval(timerInt);
+      document.getElementById('timer-btn-label').innerText = '開始計時';
+      document.getElementById('timer-btn-icon').className = 'fa-solid fa-play';
+    }
+    function resetTimer() {
+      pauseTimer();
+      timerSec = 90 * 60;
+      document.getElementById('timer-stage-title').innerText = '哈佛個案 90 分鐘標準授課時程';
+      updateTimerDisplay();
+    }
+    function updateTimerDisplay() {
+      const m = Math.floor(timerSec / 60);
+      const s = timerSec % 60;
+      const str = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      const big = document.getElementById('timer-display-big');
+      const mini = document.getElementById('timer-display-mini');
+      if (big) big.innerText = str;
+      if (mini) mini.innerText = str;
+    }
+
+    // ================= Chart.js & Interactive Simulator =================
+    let riskReturnChartInstance = null;
+    let simGrowthChartInstance = null;
+
+    function initCaseRiskReturnChart() {
+      const ctx = document.getElementById('caseRiskReturnChart');
+      if (!ctx || typeof Chart === 'undefined') return;
+      riskReturnChartInstance = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            { label: '① 台幣貨幣市場 (2.5%, σ=0.5%)', data: [{ x: 0.5, y: 2.5 }], backgroundColor: '#64748b', pointRadius: 7 },
+            { label: '② 台灣投資級債 (5.0%, σ=6.0%)', data: [{ x: 6.0, y: 5.0 }], backgroundColor: '#2563eb', pointRadius: 8 },
+            { label: '③ 元大台灣50 0050 (10.0%, σ=16%)', data: [{ x: 16.0, y: 10.0 }], backgroundColor: '#059669', pointRadius: 10 },
+            { label: '④ 富邦中小動能 (12.5%, σ=24%)', data: [{ x: 24.0, y: 12.5 }], backgroundColor: '#9333ea', pointRadius: 8 },
+            { label: '⑤ 翔鷹未上市股 (高波動 σ=45%)', data: [{ x: 45.0, y: 11.0 }], backgroundColor: '#e11d48', pointRadius: 9, pointStyle: 'triangle' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (c) => `${c.dataset.label}`
+              }
+            }
+          },
+          scales: {
+            x: { title: { display: true, text: '年化標準差 / 波動風險 σ (%)', font: { size: 10 } }, min: 0, max: 50 },
+            y: { title: { display: true, text: '預期年化報酬率 E(R) (%)', font: { size: 10 } }, min: 0, max: 15 }
+          }
+        }
+      });
+    }
+
+    function loadPresetPersona(who) {
+      if (who === 'yuchen') {
+        document.getElementById('sim-salary').value = 50000;
+        document.getElementById('sim-emp-rate').value = 5;
+        document.getElementById('sim-match-cap').value = 5;
+        document.getElementById('sim-tax').value = '0.12';
+        document.getElementById('sim-years').value = 43;
+        document.getElementById('sim-return').value = 10.0;
+      } else if (who === 'jianhong') {
+        document.getElementById('sim-salary').value = 78000;
+        document.getElementById('sim-emp-rate').value = 10;
+        document.getElementById('sim-match-cap').value = 5;
+        document.getElementById('sim-tax').value = '0.20';
+        document.getElementById('sim-years').value = 23;
+        document.getElementById('sim-return').value = 9.0;
+      } else if (who === 'meiling') {
+        document.getElementById('sim-salary').value = 65000;
+        document.getElementById('sim-emp-rate').value = 15;
+        document.getElementById('sim-match-cap').value = 5;
+        document.getElementById('sim-tax').value = '0.12';
+        document.getElementById('sim-years').value = 7;
+        document.getElementById('sim-return').value = 6.0;
+      }
+      updateSimulator();
+    }
+
+    function updateSimulator() {
+      const salary = parseFloat(document.getElementById('sim-salary').value);
+      const empRatePct = parseFloat(document.getElementById('sim-emp-rate').value);
+      const matchCapPct = parseFloat(document.getElementById('sim-match-cap').value);
+      const taxRate = parseFloat(document.getElementById('sim-tax').value);
+      const years = parseInt(document.getElementById('sim-years').value);
+      const retPct = parseFloat(document.getElementById('sim-return').value);
+
+      const empMonthly = salary * (empRatePct / 100);
+      const matchRatePct = empRatePct > 0 ? Math.min(empRatePct, matchCapPct) : 0;
+      const matchMonthly = salary * (matchRatePct / 100);
+      const totalMonthly = empMonthly + matchMonthly;
+      const totalAnnual = totalMonthly * 12;
+
+      const taxSavedMonthly = empMonthly * taxRate;
+      const outOfPocketMonthly = empMonthly - taxSavedMonthly;
+      const instantRoi = outOfPocketMonthly > 0 ? ((totalMonthly - outOfPocketMonthly) / outOfPocketMonthly) * 100 : 0;
+
+      const r = retPct / 100;
+      const rm = r / 12;
+      const months = years * 12;
+
+      const fvAnnual = r > 0 ? totalAnnual * ((Math.pow(1 + r, years) - 1) / r) : totalAnnual * years;
+      const fvMonthly = rm > 0 ? totalMonthly * ((Math.pow(1 + rm, months) - 1) / rm) : totalMonthly * months;
+      const totalOutPocket = outOfPocketMonthly * months;
+      const mult = totalOutPocket > 0 ? (fvMonthly / totalOutPocket) : 0;
+
+      // Update Labels
+      document.getElementById('sim-salary-val').innerText = `NT$${salary.toLocaleString()}`;
+      document.getElementById('sim-emp-rate-val').innerText = `${empRatePct.toFixed(1)}% (NT$${empMonthly.toLocaleString()}/月)`;
+      document.getElementById('sim-match-cap-val').innerText = `${matchCapPct.toFixed(1)}% (實得 ${matchRatePct.toFixed(1)}%)`;
+      document.getElementById('sim-tax-val').innerText = `${(taxRate * 100).toFixed(0)}%`;
+      document.getElementById('sim-years-val').innerText = `${years} 年 (${months} 個月)`;
+      document.getElementById('sim-return-val').innerText = `${retPct.toFixed(2)}%`;
+
+      document.getElementById('sim-out-pocket').innerText = `NT$${Math.round(outOfPocketMonthly).toLocaleString()}`;
+      document.getElementById('sim-tax-saved').innerText = `每月節稅 +NT$${Math.round(taxSavedMonthly).toLocaleString()}`;
+      document.getElementById('sim-total-monthly').innerText = `NT$${Math.round(totalMonthly).toLocaleString()}`;
+      document.getElementById('sim-instant-roi').innerText = `瞬間報酬 +${instantRoi.toFixed(1)}%`;
+      document.getElementById('sim-fv-annual').innerText = `NT$${Math.round(fvAnnual / 10000).toLocaleString()}萬`;
+      document.getElementById('sim-out-total').innerText = `總實付本金 ${(totalOutPocket / 10000).toFixed(1)}萬`;
+      document.getElementById('sim-fv-monthly').innerText = `NT$${Math.round(fvMonthly / 10000).toLocaleString()}萬`;
+      document.getElementById('sim-multiplier').innerText = `資產放大 ${mult.toFixed(1)} 倍！`;
+
+      // Update Growth Chart
+      const labels = [];
+      const dataFV = [];
+      const dataCost = [];
+      for (let y = 1; y <= years; y++) {
+        labels.push(`第${y}年`);
+        const m = y * 12;
+        const valM = rm > 0 ? totalMonthly * ((Math.pow(1 + rm, m) - 1) / rm) : totalMonthly * m;
+        dataFV.push(Math.round(valM / 10000));
+        dataCost.push(Math.round((outOfPocketMonthly * m) / 10000));
+      }
+
+      const ctx = document.getElementById('simGrowthChart');
+      if (!ctx || typeof Chart === 'undefined') return;
+      if (simGrowthChartInstance) {
+        simGrowthChartInstance.data.labels = labels;
+        simGrowthChartInstance.data.datasets[0].data = dataFV;
+        simGrowthChartInstance.data.datasets[1].data = dataCost;
+        simGrowthChartInstance.update();
+      } else {
+        simGrowthChartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: '退休專戶累積終值 (萬元 NT$)',
+                data: dataFV,
+                borderColor: '#eebf4d',
+                backgroundColor: 'rgba(238, 191, 77, 0.15)',
+                fill: true,
+                tension: 0.3
+              },
+              {
+                label: '個人實質自付淨成本 (萬元 NT$)',
+                data: dataCost,
+                borderColor: '#34d399',
+                borderDash: [5, 5],
+                fill: false,
+                tension: 0.1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 11 } } } },
+            scales: {
+              x: { ticks: { color: '#94a3b8', maxTicksLimit: 10 }, grid: { color: 'rgba(51,65,85,0.4)' } },
+              y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51,65,85,0.4)' } }
+            }
+          }
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateSlideSelect();
+      initCaseRiskReturnChart();
+      updateSimulator();
+    });
+  </script>
+</body>
+</html>

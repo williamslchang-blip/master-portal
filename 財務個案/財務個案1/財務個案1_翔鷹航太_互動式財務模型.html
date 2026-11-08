@@ -1,0 +1,2343 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>翔鷹航太科技（AeroTaiwan）完整解析財務模型｜哈佛商學院互動式決策平台</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- SheetJS (xlsx.full.min.js) for live Excel export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            hbs: {
+              crimson: '#A51C30',
+              dark: '#7A1222',
+              light: '#FDECEF',
+            },
+            brand: {
+              50: '#F0F5FA',
+              100: '#E1EBF5',
+              500: '#1F4E79',
+              600: '#173B5C',
+              700: '#10283E',
+              800: '#0C1E2F',
+              900: '#07121C',
+            },
+            gold: {
+              300: '#f7d683',
+              400: '#eebf4d',
+              500: '#d99f26',
+              600: '#b87c18',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Custom Table Styles */
+    .table-compact th { padding: 10px 12px; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .table-compact td { padding: 8px 12px; font-size: 0.8125rem; }
+    
+    /* Input Styling */
+    .num-input {
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      padding: 0.35rem 0.6rem;
+      transition: all 0.2s;
+    }
+    .num-input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+    .slider-accent {
+      accent-color: #38bdf8;
+    }
+
+    /* Formula Badge */
+    .fx-tag {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(234, 179, 8, 0.15);
+      color: #facc15;
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      padding: 1px 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 4px;
+      transition: all 0.15s;
+    }
+    .fx-tag:hover {
+      background: rgba(234, 179, 8, 0.3);
+      transform: scale(1.05);
+    }
+
+    /* Print styling */
+    @media print {
+      header, nav, #kpi-strip, #scenario-bar, #formula-modal, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .sheet-tab { display: block !important; page-break-after: always; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col">
+
+  <!-- ============================================================== -->
+  <!-- HEADER                                                         -->
+  <!-- ============================================================== -->
+  <header class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-teal-950/50 ring-2 ring-white/10">
+            <i class="fa-solid fa-piggy-bank text-white text-lg sm:text-xl"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-widest text-gold-400 bg-gold-500/10 px-2 py-0.5 rounded border border-gold-500/30">
+                哈佛商學院個案精算模型
+              </span>
+              <span class="text-[10px] text-slate-400 font-mono hidden md:inline">AEROTAIWAN FINANCIAL ENGINE V2.0</span>
+            </div>
+            <h1 class="text-sm sm:text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
+              翔鷹航太科技（AeroTaiwan）完整解析財務模型
+            </h1>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <button id="btn-toggle-formula" onclick="toggleFormulaMode()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+            <i class="fa-solid fa-square-root-variable text-amber-400"></i>
+            <span class="hidden sm:inline">算式透視</span>
+            <span id="formula-mode-status" class="text-[10px] px-1.5 py-0.2 rounded bg-slate-900 text-slate-400">關</span>
+          </button>
+
+          <button onclick="exportLiveExcel()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-950/40">
+            <i class="fa-solid fa-file-excel"></i>
+            <span class="hidden md:inline">匯出 Excel</span>
+          </button>
+
+          <a href="index.html" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white shadow-lg shadow-sky-950/40">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span class="hidden md:inline">教學簡報</span>
+          </a>
+
+          <button onclick="resetToBaseCase()" class="p-2 sm:px-3 sm:py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" title="重置為 Excel 個案原始基準">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span class="hidden lg:inline ml-1">重置基準</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- TOP LIVE KPI STRIP                                             -->
+  <!-- ============================================================== -->
+  <section id="kpi-strip" class="bg-slate-900/90 border-b border-slate-800 px-4 py-3 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Scenario Selector -->
+      <div id="scenario-bar" class="flex items-center gap-2">
+        <span class="text-xs font-bold text-slate-400 flex items-center gap-1">
+          <i class="fa-solid fa-wand-magic-sparkles text-gold-400"></i> 情境模擬：
+        </span>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="applyScenario('base')" id="scen-base" class="scenario-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-sky-950/80 text-sky-400 border border-sky-500/50 transition">
+            <i class="fa-solid fa-check-circle mr-1"></i>原案基準 (5%自提+5%配比)
+          </button>
+          <button onclick="applyScenario('max')" id="scen-max" class="scenario-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 hover:border-emerald-500/40 transition">
+            <i class="fa-solid fa-rocket mr-1"></i>頂格提撥 (15%頂格自提)
+          </button>
+          <button onclick="applyScenario('promo')" id="scen-promo" class="scenario-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-amber-400 border border-slate-700 hover:border-amber-500/40 transition">
+            <i class="fa-solid fa-arrow-trend-up mr-1"></i>主管晉升 (月薪9萬+稅率20%)
+          </button>
+          <button onclick="applyScenario('late')" id="scen-late" class="scenario-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-rose-400 border border-slate-700 hover:border-rose-500/40 transition">
+            <i class="fa-solid fa-triangle-exclamation mr-1"></i>晚鳥拖延 (陳建宏32歲起步)
+          </button>
+          <button onclick="openScenarioModal()" class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-gradient-to-r from-amber-600/30 to-gold-500/30 text-gold-300 border border-gold-500/50 hover:bg-gold-500/30 transition flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-table-columns"></i>
+            <span>四大情境數據對照表</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-time Summary Badges -->
+      <div class="flex items-center flex-wrap gap-2.5 text-xs font-mono">
+        <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+          <span class="text-slate-400 font-sans">每月實拿減少:</span>
+          <span id="strip-cost" class="text-amber-400 font-bold">NT$ 2,200</span>
+        </div>
+        <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+          <span class="text-slate-400 font-sans">稅後即時報酬率:</span>
+          <span id="strip-immed-ret" class="text-emerald-400 font-bold">+127.27%</span>
+        </div>
+        <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+          <span class="text-slate-400 font-sans">43年按月終值:</span>
+          <span id="strip-fv-monthly" class="text-sky-300 font-bold">NT$ 4,284 萬</span>
+        </div>
+        <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+          <span class="text-slate-400 font-sans">43年按年終值:</span>
+          <span id="strip-fv-annual" class="text-slate-200 font-bold">NT$ 3,554 萬</span>
+        </div>
+        <div id="strip-delay-box" class="px-3 py-1.5 rounded-xl border flex items-center gap-2 bg-rose-950/70 border-rose-600/70 text-rose-300">
+          <span class="font-sans font-bold">延遲10年損失:</span>
+          <span id="strip-delay-loss" class="font-black text-sm">-NT$ 2,221 萬</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-sans font-extrabold bg-rose-600 text-white">殘酷真相</span>
+        </div>
+      </div>
+
+      <!-- Live Scenario Intelligence Card -->
+      <div id="scen-info-banner" class="w-full mt-3 p-4 rounded-2xl border transition-all duration-300">
+        <!-- Rendered dynamically by updateScenarioBanner -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 8-SHEET TAB SWITCHER NAVIGATION                                -->
+  <!-- ============================================================== -->
+  <nav class="bg-slate-950 border-b border-slate-800 sticky top-16 sm:top-20 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center space-x-1 sm:space-x-2 overflow-x-auto py-2 no-scrollbar text-xs font-bold">
+      
+      <button onclick="switchTab('sheet-dash')" id="tab-btn-dash" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap bg-brand-500 text-white shadow-md">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>決策總覽與參數</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q1')" id="tab-btn-q1" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>問題一：ETF vs 內部股票</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q2')" id="tab-btn-q2" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-scale-balanced"></i>
+        <span>問題二：對等提撥與稅盾</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q4')" id="tab-btn-q4" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-receipt"></i>
+        <span>問題四：薪資單衝擊精算</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q5a')" id="tab-btn-q5a" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-money-bill-trend-up"></i>
+        <span>問題五：43年複利終值</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q5b')" id="tab-btn-q5b" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-hourglass-half"></i>
+        <span>問題五：早鳥 vs 晚鳥</span>
+      </button>
+
+      <button onclick="switchTab('sheet-q6')" id="tab-btn-q6" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-compass"></i>
+        <span>問題六：ETF與生命週期</span>
+      </button>
+
+      <button onclick="switchTab('sheet-timeline')" id="tab-btn-timeline" class="tab-btn px-3.5 py-2 rounded-xl transition flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800">
+        <i class="fa-solid fa-list-ol"></i>
+        <span>43年逐年滾動明細</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ============================================================== -->
+  <!-- MAIN WORKSPACE CONTENT                                         -->
+  <!-- ============================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+
+    <!-- ============================================================ -->
+    <!-- SHEET 1: 決策總覽與參數設定                                    -->
+    <!-- ============================================================ -->
+    <div id="sheet-dash" class="sheet-tab space-y-8 animate-fadeIn">
+      
+      <!-- Top Banner -->
+      <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-teal-950/40 to-slate-900 border border-slate-800 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-teal-400 pointer-events-none">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="max-w-3xl space-y-2">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>EXCEL SHEET 1 ｜ 決策總覽與全域參數設定</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            翔鷹航太科技（AeroTaiwan）：員工退休福利儲蓄與台幣 ETF 配置決策模型
+          </h2>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            哈佛商學院教學風格個案財務模型（HBS Solutions Manual & Quantitative Exhibits）。
+            本頁統整五大核心決策指標（建議提撥比例、實質月成本、稅盾套利倍數、43 年終值與延遲成本），並提供完整薪資、稅率與投資參數動態調節面板。
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Summary Cards (Excel R4-R7) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-trophy text-gold-400"></i>
+              【核心財務決策與精算成果摘要】
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              林宥辰（22 歲新進分析師）最佳退休決策方案精算摘要（Excel 決策總覽與參數設定!B4:F7）
+            </p>
+          </div>
+          <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">
+            個案解析附表核心成果
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-slate-400 text-xs font-bold block">建議自提比例</span>
+            <div class="text-xl font-black text-sky-400 font-mono" id="kpi-rate">5.0% 頂格領滿</div>
+            <p class="text-[11px] text-slate-400 leading-tight">吃滿公司 5% 對等補貼，每月專戶存入 NT$5,000</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-slate-400 text-xs font-bold block">每月實質口袋成本</span>
+            <div class="text-xl font-black text-amber-400 font-mono" id="kpi-cost">NT$ 2,200</div>
+            <p class="text-[11px] text-slate-400 leading-tight">受 12% 綜所稅盾保護，每存 $1 實掏僅 $0.88</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-slate-400 text-xs font-bold block">稅後即時報酬率</span>
+            <div class="text-xl font-black text-emerald-400 font-mono" id="kpi-immed-ret">+127.27%</div>
+            <p class="text-[11px] text-slate-400 leading-tight">名目 +100% 雇主配比，總資金立即放大 2.27 倍</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <span class="text-slate-400 text-xs font-bold block">43年累積終值 (10%)</span>
+            <div class="text-xl font-black text-teal-300 font-mono" id="kpi-fv-summary">3,554 萬 ~ 4,284 萬</div>
+            <p class="text-[11px] text-slate-400 leading-tight">實掏腰包僅 113.5 萬，滾出超震撼退休金庫</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-rose-950/40 border border-rose-600/40 space-y-2">
+            <span class="text-rose-300 text-xs font-bold block">延遲 10 年損失</span>
+            <div class="text-xl font-black text-rose-400 font-mono" id="kpi-delay-loss">-NT$ 2,221 萬</div>
+            <p class="text-[11px] text-rose-300/80 leading-tight">晚鳥 32 歲多掏 138 萬本金，65歲終值反輸 887 萬</p>
+          </div>
+
+        </div>
+
+        <!-- Callout Banner -->
+        <div class="p-4 rounded-2xl bg-teal-950/30 border border-teal-800/40 flex items-start gap-3">
+          <i class="fa-solid fa-circle-check text-teal-400 text-lg mt-0.5"></i>
+          <div class="text-xs space-y-1">
+            <span class="font-extrabold text-teal-300 uppercase tracking-wider block">哈佛財務架構核心洞察（Financial Structure Insight）</span>
+            <p class="text-slate-300 leading-relaxed">
+              許多初入職場的年輕人如同<strong>陳建宏</strong>，誤認「薪水只有 5 萬，生活費緊湊，等 32 歲薪水高了再存也不遲」。
+              然而，員工福利信託的 <strong>1:1 雇主對等補貼</strong> 疊加 <strong>所得稅法第 14 條稅盾</strong>，提供了驚人的 <strong>+127.27% 即時無風險報酬</strong>！
+              更驚人的是，前 10 年的「早鳥複利雪球」產生的終值高達 <strong>2,221 萬元</strong>，佔據整整 43 年總退休金的 <strong>62.5%</strong>！放棄提撥等同於每年自願把免費公司津貼與國稅局紅包直接丟棄！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parameter Inputs Table (Excel R10-R24) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-sky-400"></i>
+              【個案主角與制度基礎參數設定表】
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              修改任何薪資、稅率、提撥或預期報酬率參數，全模型 8 個工作表將即時連動重算
+            </p>
+          </div>
+          <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">
+            Excel 儲存格：決策總覽與參數設定!A10:D23
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Card 1: 薪資與背景 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-sky-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-user-tie"></i> 主角背景與薪資參數
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">林宥辰（22歲）</span>
+            </div>
+
+            <!-- Gross Monthly Salary -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">起始稅前月薪 (Gross Salary)</span>
+                <span class="font-mono text-sky-400 font-bold" id="lbl-salary">NT$ 50,000</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-salary" step="5000" value="50000" oninput="handleParamChange()" class="num-input w-28 text-right text-xs">
+                <input type="range" id="rng-salary" min="35000" max="150000" step="5000" value="50000" oninput="syncRangeToNum('rng-salary', 'inp-salary'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">起始年薪 NT$ <span id="lbl-annual-salary">600,000</span> 元</p>
+            </div>
+
+            <!-- Tax Rate -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">台灣綜所稅邊際稅率</span>
+                <span class="font-mono text-sky-400 font-bold" id="lbl-tax-rate">12.0%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <select id="inp-tax-rate" onchange="handleParamChange()" class="num-input w-full text-xs">
+                  <option value="0.05">第一級距 (5.0%) - 初階辦事員/實習助理</option>
+                  <option value="0.12" selected>第二級距 (12.0%) - 林宥辰初入職基準</option>
+                  <option value="0.20">第三級距 (20.0%) - 資深工程師/財務副理</option>
+                  <option value="0.30">第四級距 (30.0%) - 業務協理/研發處長</option>
+                  <option value="0.40">第五級距 (40.0%) - 總經理/高階主管</option>
+                </select>
+              </div>
+              <p class="text-[10px] text-slate-500">自提享有稅前全額扣除 (Pre-tax) 稅盾優勢</p>
+            </div>
+          </div>
+
+          <!-- Card 2: 信託制度與配比 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-teal-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-hand-holding-dollar"></i> 翔鷹福利信託制度參數
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">勞退與福利信託</span>
+            </div>
+
+            <!-- Employer Match Cap -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">雇主 1:1 對等提撥上限</span>
+                <span class="font-mono text-teal-400 font-bold" id="lbl-match-cap">5.0%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-match-cap" step="1.0" value="5.0" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-match-cap" min="0.0" max="10.0" step="1.0" value="5.0" oninput="syncRangeToNum('rng-match-cap', 'inp-match-cap'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">公司等額補貼上限: NT$ <span id="lbl-match-amt" class="text-slate-300 font-mono">2,500</span> / 月</p>
+            </div>
+
+            <!-- Employee Match Limit -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">員工自提上限比例</span>
+                <span class="font-mono text-slate-300 font-bold">15.0% (NT$ 7,500)</span>
+              </div>
+              <p class="text-[11px] text-slate-400 leading-relaxed">
+                員工可在 0%~15% 區間自由決定自提額度。超過 5% 部分公司不再補助，但仍全額享有 12% 綜所稅扣除稅盾！
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3: 投資回報率參數 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <span class="text-xs font-extrabold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-arrow-trend-up"></i> ETF 投資年化報酬率
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">含息長期歷史年化</span>
+            </div>
+
+            <!-- Expected Return -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">退休投資組合年化報酬 (r)</span>
+                <span class="font-mono text-amber-400 font-bold" id="lbl-return-rate">10.0%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-return-rate" step="0.5" value="10.0" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-return-rate" min="6.0" max="14.0" step="0.5" value="10.0" oninput="syncRangeToNum('rng-return-rate', 'inp-return-rate'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>保守: 8.0%</span>
+                <span>基準: 10.0% (0050)</span>
+                <span>積極: 12.0%</span>
+              </div>
+            </div>
+
+            <!-- Early Bird Years -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-bold">早鳥儲蓄期 (年數)</span>
+                <span class="font-mono text-gold-300 font-bold" id="lbl-early-years">前 10 年 (22~32歲)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inp-early-years" step="1" value="10" min="5" max="20" oninput="handleParamChange()" class="num-input w-24 text-right text-xs">
+                <input type="range" id="rng-early-years" min="5" max="20" step="1" value="10" oninput="syncRangeToNum('rng-early-years', 'inp-early-years'); handleParamChange()" class="slider-accent flex-1">
+              </div>
+              <p class="text-[10px] text-slate-500">早鳥停扣後在帳戶複利滾存 <span id="lbl-compound-years" class="text-slate-300 font-mono">33</span> 年至 65 歲</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 2: 問題一 ETF 與內部股票評估                             -->
+    <!-- ============================================================ -->
+    <div id="sheet-q1" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold border border-sky-500/30">
+          <i class="fa-solid fa-scale-balanced"></i>
+          <span>EXCEL SHEET 2 ｜ TN EXHIBIT A</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題一：台股公開市場基金 vs. 翔鷹航太未上市內部股票評估矩陣
+        </h2>
+        <p class="text-xs text-slate-400">
+          依據現代投資組合理論（MPT）、缺乏流動性折價（DLOM）與人力資本相關性模型深度對比王大衛工程師觀點之盲點
+        </p>
+      </div>
+
+      <!-- 6-Dimension Matrix Table (Excel R4-R10) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-table-list text-sky-400"></i>
+          六大財務評估維度全景對照表
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact">
+            <thead class="bg-slate-950 text-slate-300 font-bold">
+              <tr>
+                <th class="py-3 px-3 w-40">評估維度</th>
+                <th class="py-3 px-3 text-sky-400">台股公開市場基金組合 (0050 / 00733)</th>
+                <th class="py-3 px-3 text-amber-400">翔鷹航太未上市內部股票 (Company Stock)</th>
+                <th class="py-3 px-3 text-emerald-400 w-44">優劣判定與財務意涵</th>
+                <th class="py-3 px-3 text-rose-400 w-56">王大衛工程師之盲點與陷阱</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80 leading-relaxed">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-bold text-slate-200">1. 非系統性風險分散度<br><span class="text-[10px] text-slate-500 font-mono">(Diversification)</span></td>
+                <td class="py-3.5 px-3 text-slate-300">極佳。0050 橫跨半導體、電子、金融、傳產等 50 大跨國龍頭，徹底消除單一企業倒閉或營運失敗之非系統性風險（Idiosyncratic Risk）。</td>
+                <td class="py-3.5 px-3 text-slate-400">極差（零分散）。100% 押注單一中小型航太廠，老本完全暴露於單一機型飛安事故、碳纖維原料斷鏈或單一客戶抽單之極端風險中。</td>
+                <td class="py-3.5 px-3">
+                  <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-800/60 block text-center">公開基金絕對勝出<br>（消除個別風險）</span>
+                </td>
+                <td class="py-3.5 px-3 text-rose-300 text-[11px]">王大衛忽視投資組合分散理論，將退休保障完全押在單一未經市場長期驗證的中小企業上。</td>
+              </tr>
+
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-bold text-slate-200">2. 次級市場流通性與折價<br><span class="text-[10px] text-slate-500 font-mono">(Liquidity & DLOM)</span></td>
+                <td class="py-3.5 px-3 text-slate-300">極高。每日由集中市場數十萬投資人公開搓合成交，無任何流動性折價，可每日即時變現或進行再平衡。</td>
+                <td class="py-3.5 px-3 text-slate-400">極低。未上市且未登錄興櫃，完全無公開次級交易市場。會計評價實務上必扣 20%~35% 之缺乏流動性折價（DLOM）。</td>
+                <td class="py-3.5 px-3">
+                  <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-800/60 block text-center">公開基金絕對勝出<br>（8折僅補償無流動）</span>
+                </td>
+                <td class="py-3.5 px-3 text-rose-300 text-[11px]">誤認「8折認購現賺25%」，忽略無法變現的資產在財務學上本應享有折價，並非白吃午餐。</td>
+              </tr>
+
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-bold text-slate-200">3. 估值客觀性與定價機制<br><span class="text-[10px] text-slate-500 font-mono">(Valuation Objectivity)</span></td>
+                <td class="py-3.5 px-3 text-slate-300">完全公開透明。受台灣金管會證期局嚴密監管，每日公告淨值（NAV），完全反映效率市場公允評價。</td>
+                <td class="py-3.5 px-3 text-slate-400">主觀性高且嚴重滯後。每年僅年底委託會計師事務所鑑價一次，評價假設容易受高層對未來 IPO 樂觀預期影響。</td>
+                <td class="py-3.5 px-3">
+                  <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-800/60 block text-center">公開基金絕對勝出<br>（公允價值透明）</span>
+                </td>
+                <td class="py-3.5 px-3 text-rose-300 text-[11px]">內部鑑價缺乏每日公開市場多空拉鋸檢驗，一旦營運下滑，帳面估值可能瞬間劇烈下修。</td>
+              </tr>
+
+              <tr class="hover:bg-slate-850 bg-rose-950/20">
+                <td class="py-3.5 px-3 font-bold text-rose-300">4. 人力資本雙重曝險<br><span class="text-[10px] text-rose-400 font-mono">(Double Jeopardy)</span></td>
+                <td class="py-3.5 px-3 text-slate-300">相關性極低（趨近於 0）。成分股來自全台灣主要產業，與林宥辰在翔鷹航太的工作薪資無直接連動性。</td>
+                <td class="py-3.5 px-3 text-slate-400 font-bold text-rose-400">完全正相關（ρ ≈ +1）。宥辰未來 43 年薪水已綁在翔鷹航太，若再將退休金全押內部股，將面臨雙重曝險。</td>
+                <td class="py-3.5 px-3">
+                  <span class="px-2 py-0.5 rounded bg-rose-950 text-rose-400 font-bold border border-rose-800/60 block text-center">公開基金絕對勝出<br>（規避中年雙殺）</span>
+                </td>
+                <td class="py-3.5 px-3 text-rose-300 text-[11px] font-bold">若遭遇無人機景氣崩盤或 IPO 審查未過導致公司倒閉，將如同美國安隆（Enron）事件，同時失業且股票變壁紙！</td>
+              </tr>
+
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-bold text-slate-200">5. 潛在爆發收益與獲利上限<br><span class="text-[10px] text-slate-500 font-mono">(Upside Potential)</span></td>
+                <td class="py-3.5 px-3 text-slate-300">穩健可預測之市場長期年化報酬（0050 約 10.0%、00733 約 12.5%），長期複利曲線驚人。</td>
+                <td class="py-3.5 px-3 text-emerald-400">具短期高投機爆發力。若 3～4 年內順利於台灣創新板高價掛牌 IPO，股價有機會翻倍爆發。</td>
+                <td class="py-3.5 px-3">
+                  <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-400 font-bold border border-amber-800/60 block text-center">內部股票具投機潛力<br>（僅宜上限 5% 衛星）</span>
+                </td>
+                <td class="py-3.5 px-3 text-slate-300 text-[11px]">不能因少數成功 IPO 個案而將具有保命性質的退休資產全面投入高風險創投標的。</td>
+              </tr>
+
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-bold text-slate-200">6. 監管保護與資訊揭露<br><span class="text-[10px] text-slate-500 font-mono">(Regulatory Protection)</span></td>
+                <td class="py-3.5 px-3 text-slate-300">高度法規監管。公開說明書、持股明細、經會計師審計財報均依法按季/按年公開揭露，保障健全。</td>
+                <td class="py-3.5 px-3 text-slate-400">未公開發行公司資訊揭露有限，基層員工無法獲悉完整經營明細、未結訴訟或潛在重大負債。</td>
+                <td class="py-3.5 px-3">
+                  <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-800/60 block text-center">公開基金絕對勝出<br>（法律高度保障）</span>
+                </td>
+                <td class="py-3.5 px-3 text-slate-300 text-[11px]">散戶員工在未公開發行公司處於資訊絕對劣勢，極易承擔未知的隱性經營風險。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 3: 問題二 對等提撥與稅盾套利                             -->
+    <!-- ============================================================ -->
+    <div id="sheet-q2" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
+          <i class="fa-solid fa-coins"></i>
+          <span>EXCEL SHEET 3 ｜ TN EXHIBIT B</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題二：雇主 1:1 對等提撥與台灣綜所稅盾套利推導模型
+        </h2>
+        <p class="text-xs text-slate-400">
+          推導公式：名目即時報酬率 = 100% ； 稅後實質即時報酬率 = [NT$2.00 - (1 - T)] / (1 - T) = 1 / (1 - T) - 1
+        </p>
+      </div>
+
+      <!-- Tax Bracket Arbitrage Table (Excel R4-R9) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-arrow-trend-up text-emerald-400"></i>
+          台灣五大所得稅級距即時報酬率套利矩陣
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-3">綜所稅邊際稅率 (T)</th>
+                <th class="py-3 px-3 font-sans">對應職場職級階段</th>
+                <th class="py-3 px-3 text-right">名目自提 (A)</th>
+                <th class="py-3 px-3 text-right text-emerald-400">當期稅盾 (B=A×T)</th>
+                <th class="py-3 px-3 text-right text-amber-400">稅後實付 (C=A-B)</th>
+                <th class="py-3 px-3 text-right text-sky-400">公司補助 (D=A)</th>
+                <th class="py-3 px-3 text-right font-bold text-white">入帳總額 (E=A+D)</th>
+                <th class="py-3 px-3 text-right text-slate-400">名目報酬率</th>
+                <th class="py-3 px-3 text-right text-emerald-400 font-black">稅後實質報酬率</th>
+                <th class="py-3 px-3 text-right text-gold-300 font-black">槓桿放大倍數</th>
+              </tr>
+            </thead>
+            <tbody id="tax-bracket-tbody" class="divide-y divide-slate-800/80">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Core Insights -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+            1
+          </div>
+          <h4 class="text-base font-extrabold text-white">花 NT$0.88 買進 NT$2.00 實體資產</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            林宥辰適用 12% 稅率，自提享有當期免稅。自提 NT$1.00，國稅局退稅補貼 NT$0.12，自己實質減少可支配所得僅 <strong>NT$0.88</strong>。
+            加上公司等額補助 NT$1.00，專戶立即入帳 NT$2.00！實質即時報酬率高達 <strong>+127.27%</strong>，資金瞬間放大 <strong>2.27 倍</strong>！
+          </p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            2
+          </div>
+          <h4 class="text-base font-extrabold text-white">晉升主管後，稅盾套利威力倍增</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            未來升任副理（稅率 20%），每自提 $1 只實付 $0.80，實質報酬率升至 <strong>+150.0%（放大 2.5 倍）</strong>；
+            升任協理處長（稅率 30%），每自提 $1 只實付 $0.70，實質報酬率飆上 <strong>+185.7%（放大 2.86 倍）</strong>！越會賺錢的高管，越要頂格自提！
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 4: 問題四 薪資單與稅盾衝擊                             -->
+    <!-- ============================================================ -->
+    <div id="sheet-q4" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">
+          <i class="fa-solid fa-receipt"></i>
+          <span>EXCEL SHEET 4 ｜ TN EXHIBIT C</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題四：四種自提方案每月薪資單（Paycheck）拆解與稅盾衝擊表
+        </h2>
+        <p class="text-xs text-slate-400">
+          精算 0%、5%、10%、15% 自提下，每月實拿薪資（Take-home Pay）、節稅額度與實質自付成本
+        </p>
+      </div>
+
+      <!-- Paycheck Table (Excel R4-R17) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-file-invoice-dollar text-indigo-400"></i>
+          薪資單全欄位拆解精算表（月薪 NT$ <span id="q4-salary-display">50,000</span>，邊際稅率 <span id="q4-tax-display">12.0%</span>）
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-4 w-72">薪資單拆解項目 (新台幣 TWD)</th>
+                <th class="py-3 px-4 text-slate-400">方案 A：自提 0%<br><span class="text-[10px] font-normal">(不參加)</span></th>
+                <th class="py-3 px-4 text-emerald-400 bg-emerald-950/20 border-x border-emerald-900/40">方案 B【推薦基準】<br><span class="text-[10px] font-normal">(自提 5% + 公司 5%)</span></th>
+                <th class="py-3 px-4 text-sky-400">方案 C：自提 10%<br><span class="text-[10px] font-normal">(自提 10% + 公司 5%)</span></th>
+                <th class="py-3 px-4 text-indigo-400">方案 D【頂格自提】<br><span class="text-[10px] font-normal">(自提 15% + 公司 5%)</span></th>
+              </tr>
+            </thead>
+            <tbody id="paycheck-tbody" class="divide-y divide-slate-800/80">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Funding Breakdown Donut Chart -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-3">
+          <h3 class="text-base font-extrabold text-white flex items-center justify-between">
+            <span>方案 B（自提 5%）專戶每月 $5,000 出資結構拆解</span>
+            <span class="text-xs text-emerald-400 font-mono font-bold">自付僅 44%</span>
+          </h3>
+          <div class="h-60 flex items-center justify-center">
+            <canvas id="chartPaycheckDonut"></canvas>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-3 text-xs">
+          <h4 class="font-extrabold text-sm text-gold-400">【薪資單精算核心結論剖析】</h4>
+          <ol class="list-decimal list-inside space-y-2 text-slate-300 leading-relaxed">
+            <li>在【方案 B（自提 5%）】下，林宥辰每月專戶存入整整 <strong>NT$ 5,000 元</strong>（每年 6 萬元），但到手實拿薪資僅從 NT$ 44,000 降至 NT$ 41,800，<strong>僅少拿 NT$ 2,200 元</strong>！</li>
+            <li><strong>出資結構神級拆解：</strong>
+              <ul class="list-disc list-inside ml-4 mt-1 text-slate-400 space-y-0.5">
+                <li>林宥辰真正自掏腰包：<span class="text-amber-400 font-bold">NT$ 2,200（佔 44%）</span></li>
+                <li>國稅局減稅補貼紅包：<span class="text-emerald-400 font-bold">NT$ 300（佔 6%）</span></li>
+                <li>翔鷹航太免費對等補助：<span class="text-sky-400 font-bold">NT$ 2,500（佔 50%）</span></li>
+              </ul>
+            </li>
+            <li>陳建宏宣稱「少拿 2,500 負擔沉重」完全是錯誤財務直覺，實質減少的可支配所得僅 NT$ 2,200，相當於每天少喝一杯拿鐵，卻能換得每年 6 萬元的強大資產庫！</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 5: 問題五 43 年複利終值精算                             -->
+    <!-- ============================================================ -->
+    <div id="sheet-q5a" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
+          <i class="fa-solid fa-money-bill-trend-up"></i>
+          <span>EXCEL SHEET 5 ｜ TN EXHIBIT D</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題五：43 年退休帳戶累積資產終值精算矩陣
+        </h2>
+        <p class="text-xs text-slate-400">
+          對比【模型 A：按年複利（n = 43 年）】 vs. 【模型 B：按月發薪扣款複利（N = 516 個月）】在年化 8.0% 與 10.0% 報酬率下之新台幣終值
+        </p>
+      </div>
+
+      <!-- FV Table (Excel R4-R8) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-calculator text-teal-400"></i>
+          四大提撥方案 43 年累積資產終值精算表
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-3">提撥方案類別</th>
+                <th class="py-3 px-3">每年/每月存入</th>
+                <th class="py-3 px-3 text-right text-amber-400">43年自掏腰包總成本</th>
+                <th class="py-3 px-3 text-right text-slate-300">43年專戶名目總本金</th>
+                <th class="py-3 px-3 text-right">【按年】r = 8.0%</th>
+                <th class="py-3 px-3 text-right text-slate-200">【按年】r = 10.0%</th>
+                <th class="py-3 px-3 text-right text-sky-400">【按月】r = 8.0%</th>
+                <th class="py-3 px-3 text-right text-emerald-400 font-black bg-emerald-950/20">【按月】r = 10.0%</th>
+              </tr>
+            </thead>
+            <tbody id="fv-matrix-tbody" class="divide-y divide-slate-800/80">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bar Chart -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-3">
+        <h3 class="text-base font-extrabold text-white flex items-center justify-between">
+          <span>四大方案 43 年退休終值柱狀對比圖（按年 vs. 按月複利）</span>
+          <span class="text-xs text-emerald-400 font-mono font-bold">月複利增額 +20.5%</span>
+        </h3>
+        <div class="h-64 flex items-center justify-center">
+          <canvas id="chartFvComparison"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 6: 問題五 早鳥 vs 晚鳥機會成本                           -->
+    <!-- ============================================================ -->
+    <div id="sheet-q5b" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-500/30">
+          <i class="fa-solid fa-hourglass-half"></i>
+          <span>EXCEL SHEET 6 ｜ TN EXHIBIT E</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題五：延遲 10 年儲蓄之機會成本精算表（早鳥林宥辰 vs. 晚鳥陳建宏）
+        </h2>
+        <p class="text-xs text-slate-400">
+          以【方案 B：每年專戶存入 NT$60,000 元（每月 NT$5,000）】為基準，震撼檢驗陳建宏「等 32 歲再存」之毀滅性代價
+        </p>
+      </div>
+
+      <!-- Early vs Late Bird Comparison Table (Excel R4-R9) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-code-compare text-rose-400"></i>
+          早鳥停扣組 vs. 晚鳥苦追組 vs. 全程紀律組對照全景表
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-3">儲蓄行為軌跡組別</th>
+                <th class="py-3 px-3 font-sans">提撥年齡區間與年數</th>
+                <th class="py-3 px-3 text-right text-amber-400">個人實掏成本</th>
+                <th class="py-3 px-3 text-right text-slate-300">名目存入總本金</th>
+                <th class="py-3 px-3 text-right text-sky-400">32歲累積資產</th>
+                <th class="py-3 px-3 text-right">65歲終值 (r=8%)</th>
+                <th class="py-3 px-3 text-right text-emerald-400 font-black">65歲終值 (r=10%)</th>
+              </tr>
+            </thead>
+            <tbody id="early-late-tbody" class="divide-y divide-slate-800/80">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Line Growth Chart -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-3">
+        <h3 class="text-base font-extrabold text-white flex items-center justify-between">
+          <span>43 年滾動資產累積軌跡圖（早鳥組 vs. 晚鳥組 vs. 全程組）</span>
+          <span class="text-xs text-rose-400 font-mono font-bold">晚鳥多掏 138 萬本金反輸 887 萬！</span>
+        </h3>
+        <div class="h-64 flex items-center justify-center">
+          <canvas id="chartEarlyLateGrowth"></canvas>
+        </div>
+      </div>
+
+      <!-- Deep Analysis (Excel R11-R15) -->
+      <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
+        <h4 class="font-extrabold text-sm text-gold-400">【早鳥 vs. 晚鳥三大殘酷真相剖析】</h4>
+        <ol class="list-decimal list-inside space-y-2 text-slate-300 leading-relaxed">
+          <li><strong>早鳥只存 10 年完勝晚鳥苦存 33 年：</strong>早鳥宥辰只存前 10 年（實付僅 26.4 萬，名目本金 60 萬），之後 33 年一毛錢都不存，65 歲終值高達 <strong>NT$ 2,221 萬元</strong>！</li>
+          <li><strong>晚鳥苦存 33 年多掏腰包 138 萬本金反輸 887 萬：</strong>晚鳥陳建宏 32 歲起連存 33 年（名目本金 198 萬，是早鳥的 3.3 倍），65 歲終值僅 <strong>NT$ 1,334 萬元</strong>，足足落後早鳥 <strong>NT$ 8,873,856 元</strong>！</li>
+          <li><strong>拖延 10 年代價高達 NT$ 2,221 萬：</strong>全程組累積 3,554 萬 = 早鳥前 10 年貢獻之 2,221 萬（佔 62.5%）+ 晚鳥後 33 年貢獻之 1,334 萬（佔 37.5%）。陳建宏前 10 年看似每個月省下 NT$ 2,200 元生活費，代價卻是退休帳戶永久蒸發 <strong>NT$ 2,221 萬元</strong>！</li>
+        </ol>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 7: 問題六 ETF 配置與生命週期                             -->
+    <!-- ============================================================ -->
+    <div id="sheet-q6" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold-500/20 text-gold-300 text-xs font-bold border border-gold-500/30">
+          <i class="fa-solid fa-compass"></i>
+          <span>EXCEL SHEET 7 ｜ TN EXHIBIT F</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          問題六：22 歲初始台幣 ETF 配置與 43 年生命週期動態滑降路徑（Glide Path）
+        </h2>
+        <p class="text-xs text-slate-400">
+          結合現代投資組合理論（MPT）、行為財務學 SMarT 自動遞增提撥與生命週期投資法（Life-Cycle Investing）
+        </p>
+      </div>
+
+      <!-- Part A: 22-year-old initial portfolio (Excel R4-R11) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-pie-chart text-gold-400"></i>
+          【林宥辰 22 歲初始台幣 ETF 組合權重與預期年化報酬率精算】
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-4">投資標的名稱</th>
+                <th class="py-3 px-4">標的代號 / 對標商品</th>
+                <th class="py-3 px-4 font-sans">資產類別與角色定位</th>
+                <th class="py-3 px-4 text-right">預期年化報酬率 (Ri)</th>
+                <th class="py-3 px-4 text-right">年化標準差 (σi)</th>
+                <th class="py-3 px-4 text-right text-gold-300">配置權重 (Wi)</th>
+                <th class="py-3 px-4 text-right text-emerald-400 font-bold">加權報酬貢獻 (Wi×Ri)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-200">元大台灣卓越 50 指數基金</td>
+                <td class="py-3 px-4 text-sky-400">0050 / 006208</td>
+                <td class="py-3 px-4 font-sans text-slate-300">台灣市值前 50 大大型權值股（核心基石）</td>
+                <td class="py-3 px-4 text-right text-slate-200">10.00%</td>
+                <td class="py-3 px-4 text-right text-slate-400">16.0%</td>
+                <td class="py-3 px-4 text-right text-gold-300 font-bold">65.0%</td>
+                <td class="py-3 px-4 text-right text-emerald-400 font-bold">6.500%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-200">富邦台灣中小動能成長基金</td>
+                <td class="py-3 px-4 text-sky-400">00733 / 台灣中小</td>
+                <td class="py-3 px-4 font-sans text-slate-300">台灣中小型動能高成長股（超額報酬引擎）</td>
+                <td class="py-3 px-4 text-right text-slate-200">12.50%</td>
+                <td class="py-3 px-4 text-right text-slate-400">22.0%</td>
+                <td class="py-3 px-4 text-right text-gold-300 font-bold">25.0%</td>
+                <td class="py-3 px-4 text-right text-emerald-400 font-bold">3.125%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-200">元大投資級債券 ETF 基金</td>
+                <td class="py-3 px-4 text-sky-400">00679B / 00720B</td>
+                <td class="py-3 px-4 font-sans text-slate-300">全球/美國投資級長天期債券（避險再平衡緩衝）</td>
+                <td class="py-3 px-4 text-right text-slate-200">5.00%</td>
+                <td class="py-3 px-4 text-right text-slate-400">6.5%</td>
+                <td class="py-3 px-4 text-right text-gold-300 font-bold">5.0%</td>
+                <td class="py-3 px-4 text-right text-emerald-400 font-bold">0.250%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-200">翔鷹航太未上市內部股票</td>
+                <td class="py-3 px-4 text-amber-400">內部專戶認購</td>
+                <td class="py-3 px-4 font-sans text-slate-300">員工福利折價認購（嚴格控制上限，規避雙重曝險）</td>
+                <td class="py-3 px-4 text-right text-slate-200">10.00%</td>
+                <td class="py-3 px-4 text-right text-slate-400">28.0%</td>
+                <td class="py-3 px-4 text-right text-gold-300 font-bold">5.0%</td>
+                <td class="py-3 px-4 text-right text-emerald-400 font-bold">0.500%</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3 px-4 font-sans font-bold text-slate-200">元大台幣貨幣市場基金</td>
+                <td class="py-3 px-4 text-slate-500">貨幣市場基金</td>
+                <td class="py-3 px-4 font-sans text-slate-400">定存與現金等價物（22歲年輕人不宜配置，抗通膨）</td>
+                <td class="py-3 px-4 text-right text-slate-400">2.50%</td>
+                <td class="py-3 px-4 text-right text-slate-400">0.5%</td>
+                <td class="py-3 px-4 text-right text-slate-500">0.0%</td>
+                <td class="py-3 px-4 text-right text-slate-500">0.000%</td>
+              </tr>
+              <tr class="bg-slate-950 font-bold border-t-2 border-slate-700">
+                <td class="py-3.5 px-4 font-sans font-black text-white" colspan="3">22 歲初始投資組合加權平均合計（90% 股票 / 5% 債券 / 5% 內部股）</td>
+                <td class="py-3.5 px-4 text-right text-slate-500">—</td>
+                <td class="py-3.5 px-4 text-right text-slate-400 font-mono">約 16.5%</td>
+                <td class="py-3.5 px-4 text-right text-gold-400 font-black">100.0%</td>
+                <td class="py-3.5 px-4 text-right text-emerald-400 font-black text-sm">10.375%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Part B: 4-Stage Glide Path (Excel R13-R18) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-stairs text-sky-400"></i>
+          【43 年四階段生命週期動態滑降路徑（Glide Path）】
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+              <tr>
+                <th class="py-3 px-3">職涯生命週期階段與年齡</th>
+                <th class="py-3 px-3 text-right">元大台灣50 (0050)</th>
+                <th class="py-3 px-3 text-right">富邦中小 (00733)</th>
+                <th class="py-3 px-3 text-right">投資級債 (00679B)</th>
+                <th class="py-3 px-3 text-right">台幣貨幣基金</th>
+                <th class="py-3 px-3 text-right">翔鷹內部股票</th>
+                <th class="py-3 px-3 text-right text-emerald-400 font-bold">預期報酬 E(Rp)</th>
+                <th class="py-3 px-3 font-sans">階段核心目標與動態再平衡紀律</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-sans font-bold text-sky-300">階段一：積極財富累積期<br><span class="text-[10px] text-slate-400">22 ～ 35 歲 (距退休 30~43年)</span></td>
+                <td class="py-3.5 px-3 text-right">65.0%</td>
+                <td class="py-3.5 px-3 text-right">25.0%</td>
+                <td class="py-3.5 px-3 text-right">5.0%</td>
+                <td class="py-3.5 px-3 text-right text-slate-500">0.0%</td>
+                <td class="py-3.5 px-3 text-right">5.0%</td>
+                <td class="py-3.5 px-3 text-right text-emerald-400 font-bold">10.375%</td>
+                <td class="py-3.5 px-3 font-sans text-slate-300 text-[11px]">90%+ 台股 ETF 最大化長線複利；第 4 年翔鷹若成功 IPO 即全數獲利了結轉入 0050。</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-sans font-bold text-teal-300">階段二：穩健成長鞏固期<br><span class="text-[10px] text-slate-400">36 ～ 50 歲 (距退休 15~29年)</span></td>
+                <td class="py-3.5 px-3 text-right">60.0%</td>
+                <td class="py-3.5 px-3 text-right">20.0%</td>
+                <td class="py-3.5 px-3 text-right">20.0%</td>
+                <td class="py-3.5 px-3 text-right text-slate-500">0.0%</td>
+                <td class="py-3.5 px-3 text-right text-slate-500">0.0%</td>
+                <td class="py-3.5 px-3 text-right text-teal-400 font-bold">9.500%</td>
+                <td class="py-3.5 px-3 font-sans text-slate-300 text-[11px]">80% 股票 / 20% 債券；隨升任主管稅率升至 20%~30%，自提維持 15% 頂格節稅。</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-sans font-bold text-amber-300">階段三：風險逐步收斂期<br><span class="text-[10px] text-slate-400">51 ～ 60 歲 (距退休 5~14年)</span></td>
+                <td class="py-3.5 px-3 text-right">45.0%</td>
+                <td class="py-3.5 px-3 text-right">10.0%</td>
+                <td class="py-3.5 px-3 text-right">35.0%</td>
+                <td class="py-3.5 px-3 text-right">10.0%</td>
+                <td class="py-3.5 px-3 text-right text-slate-500">0.0%</td>
+                <td class="py-3.5 px-3 text-right text-amber-400 font-bold">7.750%</td>
+                <td class="py-3.5 px-3 font-sans text-slate-300 text-[11px]">55% 股票 / 45% 債券現金；削減高波動中小股，防範退休前遭遇系統性崩跌。</td>
+              </tr>
+              <tr class="hover:bg-slate-850">
+                <td class="py-3.5 px-3 font-sans font-bold text-rose-300">階段四：退休保全提領期<br><span class="text-[10px] text-slate-400">61 ～ 65+ 歲 (距退休 0~4年)</span></td>
+                <td class="py-3.5 px-3 text-right">35.0%</td>
+                <td class="py-3.5 px-3 text-right">5.0%</td>
+                <td class="py-3.5 px-3 text-right">40.0%</td>
+                <td class="py-3.5 px-3 text-right">20.0%</td>
+                <td class="py-3.5 px-3 text-right text-slate-500">0.0%</td>
+                <td class="py-3.5 px-3 text-right text-slate-200 font-bold">5.900%</td>
+                <td class="py-3.5 px-3 font-sans text-slate-300 text-[11px]">40% 0050 抗通膨；60% 債券與貨幣基金提供未來 3~5 年穩定退休生活費安全墊。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SHEET 8: 43 年逐年資產累積明細                                -->
+    <!-- ============================================================ -->
+    <div id="sheet-timeline" class="sheet-tab hidden space-y-8 animate-fadeIn">
+      
+      <!-- Header -->
+      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-1">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold border border-sky-500/30">
+          <i class="fa-solid fa-list-ol"></i>
+          <span>EXCEL SHEET 8 ｜ 43 年逐年資產累積明細</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mt-1">
+          43 年（22 歲～65 歲）逐年資產累積與現金流滾動試算表（方案 B 基準，r = 10.0%）
+        </h2>
+        <p class="text-xs text-slate-400">
+          採普通年金基準（期初本金享複利收益，年度存入 6 萬）：精確呈現【全程組】、【早鳥停扣組】與【晚鳥苦追組】之逐年滾動軌跡
+        </p>
+      </div>
+
+      <!-- 43-Year Rolling Table (Excel Sheet 8 R4-R48) -->
+      <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+            <i class="fa-solid fa-table text-sky-400"></i>
+            43 年逐年資產明細表（第 1 年至第 43 年，22 歲至 65 歲）
+          </h3>
+          <span class="text-xs text-slate-400 font-mono">
+            可自由滑動查看逐年滾動收益與早鳥領先差距
+          </span>
+        </div>
+
+        <div class="overflow-x-auto max-h-[580px] overflow-y-auto">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-2xl table-compact font-mono">
+            <thead class="bg-slate-950 text-slate-300 font-sans font-bold sticky top-0 z-20 shadow-md">
+              <tr>
+                <th class="py-3 px-2 text-center">期數</th>
+                <th class="py-3 px-2 text-center">年齡</th>
+                <th class="py-3 px-3 text-right">【全程組】年初本金</th>
+                <th class="py-3 px-3 text-right">【全程組】年存入</th>
+                <th class="py-3 px-3 text-right text-slate-400">【全程組】年收益</th>
+                <th class="py-3 px-3 text-right text-sky-400 font-bold">【全程組】年末資產</th>
+                <th class="py-3 px-3 text-right">【早鳥組】年存入</th>
+                <th class="py-3 px-3 text-right text-emerald-400 font-bold">【早鳥組】年末資產</th>
+                <th class="py-3 px-3 text-right">【晚鳥組】年存入</th>
+                <th class="py-3 px-3 text-right text-amber-400 font-bold">【晚鳥組】年末資產</th>
+                <th class="py-3 px-3 text-right text-rose-400 font-bold">早鳥領先差距</th>
+              </tr>
+            </thead>
+            <tbody id="timeline-tbody" class="divide-y divide-slate-800/80">
+              <!-- Dynamically populated by JS (43 rows) -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  
+  <!-- ============================================================== -->
+  <!-- SCENARIO COMPARISON MODAL                                      -->
+  <!-- ============================================================== -->
+  <div id="scenario-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-slate-900 border border-slate-700 max-w-5xl w-full rounded-3xl p-6 shadow-2xl space-y-5 animate-fadeIn my-8 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-gold-600 flex items-center justify-center text-slate-950 font-black">
+            <i class="fa-solid fa-table-columns text-lg"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-white text-lg sm:text-xl flex items-center gap-2">
+              四大決策情境關鍵財務數據全景對照表
+            </h3>
+            <p class="text-xs text-slate-400">
+              翔鷹航太科技：林宥辰（原案基準、頂格自提）、高階主管（晉升加薪）與陳建宏（晚鳥拖延）全面量化對比
+            </p>
+          </div>
+        </div>
+        <button onclick="closeScenarioModal()" class="text-slate-400 hover:text-white text-xl p-2 rounded-xl hover:bg-slate-800 transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border border-slate-800 rounded-2xl overflow-hidden font-mono">
+          <thead class="bg-slate-950 text-slate-300 font-sans font-bold">
+            <tr>
+              <th class="py-3 px-3">財務精算維度指標</th>
+              <th class="py-3 px-3 text-sky-400 bg-sky-950/30 border-x border-sky-900/50">① 原案基準 (5%對等)</th>
+              <th class="py-3 px-3 text-emerald-400 bg-emerald-950/20 border-r border-slate-800">② 頂格提撥 (15%自提)</th>
+              <th class="py-3 px-3 text-amber-400 bg-amber-950/20 border-r border-slate-800">③ 主管晉升 (副理9萬)</th>
+              <th class="py-3 px-3 text-rose-400 bg-rose-950/30">④ 晚鳥拖延 (陳建宏32歲)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/80">
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans font-bold text-slate-200">適用主角與職涯起步</td>
+              <td class="py-3 px-3 text-sky-300 bg-sky-950/20 border-x border-sky-900/50">林宥辰（22 歲新進）</td>
+              <td class="py-3 px-3 text-emerald-300 border-r border-slate-800">林宥辰（22 歲新進）</td>
+              <td class="py-3 px-3 text-amber-300 border-r border-slate-800">林宥辰（晉升財務副理）</td>
+              <td class="py-3 px-3 text-rose-300 bg-rose-950/20">陳建宏（32 歲產線組長）</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">提撥投資時間跨度</td>
+              <td class="py-3 px-3 text-sky-300 bg-sky-950/20 border-x border-sky-900/50">43 年 (22～65歲 / 516月)</td>
+              <td class="py-3 px-3 text-emerald-300 border-r border-slate-800">43 年 (22～65歲 / 516月)</td>
+              <td class="py-3 px-3 text-amber-300 border-r border-slate-800">43 年 (22～65歲 / 516月)</td>
+              <td class="py-3 px-3 text-rose-400 font-bold bg-rose-950/20">後 33 年 (32～65歲 / 396月)</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">稅前月薪 (Gross Pay)</td>
+              <td class="py-3 px-3 text-slate-200 bg-sky-950/20 border-x border-sky-900/50">NT$ 50,000</td>
+              <td class="py-3 px-3 text-slate-200 border-r border-slate-800">NT$ 50,000</td>
+              <td class="py-3 px-3 text-amber-300 font-bold border-r border-slate-800">NT$ 90,000</td>
+              <td class="py-3 px-3 text-slate-200 bg-rose-950/20">NT$ 50,000</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">台灣綜所稅邊際稅率</td>
+              <td class="py-3 px-3 text-slate-200 bg-sky-950/20 border-x border-sky-900/50">12.0% (第 2 級距)</td>
+              <td class="py-3 px-3 text-slate-200 border-r border-slate-800">12.0% (第 2 級距)</td>
+              <td class="py-3 px-3 text-amber-300 font-bold border-r border-slate-800">20.0% (第 3 級距)</td>
+              <td class="py-3 px-3 text-slate-200 bg-rose-950/20">12.0% (第 2 級距)</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">員工每月自提金額</td>
+              <td class="py-3 px-3 text-sky-300 font-bold bg-sky-950/20 border-x border-sky-900/50">NT$ 2,500 (5%)</td>
+              <td class="py-3 px-3 text-emerald-300 font-bold border-r border-slate-800">NT$ 7,500 (15%)</td>
+              <td class="py-3 px-3 text-amber-300 font-bold border-r border-slate-800">NT$ 4,500 (5%)</td>
+              <td class="py-3 px-3 text-rose-300 bg-rose-950/20">NT$ 0 (前10年) / NT$ 2,500 (後33年)</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">雇主每月對等補助</td>
+              <td class="py-3 px-3 text-sky-300 font-bold bg-sky-950/20 border-x border-sky-900/50">NT$ 2,500 (5%)</td>
+              <td class="py-3 px-3 text-emerald-300 font-bold border-r border-slate-800">NT$ 2,500 (5%上限)</td>
+              <td class="py-3 px-3 text-amber-300 font-bold border-r border-slate-800">NT$ 4,500 (5%)</td>
+              <td class="py-3 px-3 text-rose-300 bg-rose-950/20">NT$ 0 (前10年) / NT$ 2,500 (後33年)</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans font-bold text-slate-200">每月專戶存入總額</td>
+              <td class="py-3 px-3 text-sky-400 font-black bg-sky-950/20 border-x border-sky-900/50">NT$ 5,000</td>
+              <td class="py-3 px-3 text-emerald-400 font-black border-r border-slate-800">NT$ 10,000</td>
+              <td class="py-3 px-3 text-amber-400 font-black border-r border-slate-800">NT$ 9,000</td>
+              <td class="py-3 px-3 text-rose-400 font-black bg-rose-950/20">NT$ 0 (前10年) / NT$ 5,000 (後33年)</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">每月實質口袋扣除 (實付)</td>
+              <td class="py-3 px-3 text-amber-400 font-bold bg-sky-950/20 border-x border-sky-900/50">NT$ 2,200</td>
+              <td class="py-3 px-3 text-amber-400 font-bold border-r border-slate-800">NT$ 6,600</td>
+              <td class="py-3 px-3 text-amber-400 font-bold border-r border-slate-800">NT$ 3,600</td>
+              <td class="py-3 px-3 text-slate-400 bg-rose-950/20">NT$ 0 (前10年) / NT$ 2,200 (後33年)</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">每月稅盾節稅金額</td>
+              <td class="py-3 px-3 text-emerald-400 bg-sky-950/20 border-x border-sky-900/50">NT$ 300 / 月</td>
+              <td class="py-3 px-3 text-emerald-400 border-r border-slate-800">NT$ 900 / 月</td>
+              <td class="py-3 px-3 text-emerald-400 font-bold border-r border-slate-800">NT$ 900 / 月</td>
+              <td class="py-3 px-3 text-slate-400 bg-rose-950/20">NT$ 0 (前10年) / NT$ 300 (後33年)</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans font-bold text-slate-200">稅後即時套利報酬率</td>
+              <td class="py-3 px-3 text-emerald-400 font-black bg-sky-950/20 border-x border-sky-900/50">+127.27% (2.27x)</td>
+              <td class="py-3 px-3 text-emerald-400 font-bold border-r border-slate-800">+51.52% (1.52x)</td>
+              <td class="py-3 px-3 text-amber-400 font-black border-r border-slate-800">+150.00% (2.50x)</td>
+              <td class="py-3 px-3 text-slate-400 bg-rose-950/20">前 10 年 0% / 後 33 年 +127.27%</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">職涯累計個人實掏總成本</td>
+              <td class="py-3 px-3 text-slate-200 bg-sky-950/20 border-x border-sky-900/50">NT$ 1,135,200 (113.5萬)</td>
+              <td class="py-3 px-3 text-slate-200 border-r border-slate-800">NT$ 3,405,600 (340.6萬)</td>
+              <td class="py-3 px-3 text-slate-200 border-r border-slate-800">NT$ 1,857,600 (185.8萬)</td>
+              <td class="py-3 px-3 text-amber-400 font-bold bg-rose-950/20">NT$ 871,200 (87.1萬)</td>
+            </tr>
+            <tr class="hover:bg-slate-850">
+              <td class="py-3 px-3 font-sans text-slate-300">職涯累計專戶名目總本金</td>
+              <td class="py-3 px-3 text-slate-200 bg-sky-950/20 border-x border-sky-900/50">NT$ 2,580,000 (258.0萬)</td>
+              <td class="py-3 px-3 text-slate-200 border-r border-slate-800">NT$ 5,160,000 (516.0萬)</td>
+              <td class="py-3 px-3 text-slate-200 border-r border-slate-800">NT$ 4,644,000 (464.4萬)</td>
+              <td class="py-3 px-3 text-amber-400 font-bold bg-rose-950/20">NT$ 1,980,000 (198.0萬)</td>
+            </tr>
+            <tr class="hover:bg-slate-850 bg-slate-950/60 font-bold">
+              <td class="py-3 px-3 font-sans text-slate-200">65歲退休累積終值 (按年複利 10%)</td>
+              <td class="py-3 px-3 text-sky-400 font-black bg-sky-950/30 border-x border-sky-900/50">NT$ 35,544,041 (3,554萬)</td>
+              <td class="py-3 px-3 text-emerald-400 font-black border-r border-slate-800">NT$ 71,088,082 (7,109萬)</td>
+              <td class="py-3 px-3 text-amber-400 font-black border-r border-slate-800">NT$ 63,979,274 (6,398萬)</td>
+              <td class="py-3 px-3 text-rose-400 font-black bg-rose-950/30">NT$ 13,335,093 (1,334萬)</td>
+            </tr>
+            <tr class="hover:bg-slate-850 bg-slate-950/80 font-bold">
+              <td class="py-3 px-3 font-sans text-white">65歲退休累積終值 (按月複利 10%)</td>
+              <td class="py-3 px-3 text-sky-300 font-black text-sm bg-sky-950/40 border-x border-sky-900/50">NT$ 42,838,955 (4,284萬)</td>
+              <td class="py-3 px-3 text-emerald-300 font-black text-sm border-r border-slate-800">NT$ 85,677,910 (8,568萬)</td>
+              <td class="py-3 px-3 text-amber-300 font-black text-sm border-r border-slate-800">NT$ 77,110,119 (7,711萬)</td>
+              <td class="py-3 px-3 text-rose-300 font-black text-sm bg-rose-950/40">NT$ 13,335,093 (1,334萬)</td>
+            </tr>
+            <tr class="hover:bg-slate-850 bg-rose-950/30 font-bold">
+              <td class="py-3 px-3 font-sans text-rose-300">晚鳥拖延之終生財富淨代價</td>
+              <td class="py-3 px-3 text-emerald-400 bg-sky-950/20 border-x border-sky-900/50">【早鳥基準領先】</td>
+              <td class="py-3 px-3 text-emerald-400 border-r border-slate-800">領先晚鳥 +5,775 萬</td>
+              <td class="py-3 px-3 text-amber-400 border-r border-slate-800">領先晚鳥 +5,064 萬</td>
+              <td class="py-3 px-3 text-rose-400 font-black text-sm bg-rose-950/30">-NT$ 22,208,949 (-2,221萬)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+        <span class="text-xs text-slate-400">
+          💡 點選下方按鈕可直接切換至該情境，全站 8 大工作表將即時連動重算
+        </span>
+        <div class="flex items-center gap-2">
+          <button onclick="applyScenario('base'); closeScenarioModal();" class="px-3 py-1.5 rounded-xl bg-sky-950 text-sky-400 border border-sky-600 text-xs font-bold hover:bg-sky-900 transition">切換原案基準</button>
+          <button onclick="applyScenario('late'); closeScenarioModal();" class="px-3 py-1.5 rounded-xl bg-rose-950 text-rose-400 border border-rose-600 text-xs font-bold hover:bg-rose-900 transition">切換晚鳥拖延</button>
+          <button onclick="closeScenarioModal()" class="px-4 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold hover:bg-slate-700 transition">關閉對照表</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- FORMULA INSPECTOR MODAL                                        -->
+  <!-- ============================================================== -->
+  <div id="formula-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 max-w-lg w-full rounded-3xl p-6 shadow-2xl space-y-4 animate-fadeIn">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-square-root-variable text-amber-400 text-lg"></i>
+          <h3 class="font-extrabold text-white text-base">公式透視解析器</h3>
+        </div>
+        <button onclick="closeFormulaModal()" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <span class="text-slate-400 block mb-1 font-bold">Excel 儲存格來源引用：</span>
+          <div id="modal-formula-src" class="font-mono bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-sky-400"></div>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-1 font-bold">數學模型與數值代入：</span>
+          <div id="modal-formula-math" class="font-mono bg-slate-950 p-3 rounded-xl border border-slate-800 text-amber-300 whitespace-pre-wrap leading-relaxed"></div>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-1 font-bold">當前計算輸出數值：</span>
+          <div id="modal-formula-val" class="font-mono bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-emerald-400 font-bold text-sm"></div>
+        </div>
+      </div>
+      <button onclick="closeFormulaModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs transition">
+        關閉視窗
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- FOOTER                                                         -->
+  <!-- ============================================================== -->
+  <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 space-y-1">
+      <p>翔鷹航太科技（AeroTaiwan）財務模型互動決策系統 ｜ 哈佛商學院個案教學風格</p>
+      <p class="font-mono text-[11px] text-slate-600">模型架構基於 401(k) 對等提撥、綜所稅盾套利、台股 ETF 配置與 43 年動態時間價值複利模型</p>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT CALCULATION & INTERACTIVE ENGINE                    -->
+  <!-- ============================================================== -->
+  <script>
+    // --- Model State (Defaults from Case Baseline) ---
+    const BASE_STATE = {
+      salary: 50000.0,
+      taxRate: 0.12,
+      matchCap: 0.05,
+      returnRate: 0.10,
+      earlyYears: 10,
+      totalYears: 43
+    };
+
+    let state = JSON.parse(JSON.stringify(BASE_STATE));
+    let formulaMode = false;
+    let chartPaycheck = null;
+    let chartFv = null;
+    let chartGrowth = null;
+
+    // Formatters
+    const fmtPct = (val, d = 2) => (val * 100).toFixed(d) + '%';
+    const fmtCurr = (val, d = 0) => {
+      const sign = val < 0 ? '-' : '';
+      const absVal = Math.abs(val);
+      return sign + 'NT$ ' + absVal.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+    };
+    const fmtNum = (val, d = 2) => val.toFixed(d);
+
+    // Sync Slider and Input
+    function syncRangeToNum(rangeId, numId) {
+      document.getElementById(numId).value = document.getElementById(rangeId).value;
+    }
+
+    // Toggle Formula Mode
+    function toggleFormulaMode() {
+      formulaMode = !formulaMode;
+      const statusEl = document.getElementById('formula-mode-status');
+      const btnEl = document.getElementById('btn-toggle-formula');
+      if (formulaMode) {
+        statusEl.innerText = '開';
+        statusEl.className = 'text-[10px] px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-black';
+        btnEl.classList.add('border-amber-500', 'bg-amber-950/40');
+      } else {
+        statusEl.innerText = '關';
+        statusEl.className = 'text-[10px] px-1.5 py-0.2 rounded bg-slate-900 text-slate-400';
+        btnEl.classList.remove('border-amber-500', 'bg-amber-950/40');
+      }
+    }
+
+    function showFormula(src, math, val) {
+      document.getElementById('modal-formula-src').innerText = src;
+      document.getElementById('modal-formula-math').innerText = math;
+      document.getElementById('modal-formula-val').innerText = val;
+      document.getElementById('formula-modal').classList.remove('hidden');
+    }
+
+    function closeFormulaModal() {
+      document.getElementById('formula-modal').classList.add('hidden');
+    }
+
+    // Clean DOM helper to attach fx badge without broken quote issues
+    function attachFxBadge(elementId, textVal, src, math, val) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      el.textContent = textVal + ' ';
+      const badge = document.createElement('span');
+      badge.className = 'fx-tag';
+      badge.textContent = 'fx';
+      badge.onclick = (e) => {
+        e.stopPropagation();
+        showFormula(src, math, val);
+      };
+      el.appendChild(badge);
+    }
+
+    // Tab Switcher
+    function switchTab(sheetId) {
+      document.querySelectorAll('.sheet-tab').forEach(el => el.classList.add('hidden'));
+      document.getElementById(sheetId).classList.remove('hidden');
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-500', 'text-white', 'shadow-md');
+        btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+      });
+
+      const activeBtnId = {
+        'sheet-dash': 'tab-btn-dash',
+        'sheet-q1': 'tab-btn-q1',
+        'sheet-q2': 'tab-btn-q2',
+        'sheet-q4': 'tab-btn-q4',
+        'sheet-q5a': 'tab-btn-q5a',
+        'sheet-q5b': 'tab-btn-q5b',
+        'sheet-q6': 'tab-btn-q6',
+        'sheet-timeline': 'tab-btn-timeline'
+      }[sheetId];
+
+      if (activeBtnId) {
+        const btn = document.getElementById(activeBtnId);
+        btn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+        btn.classList.add('bg-brand-500', 'text-white', 'shadow-md');
+      }
+
+      // Resize charts if becoming visible
+      if (sheetId === 'sheet-q4' && chartPaycheck) chartPaycheck.resize();
+      if (sheetId === 'sheet-q5a' && chartFv) chartFv.resize();
+      if (sheetId === 'sheet-q5b' && chartGrowth) chartGrowth.resize();
+    }
+
+    // Preset Scenarios
+    let currentScenario = 'base';
+
+    function openScenarioModal() {
+      document.getElementById('scenario-modal').classList.remove('hidden');
+    }
+
+    function closeScenarioModal() {
+      document.getElementById('scenario-modal').classList.add('hidden');
+    }
+
+    function updateScenarioBanner(scen, res) {
+      const banner = document.getElementById('scen-info-banner');
+      if (!banner) return;
+
+      if (scen === 'base') {
+        banner.className = 'w-full mt-3 p-4 rounded-2xl border transition-all duration-300 bg-sky-950/40 border-sky-600/50 text-sky-200';
+        banner.innerHTML = `
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-sky-500/30 text-sky-300 text-xs font-black border border-sky-400/40">
+                  <i class="fa-solid fa-check-circle mr-1"></i>當前情境：① 原案基準（林宥辰 22 歲起步）
+                </span>
+                <span class="text-xs text-slate-300 font-sans">主角月薪 NT$ 50,000 ｜ 綜所稅率 12% ｜ 自提 5% (NT$ 2,500) ｜ 公司 5% (NT$ 2,500)</span>
+              </div>
+              <p class="text-xs text-slate-300">
+                每個月實掏僅 <strong>NT$ 2,200</strong> 換取 <strong>NT$ 5,000</strong> 資產入帳（<strong>+127.27% 立即無風險獲利</strong>）！43 年累積自付僅 113.5 萬，滾出 <strong>NT$ 4,284 萬</strong>（按月複利）退休巨富！
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 font-bold">月存入: NT$ 5,000</span>
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-emerald-500/30 text-emerald-400 font-bold">實付: NT$ 2,200</span>
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-teal-500/30 text-teal-300 font-black">43年終值: NT$ 4,284 萬</span>
+            </div>
+          </div>
+        `;
+      } else if (scen === 'late') {
+        banner.className = 'w-full mt-3 p-4 rounded-2xl border transition-all duration-300 bg-rose-950/70 border-rose-500/80 text-rose-200 shadow-lg shadow-rose-950/40';
+        banner.innerHTML = `
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-xs font-black shadow-sm">
+                  <i class="fa-solid fa-triangle-exclamation mr-1"></i>當前情境：④ 晚鳥拖延（陳建宏 32 歲起步苦追）
+                </span>
+                <span class="text-xs text-rose-200 font-sans font-bold">前 10 年不存 (22~32歲) ｜ 32~65歲連存 33 年 ｜ 名目本金 NT$ 198 萬</span>
+              </div>
+              <p class="text-xs text-slate-200">
+                陳建宏多掏 <strong>138 萬</strong> 本金苦存 33 年，65 歲終值僅 <strong>NT$ 1,334 萬</strong>，足足輸給早鳥 <strong>NT$ 887 萬</strong>！拖延 10 年終生財富蒸發 <strong>NT$ 2,221 萬</strong>！
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-rose-500/50 text-rose-300 font-bold">晚鳥65歲終值: NT$ 1,334 萬</span>
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-rose-500/50 text-rose-400 font-black">拖延損失: -NT$ 2,221 萬</span>
+              <button onclick="switchTab('sheet-q5b')" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-sans font-bold shadow transition">
+                查看早鳥 vs 晚鳥對照表 <i class="fa-solid fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (scen === 'max') {
+        banner.className = 'w-full mt-3 p-4 rounded-2xl border transition-all duration-300 bg-emerald-950/50 border-emerald-500/60 text-emerald-200';
+        banner.innerHTML = `
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-xs font-black shadow-sm">
+                  <i class="fa-solid fa-rocket mr-1"></i>當前情境：② 頂格提撥（林宥辰自提 15% 頂格 + 公司 5% 上限）
+                </span>
+                <span class="text-xs text-slate-300 font-sans">自提 15% (NT$ 7,500) + 公司 5% (NT$ 2,500) ｜ 每月存入 NT$ 10,000</span>
+              </div>
+              <p class="text-xs text-slate-300">
+                每月口袋實扣 <strong>NT$ 6,600</strong>（享受 NT$ 900 稅盾），每月存入整整 <strong>NT$ 10,000</strong>！43 年按月複利累積高達驚人的 <strong>NT$ 8,568 萬元</strong>！
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-emerald-500/40 text-emerald-400 font-bold">月存: NT$ 10,000</span>
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-emerald-500/40 text-emerald-300 font-black">43年終值: NT$ 8,568 萬</span>
+              <button onclick="switchTab('sheet-q4')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-sans font-bold shadow transition">
+                查看薪資單衝擊表 <i class="fa-solid fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (scen === 'promo') {
+        banner.className = 'w-full mt-3 p-4 rounded-2xl border transition-all duration-300 bg-amber-950/50 border-amber-500/60 text-amber-200';
+        banner.innerHTML = `
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-xs font-black shadow-sm">
+                  <i class="fa-solid fa-arrow-trend-up mr-1"></i>當前情境：③ 主管晉升（月薪 90,000 元 ｜ 適用 20% 高邊際稅率）
+                </span>
+                <span class="text-xs text-slate-300 font-sans">升任主管 5% 對等提撥 NT$ 4,500 ｜ 公司對等 NT$ 4,500 ｜ 每月存入 NT$ 9,000</span>
+              </div>
+              <p class="text-xs text-slate-300">
+                邊際稅率提升至 20%，每自提 NT$ 4,500 可省稅 <strong>NT$ 900</strong>，口袋實掏僅 <strong>NT$ 3,600</strong>！稅後即時套利報酬率飆升至 <strong>+150.00%</strong>（資金放大 2.50 倍）！
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/40 text-amber-400 font-bold">稅後即時報酬: +150.00%</span>
+              <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/40 text-gold-300 font-black">43年終值: NT$ 7,711 萬</span>
+              <button onclick="switchTab('sheet-q2')" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-sans font-bold shadow transition">
+                查看稅盾矩陣 <i class="fa-solid fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function applyScenario(scen) {
+      currentScenario = scen;
+
+      document.querySelectorAll('.scenario-btn').forEach(b => {
+        b.classList.remove('bg-sky-950/80', 'border-sky-500/50', 'bg-rose-950/80', 'border-rose-500/50', 'bg-emerald-950/80', 'border-emerald-500/50', 'bg-amber-950/80', 'border-amber-500/50');
+        b.classList.add('bg-slate-800', 'border-slate-700');
+      });
+
+      if (scen === 'base') {
+        state = JSON.parse(JSON.stringify(BASE_STATE));
+        document.getElementById('scen-base').classList.add('bg-sky-950/80', 'border-sky-500/50');
+        switchTab('sheet-dash');
+      } else if (scen === 'max') {
+        state = JSON.parse(JSON.stringify(BASE_STATE));
+        document.getElementById('scen-max').classList.add('bg-emerald-950/80', 'border-emerald-500/50');
+        switchTab('sheet-q4');
+        if (typeof confetti === 'function') {
+          try { confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } }); } catch (e) { }
+        }
+      } else if (scen === 'promo') {
+        state = JSON.parse(JSON.stringify(BASE_STATE));
+        state.salary = 90000.0; // Manager salary NT$90,000
+        state.taxRate = 0.20; // 20% tax bracket
+        document.getElementById('scen-promo').classList.add('bg-amber-950/80', 'border-amber-500/50');
+        switchTab('sheet-q2');
+      } else if (scen === 'late') {
+        state = JSON.parse(JSON.stringify(BASE_STATE));
+        document.getElementById('scen-late').classList.add('bg-rose-950/80', 'border-rose-500/50');
+        switchTab('sheet-q5b');
+      }
+
+      syncInputsFromState();
+      recalcAll();
+    }
+
+    function resetToBaseCase() {
+      applyScenario('base');
+    }
+
+    function syncInputsFromState() {
+      document.getElementById('inp-salary').value = state.salary;
+      document.getElementById('rng-salary').value = state.salary;
+      document.getElementById('inp-tax-rate').value = state.taxRate.toString();
+      document.getElementById('inp-match-cap').value = (state.matchCap * 100).toFixed(1);
+      document.getElementById('rng-match-cap').value = (state.matchCap * 100).toFixed(1);
+      document.getElementById('inp-return-rate').value = (state.returnRate * 100).toFixed(1);
+      document.getElementById('rng-return-rate').value = (state.returnRate * 100).toFixed(1);
+      document.getElementById('inp-early-years').value = state.earlyYears;
+      document.getElementById('rng-early-years').value = state.earlyYears;
+    }
+
+    function handleParamChange() {
+      state.salary = parseFloat(document.getElementById('inp-salary').value) || 50000;
+      document.getElementById('rng-salary').value = state.salary;
+
+      state.taxRate = parseFloat(document.getElementById('inp-tax-rate').value) || 0.12;
+
+      state.matchCap = (parseFloat(document.getElementById('inp-match-cap').value) || 5.0) / 100.0;
+      document.getElementById('rng-match-cap').value = (state.matchCap * 100).toFixed(1);
+
+      state.returnRate = (parseFloat(document.getElementById('inp-return-rate').value) || 10.0) / 100.0;
+      document.getElementById('rng-return-rate').value = (state.returnRate * 100).toFixed(1);
+
+      state.earlyYears = parseInt(document.getElementById('inp-early-years').value) || 10;
+      document.getElementById('rng-early-years').value = state.earlyYears;
+
+      recalcAll();
+    }
+
+    // FV Annuity Functions
+    function fvAnnual(r, n, pmt) {
+      if (r === 0) return pmt * n;
+      return pmt * ((Math.pow(1.0 + r, n) - 1.0) / r);
+    }
+
+    function fvMonthly(r, nMonths, pmtMonth) {
+      if (r === 0) return pmtMonth * nMonths;
+      const rm = r / 12.0;
+      return pmtMonth * ((Math.pow(1.0 + rm, nMonths) - 1.0) / rm);
+    }
+
+    // Financial Calculation Engine
+    function calcFinancials() {
+      const grossMonthly = state.salary;
+      const taxRate = state.taxRate;
+      const matchCapRate = state.matchCap;
+      const r = state.returnRate;
+      const nTotal = state.totalYears;
+      const nEarly = state.earlyYears;
+      const nLate = nTotal - nEarly;
+
+      // 1. Paycheck Plans (A: 0%, B: 5%, C: 10%, D: 15%)
+      const planRates = [
+        { key: 'A', name: '方案 A (自提 0%)', rate: 0.0 },
+        { key: 'B', name: '方案 B (自提 5%)', rate: 0.05, isRecommended: true },
+        { key: 'C', name: '方案 C (自提 10%)', rate: 0.10 },
+        { key: 'D', name: '方案 D (自提 15%)', rate: 0.15 }
+      ];
+
+      const zeroPlanTaxable = grossMonthly;
+      const zeroPlanTax = zeroPlanTaxable * taxRate;
+      const zeroPlanTakeHome = grossMonthly - zeroPlanTax;
+
+      const plans = planRates.map(p => {
+        const empContrib = grossMonthly * p.rate;
+        const compMatch = Math.min(empContrib, grossMonthly * matchCapRate);
+        const totalMonthly = empContrib + compMatch;
+        const totalAnnual = totalMonthly * 12;
+
+        const taxableIncome = grossMonthly - empContrib;
+        const taxWithholding = taxableIncome * taxRate;
+        const taxShield = zeroPlanTax - taxWithholding;
+        const takeHomePay = grossMonthly - empContrib - taxWithholding;
+        const takeHomeReduction = zeroPlanTakeHome - takeHomePay;
+
+        const effectiveCostPerDollar = empContrib > 0 ? (takeHomeReduction / empContrib) : 0;
+        const leverageMultiplier = takeHomeReduction > 0 ? (totalMonthly / takeHomeReduction) : 0;
+
+        // 43-year totals
+        const totalSelfPaid43 = takeHomeReduction * 12 * nTotal;
+        const totalPrincipal43 = totalAnnual * nTotal;
+
+        // FV Models at 8% and 10% (or current r)
+        const fvAnn8 = fvAnnual(0.08, nTotal, totalAnnual);
+        const fvAnn10 = fvAnnual(0.10, nTotal, totalAnnual);
+        const fvAnnR = fvAnnual(r, nTotal, totalAnnual);
+
+        const fvMon8 = fvMonthly(0.08, nTotal * 12, totalMonthly);
+        const fvMon10 = fvMonthly(0.10, nTotal * 12, totalMonthly);
+        const fvMonR = fvMonthly(r, nTotal * 12, totalMonthly);
+
+        return {
+          ...p,
+          empContrib, compMatch, totalMonthly, totalAnnual,
+          taxableIncome, taxWithholding, taxShield, takeHomePay,
+          takeHomeReduction, effectiveCostPerDollar, leverageMultiplier,
+          totalSelfPaid43, totalPrincipal43,
+          fvAnn8, fvAnn10, fvAnnR, fvMon8, fvMon10, fvMonR
+        };
+      });
+
+      // 2. Immediate Arbitrage for 5 Tax Brackets
+      const taxBrackets = [
+        { label: '第一級距 (5.0%)', t: 0.05, role: '初階辦事員 / 實習助理' },
+        { label: '第二級距 (12.0%)', t: 0.12, role: '【林宥辰初入職基準】', isCurrent: true },
+        { label: '第三級距 (20.0%)', t: 0.20, role: '資深工程師 / 財務副理' },
+        { label: '第四級距 (30.0%)', t: 0.30, role: '業務協理 / 研發處長' },
+        { label: '第五級距 (40.0%)', t: 0.40, role: '執行副總 / 總經理 / 高管' }
+      ];
+
+      const bracketResults = taxBrackets.map(b => {
+        const A = 1.0;
+        const B = A * b.t;
+        const C = A - B;
+        const D = A;
+        const E = A + D;
+        const nominalReturn = D / A;
+        const afterTaxReturn = (E - C) / C;
+        const mult = E / C;
+        return { ...b, A, B, C, D, E, nominalReturn, afterTaxReturn, mult };
+      });
+
+      // 3. Early Bird vs Late Bird (Based on Plan B $60,000/yr)
+      const basePlan = plans.find(p => p.key === 'B');
+      const pmtAnnualB = basePlan.totalAnnual;
+      const pmtMonthlyCostB = basePlan.takeHomeReduction;
+
+      // Group 1: Early bird (nEarly yrs deposit, then nLate yrs compound)
+      const earlyFvAt32 = fvAnnual(r, nEarly, pmtAnnualB);
+      const earlyFvAt65_8 = fvAnnual(0.08, nEarly, pmtAnnualB) * Math.pow(1.0 + 0.08, nLate);
+      const earlyFvAt65_10 = fvAnnual(0.10, nEarly, pmtAnnualB) * Math.pow(1.0 + 0.10, nLate);
+      const earlyFvAt65_R = earlyFvAt32 * Math.pow(1.0 + r, nLate);
+      const earlySelfPaid = pmtMonthlyCostB * 12 * nEarly;
+      const earlyPrincipal = pmtAnnualB * nEarly;
+
+      // Group 2: Late bird (0 for nEarly, then nLate yrs deposit)
+      const lateFvAt32 = 0;
+      const lateFvAt65_8 = fvAnnual(0.08, nLate, pmtAnnualB);
+      const lateFvAt65_10 = fvAnnual(0.10, nLate, pmtAnnualB);
+      const lateFvAt65_R = fvAnnual(r, nLate, pmtAnnualB);
+      const lateSelfPaid = pmtMonthlyCostB * 12 * nLate;
+      const latePrincipal = pmtAnnualB * nLate;
+
+      // Group 3: Full career (nTotal yrs deposit)
+      const fullFvAt32 = earlyFvAt32;
+      const fullFvAt65_8 = fvAnnual(0.08, nTotal, pmtAnnualB);
+      const fullFvAt65_10 = fvAnnual(0.10, nTotal, pmtAnnualB);
+      const fullFvAt65_R = fvAnnual(r, nTotal, pmtAnnualB);
+      const fullSelfPaid = pmtMonthlyCostB * 12 * nTotal;
+      const fullPrincipal = pmtAnnualB * nTotal;
+
+      // Differences
+      const delayLoss_8 = fullFvAt65_8 - lateFvAt65_8;
+      const delayLoss_10 = fullFvAt65_10 - lateFvAt65_10;
+      const delayLoss_R = fullFvAt65_R - lateFvAt65_R;
+
+      const earlyLateGap_8 = earlyFvAt65_8 - lateFvAt65_8;
+      const earlyLateGap_10 = earlyFvAt65_10 - lateFvAt65_10;
+      const earlyLateGap_R = earlyFvAt65_R - lateFvAt65_R;
+
+      // 4. Generate 43-year Rolling Timeline Table Data
+      const timelineRows = [];
+      let fullBal = 0;
+      let earlyBal = 0;
+      let lateBal = 0;
+
+      for (let y = 1; y <= nTotal; y++) {
+        const age = 21 + y;
+        const fullDeposit = pmtAnnualB;
+        const fullReturn = fullBal * r;
+        fullBal = fullBal + fullDeposit + fullReturn;
+
+        let earlyDeposit = 0;
+        let earlyReturn = 0;
+        if (y <= nEarly) {
+          earlyDeposit = pmtAnnualB;
+          earlyReturn = earlyBal * r;
+          earlyBal = earlyBal + earlyDeposit + earlyReturn;
+        } else {
+          earlyDeposit = 0;
+          earlyReturn = earlyBal * r;
+          earlyBal = earlyBal + earlyReturn;
+        }
+
+        let lateDeposit = 0;
+        let lateReturn = 0;
+        if (y > nEarly) {
+          lateDeposit = pmtAnnualB;
+          lateReturn = lateBal * r;
+          lateBal = lateBal + lateDeposit + lateReturn;
+        } else {
+          lateDeposit = 0;
+          lateBal = 0;
+        }
+
+        const gap = earlyBal - lateBal;
+
+        timelineRows.push({
+          year: y,
+          age: age,
+          fullBalStart: fullBal - fullDeposit - fullReturn,
+          fullDeposit: fullDeposit,
+          fullReturn: fullReturn,
+          fullBalEnd: fullBal,
+          earlyDeposit: earlyDeposit,
+          earlyBalEnd: earlyBal,
+          lateDeposit: lateDeposit,
+          lateBalEnd: lateBal,
+          gap: gap
+        });
+      }
+
+      return {
+        plans,
+        basePlan,
+        bracketResults,
+        earlyFvAt32, earlyFvAt65_8, earlyFvAt65_10, earlyFvAt65_R, earlySelfPaid, earlyPrincipal,
+        lateFvAt32, lateFvAt65_8, lateFvAt65_10, lateFvAt65_R, lateSelfPaid, latePrincipal,
+        fullFvAt32, fullFvAt65_8, fullFvAt65_10, fullFvAt65_R, fullSelfPaid, fullPrincipal,
+        delayLoss_8, delayLoss_10, delayLoss_R,
+        earlyLateGap_8, earlyLateGap_10, earlyLateGap_R,
+        timelineRows
+      };
+    }
+
+    // Update DOM
+    function recalcAll() {
+      const res = calcFinancials();
+      const pB = res.basePlan;
+
+      // Update Live Scenario Intelligence Banner
+      updateScenarioBanner(currentScenario, res);
+
+      // Top KPI Strip (Dynamic based on current scenario)
+      const afterTaxRetPct = ((2.0 - (1.0 - state.taxRate)) / (1.0 - state.taxRate));
+
+      if (currentScenario === 'late') {
+        document.getElementById('strip-cost').innerText = fmtCurr(res.basePlan.takeHomeReduction) + ' (後33年)';
+        document.getElementById('strip-immed-ret').innerText = '+127.27% (32歲起)';
+        document.getElementById('strip-fv-monthly').innerText = 'NT$ ' + (res.lateFvAt65_10 / 1e4).toFixed(0) + ' 萬 (晚鳥)';
+        document.getElementById('strip-fv-annual').innerText = 'NT$ ' + (res.lateFvAt65_10 / 1e4).toFixed(0) + ' 萬';
+        document.getElementById('strip-delay-loss').innerText = '-NT$ ' + (res.delayLoss_10 / 1e4).toFixed(0) + ' 萬';
+      } else if (currentScenario === 'max') {
+        const pD = res.plans.find(p => p.key === 'D') || pB;
+        document.getElementById('strip-cost').innerText = fmtCurr(pD.takeHomeReduction);
+        document.getElementById('strip-immed-ret').innerText = '+51.52%';
+        document.getElementById('strip-fv-monthly').innerText = 'NT$ ' + (pD.fvMon10 / 1e4).toFixed(0) + ' 萬';
+        document.getElementById('strip-fv-annual').innerText = 'NT$ ' + (pD.fvAnn10 / 1e4).toFixed(0) + ' 萬';
+        document.getElementById('strip-delay-loss').innerText = '-NT$ ' + (res.delayLoss_10 / 1e4).toFixed(0) + ' 萬';
+      } else {
+        document.getElementById('strip-cost').innerText = fmtCurr(pB.takeHomeReduction);
+        document.getElementById('strip-immed-ret').innerText = '+' + (afterTaxRetPct * 100).toFixed(2) + '%';
+        document.getElementById('strip-fv-monthly').innerText = 'NT$ ' + (pB.fvMon10 / 1e4).toFixed(0) + ' 萬';
+        document.getElementById('strip-fv-annual').innerText = 'NT$ ' + (pB.fvAnn10 / 1e4).toFixed(0) + ' 萬';
+        document.getElementById('strip-delay-loss').innerText = '-NT$ ' + (res.delayLoss_10 / 1e4).toFixed(0) + ' 萬';
+      }
+
+      // Sheet 1 KPI Cards
+      document.getElementById('kpi-rate').innerText = '5.0% 頂格領滿';
+      document.getElementById('kpi-cost').innerText = fmtCurr(pB.takeHomeReduction);
+      document.getElementById('kpi-immed-ret').innerText = '+' + (afterTaxRetPct * 100).toFixed(2) + '%';
+      document.getElementById('kpi-fv-summary').innerText = (pB.fvAnn10 / 1e4).toFixed(0) + ' 萬 ~ ' + (pB.fvMon10 / 1e4).toFixed(0) + ' 萬';
+      document.getElementById('kpi-delay-loss').innerText = '-NT$ ' + (res.delayLoss_10 / 1e4).toFixed(0) + ' 萬';
+
+      // Sheet 1 Parameter Display
+      document.getElementById('lbl-salary').innerText = fmtCurr(state.salary);
+      document.getElementById('lbl-annual-salary').innerText = (state.salary * 12).toLocaleString();
+      document.getElementById('lbl-tax-rate').innerText = fmtPct(state.taxRate);
+      document.getElementById('lbl-match-cap').innerText = fmtPct(state.matchCap);
+      document.getElementById('lbl-match-amt').innerText = (state.salary * state.matchCap).toLocaleString();
+      document.getElementById('lbl-return-rate').innerText = fmtPct(state.returnRate);
+      document.getElementById('lbl-early-years').innerText = '前 ' + state.earlyYears + ' 年 (22~' + (22 + state.earlyYears) + '歲)';
+      document.getElementById('lbl-compound-years').innerText = (state.totalYears - state.earlyYears).toString();
+
+      // Sheet 3: Tax Bracket Arbitrage Table
+      renderTaxBracketTable(res);
+
+      // Sheet 4: Paycheck Table
+      renderPaycheckTable(res);
+
+      // Sheet 5: FV Table
+      renderFvMatrixTable(res);
+
+      // Sheet 6: Early vs Late Bird Table
+      renderEarlyLateTable(res);
+
+      // Sheet 8: Timeline Table
+      renderTimelineTable(res);
+
+      // Update Charts
+      updateCharts(res);
+    }
+
+    function renderTaxBracketTable(res) {
+      const tbody = document.getElementById('tax-bracket-tbody');
+      tbody.innerHTML = '';
+
+      res.bracketResults.forEach(b => {
+        const tr = document.createElement('tr');
+        let rowClass = 'hover:bg-slate-850 ';
+        if (b.isCurrent) rowClass += 'bg-emerald-950/20 font-bold border-y border-emerald-600/40 ';
+        tr.className = rowClass;
+
+        tr.innerHTML = `
+          <td class="py-3 px-3 font-sans font-bold ${b.isCurrent ? 'text-emerald-400' : 'text-slate-300'}">${b.label}</td>
+          <td class="py-3 px-3 font-sans text-slate-300">${b.role}</td>
+          <td class="py-3 px-3 text-right text-slate-300">${b.A.toFixed(2)}</td>
+          <td class="py-3 px-3 text-right text-emerald-400">${b.B.toFixed(2)}</td>
+          <td class="py-3 px-3 text-right text-amber-400">${b.C.toFixed(2)}</td>
+          <td class="py-3 px-3 text-right text-sky-400">${b.D.toFixed(2)}</td>
+          <td class="py-3 px-3 text-right font-bold text-white">${b.E.toFixed(2)}</td>
+          <td class="py-3 px-3 text-right text-slate-400">+100.0%</td>
+          <td class="py-3 px-3 text-right text-emerald-400 font-black">+${(b.afterTaxReturn * 100).toFixed(2)}%</td>
+          <td class="py-3 px-3 text-right text-gold-300 font-black">${b.mult.toFixed(2)} 倍</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderPaycheckTable(res) {
+      document.getElementById('q4-salary-display').innerText = state.salary.toLocaleString();
+      document.getElementById('q4-tax-display').innerText = fmtPct(state.taxRate);
+
+      const tbody = document.getElementById('paycheck-tbody');
+      tbody.innerHTML = '';
+
+      const rowsMeta = [
+        { label: '① 每月稅前全薪 (Gross Pay)', key: 'gross', fmt: (p) => fmtCurr(state.salary) },
+        { label: '② 個人稅前自提比例', key: 'rate', fmt: (p) => fmtPct(p.rate, 1) },
+        { label: '③ 每月個人稅前自提金額 (= ① × ②)', key: 'empContrib', fmt: (p) => fmtCurr(p.empContrib), isFx: true, src: '薪資單!③', math: 'Gross * Rate' },
+        { label: '④ 雇主每月對等補助額 (= MIN(③, ① × 5%))', key: 'compMatch', fmt: (p) => fmtCurr(p.compMatch), isFx: true, src: '薪資單!④', math: 'MIN(自提, 全薪*5%)' },
+        { label: '⑤ 每月存入退休信託帳戶總額 (= ③ + ④)', key: 'totalMonthly', fmt: (p) => fmtCurr(p.totalMonthly), isHighlight: true, isFx: true, src: '薪資單!⑤', math: '③ + ④' },
+        { label: '⑥ 每年存入退休信託帳戶總額 (= ⑤ × 12)', key: 'totalAnnual', fmt: (p) => fmtCurr(p.totalAnnual) },
+        { label: '⑦ 每月應稅薪資所得 (Taxable Income = ① - ③)', key: 'taxableIncome', fmt: (p) => fmtCurr(p.taxableIncome) },
+        { label: '⑧ 每月應納綜合所得稅 (Tax Withholding = ⑦ × T)', key: 'taxWithholding', fmt: (p) => fmtCurr(p.taxWithholding) },
+        { label: '⑨ 每月當期所得稅盾 / 節稅額 (= 方案A稅額 - ⑧)', key: 'taxShield', fmt: (p) => '+' + fmtCurr(p.taxShield), isShield: true },
+        { label: '⑩ 每月實際到手薪資 (Take-Home = ① - ③ - ⑧)', key: 'takeHomePay', fmt: (p) => fmtCurr(p.takeHomePay), isTakeHome: true },
+        { label: '⑪ 每月實拿薪資減少額 (= 方案A到手 - ⑩)', key: 'takeHomeReduction', fmt: (p) => fmtCurr(p.takeHomeReduction), isCost: true },
+        { label: '⑫ 每自提 NT$1 口袋實際減少額 (= ⑪ ÷ ③)', key: 'effectiveCost', fmt: (p) => p.effectiveCostPerDollar > 0 ? ('NT$ ' + p.effectiveCostPerDollar.toFixed(2)) : '——' },
+        { label: '⑬ 總資金槓桿放大倍數 (= 帳戶⑤ ÷ 實付⑪)', key: 'leverageMultiplier', fmt: (p) => p.leverageMultiplier > 0 ? (p.leverageMultiplier.toFixed(2) + ' 倍') : '——', isMult: true }
+      ];
+
+      rowsMeta.forEach(r => {
+        const tr = document.createElement('tr');
+        let trClass = 'hover:bg-slate-850 ';
+        if (r.isHighlight) trClass += 'bg-teal-950/20 font-bold ';
+        if (r.isTakeHome) trClass += 'bg-slate-950 font-bold ';
+        tr.className = trClass;
+
+        let html = `<td class="py-3 px-4 font-sans font-bold text-slate-300">${r.label}</td>`;
+
+        res.plans.forEach(p => {
+          let cellClass = 'py-3 px-4 ';
+          if (p.isRecommended) cellClass += 'bg-emerald-950/20 border-x border-emerald-900/40 ';
+          if (r.isHighlight) cellClass += 'text-teal-300 font-black ';
+          else if (r.isShield) cellClass += 'text-emerald-400 font-bold ';
+          else if (r.isCost) cellClass += 'text-amber-400 font-bold ';
+          else if (r.isMult) cellClass += 'text-gold-300 font-black text-sm ';
+          else cellClass += 'text-slate-300 ';
+
+          html += `<td class="${cellClass}">${r.fmt(p)}</td>`;
+        });
+
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderFvMatrixTable(res) {
+      const tbody = document.getElementById('fv-matrix-tbody');
+      tbody.innerHTML = '';
+
+      res.plans.forEach(p => {
+        const tr = document.createElement('tr');
+        let trClass = 'hover:bg-slate-850 ';
+        if (p.isRecommended) trClass += 'bg-emerald-950/20 border-y border-emerald-600/40 font-bold ';
+        tr.className = trClass;
+
+        tr.innerHTML = `
+          <td class="py-3.5 px-3 font-sans font-bold ${p.isRecommended ? 'text-emerald-400' : 'text-slate-200'}">${p.name}</td>
+          <td class="py-3.5 px-3 text-slate-300">${fmtCurr(p.totalAnnual)} / 年<br><span class="text-[10px] text-slate-500 font-mono">(${fmtCurr(p.totalMonthly)} / 月)</span></td>
+          <td class="py-3.5 px-3 text-right text-amber-400 font-bold">${fmtCurr(p.totalSelfPaid43)}</td>
+          <td class="py-3.5 px-3 text-right text-slate-300">${fmtCurr(p.totalPrincipal43)}</td>
+          <td class="py-3.5 px-3 text-right text-slate-400">${fmtCurr(p.fvAnn8)}</td>
+          <td class="py-3.5 px-3 text-right text-slate-200 font-bold">${fmtCurr(p.fvAnn10)}</td>
+          <td class="py-3.5 px-3 text-right text-sky-400">${fmtCurr(p.fvMon8)}</td>
+          <td class="py-3.5 px-3 text-right text-emerald-400 font-black text-sm bg-emerald-950/20">${fmtCurr(p.fvMon10)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderEarlyLateTable(res) {
+      const tbody = document.getElementById('early-late-tbody');
+      tbody.innerHTML = '';
+
+      const rows = [
+        {
+          group: '① 早鳥停扣組（林宥辰前10年）',
+          sub: '22~32歲存10年，後33年停扣滾存',
+          period: '22～32 歲 (存 10 年)<br>32～65 歲停扣滾存 33 年',
+          selfPaid: res.earlySelfPaid,
+          principal: res.earlyPrincipal,
+          fv32: res.earlyFvAt32,
+          fv65_8: res.earlyFvAt65_8,
+          fv65_10: res.earlyFvAt65_10,
+          color: 'text-emerald-400',
+          bg: 'bg-emerald-950/20'
+        },
+        {
+          group: '② 晚鳥苦追組（陳建宏後33年）',
+          sub: '22~32歲不存，32~65歲連存33年',
+          period: '22～32 歲 (NT$0)<br>32～65 歲 (連存 33 年)',
+          selfPaid: res.lateSelfPaid,
+          principal: res.latePrincipal,
+          fv32: 0,
+          fv65_8: res.lateFvAt65_8,
+          fv65_10: res.lateFvAt65_10,
+          color: 'text-amber-400',
+          bg: 'bg-amber-950/20'
+        },
+        {
+          group: '③ 全程紀律組（43年連續提撥）',
+          sub: '22~65歲全程無中斷連續提撥',
+          period: '22～65 歲 (連存 43 年)',
+          selfPaid: res.fullSelfPaid,
+          principal: res.fullPrincipal,
+          fv32: res.fullFvAt32,
+          fv65_8: res.fullFvAt65_8,
+          fv65_10: res.fullFvAt65_10,
+          color: 'text-sky-300',
+          bg: 'bg-slate-900'
+        },
+        {
+          group: '【延遲 10 年之淨財富損失】',
+          sub: '(晚鳥組 ② - 全程組 ③)',
+          period: '少存前 10 年黃金期 (損失 60 萬)',
+          selfPaid: res.lateSelfPaid - res.fullSelfPaid,
+          principal: res.latePrincipal - res.fullPrincipal,
+          fv32: -res.fullFvAt32,
+          fv65_8: -res.delayLoss_8,
+          fv65_10: -res.delayLoss_10,
+          color: 'text-rose-400 font-black',
+          bg: 'bg-rose-950/40 border-y border-rose-600/40'
+        },
+        {
+          group: '【早鳥停扣組 vs 晚鳥苦追組 差額】',
+          sub: '(早鳥組 ① - 晚鳥組 ②)',
+          period: '早鳥少掏 60.7 萬實質自付成本',
+          selfPaid: res.earlySelfPaid - res.lateSelfPaid,
+          principal: res.earlyPrincipal - res.latePrincipal,
+          fv32: res.earlyFvAt32,
+          fv65_8: res.earlyLateGap_8,
+          fv65_10: res.earlyLateGap_10,
+          color: 'text-gold-300 font-black',
+          bg: 'bg-slate-950/90'
+        }
+      ];
+
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = `hover:bg-slate-850 ${r.bg}`;
+
+        tr.innerHTML = `
+          <td class="py-3 px-3 font-sans">
+            <span class="font-bold text-white block">${r.group}</span>
+            <span class="text-[10px] text-slate-400">${r.sub}</span>
+          </td>
+          <td class="py-3 px-3 font-sans text-slate-300 text-[11px]">${r.period}</td>
+          <td class="py-3 px-3 text-right font-bold text-amber-400">${fmtCurr(r.selfPaid)}</td>
+          <td class="py-3 px-3 text-right text-slate-300">${fmtCurr(r.principal)}</td>
+          <td class="py-3 px-3 text-right text-sky-400">${fmtCurr(r.fv32)}</td>
+          <td class="py-3 px-3 text-right text-slate-400">${fmtCurr(r.fv65_8)}</td>
+          <td class="py-3 px-3 text-right text-sm font-black ${r.color}">${fmtCurr(r.fv65_10)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderTimelineTable(res) {
+      const tbody = document.getElementById('timeline-tbody');
+      tbody.innerHTML = '';
+
+      res.timelineRows.forEach(row => {
+        const tr = document.createElement('tr');
+        let trClass = 'hover:bg-slate-850 ';
+        if (row.year === 10) trClass += 'bg-emerald-950/30 border-y border-emerald-600/40 font-bold ';
+        if (row.year === 43) trClass += 'bg-teal-950/40 border-y border-teal-500 font-black ';
+        tr.className = trClass;
+
+        tr.innerHTML = `
+          <td class="py-2 px-2 text-center text-slate-400 font-mono">${row.year}</td>
+          <td class="py-2 px-2 text-center text-slate-300 font-mono font-bold">${row.age}</td>
+          <td class="py-2 px-3 text-right text-slate-400 font-mono">${fmtCurr(row.fullBalStart)}</td>
+          <td class="py-2 px-3 text-right text-slate-300 font-mono">${fmtCurr(row.fullDeposit)}</td>
+          <td class="py-2 px-3 text-right text-slate-500 font-mono">${fmtCurr(row.fullReturn)}</td>
+          <td class="py-2 px-3 text-right text-sky-300 font-mono font-bold">${fmtCurr(row.fullBalEnd)}</td>
+          <td class="py-2 px-3 text-right text-slate-400 font-mono">${fmtCurr(row.earlyDeposit)}</td>
+          <td class="py-2 px-3 text-right text-emerald-400 font-mono font-bold">${fmtCurr(row.earlyBalEnd)}</td>
+          <td class="py-2 px-3 text-right text-slate-400 font-mono">${fmtCurr(row.lateDeposit)}</td>
+          <td class="py-2 px-3 text-right text-amber-400 font-mono font-bold">${fmtCurr(row.lateBalEnd)}</td>
+          <td class="py-2 px-3 text-right font-mono font-bold ${row.gap >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmtCurr(row.gap)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateCharts(res) {
+      // 1. Paycheck Funding Donut
+      if (document.getElementById('chartPaycheckDonut')) {
+        const ctx1 = document.getElementById('chartPaycheckDonut').getContext('2d');
+        if (chartPaycheck) chartPaycheck.destroy();
+
+        const pB = res.basePlan;
+        const selfPaid = pB.takeHomeReduction;
+        const taxShield = pB.taxShield;
+        const compMatch = pB.compMatch;
+
+        chartPaycheck = new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: [
+              `個人實質掏腰包 ($${selfPaid.toLocaleString()})`,
+              `國稅局稅盾補貼 ($${taxShield.toLocaleString()})`,
+              `翔鷹航太對等補助 ($${compMatch.toLocaleString()})`
+            ],
+            datasets: [{
+              data: [selfPaid, taxShield, compMatch],
+              backgroundColor: ['#f59e0b', '#10b981', '#0ea5e9'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: '#94a3b8', font: { size: 10 } }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${ctx.label}: ${(ctx.parsed / pB.totalMonthly * 100).toFixed(1)}%`
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // 2. FV Bar Chart
+      if (document.getElementById('chartFvComparison')) {
+        const ctx2 = document.getElementById('chartFvComparison').getContext('2d');
+        if (chartFv) chartFv.destroy();
+
+        chartFv = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: res.plans.map(p => p.key + ': ' + p.name),
+            datasets: [
+              {
+                label: '按年複利 (r = 10%)',
+                data: res.plans.map(p => Math.round(p.fvAnn10 / 10000)),
+                backgroundColor: '#0284c7'
+              },
+              {
+                label: '按月複利 (r = 10%) - 實務發薪扣存',
+                data: res.plans.map(p => Math.round(p.fvMon10 / 10000)),
+                backgroundColor: '#10b981'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } },
+              y: {
+                ticks: {
+                  color: '#94a3b8',
+                  font: { size: 10 },
+                  callback: (val) => val.toLocaleString() + ' 萬'
+                },
+                grid: { color: 'rgba(51, 65, 85, 0.3)' }
+              }
+            },
+            plugins: {
+              legend: { position: 'top', labels: { color: '#94a3b8', font: { size: 11 } } },
+              tooltip: {
+                callbacks: { label: (ctx) => `${ctx.dataset.label}: NT$ ${ctx.parsed.y.toLocaleString()} 萬元` }
+              }
+            }
+          }
+        });
+      }
+
+      // 3. Early vs Late Growth Line Chart
+      if (document.getElementById('chartEarlyLateGrowth')) {
+        const ctx3 = document.getElementById('chartEarlyLateGrowth').getContext('2d');
+        if (chartGrowth) chartGrowth.destroy();
+
+        const labels = res.timelineRows.map(r => r.age + '歲');
+        const earlyData = res.timelineRows.map(r => Math.round(r.earlyBalEnd / 10000));
+        const lateData = res.timelineRows.map(r => Math.round(r.lateBalEnd / 10000));
+        const fullData = res.timelineRows.map(r => Math.round(r.fullBalEnd / 10000));
+
+        chartGrowth = new Chart(ctx3, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: '【全程紀律組】43年持續提撥',
+                data: fullData,
+                borderColor: '#38bdf8',
+                backgroundColor: 'rgba(56, 189, 248, 0.05)',
+                borderWidth: 2,
+                pointRadius: 0
+              },
+              {
+                label: '【早鳥停扣組】只存前10年 (22~32歲)',
+                data: earlyData,
+                borderColor: '#10b981',
+                borderWidth: 3,
+                pointRadius: 0
+              },
+              {
+                label: '【晚鳥苦追組】後33年連存 (32~65歲)',
+                data: lateData,
+                borderColor: '#f59e0b',
+                borderWidth: 2,
+                borderDash: [4, 4],
+                pointRadius: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(51, 65, 85, 0.2)' } },
+              y: {
+                ticks: {
+                  color: '#94a3b8',
+                  font: { size: 10 },
+                  callback: (val) => val.toLocaleString() + ' 萬'
+                },
+                grid: { color: 'rgba(51, 65, 85, 0.2)' }
+              }
+            },
+            plugins: {
+              legend: { position: 'top', labels: { color: '#94a3b8', font: { size: 11 } } },
+              tooltip: {
+                callbacks: { label: (ctx) => `${ctx.dataset.label}: NT$ ${ctx.parsed.y.toLocaleString()} 萬元` }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // Export Live Excel Workbook
+    function exportLiveExcel() {
+      const res = calcFinancials();
+      const wb = XLSX.utils.book_new();
+
+      // Sheet 1: Dashboard
+      const wsDashData = [
+        ['翔鷹航太科技（AeroTaiwan）：員工退休福利儲蓄與台幣 ETF 配置決策模型'],
+        ['哈佛商學院教學風格個案財務模型（HBS Solutions Manual）'],
+        [],
+        ['【核心財務決策與精算成果摘要】'],
+        ['決策指標', '數值', '說明'],
+        ['建議自提比例', '5.0%', '吃滿公司 5% 對等補貼，每月專戶存入 NT$5,000'],
+        ['每月實質自付成本', res.basePlan.takeHomeReduction, '受 12% 綜所稅盾保護，每存 $1 實掏僅 $0.88'],
+        ['稅後即時報酬率', (2.0 - (1.0 - state.taxRate)) / (1.0 - state.taxRate), '名目 +100% 雇主配比，總資金放大 2.27 倍'],
+        ['43 年按年累積終值 (10%)', res.basePlan.fvAnn10, '實質自掏腰包總成本僅 113.5 萬元'],
+        ['43 年按月累積終值 (10%)', res.basePlan.fvMon10, '實務每月發薪扣款滾存紅利 +20.5%'],
+        ['延遲 10 年損失 (晚鳥虧損)', res.delayLoss_10, '晚鳥陳建宏 32 歲起步多掏 138 萬本金反輸 887 萬'],
+        [],
+        ['【個案基礎參數設定表】'],
+        ['參數項目', '當前數值', '備註說明'],
+        ['起始稅前月薪 (Gross Salary)', state.salary, '折合年薪 NT$' + (state.salary * 12)],
+        ['台灣綜合所得稅邊際稅率', state.taxRate, '享有稅前全額扣除稅盾優勢'],
+        ['雇主 1:1 對等提撥上限', state.matchCap, '公司等額補助 100%'],
+        ['退休投資年化報酬率', state.returnRate, '0050 等大型台股 ETF 組合含息預期回報'],
+        ['早鳥儲蓄期年數', state.earlyYears, '前 10 年儲蓄黃金期 (22~32歲)']
+      ];
+      const wsDash = XLSX.utils.aoa_to_sheet(wsDashData);
+      XLSX.utils.book_append_sheet(wb, wsDash, '決策總覽與參數');
+
+      // Sheet 4: Paycheck
+      const wsPayData = [
+        ['問題四：四種自提方案每月薪資單拆解表'],
+        [],
+        ['項目', '方案 A (0%)', '方案 B (5%)', '方案 C (10%)', '方案 D (15%)'],
+        ['稅前全薪', ...res.plans.map(p => state.salary)],
+        ['個人自提比例', ...res.plans.map(p => p.rate)],
+        ['個人自提金額', ...res.plans.map(p => p.empContrib)],
+        ['雇主對等補助', ...res.plans.map(p => p.compMatch)],
+        ['每月入帳總額', ...res.plans.map(p => p.totalMonthly)],
+        ['應稅薪資所得', ...res.plans.map(p => p.taxableIncome)],
+        ['應扣繳所得稅', ...res.plans.map(p => p.taxWithholding)],
+        ['當期所得稅盾', ...res.plans.map(p => p.taxShield)],
+        ['實際到手薪資', ...res.plans.map(p => p.takeHomePay)],
+        ['實拿減少金額', ...res.plans.map(p => p.takeHomeReduction)],
+        ['槓桿放大倍數', ...res.plans.map(p => p.leverageMultiplier)]
+      ];
+      const wsPay = XLSX.utils.aoa_to_sheet(wsPayData);
+      XLSX.utils.book_append_sheet(wb, wsPay, '薪資單與稅盾衝擊');
+
+      // Sheet 5: Early vs Late
+      const wsEarlyData = [
+        ['問題五：延遲 10 年儲蓄之機會成本精算表 (早鳥 vs 晚鳥)'],
+        [],
+        ['組別', '年齡與區間', '個人實付總成本', '名目存入總本金', '32歲資產 (10%)', '65歲終值 (8%)', '65歲終值 (10%)'],
+        ['早鳥停扣組', '22~32歲存10年', res.earlySelfPaid, res.earlyPrincipal, res.earlyFvAt32, res.earlyFvAt65_8, res.earlyFvAt65_10],
+        ['晚鳥苦追組', '32~65歲連存33年', res.lateSelfPaid, res.latePrincipal, res.lateFvAt32, res.lateFvAt65_8, res.lateFvAt65_10],
+        ['全程紀律組', '22~65歲全程連存43年', res.fullSelfPaid, res.fullPrincipal, res.fullFvAt32, res.fullFvAt65_8, res.fullFvAt65_10],
+        ['延遲10年淨財富損失', '少存前10年', res.lateSelfPaid - res.fullSelfPaid, res.latePrincipal - res.fullPrincipal, -res.fullFvAt32, -res.delayLoss_8, -res.delayLoss_10],
+        ['早鳥 vs 晚鳥差距', '早鳥少付60.7萬反贏887萬', res.earlySelfPaid - res.lateSelfPaid, res.earlyPrincipal - res.latePrincipal, res.earlyFvAt32, res.earlyLateGap_8, res.earlyLateGap_10]
+      ];
+      const wsEarly = XLSX.utils.aoa_to_sheet(wsEarlyData);
+      XLSX.utils.book_append_sheet(wb, wsEarly, '早鳥vs晚鳥機會成本');
+
+      // Sheet 8: Timeline
+      const wsTimeData = [
+        ['43 年逐年資產累積明細 (22歲至65歲)'],
+        [],
+        ['期數', '年齡', '全程組年初本金', '全程組年存入', '全程組年收益', '全程組年末資產', '早鳥組年存入', '早鳥組年末資產', '晚鳥組年存入', '晚鳥組年末資產', '早鳥領先差距']
+      ];
+      res.timelineRows.forEach(r => {
+        wsTimeData.push([r.year, r.age, r.fullBalStart, r.fullDeposit, r.fullReturn, r.fullBalEnd, r.earlyDeposit, r.earlyBalEnd, r.lateDeposit, r.lateBalEnd, r.gap]);
+      });
+      const wsTime = XLSX.utils.aoa_to_sheet(wsTimeData);
+      XLSX.utils.book_append_sheet(wb, wsTime, '43年逐年資產明細');
+
+      XLSX.writeFile(wb, '翔鷹航太_員工儲蓄信託互動試算成果.xlsx');
+    }
+
+    // Initialize on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      syncInputsFromState();
+      recalcAll();
+    });
+  </script>
+
+</body>
+</html>
