@@ -166,6 +166,7 @@
             >
               <option value="sem11501">🎓 11501 學期課程主控台 (3 堂課 ‧ 47 週次)</option>
               <option value="cases">💼 實務財務個案教學庫 (個案 1 & 2 ‧ 運算模型)</option>
+              <option value="fincalc">🧮 財務計算分析 (財務決策模型 ‧ 互動試算)</option>
               <option value="sem11502">🌱 11502 學期課程 (三民高中 / 信託)</option>
               <option value="theses">📚 碩士論文與實證研究 (金金併 / 0050 ETF)</option>
             </select>
@@ -380,7 +381,7 @@
       Master Portal ‧ 115學年度 商管教學、實務個案與財務運算總門戶
     </p>
     <p class="text-[11px] text-slate-500">
-      跨學期架構：11501 學期課程 ‧ 11502 學期課程 (預留擴充) ‧ 哈佛實務財務個案教學庫 ‧ 碩士論文指導 ‧ 授課教師：張書濂 教授
+      跨學期架構：11501 學期課程 ‧ 實務財務個案教學庫 ‧ 財務計算分析 ‧ 11502 學期課程 (預留擴充) ‧ 碩士論文指導 ‧ 授課教師：張書濂 教授
     </p>
   </footer>
 
@@ -541,7 +542,99 @@
       },
 
       // ==========================================
-      // 3. 11502 學期課程 (預留擴充接口)
+      // 3. 財務計算分析 (財務決策模型 ‧ 互動試算)
+      // ==========================================
+      fincalc: {
+        id: 'fincalc',
+        name: '財務計算分析',
+        icon: 'fa-calculator text-amber-400',
+        homeUrl: '財務計算/氣候轉型/index.html',
+        subCategories: {
+          climate: {
+            id: 'climate',
+            name: '企業氣候轉型財務決策模擬',
+            shortName: '氣候轉型財務模擬',
+            badge: '8大情境 ‧ 財務三表',
+            icon: 'fa-leaf text-emerald-400',
+            sub: 'ABC企業碳稅衝擊、資本支出與財務三表動態聯動',
+            homeUrl: '財務計算/氣候轉型/index.html',
+            items: [
+              {
+                code: '情境模擬',
+                title: '企業氣候轉型財務決策與情境模擬系統（ABC企業）',
+                desc: '包含基準年、保守防禦、穩健漸進、積極前瞻與碳稅風暴等 8 大情境切換，5 組敏感度滑桿，即時動態連動資產負債表、損益表、現金流量表與 C-Suite 觀點。',
+                html: '財務計算/氣候轉型/index.html',
+                interactiveTool: 'https://williamslchang-blip.github.io/climate-transition-case-simulator/',
+                docx: '財務計算/氣候轉型/企業氣候轉型不同情境模擬與財務決策分析說明.docx'
+              }
+            ]
+          },
+          hubbard_wacc: {
+            id: 'hubbard_wacc',
+            name: 'Hubbard Computer WACC 與純業務法運算模型',
+            shortName: 'WACC 純業務法模型',
+            badge: '哈佛商院 ‧ 資本成本',
+            icon: 'fa-laptop-code text-amber-400',
+            sub: '非上市公司加權平均資本成本（WACC）與純業務法',
+            homeUrl: '財務個案/財務個案2/財務個案2_Hubbard_Computer_互動式財務模型.html',
+            items: [
+              {
+                code: 'WACC 試算',
+                title: 'Hubbard Computer, Inc.：純業務法（Pure Play Method）與 WACC 敏感度分析互動模型',
+                desc: '非上市公司加權平均資本成本（WACC）精算、純業務法（Pure Play Method）去除與還原財務槓桿貝他、敏感度分析與實體資本預算決策。',
+                html: '財務個案/財務個案2/財務個案2_Hubbard_Computer_互動式財務模型.html',
+                interactiveTool: '財務個案/財務個案2/財務個案2_Hubbard_Computer_互動式財務模型.html',
+                excelModel: '財務個案/財務個案2/財務個案2_Hubbard_Computer_完整解析財務模型.xlsx',
+                htmlPresentation: '財務個案/財務個案2/教學簡報網站：Hubbard_Computer.html',
+                docx: '財務個案/財務個案2/2. 教學指引：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx'
+              }
+            ]
+          },
+          aerotaiwan_pension: {
+            id: 'aerotaiwan_pension',
+            name: '翔鷹航太 勞退自提與 ETF 資產配置精算模型',
+            shortName: '勞退與 ETF 配置',
+            badge: '資產配置 ‧ 複利現值',
+            icon: 'fa-chart-pie text-rose-400',
+            sub: '勞退自提 6% 節稅現值、員工持股信託 100% 獎勵與台幣 ETF 長線配置',
+            homeUrl: '財務個案/財務個案1/財務個案1_翔鷹航太_互動式財務模型.html',
+            items: [
+              {
+                code: '退休配置',
+                title: '翔鷹航太科技：新進財務分析師勞退自提、員工福利信託與台幣 ETF 資產配置精算模型',
+                desc: '國防航太製造業資本預算、自由現金流估算，新進財務分析師勞退自提 6% 節稅現值分析、員工持股信託 100% 獎勵金與台幣 ETF（0050/0056/00878）長線資產配置實戰。',
+                html: '財務個案/財務個案1/財務個案1_翔鷹航太_互動式財務模型.html',
+                interactiveTool: '財務個案/財務個案1/財務個案1_翔鷹航太_互動式財務模型.html',
+                excelModel: '財務個案/財務個案1/財務個案1_翔鷹航太_完整解析財務模型.xlsx',
+                htmlPresentation: '財務個案/財務個案1/教學簡報網站：翔鷹航太科技（AeroTaiwan）.html',
+                docx: '財務個案/財務個案1/1. 教學指引：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx'
+              }
+            ]
+          },
+          realestate: {
+            id: 'realestate',
+            name: '不動產買房、房貸與租買決策財務模型',
+            shortName: '不動產租買與房貸',
+            badge: '房貸月繳 ‧ 租買精算',
+            icon: 'fa-house-chimney text-sky-400',
+            sub: '本息均等 vs 本金均等月繳試算、寬限期陷阱與租買決策財務學',
+            homeUrl: '11501 管理探索二NEW/W10_不動產房地產與租買決策財務學.html',
+            items: [
+              {
+                code: '房貸精算',
+                title: '不動產房地產與租買決策財務學：房貸月繳攤還與租買精算模型',
+                desc: '包含房屋權狀公設比計算、本息平均攤還 vs 本金平均攤還月付金即時試算、寬限期負擔跳升壓力測試、新青安優惠房貸比較與個人租買決策模型。',
+                html: '11501 管理探索二NEW/W10_不動產房地產與租買決策財務學.html',
+                interactiveTool: '11501 管理探索二NEW/W10_不動產房地產與租買決策財務學.html',
+                docx: '財務計算/不動產/不動產：買房、房貸、租屋與投資財務決策.docx'
+              }
+            ]
+          }
+        }
+      },
+
+      // ==========================================
+      // 4. 11502 學期課程 (預留擴充接口)
       // ==========================================
       sem11502: {
         id: 'sem11502',
@@ -588,7 +681,7 @@
       },
 
       // ==========================================
-      // 4. 碩士論文與實證研究 (EMBA 碩論指導)
+      // 5. 碩士論文與實證研究 (EMBA 碩論指導)
       // ==========================================
       theses: {
         id: 'theses',
@@ -642,7 +735,11 @@
       ethics: 'https://williamslchang-blip.github.io/11501-business-ethics-sustainability/',
       explore: 'https://williamslchang-blip.github.io/11501-management-discovery-2/',
       case1: 'https://williamslchang-blip.github.io/11501-leadership-and-management/',
-      case2: 'https://williamslchang-blip.github.io/11501-leadership-and-management/'
+      case2: 'https://williamslchang-blip.github.io/11501-leadership-and-management/',
+      climate: 'https://williamslchang-blip.github.io/master-portal/',
+      hubbard_wacc: 'https://williamslchang-blip.github.io/master-portal/',
+      aerotaiwan_pension: 'https://williamslchang-blip.github.io/master-portal/',
+      realestate: 'https://williamslchang-blip.github.io/11501-management-discovery-2/'
     };
 
     const GITHUB_RAW_BASE = {
@@ -650,7 +747,11 @@
       ethics: 'https://raw.githubusercontent.com/williamslchang-blip/11501-business-ethics-sustainability/main/',
       explore: 'https://raw.githubusercontent.com/williamslchang-blip/11501-management-discovery-2/main/',
       case1: 'https://raw.githubusercontent.com/williamslchang-blip/11501-leadership-and-management/main/',
-      case2: 'https://raw.githubusercontent.com/williamslchang-blip/11501-leadership-and-management/main/'
+      case2: 'https://raw.githubusercontent.com/williamslchang-blip/11501-leadership-and-management/main/',
+      climate: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/',
+      hubbard_wacc: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/',
+      aerotaiwan_pension: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/',
+      realestate: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/'
     };
 
     function resolveUrl(path, courseId) {
@@ -892,6 +993,7 @@
       if (!item) return;
 
       const isCases = lvl1.id === 'cases';
+      const isFinCalc = lvl1.id === 'fincalc';
 
       // Breadcrumbs
       document.getElementById('breadTier1').textContent = lvl1.name;
@@ -900,7 +1002,7 @@
 
       // Canvas Header
       document.getElementById('canvasBadge').textContent = item.code;
-      document.getElementById('canvasBadge').className = `px-2.5 py-0.5 rounded-lg text-xs font-black text-white shadow-sm ${isCases ? 'bg-rose-600' : 'bg-sky-600'}`;
+      document.getElementById('canvasBadge').className = `px-2.5 py-0.5 rounded-lg text-xs font-black text-white shadow-sm ${isCases ? 'bg-rose-600' : isFinCalc ? 'bg-amber-600' : 'bg-sky-600'}`;
       document.getElementById('canvasCategoryLabel').textContent = `${lvl1.name} ❯ ${lvl2.name} (${lvl2.badge})`;
       document.getElementById('canvasTitle').textContent = item.title;
       document.getElementById('canvasDesc').textContent = item.desc;
@@ -916,7 +1018,7 @@
 
       // External Link in Header
       document.getElementById('externalPortalLink').href = resolveUrl(lvl2.homeUrl, currentTier2);
-      document.getElementById('externalPortalText').textContent = isCases ? '個案專區' : '專區總入口';
+      document.getElementById('externalPortalText').textContent = isCases ? '個案專區' : isFinCalc ? '運算專區' : '專區總入口';
 
       // Dynamic Action Buttons
       const actionsBox = document.getElementById('canvasActionsContainer');
@@ -1003,6 +1105,60 @@
           tabSwitch.classList.add('hidden');
         }
 
+      } else if (isFinCalc) {
+        const finToolUrl = item.interactiveTool ? resolveUrl(item.interactiveTool, currentTier2) : (item.html ? resolveUrl(item.html, currentTier2) : '');
+        const finExcelUrl = item.excelModel ? resolveUrl(item.excelModel, currentTier2) : '';
+        const finPresUrl = item.htmlPresentation ? resolveUrl(item.htmlPresentation, currentTier2) : '';
+        const finDocxUrl = item.docx ? resolveUrl(item.docx, currentTier2) : '';
+
+        actionsBox.innerHTML = `
+          <div class="space-y-2.5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+              ${finToolUrl ? `
+                <a href="${finToolUrl}" target="_blank" class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-solid fa-calculator"></i>
+                  <span>開啟互動運算模型 (獨立分頁)</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              ` : ''}
+
+              ${finExcelUrl ? `
+                <a href="${finExcelUrl}" download class="py-2.5 px-3 rounded-xl bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/80 font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-regular fa-file-excel"></i>
+                  <span>Excel 完整財務模型</span>
+                  <i class="fa-solid fa-download text-[9px]"></i>
+                </a>
+              ` : ''}
+
+              ${finPresUrl ? `
+                <a href="${finPresUrl}" target="_blank" class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-solid fa-chalkboard-user"></i>
+                  <span>開啟對應教學簡報網站</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              ` : ''}
+
+              ${finDocxUrl && !finExcelUrl ? `
+                <a href="${finDocxUrl}" download class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-regular fa-file-word"></i>
+                  <span>下載說明與教學指引 (.docx)</span>
+                  <i class="fa-solid fa-download text-[9px]"></i>
+                </a>
+              ` : ''}
+            </div>
+
+            ${finDocxUrl && finExcelUrl ? `
+              <div class="pt-1 border-t border-slate-800/60 flex items-center">
+                <a href="${finDocxUrl}" download class="py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs transition flex items-center gap-1.5">
+                  <i class="fa-regular fa-file-word text-emerald-400"></i>
+                  <span>下載說明與教學指引 (.docx)</span>
+                </a>
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        document.getElementById('viewerTabsSwitch').classList.add('hidden');
       } else {
         // Standard Course Actions
         const courseHtmlUrl = resolveUrl(item.html, currentTier2);
@@ -1054,6 +1210,9 @@
       if (currentTier1 === 'cases' && currentViewerTab === 'tool' && item.interactiveTool) {
         rawTargetUrl = item.interactiveTool;
         document.getElementById('viewerTypeLabel').textContent = '運算模型工具預覽';
+      } else if (currentTier1 === 'fincalc') {
+        rawTargetUrl = item.html || item.interactiveTool;
+        document.getElementById('viewerTypeLabel').textContent = '財務計算分析互動預覽';
       } else {
         document.getElementById('viewerTypeLabel').textContent = '教學簡報網站預覽';
       }

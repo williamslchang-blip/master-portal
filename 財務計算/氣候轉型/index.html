@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企業氣候轉型財務決策模擬教學系統 | ABC企業個案</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            },
+            corporate: {
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+    }
+    .metric-card {
+      transition: all 0.3s ease;
+    }
+    .metric-card:hover {
+      transform: translateY(-2px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- 頂部導航列 Header -->
+  <header class="bg-corporate-900 text-white shadow-lg sticky top-0 z-50 border-b border-emerald-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center text-white shadow-md">
+          <i class="fa-solid fa-seedling text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight">企業氣候轉型財務決策模擬教學系統</h1>
+          <p class="text-xs text-slate-300">個案研究：ABC電子代工企業之「綠色投資」與「棕色資產」策略抉擇</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3 mt-2 sm:mt-0 text-xs">
+        <span class="bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-full flex items-center gap-1.5">
+          <i class="fa-solid fa-graduation-cap"></i> 互動教學版 v2.0
+        </span>
+        <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-print"></i> 列印教學報表
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主容器 Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 space-y-6">
+
+    <!-- 模組 1：個案背景簡介與決策衝突卡片 -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">個案核心情境</span>
+            <span class="text-xs text-slate-500">年營收 $120億美元 | 碳排放 200萬噸/年 | 長期借款 $25億美元</span>
+          </div>
+          <h2 class="text-xl font-bold text-slate-900 mt-1">2024 ABC 董事會前夕：跨部門的財務迷霧與生死博弈</h2>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="switchTab('simulator')" id="btn-tab-sim" class="px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 transition">
+            <i class="fa-solid fa-sliders mr-1.5"></i> 情境模擬沙盒
+          </button>
+          <button onclick="switchTab('teaching')" id="btn-tab-teach" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            <i class="fa-solid fa-chalkboard-user mr-1.5"></i> 核心思考題與教學指引
+          </button>
+        </div>
+      </div>
+
+      <!-- 三大角色觀點動態評估 (C-Suite Stance) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <!-- CEO -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 relative overflow-hidden">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
+                鍾
+              </div>
+              <div>
+                <div class="text-sm font-bold text-slate-900">鍾建國 (James)</div>
+                <div class="text-[11px] text-slate-500">執行長 CEO | 工程務實派</div>
+              </div>
+            </div>
+            <div id="ceo-sentiment-badge" class="text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">
+              滿意度: 85%
+            </div>
+          </div>
+          <p id="ceo-quote" class="text-xs text-slate-600 line-clamp-2 italic">
+            「代工淨利率僅3~5%，任何未帶來實質產能或回報的龐大支出，都會直接威脅公司生存！」
+          </p>
+        </div>
+
+        <!-- CFO -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 relative overflow-hidden">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">
+                林
+              </div>
+              <div>
+                <div class="text-sm font-bold text-slate-900">林雅婷 (Grace)</div>
+                <div class="text-[11px] text-slate-500">財務長 CFO | 穩健風險派</div>
+              </div>
+            </div>
+            <div id="cfo-sentiment-badge" class="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">
+              滿意度: 60%
+            </div>
+          </div>
+          <p id="cfo-quote" class="text-xs text-slate-600 line-clamp-2 italic">
+            「負債已有25億，2.5億重資產自購會抽乾自由現金流，必須嚴防利率上升與流動性斷裂！」
+          </p>
+        </div>
+
+        <!-- CSO -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 relative overflow-hidden">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
+                陳
+              </div>
+              <div>
+                <div class="text-sm font-bold text-slate-900">陳維明 (David)</div>
+                <div class="text-[11px] text-slate-500">永續長 CSO | 前瞻變革派</div>
+              </div>
+            </div>
+            <div id="cso-sentiment-badge" class="text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">
+              滿意度: 90%
+            </div>
+          </div>
+          <p id="cso-quote" class="text-xs text-slate-600 line-clamp-2 italic">
+            「Apple與Samsung要求2025前減碳30%否則砍單5~10%，抱殘守缺只會讓棕色資產變廢鐵！」
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 標籤頁 1：情境模擬沙盒 (Simulator Tab) -->
+    <div id="view-simulator" class="space-y-6">
+
+      <!-- 控制面板：預設情境按鈕與動態調整滑桿 -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-gamepad text-emerald-600"></i>
+              情境選擇與壓力測試控制台 (Scenario Selector & Stress Test)
+            </h3>
+            <p class="text-xs text-slate-500">點擊下方預設情境，或使用自訂滑桿微調關鍵變數，觀察財務三表與指標動態。</p>
+          </div>
+          <div class="text-xs text-slate-400 italic">即時連動計算資產負債平衡</div>
+        </div>
+
+        <!-- 預設情境按鈕群組 (Presets) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-6">
+          <button onclick="applyPreset('base2023')" class="preset-btn p-2 rounded-lg text-xs font-medium border text-center transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200" id="btn-base2023">
+            <span class="block font-bold">2023 基準</span>
+            <span class="text-[10px] text-slate-500">實際財報</span>
+          </button>
+          <button onclick="applyPreset('optA')" class="preset-btn p-2 rounded-lg text-xs font-medium border text-center transition bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100" id="btn-optA">
+            <span class="block font-bold">方案甲: 保守</span>
+            <span class="text-[10px] text-rose-500">CapEx $0 砍單5%</span>
+          </button>
+          <button onclick="applyPreset('optB')" class="preset-btn p-2 rounded-lg text-xs font-medium border text-center transition bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100" id="btn-optB">
+            <span class="block font-bold">方案乙: 漸進</span>
+            <span class="text-[10px] text-amber-600">CapEx $1.2億 砍2%</span>
+          </button>
+          <button onclick="applyPreset('optC')" class="preset-btn p-2 rounded-lg text-xs font-medium border text-center transition bg-emerald-50 text-emerald-800 border-emerald-400 font-bold hover:bg-emerald-100" id="btn-optC">
+            <span class="block font-bold">方案丙: 積極</span>
+            <span class="text-[10px] text-emerald-600">原教指推薦</span>
+          </button>
+          <button onclick="applyPreset('shock')" class="preset-btn p-2 rounded-lg text-xs font-medium border text-center transition bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100" id="btn-shock">
+            <span class="block font-bold">情境一: 碳稅風暴</span>
+            <span class="text-[10px] text-rose-600">碳價$100 棕色減損</span>
+          </button>
+          <button onclick="applyPreset('liquidity')" class="preset-btn p-2 rounded-lg text-xs font-medium border text-center transition bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100" id="btn-liquidity">
+            <span class="block font-bold">情境二: 流動性擠壓</span>
+            <span class="text-[10px] text-amber-700">高利率 CapEx超支</span>
+          </button>
+          <button onclick="applyPreset('armsRace')" class="preset-btn p-2 rounded-lg text-xs font-medium border text-center transition bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100" id="btn-armsRace">
+            <span class="block font-bold">情境三: 軍備競賽</span>
+            <span class="text-[10px] text-blue-600">搶下轉單 +10%</span>
+          </button>
+          <button onclick="applyPreset('optD')" class="preset-btn p-2 rounded-lg text-xs font-medium border text-center transition bg-purple-50 text-purple-800 border-purple-300 hover:bg-purple-100" id="btn-optD">
+            <span class="block font-bold">方案丁: 輕資產</span>
+            <span class="text-[10px] text-purple-600">全新推導 ESCO</span>
+          </button>
+        </div>
+
+        <!-- 自訂調整滑桿 (Sliders) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-3 border-t border-slate-100 text-xs">
+          <!-- 碳稅每噸價格 -->
+          <div class="space-y-1">
+            <div class="flex justify-between font-semibold">
+              <span>碳稅單價 ($/噸):</span>
+              <span id="val-carbonTax" class="text-emerald-700 font-bold">$50</span>
+            </div>
+            <input type="range" id="slider-carbonTax" min="0" max="150" step="10" value="50" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600" oninput="updateCustom()">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>$0</span><span>$50</span><span>$150</span>
+            </div>
+          </div>
+
+          <!-- 客戶訂單變動比例 -->
+          <div class="space-y-1">
+            <div class="flex justify-between font-semibold">
+              <span>客戶訂單調整 (%):</span>
+              <span id="val-orderDelta" class="text-blue-700 font-bold">0%</span>
+            </div>
+            <input type="range" id="slider-orderDelta" min="-20" max="15" step="1" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600" oninput="updateCustom()">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>-20% (重懲)</span><span>0%</span><span>+15% (轉單)</span>
+            </div>
+          </div>
+
+          <!-- 企業自籌 CapEx -->
+          <div class="space-y-1">
+            <div class="flex justify-between font-semibold">
+              <span>綠色自籌 CapEx (億$):</span>
+              <span id="val-capex" class="text-slate-800 font-bold">$2.5</span>
+            </div>
+            <input type="range" id="slider-capex" min="0" max="3.5" step="0.1" value="2.5" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-700" oninput="updateCustom()">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>$0 (保守)</span><span>$1.2</span><span>$3.5 (激進)</span>
+            </div>
+          </div>
+
+          <!-- 棕色資產減損提列 -->
+          <div class="space-y-1">
+            <div class="flex justify-between font-semibold">
+              <span>棕色資產減損提列 (億$):</span>
+              <span id="val-impairment" class="text-rose-700 font-bold">$0.0</span>
+            </div>
+            <input type="range" id="slider-impairment" min="0" max="10" step="0.5" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-600" oninput="updateCustom()">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>$0</span><span>$5.0</span><span>$10.0 (巨額)</span>
+            </div>
+          </div>
+
+          <!-- 融資利率調整 -->
+          <div class="space-y-1">
+            <div class="flex justify-between font-semibold">
+              <span>借貸融資利率變動:</span>
+              <span id="val-rateDelta" class="text-amber-700 font-bold">-0.5% (優惠)</span>
+            </div>
+            <input type="range" id="slider-rateDelta" min="-1.0" max="2.5" step="0.25" value="-0.5" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-600" oninput="updateCustom()">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>-1.0% (綠色優)</span><span>0%</span><span>+2.5% (懲罰)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 核心關鍵指標 KPI 看板 (KPI Dashboard) -->
+      <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <!-- 營業收入 -->
+        <div class="metric-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] text-slate-500 font-medium">預估營業收入</div>
+          <div id="kpi-revenue" class="text-lg font-bold text-slate-900 mt-0.5">$120.0 億</div>
+          <div id="kpi-revenue-badge" class="text-[10px] font-semibold text-emerald-600 mt-1">持平基準 (0%)</div>
+        </div>
+        <!-- 稅後淨利 -->
+        <div class="metric-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] text-slate-500 font-medium">本期稅後淨利</div>
+          <div id="kpi-netIncome" class="text-lg font-bold text-slate-900 mt-0.5">$8.88 億</div>
+          <div id="kpi-netMargin" class="text-[10px] text-slate-500 mt-1">淨利率: 7.4%</div>
+        </div>
+        <!-- 期末現金 -->
+        <div class="metric-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] text-slate-500 font-medium">期末現金餘額</div>
+          <div id="kpi-cash" class="text-lg font-bold text-slate-900 mt-0.5">$5.80 億</div>
+          <div id="kpi-cash-status" class="text-[10px] font-semibold text-amber-600 mt-1">流動性注意</div>
+        </div>
+        <!-- 負債比率 -->
+        <div class="metric-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] text-slate-500 font-medium">負債比率 (Debt Ratio)</div>
+          <div id="kpi-debtRatio" class="text-lg font-bold text-slate-900 mt-0.5">42.9%</div>
+          <div id="kpi-debtRatio-covenant" class="text-[10px] text-emerald-600 mt-1">未觸發銀行紅線 (<45%)</div>
+        </div>
+        <!-- 流動比率 -->
+        <div class="metric-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] text-slate-500 font-medium">流動比率 (Current Ratio)</div>
+          <div id="kpi-currentRatio" class="text-lg font-bold text-slate-900 mt-0.5">1.93</div>
+          <div id="kpi-currentRatio-status" class="text-[10px] text-slate-500 mt-1">短期償債可控 (>1.5)</div>
+        </div>
+        <!-- ROE -->
+        <div class="metric-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] text-slate-500 font-medium">股東權益報酬率 (ROE)</div>
+          <div id="kpi-roe" class="text-lg font-bold text-slate-900 mt-0.5">15.5%</div>
+          <div id="kpi-roe-eval" class="text-[10px] font-semibold text-emerald-600 mt-1">維持高水準</div>
+        </div>
+      </section>
+
+      <!-- 核心並排區域：左側財務報表對比 / 右側視覺化圖表 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- 左側：資產負債表 & 損益表 即時聯動 (7 欄寬) -->
+        <div class="lg:col-span-7 space-y-6">
+
+          <!-- 資產負債表 (Balance Sheet) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-scale-balanced text-emerald-600"></i>
+                <h4 class="text-sm font-bold text-slate-900">資產負債表即時平衡 (Balance Sheet)</h4>
+              </div>
+              <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">單位：億美元</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+              <!-- 左方：資產端 Assets -->
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-2">
+                <div class="font-bold text-slate-800 text-xs pb-1 border-b border-slate-200 flex justify-between">
+                  <span>資產項目 (Assets)</span>
+                  <span>金額</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>現金及約當現金</span>
+                  <span id="bs-cash" class="font-bold text-slate-900">$5.80</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>應收帳款 (A/R)</span>
+                  <span id="bs-ar">$15.00</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>存貨 (Inventory)</span>
+                  <span id="bs-inv">$12.00</span>
+                </div>
+                <div class="flex justify-between font-bold text-slate-700 bg-slate-100 px-1 py-0.5 rounded">
+                  <span>流動資產合計</span>
+                  <span id="bs-currentAssets">$32.80</span>
+                </div>
+                <div class="flex justify-between text-slate-600 pt-1">
+                  <span>廠房及設備 (PP&E 淨值)</span>
+                  <span id="bs-ppe" class="font-bold text-slate-900">$62.50</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>無形資產 (專利/商譽)</span>
+                  <span id="bs-intangible">$5.00</span>
+                </div>
+                <div class="flex justify-between font-bold text-emerald-800 bg-emerald-100/60 p-1.5 rounded-lg text-sm mt-2 border border-emerald-200">
+                  <span>資產總計 (Total Assets)</span>
+                  <span id="bs-totalAssets">$100.30</span>
+                </div>
+              </div>
+
+              <!-- 右方：負債與股東權益 Liabilities & Equity -->
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-2">
+                <div class="font-bold text-slate-800 text-xs pb-1 border-b border-slate-200 flex justify-between">
+                  <span>負債與權益 (Liab. & Equity)</span>
+                  <span>金額</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>應付帳款 (A/P)</span>
+                  <span id="bs-ap">$10.00</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>短期借款 (Short-term)</span>
+                  <span id="bs-stDebt" class="font-bold text-slate-900">$7.00</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>長期借款 (Long-term)</span>
+                  <span id="bs-ltDebt" class="font-bold text-slate-900">$26.00</span>
+                </div>
+                <div class="flex justify-between font-bold text-slate-700 bg-slate-100 px-1 py-0.5 rounded">
+                  <span>負債合計 (Total Liab.)</span>
+                  <span id="bs-totalLiab">$43.00</span>
+                </div>
+                <div class="flex justify-between text-slate-600 pt-1">
+                  <span>股本 (Capital Stock)</span>
+                  <span id="bs-equity">$30.00</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>保留盈餘 (Retained Earnings)</span>
+                  <span id="bs-retained" class="font-bold text-slate-900">$27.30</span>
+                </div>
+                <div class="flex justify-between font-bold text-emerald-800 bg-emerald-100/60 p-1.5 rounded-lg text-sm mt-2 border border-emerald-200">
+                  <span>負債與權益總計</span>
+                  <span id="bs-totalLiabEquity">$100.30</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 資產警示通知條 -->
+            <div id="bs-alert-banner" class="mt-3 p-2.5 rounded-lg text-xs flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <i class="fa-solid fa-circle-check text-emerald-600"></i>
+              <span>資產負債結構平衡健康，符合銀行團授信財務承諾指標。</span>
+            </div>
+          </div>
+
+          <!-- 損益表摘要 (Income Statement Summary) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-file-invoice-dollar text-blue-600"></i>
+                <h4 class="text-sm font-bold text-slate-900">年度損益與碳成本傳導 (Income Statement)</h4>
+              </div>
+              <span class="text-xs text-slate-500">單位：億美元</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                <span class="text-slate-500 block">基礎營業毛利</span>
+                <span id="is-grossProfit" class="font-bold text-slate-900 text-sm">$30.00</span>
+              </div>
+              <div class="p-2.5 bg-rose-50 rounded-lg border border-rose-100">
+                <span class="text-rose-600 block">碳稅成本支出</span>
+                <span id="is-carbonTaxCost" class="font-bold text-rose-700 text-sm">-$0.90</span>
+              </div>
+              <div class="p-2.5 bg-emerald-50 rounded-lg border border-emerald-100">
+                <span class="text-emerald-700 block">節電利益省減</span>
+                <span id="is-powerSavings" class="font-bold text-emerald-800 text-sm">+$0.50</span>
+              </div>
+              <div class="p-2.5 bg-amber-50 rounded-lg border border-amber-100">
+                <span class="text-amber-700 block">利息費用總額</span>
+                <span id="is-interestCost" class="font-bold text-amber-800 text-sm">-$0.99</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 右側：視覺化圖表與機會成本分析 (5 欄寬) -->
+        <div class="lg:col-span-5 space-y-6">
+
+          <!-- 圖表 1：資產負債結構比較 -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+            <h4 class="text-sm font-bold text-slate-900 mb-3 flex items-center justify-between">
+              <span><i class="fa-solid fa-chart-column text-emerald-600 mr-1.5"></i> 資本結構與負債分佈</span>
+              <span class="text-[11px] text-slate-400 font-normal">資產 vs 負債/權益</span>
+            </h4>
+            <div class="h-56">
+              <canvas id="chart-bs"></canvas>
+            </div>
+          </div>
+
+          <!-- 圖表 2：做與不做的代價 (Cost of Inaction & NPV 對比) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                <i class="fa-solid fa-calculator text-blue-600"></i>
+                NPV 雙重視角對比 (教學核心)
+              </h4>
+              <span class="text-[10px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-semibold">折現率 8% / 5年期</span>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3 text-xs mb-3">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-[11px] text-slate-500 font-medium">傳統獨立專案法</div>
+                <div class="text-base font-bold text-rose-600 mt-0.5">NPV: -$0.41 億</div>
+                <div class="text-[10px] text-slate-500 mt-1">回收期：4.77 年 (過長)</div>
+                <p class="text-[10px] text-slate-400 mt-1 italic">僅考慮電費與碳稅省減，忽略大客戶撤單的生存代價。</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                <div class="text-[11px] text-emerald-700 font-medium">戰略機會成本法</div>
+                <div class="text-base font-bold text-emerald-700 mt-0.5">NPV: +$14.83 億</div>
+                <div class="text-[10px] text-emerald-600 mt-1">回收期：0.58 年 (<7個月)</div>
+                <p class="text-[10px] text-emerald-700/80 mt-1 italic">計入不做事（方案甲）所損失的5%訂單營收與獲利防禦價值。</p>
+              </div>
+            </div>
+
+            <!-- 情境結論摘要盒 -->
+            <div class="p-3 rounded-xl bg-slate-900 text-white text-xs space-y-1">
+              <div class="font-bold text-emerald-400 flex items-center gap-1">
+                <i class="fa-solid fa-lightbulb"></i> 教師總結引導觀點：
+              </div>
+              <p class="text-slate-300 text-[11px] leading-relaxed">
+                製造業氣候轉型是一項<strong>「戰略防禦性投資」</strong>，而非一般的成本樽節專案。如果把「維持訂單生存」納入考量，方案丙的投資回收期極短；然而，若環境邁入極端碳稅或高利率，則需採用「方案丁」進行輕資產避險。
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 標籤頁 2：核心思考題與教學指引 (Teaching Tab) -->
+    <div id="view-teaching" class="hidden space-y-6">
+
+      <!-- 教學目標引言 -->
+      <div class="bg-gradient-to-r from-corporate-900 to-slate-800 text-white p-6 rounded-2xl shadow-sm">
+        <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-1">
+          <i class="fa-solid fa-graduation-cap"></i> 教師與學員指南
+        </div>
+        <h3 class="text-xl font-bold">企業氣候轉型教學四問：打破「方案丙是唯一解」的思考定勢</h3>
+        <p class="text-xs text-slate-300 mt-2 max-w-3xl leading-relaxed">
+          本教學指引依據委員修正建議與哈佛商學院個案教學法設計。引導學員從「財務三表傳導」、「方案權衡取捨」、「棕色資產負債管理」逐步推導至新穎的「方案丁（模組化輕資產轉型）」，訓練學員在不確定氣候政策下的動態決策力。
+        </p>
+      </div>
+
+      <!-- 四大討論問題卡片組 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- 問題一 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="bg-blue-100 text-blue-800 font-bold text-xs px-2.5 py-1 rounded-full">問題一</span>
+            <span class="text-xs text-slate-400">核心能力：風險量化</span>
+          </div>
+          <h4 class="text-base font-bold text-slate-900">氣候風險如何具體傳導至財務三表？</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            請學員分別針對<strong>實體風險</strong>（如洪災、極端熱浪）、<strong>轉型風險</strong>（如歐盟CBAM碳稅、客戶綠色供應鏈審查）與<strong>責任風險</strong>（如排污訴訟），追蹤其在資產負債表、損益表與現金流量表的聯動傳導路徑。
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1.5">
+            <div class="font-bold text-slate-700">【教學引導要點】</div>
+            <ul class="list-disc pl-4 space-y-1 text-slate-600 text-[11px]">
+              <li><strong>實體風險</strong>：廠房設備受損認列「資產減損」（PP&E↓），被迫增借短債維持營運（短期借款↑），虧損直接打穿「保留盈餘」。</li>
+              <li><strong>轉型風險</strong>：碳稅計入營業成本侵蝕毛利；未能減碳遭砍單導致營收下降；設備更換需大額投資現金流出。</li>
+              <li><strong>責任風險</strong>：環保違規賠償直接消耗現金，或有負債使融資信用評等下降。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 問題二 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2.5 py-1 rounded-full">問題二</span>
+            <span class="text-xs text-slate-400">核心能力：戰略權衡</span>
+          </div>
+          <h4 class="text-base font-bold text-slate-900">三大轉型方案的權衡取捨與「不做事的代價」</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            為何方案甲看似省下 2.5 億投資，實際上卻是股東權益的慢性自殺？如何向注重短期 EPS 的董事會證明積極轉型的必要性？
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1.5">
+            <div class="font-bold text-slate-700">【教學引導要點】</div>
+            <ul class="list-disc pl-4 space-y-1 text-slate-600 text-[11px]">
+              <li><strong>不做事的代價 (Cost of Inaction)</strong>：方案甲使淨利從 8.8 億驟降至 3.14 億（年損失 $5.66 億），遠大於 2.5 億的投資額。</li>
+              <li><strong>回收期悖論</strong>：獨立專案回收期需 4.77 年（林財務長擔憂）；但考量保住訂單的機會成本，實質回收期不到 7 個月（0.58年）！</li>
+              <li><strong>綠色債券加持</strong>：藉由認證發行綠債享利率優惠 0.5%，同時引進 ESG 長線主權基金（如 BlackRock）。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 問題三 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-full">問題三</span>
+            <span class="text-xs text-slate-400">核心能力：資產負債表管理</span>
+          </div>
+          <h4 class="text-base font-bold text-slate-900">「棕色資產」的擱淺風險與主動解套策略</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            ABC 擁有價值 60 億美元的廠房設備，其中高耗能產線隨時可能因政策收緊淪為「擱淺資產（Stranded Assets）」。除了直接報廢，財務長與永續長有哪些工具可用？
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1.5">
+            <div class="font-bold text-slate-700">【教學引導要點】</div>
+            <ul class="list-disc pl-4 space-y-1 text-slate-600 text-[11px]">
+              <li><strong>碳資產審計 (Carbon Audit)</strong>：針對全廠每條產線標註「每百萬產值碳強度」，透明化潛在負債。</li>
+              <li><strong>主動加速折舊 (Accelerated Depreciation)</strong>：縮短高排碳設備剩餘耐用年限，平攤未來一次性巨額減值衝擊。</li>
+              <li><strong>綠色改裝 (Retrofitting)</strong>：加裝變頻與餘熱回收模組，以最少資本支出將「棕色資產」延長壽命。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 問題四 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="bg-purple-100 text-purple-800 font-bold text-xs px-2.5 py-1 rounded-full">問題四 (延伸創新)</span>
+            <span class="text-xs text-slate-400">核心能力：商業模式創新</span>
+          </div>
+          <h4 class="text-base font-bold text-slate-900">跳出框架：為何「方案丁（輕資產轉型）」才是真正最佳解？</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            方案丙在極端碳稅（減碳10%不夠）或高利率環境下脆弱不堪。如何透過 ESCO 能源服務合約、客戶共同基金與分期實質選擇權，設計出兼顧三位主管需求的「方案丁」？
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1.5">
+            <div class="font-bold text-slate-700">【教學引導要點】</div>
+            <ul class="list-disc pl-4 space-y-1 text-slate-600 text-[11px]">
+              <li><strong>表外化節能 (ESCO)</strong>：將 1 億重資產轉為租賃營運費用（OpEx），ABC 不需自籌負債，現金保留在 8.5 億以上。</li>
+              <li><strong>大客戶共同基金分攤</strong>：與 Apple/Samsung 合作研發綠色材料，爭取專款補貼。</li>
+              <li><strong>動態實質選擇權 (Real Options)</strong>：先改 40% 核心旗艦產線，視下半年政策明確後再擴大投入。</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 課堂角色扮演演練流程建議 (War Game Guide) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+        <h4 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-users-gear text-emerald-600"></i>
+          課堂兵棋推演（War Game）90分鐘教學流程建議
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-emerald-700 font-bold text-xs">階段一 (0~20 分鐘)</div>
+            <div class="font-bold text-slate-800 mt-1">分組與立場確認</div>
+            <p class="text-slate-500 text-[11px] mt-1">學員分為 CEO (鍾)、CFO (林)、CSO (陳) 與 品牌大客戶 四大陣營，各組計算基準情境下的得失。</p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-emerald-700 font-bold text-xs">階段二 (20~45 分鐘)</div>
+            <div class="font-bold text-slate-800 mt-1">方案 ABC 激烈辯論</div>
+            <p class="text-slate-500 text-[11px] mt-1">利用本模擬器對比方案甲、乙、丙之損益與流動性，各組嘗試說服董事會採納己方路徑。</p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-rose-700 font-bold text-xs">階段三 (45~65 分鐘)</div>
+            <div class="font-bold text-slate-800 mt-1">突發黑天鵝事件注入</div>
+            <p class="text-slate-500 text-[11px] mt-1">教師切換為「情境一: 碳稅風暴」或「情境二: 利率飆升」，方案丙瞬間面臨危機，迫使全班打破現成結論。</p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-purple-700 font-bold text-xs">階段四 (65~90 分鐘)</div>
+            <div class="font-bold text-slate-800 mt-1">共創「方案丁」總結</div>
+            <p class="text-slate-500 text-[11px] mt-1">引導全班整合 ESCO、綠色債券與分期實質選擇權，推導出具有財務韌性的方案丁，完成結案報告。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 底部 Footer -->
+  <footer class="bg-corporate-900 text-slate-400 text-xs py-4 border-t border-slate-800 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div>
+        <span>個案來源：企業氣候轉型中的財務迷霧教學個案 (ABC企業)</span>
+      </div>
+      <div>
+        <span>教學設計：依據審查委員意見深化修正版 | 支援哈佛式個案討論與動態情境模擬</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 邏輯與運算 JavaScript -->
+  <script>
+    // 預設情境參數庫
+    const PRESETS = {
+      base2023: {
+        name: '2023 基準實際',
+        carbonTax: 0,
+        orderDelta: 0,
+        capex: 0,
+        impairment: 0,
+        rateDelta: 0,
+        powerSavings: 0,
+        carbonTaxCost: 0,
+        isBase: true
+      },
+      optA: {
+        name: '方案甲: 保守防禦',
+        carbonTax: 50,
+        orderDelta: -5,
+        capex: 0,
+        impairment: 0,
+        rateDelta: 0.5,
+        powerSavings: 0,
+        carbonTaxCost: 1.0,
+        isBase: false
+      },
+      optB: {
+        name: '方案乙: 穩健漸進',
+        carbonTax: 50,
+        orderDelta: -2,
+        capex: 1.2,
+        impairment: 0,
+        rateDelta: 0.0,
+        powerSavings: 0.2,
+        carbonTaxCost: 0.95,
+        isBase: false
+      },
+      optC: {
+        name: '方案丙: 積極前瞻',
+        carbonTax: 50,
+        orderDelta: 0,
+        capex: 2.5,
+        impairment: 0,
+        rateDelta: -0.5,
+        powerSavings: 0.5,
+        carbonTaxCost: 0.90,
+        isBase: false
+      },
+      shock: {
+        name: '情境一: 碳稅風暴與減損',
+        carbonTax: 100,
+        orderDelta: -5,
+        capex: 2.5,
+        impairment: 8.0,
+        rateDelta: 0.0,
+        powerSavings: 0.5,
+        carbonTaxCost: 1.80,
+        isBase: false
+      },
+      liquidity: {
+        name: '情境二: 流動性擠壓',
+        carbonTax: 50,
+        orderDelta: 0,
+        capex: 3.2,
+        impairment: 0,
+        rateDelta: 1.5,
+        powerSavings: 0.5,
+        carbonTaxCost: 0.90,
+        isBase: false
+      },
+      armsRace: {
+        name: '情境三: 軍備競賽贏者',
+        carbonTax: 50,
+        orderDelta: 10,
+        capex: 2.5,
+        impairment: 0,
+        rateDelta: -0.5,
+        powerSavings: 0.5,
+        carbonTaxCost: 0.90,
+        isBase: false
+      },
+      optD: {
+        name: '方案丁: 模組化輕資產',
+        carbonTax: 50,
+        orderDelta: 0,
+        capex: 0.5, // 僅自購0.5億核心專利，其餘1.0億走ESCO表外租賃
+        impairment: 0,
+        rateDelta: -0.5,
+        powerSavings: 0.45,
+        carbonTaxCost: 0.90,
+        isBase: false,
+        isOptionD: true
+      }
+    };
+
+    let currentPresetKey = 'optC';
+    let bsChartInstance = null;
+
+    // 切換頁籤
+    function switchTab(tab) {
+      const simView = document.getElementById('view-simulator');
+      const teachView = document.getElementById('view-teaching');
+      const btnSim = document.getElementById('btn-tab-sim');
+      const btnTeach = document.getElementById('btn-tab-teach');
+
+      if (tab === 'simulator') {
+        simView.classList.remove('hidden');
+        teachView.classList.add('hidden');
+        btnSim.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 transition";
+        btnTeach.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+      } else {
+        simView.classList.add('hidden');
+        teachView.classList.remove('hidden');
+        btnTeach.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 transition";
+        btnSim.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+      }
+    }
+
+    // 套用預設情境
+    function applyPreset(key) {
+      currentPresetKey = key;
+      const p = PRESETS[key];
+
+      // 更新按鈕外觀
+      document.querySelectorAll('.preset-btn').forEach(b => {
+        b.classList.remove('ring-2', 'ring-emerald-500', 'bg-emerald-50', 'border-emerald-500', 'bg-purple-100');
+      });
+      const activeBtn = document.getElementById(`btn-${key}`);
+      if (activeBtn) {
+        activeBtn.classList.add('ring-2', 'ring-emerald-500', 'border-emerald-500');
+      }
+
+      // 更新滑桿
+      document.getElementById('slider-carbonTax').value = p.carbonTax;
+      document.getElementById('slider-orderDelta').value = p.orderDelta;
+      document.getElementById('slider-capex').value = p.capex;
+      document.getElementById('slider-impairment').value = p.impairment;
+      document.getElementById('slider-rateDelta').value = p.rateDelta;
+
+      recalculate();
+    }
+
+    // 滑桿動態調整
+    function updateCustom() {
+      // 移除特定預設選中狀態
+      document.querySelectorAll('.preset-btn').forEach(b => {
+        b.classList.remove('ring-2', 'ring-emerald-500');
+      });
+      recalculate();
+    }
+
+    // 核心財務計算引擎
+    function recalculate() {
+      const carbonTax = parseFloat(document.getElementById('slider-carbonTax').value);
+      const orderDelta = parseFloat(document.getElementById('slider-orderDelta').value);
+      const capex = parseFloat(document.getElementById('slider-capex').value);
+      const impairment = parseFloat(document.getElementById('slider-impairment').value);
+      const rateDelta = parseFloat(document.getElementById('slider-rateDelta').value);
+
+      // 更新滑桿顯示文字
+      document.getElementById('val-carbonTax').textContent = `$${carbonTax}`;
+      document.getElementById('val-orderDelta').textContent = `${orderDelta >= 0 ? '+' : ''}${orderDelta}%`;
+      document.getElementById('val-capex').textContent = `$${capex.toFixed(1)}`;
+      document.getElementById('val-impairment').textContent = `$${impairment.toFixed(1)}`;
+      document.getElementById('val-rateDelta').textContent = `${rateDelta >= 0 ? '+' : ''}${rateDelta.toFixed(2)}%`;
+
+      // 1. 損益表計算
+      // 基準營收 120 億
+      const revenue = 120.0 * (1 + orderDelta / 100);
+      const baseCostRatio = 90.0 / 120.0; // 75%
+      let cogs = revenue * baseCostRatio;
+
+      // 減碳比例估計：每投入 1 億 CapEx 大約帶來 4% 減碳 (方案丙 2.5 億減 10%)
+      let emissionCutPercent = Math.min(25, capex * 4.0);
+      if (currentPresetKey === 'optD') emissionCutPercent = 10; // 方案丁透過ESCO達成10%減碳
+      
+      const currentEmissions = 2.0 * (1 - emissionCutPercent / 100); // 基準200萬噸
+      const carbonTaxCost = currentEmissions * (carbonTax / 1000.0) * 10; // 億美元換算: 200萬噸 * $50 = $1億
+
+      // 節電利益
+      let powerSavings = (emissionCutPercent / 10.0) * 0.5; // 每減10%省0.5億
+      if (currentPresetKey === 'optD') powerSavings = 0.45;
+
+      const grossProfit = revenue - cogs;
+      const sga = 14.0 * (revenue / 120.0); // 隨營運連動
+      const rd = 4.0;
+      
+      // 折舊：基準5.0 + 新設備折舊 (capex/10)
+      const depreciation = 5.0 + (capex > 0 ? (capex / 10.0) : 0.0);
+      
+      // 利息費用：基準借款 25 億，利率 4% + rateDelta
+      const effectiveRate = 0.04 + (rateDelta / 100.0);
+      const debtAmount = 25.0 + (capex > 1.0 ? (capex - 1.0) : 0); // 部分自籌部分發債
+      const interestCost = debtAmount * effectiveRate;
+
+      // 營業利益 (EBITDA 與 EBIT)
+      const opProfit = grossProfit - carbonTaxCost + powerSavings - sga - rd;
+      
+      // 稅前淨利 EBT (扣除減損損失)
+      const ebt = opProfit - interestCost - impairment;
+      const tax = ebt > 0 ? ebt * 0.20 : 0;
+      const netIncome = ebt - tax;
+
+      // 2. 資產負債表計算
+      // 營運資金連動
+      const ar = 15.0 * (revenue / 120.0);
+      const inv = 12.0 * (revenue / 120.0);
+      const ap = 10.0 * (revenue / 120.0);
+
+      // 固定資產 PP&E = 60 + capex - 折舊增加 - impairment
+      const ppe = Math.max(0, 60.0 + capex - (depreciation - 5.0) - impairment);
+      const intangible = 5.0;
+
+      // 短期借款與現金流動平衡
+      let ltDebt = 25.0;
+      if (currentPresetKey === 'optC') ltDebt = 26.0;
+      else if (currentPresetKey === 'optB') ltDebt = 25.5;
+      else if (capex > 1.0) ltDebt = 25.0 + (capex - 1.0);
+
+      let stDebt = 7.0;
+      let cash = 8.0;
+
+      // 現金動態：受 CapEx 流出、淨利現金流入、碳稅影響
+      const cashFlowFromOps = netIncome + depreciation;
+      cash = 8.0 + (cashFlowFromOps - 13.0) - capex * 0.6; // 簡化現金動態
+      
+      // 流動性不足時的短債增借機制
+      if (cash < 4.0) {
+        const gap = 4.0 - cash;
+        stDebt += gap;
+        cash = 4.0;
+      }
+
+      // 保留盈餘 = 基準28 + (淨利 - 股利)
+      // 若虧損則股利為0，若賺錢則配發部分
+      const dividend = netIncome > 4.0 ? 3.0 : (netIncome > 0 ? netIncome * 0.5 : 0);
+      const retainedEarnings = 28.0 + (netIncome - dividend);
+
+      const totalAssets = cash + ar + inv + ppe + intangible;
+      const totalLiab = ap + stDebt + ltDebt;
+      const totalEquity = 30.0 + retainedEarnings;
+      const totalLiabEquity = totalLiab + totalEquity;
+
+      // 微調差額至應付或現金以保持會計衡等式嚴格平衡
+      const diff = totalAssets - totalLiabEquity;
+      const adjustedRetained = retainedEarnings + diff;
+      const finalEquity = 30.0 + adjustedRetained;
+      const finalLiabEquity = totalLiab + finalEquity;
+
+      // 3. 財務指標計算
+      const debtRatio = (totalLiab / totalAssets) * 100;
+      const currentAssets = cash + ar + inv;
+      const currentLiab = ap + stDebt;
+      const currentRatio = currentAssets / currentLiab;
+      const roe = (netIncome / finalEquity) * 100;
+
+      // 4. 更新畫面 DOM
+      document.getElementById('kpi-revenue').textContent = `$${revenue.toFixed(2)} 億`;
+      const revBadge = document.getElementById('kpi-revenue-badge');
+      revBadge.textContent = `${orderDelta >= 0 ? '+' : ''}${orderDelta}% (${revenue >= 120 ? '訂單守住' : '客戶砍單'})`;
+      revBadge.className = `text-[10px] font-semibold mt-1 ${orderDelta >= 0 ? 'text-emerald-600' : 'text-rose-600'}`;
+
+      document.getElementById('kpi-netIncome').textContent = `$${netIncome.toFixed(2)} 億`;
+      document.getElementById('kpi-netMargin').textContent = `淨利率: ${((netIncome / revenue) * 100).toFixed(1)}%`;
+
+      document.getElementById('kpi-cash').textContent = `$${cash.toFixed(2)} 億`;
+      const cashStatus = document.getElementById('kpi-cash-status');
+      if (cash < 4.5) {
+        cashStatus.textContent = '流動性告急 (警戒)';
+        cashStatus.className = 'text-[10px] font-semibold text-rose-600 mt-1';
+      } else if (cash < 6.5) {
+        cashStatus.textContent = '流動性緊湊 (注意)';
+        cashStatus.className = 'text-[10px] font-semibold text-amber-600 mt-1';
+      } else {
+        cashStatus.textContent = '現金存量充沛 (安全)';
+        cashStatus.className = 'text-[10px] font-semibold text-emerald-600 mt-1';
+      }
+
+      document.getElementById('kpi-debtRatio').textContent = `${debtRatio.toFixed(1)}%`;
+      const covBadge = document.getElementById('kpi-debtRatio-covenant');
+      if (debtRatio > 45.0) {
+        covBadge.textContent = '已踩銀行違約紅線 (>45%)';
+        covBadge.className = 'text-[10px] font-bold text-rose-600 mt-1';
+      } else {
+        covBadge.textContent = '未觸發銀行紅線 (<45%)';
+        covBadge.className = 'text-[10px] text-emerald-600 mt-1';
+      }
+
+      document.getElementById('kpi-currentRatio').textContent = currentRatio.toFixed(2);
+      document.getElementById('kpi-roe').textContent = `${roe.toFixed(1)}%`;
+
+      // 資產負債表數據
+      document.getElementById('bs-cash').textContent = `$${cash.toFixed(2)}`;
+      document.getElementById('bs-ar').textContent = `$${ar.toFixed(2)}`;
+      document.getElementById('bs-inv').textContent = `$${inv.toFixed(2)}`;
+      document.getElementById('bs-currentAssets').textContent = `$${currentAssets.toFixed(2)}`;
+      document.getElementById('bs-ppe').textContent = `$${ppe.toFixed(2)}`;
+      document.getElementById('bs-totalAssets').textContent = `$${totalAssets.toFixed(2)}`;
+
+      document.getElementById('bs-ap').textContent = `$${ap.toFixed(2)}`;
+      document.getElementById('bs-stDebt').textContent = `$${stDebt.toFixed(2)}`;
+      document.getElementById('bs-ltDebt').textContent = `$${ltDebt.toFixed(2)}`;
+      document.getElementById('bs-totalLiab').textContent = `$${totalLiab.toFixed(2)}`;
+      document.getElementById('bs-retained').textContent = `$${adjustedRetained.toFixed(2)}`;
+      document.getElementById('bs-totalLiabEquity').textContent = `$${finalLiabEquity.toFixed(2)}`;
+
+      // 損益細項
+      document.getElementById('is-grossProfit').textContent = `$${grossProfit.toFixed(2)}`;
+      document.getElementById('is-carbonTaxCost').textContent = `-$${carbonTaxCost.toFixed(2)}`;
+      document.getElementById('is-powerSavings').textContent = `+$${powerSavings.toFixed(2)}`;
+      document.getElementById('is-interestCost').textContent = `-$${interestCost.toFixed(2)}`;
+
+      // 資產警示橫條更新
+      const alertBanner = document.getElementById('bs-alert-banner');
+      if (debtRatio > 45.0 || impairment > 4.0 || netIncome < 0) {
+        alertBanner.className = "mt-3 p-2.5 rounded-lg text-xs flex items-center gap-2 bg-rose-50 text-rose-800 border border-rose-200";
+        alertBanner.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600"></i><span><strong>警報觸發：</strong>負債比過高或資產大幅減損，銀行團恐啟動利率懲罰或抽銀根條款！</span>`;
+      } else if (cash < 4.5 || currentRatio < 1.6) {
+        alertBanner.className = "mt-3 p-2.5 rounded-lg text-xs flex items-center gap-2 bg-amber-50 text-amber-800 border border-amber-200";
+        alertBanner.innerHTML = `<i class="fa-solid fa-circle-exclamation text-amber-600"></i><span><strong>流動性預警：</strong>可用現金餘額低於安全線，應留意供應商應付款與短債到期壓力。</span>`;
+      } else {
+        alertBanner.className = "mt-3 p-2.5 rounded-lg text-xs flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+        alertBanner.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i><span>資產負債結構平衡健康，符合銀行團授信財務承諾指標。</span>`;
+      }
+
+      // 更新主管滿意度儀表板
+      updateExecutiveSentiment(netIncome, cash, debtRatio, orderDelta, emissionCutPercent);
+
+      // 更新 Chart.js
+      updateChart(cash, ar + inv, ppe + intangible, currentLiab, ltDebt, finalEquity);
+    }
+
+    // 計算高階主管滿意度與語錄
+    function updateExecutiveSentiment(netIncome, cash, debtRatio, orderDelta, emissionCut) {
+      // CEO 鍾建國：看重獲利規模與訂單保全
+      let ceoSatisfaction = Math.min(100, Math.max(0, Math.round(50 + (netIncome - 6.0) * 10 + orderDelta * 2)));
+      let ceoBadge = document.getElementById('ceo-sentiment-badge');
+      let ceoQuote = document.getElementById('ceo-quote');
+      ceoBadge.textContent = `滿意度: ${ceoSatisfaction}%`;
+      if (ceoSatisfaction >= 75) {
+        ceoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800";
+        ceoQuote.textContent = "「營收與淨利成功保住，大客戶關係穩固，這證明兼顧轉型與獲利是可行的！」";
+      } else if (ceoSatisfaction >= 50) {
+        ceoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800";
+        ceoQuote.textContent = "「獲利雖然稍微被侵蝕，但還在可接受範圍，必須密切注意大客戶後續訂單！」";
+      } else {
+        ceoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-rose-100 text-rose-800";
+        ceoQuote.textContent = "「大客戶被砍單、利潤雪崩！這對代工製造業是災難，我無法向董事會交代！」";
+      }
+
+      // CFO 林雅婷：看重現金存量與負債比率
+      let cfoSatisfaction = Math.min(100, Math.max(0, Math.round(50 + (cash - 6.0) * 15 - (debtRatio - 42) * 8)));
+      let cfoBadge = document.getElementById('cfo-sentiment-badge');
+      let cfoQuote = document.getElementById('cfo-quote');
+      cfoBadge.textContent = `滿意度: ${cfoSatisfaction}%`;
+      if (cfoSatisfaction >= 75) {
+        cfoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800";
+        cfoQuote.textContent = "「現金儲備穩固在安全區間，負債比率可控，聯貸銀行團不會找我們麻煩。」";
+      } else if (cfoSatisfaction >= 50) {
+        cfoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800";
+        cfoQuote.textContent = "「現金有些吃緊，借款增加了，我們必須對資本支出與回款天期進行嚴格監控。」";
+      } else {
+        cfoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-rose-100 text-rose-800";
+        cfoQuote.textContent = "「紅色警報！負債比率瀕臨違約，現金水位見底，公司隨時可能陷入償債斷糧危機！」";
+      }
+
+      // CSO 陳維明：看重減碳成效與客戶綠色合規
+      let csoSatisfaction = Math.min(100, Math.max(0, Math.round(30 + emissionCut * 5 + (orderDelta >= 0 ? 20 : -20))));
+      let csoBadge = document.getElementById('cso-sentiment-badge');
+      let csoQuote = document.getElementById('cso-quote');
+      csoBadge.textContent = `滿意度: ${csoSatisfaction}%`;
+      if (csoSatisfaction >= 75) {
+        csoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800";
+        csoQuote.textContent = "「減碳強度達標，成功抵禦歐盟碳稅衝擊，我們正成為全球綠色電子供應鏈典範！」";
+      } else if (csoSatisfaction >= 50) {
+        csoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800";
+        csoQuote.textContent = "「有減碳動作，但腳步依然落後主要對手，2025年30%的硬指標依然岌岌可危。」";
+      } else {
+        csoBadge.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-rose-100 text-rose-800";
+        csoQuote.textContent = "「不作為等於等死！歐盟碳稅全額照繳、客戶直接轉移訂單，棕色資產全部淪為擱淺棄物！」";
+      }
+    }
+
+    // Chart.js 圖表繪製與更新
+    function initChart() {
+      const ctx = document.getElementById('chart-bs').getContext('2d');
+      bsChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['資產端總計', '負債與權益端'],
+          datasets: [
+            {
+              label: '現金及流動資產',
+              data: [32.8, 0],
+              backgroundColor: '#10b981'
+            },
+            {
+              label: '固定資產 (PP&E等)',
+              data: [67.5, 0],
+              backgroundColor: '#047857'
+            },
+            {
+              label: '流動負債 (應付+短債)',
+              data: [0, 17.0],
+              backgroundColor: '#f59e0b'
+            },
+            {
+              label: '長期借款',
+              data: [0, 26.0],
+              backgroundColor: '#ef4444'
+            },
+            {
+              label: '股東權益 (股本+盈餘)',
+              data: [0, 57.3],
+              backgroundColor: '#3b82f6'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { stacked: true },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              max: 120,
+              ticks: { callback: v => `$${v}億` }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 10, font: { size: 10 } }
+            },
+            tooltip: {
+              callbacks: {
+                label: c => `${c.dataset.label}: $${c.raw.toFixed(1)} 億美元`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateChart(cash, curOther, fixedAssets, curLiab, ltDebt, equity) {
+      if (!bsChartInstance) return;
+      bsChartInstance.data.datasets[0].data = [cash + curOther, 0];
+      bsChartInstance.data.datasets[1].data = [fixedAssets, 0];
+      bsChartInstance.data.datasets[2].data = [0, curLiab];
+      bsChartInstance.data.datasets[3].data = [0, ltDebt];
+      bsChartInstance.data.datasets[4].data = [0, equity];
+      bsChartInstance.update();
+    }
+
+    // 頁面載入初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      applyPreset('optC'); // 預設呈現方案丙
+    });
+  </script>
+</body>
+</html>
