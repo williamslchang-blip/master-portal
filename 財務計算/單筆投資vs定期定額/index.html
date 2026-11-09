@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>單筆投資 vs. 定期定額 | 財務決策與行為財務學互動教學系統</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+            },
+            lump: {
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8'
+            },
+            dca: {
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 3px;
+    }
+    /* 算式透視樣式 */
+    .fx-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      background-color: #f8fafc;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      vertical-align: middle;
+      user-select: none;
+    }
+    .fx-badge:hover {
+      background-color: #fef3c7 !important;
+      color: #b45309 !important;
+      border-color: #f59e0b !important;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+    }
+    body.formula-mode-active .fx-badge {
+      background-color: #fef3c7;
+      color: #92400e;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+      animation: pulse-fx 2.2s infinite ease-in-out;
+    }
+    @keyframes pulse-fx {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.35); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- 頂部導航列 Header -->
+  <header class="bg-slate-900 text-white sticky top-0 z-50 border-b border-emerald-500 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <a href="https://williamslchang-blip.github.io/master-portal/" class="text-slate-400 hover:text-white transition flex items-center gap-1.5 text-sm" title="返回 Master Portal">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="hidden sm:inline">Master Portal</span>
+        </a>
+        <span class="text-slate-600">|</span>
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-sm">
+            <i class="fa-solid fa-coins text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-base font-bold text-white tracking-wide leading-tight">單筆投資 vs. 定期定額</h1>
+            <p class="text-xs text-emerald-300">Lump-Sum vs. DCA 財務決策與行為財務學模擬系統</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 快速情境按鈕、算式透視開關與匯出 -->
+      <div class="flex items-center gap-2 flex-wrap text-xs">
+        <!-- 算式透視開關 -->
+        <button id="btn-toggle-formula" onclick="toggleFormulaMode()" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-square-root-variable text-amber-400"></i>
+          <span>算式透視</span>
+          <span id="formula-mode-status" class="text-[10px] px-1.5 py-0.2 rounded bg-slate-700 text-slate-300 font-bold">關</span>
+        </button>
+
+        <span class="text-slate-500 hidden xl:inline">|</span>
+        <span class="text-slate-400 hidden lg:inline"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>情境：</span>
+        <button onclick="applyPreset('baseline')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">基準 (8%, 10年)</button>
+        <button onclick="applyPreset('bull')" class="px-2.5 py-1 rounded bg-blue-900/60 hover:bg-blue-800 text-blue-200 border border-blue-700 transition">強勁牛市 (12%)</button>
+        <button onclick="applyPreset('dip')" class="px-2.5 py-1 rounded bg-amber-950/60 hover:bg-amber-900 text-amber-200 border border-amber-800 transition">微笑曲線 (先跌後漲)</button>
+        <button onclick="applyPreset('bear')" class="px-2.5 py-1 rounded bg-rose-950/60 hover:bg-rose-900 text-rose-200 border border-rose-800 transition">單邊空頭 (-5%)</button>
+        
+        <button onclick="exportCSV()" class="ml-1 px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-medium shadow transition flex items-center gap-1">
+          <i class="fa-solid fa-file-csv"></i>
+          <span>匯出明細 CSV</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 模組頁籤導航 -->
+  <nav class="bg-white border-b border-slate-200 sticky top-[57px] z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto space-x-1 sm:space-x-4 py-2 custom-scroll text-sm font-medium">
+      <button onclick="switchTab('tab-compare')" id="btn-tab-compare" class="tab-btn active px-3.5 py-2 rounded-lg text-emerald-700 bg-emerald-50 border border-emerald-200 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-scale-balanced"></i>
+        <span>一、策略比較與 10 年案例 (Table 0-1)</span>
+      </button>
+      <button onclick="switchTab('tab-simulator')" id="btn-tab-simulator" class="tab-btn px-3.5 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-sliders"></i>
+        <span>二、互動試算與多參數模擬 (Table 2)</span>
+      </button>
+      <button onclick="switchTab('tab-smile')" id="btn-tab-smile" class="tab-btn px-3.5 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-chart-line-down"></i>
+        <span>三、首年暴跌 30% 微笑曲線實驗</span>
+      </button>
+      <button onclick="switchTab('tab-vanguard')" id="btn-tab-vanguard" class="tab-btn px-3.5 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-building-columns"></i>
+        <span>四、Vanguard 歷史實證研究 (2/3 機率)</span>
+      </button>
+      <button onclick="switchTab('tab-discussion')" id="btn-tab-discussion" class="tab-btn px-3.5 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-comments"></i>
+        <span>五、課堂思辨研討與結論</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+
+    <!-- ============================================================== -->
+    <!-- TAB 1: 策略比較與 10 年案例 (Table 0 & Table 1) -->
+    <!-- ============================================================== -->
+    <section id="tab-compare" class="tab-pane space-y-6">
+      
+      <!-- Banner 卡片 -->
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
+        <div class="relative z-10 max-w-4xl">
+          <span class="badge-pill bg-emerald-500/30 text-emerald-200 border border-emerald-400/40 mb-3">
+            <i class="fa-solid fa-graduation-cap mr-1.5"></i> 核心課題 ‧ 已有一筆資金時，應立即全額投入，還是分批進場？
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">單筆投資 (Lump-Sum) vs. 定期定額 (DCA)</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            投資決策往往在「最大化預期報酬」與「控制短期下行心理壓力」之間取得平衡。本單元透過 100 萬元資金、10 年期之基準案例，剖析資金提早進場的「時間價值」與分批投入的「平均成本」效果。
+          </p>
+        </div>
+        <div class="absolute -right-8 -bottom-8 opacity-10 text-9xl text-white pointer-events-none">
+          <i class="fa-solid fa-coins"></i>
+        </div>
+      </div>
+
+      <!-- 策略特徵全面對照表 Table 0 -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+          <div>
+            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+              <i class="fa-solid fa-table-list text-emerald-600"></i>
+              兩種投資策略特徵深度對照表
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">腳本第一節 Table 0 完整教學架構</p>
+          </div>
+          <span class="badge-pill bg-slate-100 text-slate-600 font-mono">Table 0</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <thead class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+              <tr>
+                <th class="py-2.5 px-3">比較維度</th>
+                <th class="py-2.5 px-3 text-blue-700 bg-blue-50/50">方案 A：單筆投資 (Lump-Sum)</th>
+                <th class="py-2.5 px-3 text-emerald-700 bg-emerald-50/50">方案 B：定期定額 (DCA)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900">投資執行方式</td>
+                <td class="py-2.5 px-3 text-blue-800 font-medium">第一期初立即一次投入全部資金 (100萬)</td>
+                <td class="py-2.5 px-3 text-emerald-800 font-medium">將現有資金切分為等額，分批於每月定期投入</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900">資金進場時間</td>
+                <td class="py-2.5 px-3">立即 100% 進入市場曝險，無閒置資金</td>
+                <td class="py-2.5 px-3">資金分散於不同時點陸續進場，前期持有大量現金</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900">多頭上漲市場表現</td>
+                <td class="py-2.5 px-3 font-bold text-blue-700">★ 通常最為有利（100% 享受市場長線複利）</td>
+                <td class="py-2.5 px-3 text-slate-600">相對落後（後續資金買在更高價位，產生機會成本）</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900">空頭下跌市場表現</td>
+                <td class="py-2.5 px-3 text-rose-700 font-semibold">初期帳面損失可能較大，面臨資產回撤壓力</td>
+                <td class="py-2.5 px-3 font-bold text-emerald-700">★ 發揮防禦力（逢低買入更多單位數，攤平成本）</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900">平均取得成本</td>
+                <td class="py-2.5 px-3">完全取決於最初單一進場時點的市場價格</td>
+                <td class="py-2.5 px-3">取得期間內之加權平均成本（不保證成本必然較低）</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900">心理情緒與壓力</td>
+                <td class="py-2.5 px-3 text-amber-800">通常較高（若進場後立即重挫容易產生懊悔感）</td>
+                <td class="py-2.5 px-3 font-bold text-emerald-700">通常較低（即使下跌亦能以「正在撿便宜」安慰自己）</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900">最適運用對象</td>
+                <td class="py-2.5 px-3">已有大筆閒置資金、投資期限長且能承受波動者</td>
+                <td class="py-2.5 px-3">具薪資現金流者，或手握大筆資金但極度恐懼進場高點者</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 100萬、10年基準案例 Table 1 & 視覺卡片 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側數據看板 (5 cols) -->
+        <div class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                <i class="fa-solid fa-calculator text-blue-600"></i>
+                100萬元、10年投資案例比較
+              </h3>
+              <p class="text-xs text-slate-500">假設標的 0050，年化示範報酬率 8% (含息再投入)</p>
+            </div>
+            <span class="badge-pill bg-blue-100 text-blue-700 font-mono">Table 1</span>
+          </div>
+
+          <!-- 單筆投資卡片 -->
+          <div class="bg-blue-50/60 border border-blue-200 rounded-xl p-4 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-blue-900 flex items-center gap-1.5">
+                <i class="fa-solid fa-rocket text-blue-600"></i> 方案 A：單筆投資 (第一個月初投入)
+              </span>
+              <span class="fx-badge" onclick="openFormulaInspector('lump_case')" title="透視單筆終值公式">
+                <i class="fa-solid fa-square-root-variable text-amber-500"></i> fx
+              </span>
+            </div>
+            <div class="flex justify-between items-baseline pt-1">
+              <span class="text-xs text-slate-600">10年期末總資產：</span>
+              <span class="text-xl font-extrabold text-blue-700 font-mono">215.89 萬元</span>
+            </div>
+            <div class="flex justify-between text-xs text-slate-600">
+              <span>累積淨獲利：</span>
+              <span class="font-bold text-blue-800 font-mono">+ 115.89 萬元 (+115.9%)</span>
+            </div>
+          </div>
+
+          <!-- 定期定額卡片 -->
+          <div class="bg-emerald-50/60 border border-emerald-200 rounded-xl p-4 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+                <i class="fa-solid fa-layer-group text-emerald-600"></i> 方案 B：定期定額 (分120個月，每月8,333元)
+              </span>
+              <span class="fx-badge" onclick="openFormulaInspector('dca_case')" title="透視定期定額終值公式">
+                <i class="fa-solid fa-square-root-variable text-amber-500"></i> fx
+              </span>
+            </div>
+            <div class="flex justify-between items-baseline pt-1">
+              <span class="text-xs text-slate-600">10年期末總資產：</span>
+              <span class="text-xl font-extrabold text-emerald-700 font-mono">150.10 萬元</span>
+            </div>
+            <div class="flex justify-between text-xs text-slate-600">
+              <span>累積淨獲利：</span>
+              <span class="font-bold text-emerald-800 font-mono">+ 50.10 萬元 (+50.1%)</span>
+            </div>
+          </div>
+
+          <!-- 差額對比結果 Banner -->
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold text-amber-900 block">單筆投資領先超額回報：</span>
+              <span class="text-xs text-amber-700">資金 100% 完整參與 10 年複利之紅利</span>
+            </div>
+            <div class="text-right">
+              <span class="text-lg font-black text-amber-700 font-mono">+ 65.79 萬元</span>
+              <span class="fx-badge ml-1" onclick="openFormulaInspector('diff_case')"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-500 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>
+            <strong>月報酬率計算</strong>：以等效月報酬公式 $r = (1+8\%)^{1/12} - 1 pprox 0.6434\%$ 計算。定期定額期末價值 $= \sum_{i=1}^{120} 8,333.33 	imes (1+r)^{120-i}$。
+          </div>
+        </div>
+
+        <!-- 右側圖表與原文件示意圖對照 (7 cols) -->
+        <div class="lg:col-span-7 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-emerald-600"></i>
+                10 年資產增長軌跡即時比較 (120期)
+              </h4>
+              <div class="flex items-center gap-3 text-xs">
+                <span class="flex items-center gap-1.5 text-blue-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-blue-600 inline-block"></span> 單筆投資
+                </span>
+                <span class="flex items-center gap-1.5 text-emerald-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span> 定期定額
+                </span>
+              </div>
+            </div>
+            <div class="h-64 sm:h-72 w-full">
+              <canvas id="chart-tab1-compare"></canvas>
+            </div>
+          </div>
+
+          <!-- 原文件圖形對照檢視 (圖1 & 圖2) -->
+          <div class="bg-slate-50 rounded-xl p-3 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-image text-slate-500"></i>
+              <span class="font-bold text-slate-700">教材原始圖表存檔：</span>
+              <span class="text-slate-500">圖1（固定報酬示意曲線）與 圖2（策略比較資訊圖）</span>
+            </div>
+            <button onclick="openImageModal()" class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-300 rounded text-slate-700 font-medium transition shadow-xs flex items-center gap-1">
+              <i class="fa-regular fa-eye"></i> 查看原教材圖像
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 2: 互動試算與多參數模擬 (Table 2 規格) -->
+    <!-- ============================================================== -->
+    <section id="tab-simulator" class="tab-pane hidden space-y-6">
+      
+      <!-- 導引說明 -->
+      <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-emerald-600"></i>
+            互動式投資試算引擎（規格 Table 2）
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            自由拉動 4 組滑桿，即時探索初始本金、投資年數、年化報酬率與分批投入期間之敏感度變化。
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="resetToDefaults()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold border border-slate-300 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-rotate-left"></i> 恢復教材預設值
+          </button>
+          <span class="badge-pill bg-emerald-100 text-emerald-800">規格 Table 2</span>
+        </div>
+      </div>
+
+      <!-- 核心控制區與走勢圖 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側控制面板 (4 cols) -->
+        <div class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-5">
+          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2 flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-gears text-emerald-600"></i> 控制參數設定 (Table 2)
+            </span>
+            <span class="text-[10px] text-slate-400">即時聯動</span>
+          </h3>
+
+          <!-- 1. 初始資金 (10-500萬，步進10萬，預設100萬) -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>初始資金 (本金 P)：</span>
+              <span id="ctrl-capital-val" class="text-blue-600 font-bold">100 萬元</span>
+            </div>
+            <input type="range" id="ctrl-capital" min="10" max="500" step="10" value="100" oninput="runInteractiveSim()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>10萬</span>
+              <span>100萬(預設)</span>
+              <span>300萬</span>
+              <span>500萬</span>
+            </div>
+          </div>
+
+          <!-- 2. 投資期間 (1-30年，步進1年，預設10年) -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>投資總期間 (Years)：</span>
+              <span id="ctrl-years-val" class="text-indigo-600 font-bold">10 年 (120 期)</span>
+            </div>
+            <input type="range" id="ctrl-years" min="1" max="30" step="1" value="10" oninput="runInteractiveSim()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>1年</span>
+              <span>10年(預設)</span>
+              <span>20年</span>
+              <span>30年</span>
+            </div>
+          </div>
+
+          <!-- 3. 假設年化報酬率 (-10% 至 15%，步進0.5%，預設8%) -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>假設年化報酬率 (R_yr)：</span>
+              <span id="ctrl-return-val" class="text-emerald-600 font-bold">8.0 %</span>
+            </div>
+            <input type="range" id="ctrl-return" min="-10.0" max="15.0" step="0.5" value="8.0" oninput="runInteractiveSim()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>-10%</span>
+              <span>0%</span>
+              <span>8%(預設)</span>
+              <span>15%</span>
+            </div>
+          </div>
+
+          <!-- 4. 定期定額投入期間 (3-360個月，步進3個月，預設120個月) -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>定期定額投入月數 (k)：</span>
+              <span id="ctrl-dca-months-val" class="text-amber-600 font-bold">120 個月 (10年)</span>
+            </div>
+            <input type="range" id="ctrl-dca-months" min="3" max="360" step="3" value="120" oninput="runInteractiveSim()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>3月(極速分批)</span>
+              <span>24月(2年)</span>
+              <span>120月(預設)</span>
+              <span>360月</span>
+            </div>
+          </div>
+
+          <!-- 每月分批進場金額即時算式 -->
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-1.5 text-xs text-slate-700">
+            <div class="flex justify-between items-center font-bold">
+              <span>每月分批投入金額：</span>
+              <span id="ctrl-monthly-pmt" class="font-mono text-emerald-700 font-extrabold text-sm">8,333 元</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-mono">PMT = 本金 ÷ 投入月數</p>
+          </div>
+
+          <!-- 重要限制提示 (Spec P19) -->
+          <div id="sim-limit-box" class="p-3 rounded-lg border text-xs leading-relaxed bg-blue-50 border-blue-200 text-blue-900">
+            <i class="fa-solid fa-circle-info text-blue-600 mr-1"></i>
+            <strong>投入期對齊狀態</strong>：投入月數與投資期間恰好對齊，所有資金於期末全數投入市場。
+          </div>
+        </div>
+
+        <!-- 右側期末資產、圖表與拆解 (8 cols) -->
+        <div class="lg:col-span-8 space-y-5">
+          
+          <!-- 統計看板 -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+              <div class="flex items-center justify-center gap-1">
+                <span class="text-[11px] text-slate-500">單筆期末資產</span>
+                <span class="fx-badge" onclick="openFormulaInspector('lump_case')"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
+              </div>
+              <span id="stat-lump-total" class="text-base sm:text-lg font-extrabold text-blue-700 block mt-0.5">215.89 萬</span>
+              <span id="stat-lump-profit" class="text-[10px] text-blue-600 block">(淨賺 115.89 萬)</span>
+            </div>
+
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+              <div class="flex items-center justify-center gap-1">
+                <span class="text-[11px] text-slate-500">定期定額市場資產</span>
+                <span class="fx-badge" onclick="openFormulaInspector('dca_case')"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
+              </div>
+              <span id="stat-dca-invested" class="text-base sm:text-lg font-extrabold text-emerald-700 block mt-0.5">150.10 萬</span>
+              <span id="stat-dca-profit" class="text-[10px] text-emerald-600 block">(淨賺 50.10 萬)</span>
+            </div>
+
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+              <div class="flex items-center justify-center gap-1">
+                <span class="text-[11px] text-slate-500">定期定額總財富</span>
+                <span class="fx-badge" onclick="openFormulaInspector('total_wealth')"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
+              </div>
+              <span id="stat-dca-total-wealth" class="text-base sm:text-lg font-extrabold text-slate-800 block mt-0.5">150.10 萬</span>
+              <span id="stat-dca-cash-rem" class="text-[10px] text-slate-400 block">(含未投現金 0 萬)</span>
+            </div>
+
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+              <div class="flex items-center justify-center gap-1">
+                <span class="text-[11px] text-slate-500">勝出方案與差額</span>
+                <span class="fx-badge" onclick="openFormulaInspector('diff_case')"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
+              </div>
+              <span id="stat-winner-label" class="text-base sm:text-lg font-extrabold text-blue-700 block mt-0.5">單筆勝出</span>
+              <span id="stat-winner-diff" class="text-[10px] text-blue-600 font-bold block">多賺 65.79 萬</span>
+            </div>
+          </div>
+
+          <!-- 折線圖：動態增長走勢比較 -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                  <i class="fa-solid fa-chart-line text-emerald-600"></i>
+                  資產逐月演化軌跡比較
+                </h4>
+                <p class="text-[11px] text-slate-500">即時模擬單筆 vs 定期定額投入之財富累積曲線</p>
+              </div>
+              <div class="flex items-center gap-3 text-xs">
+                <span class="flex items-center gap-1.5 text-blue-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-blue-600 inline-block"></span> 單筆資產
+                </span>
+                <span class="flex items-center gap-1.5 text-emerald-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span> 定期定額已投
+                </span>
+                <span class="flex items-center gap-1.5 text-slate-500 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-slate-400 inline-block"></span> 定期定額總財富
+                </span>
+              </div>
+            </div>
+            <div class="h-64 sm:h-72 w-full">
+              <canvas id="chart-sim-timeline"></canvas>
+            </div>
+          </div>
+
+          <!-- 柱狀圖：期末本金與獲利結構拆解 -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex justify-between items-center mb-3">
+              <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-chart-column text-emerald-600"></i>
+                期末總財富拆解（已投入本金 vs 累計獲利 vs 未投現金）
+              </h4>
+              <span class="text-xs font-mono text-slate-400">End of Period</span>
+            </div>
+            <div class="h-56 sm:h-64 w-full">
+              <canvas id="chart-sim-bar"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 3: 首年暴跌 30% 微笑曲線實驗 -->
+    <!-- ============================================================== -->
+    <section id="tab-smile" class="tab-pane hidden space-y-6">
+      
+      <!-- 導引 Banner -->
+      <div class="bg-gradient-to-r from-amber-950 via-slate-900 to-rose-950 text-white rounded-2xl p-6 shadow-md">
+        <div class="max-w-4xl">
+          <span class="badge-pill bg-amber-500/30 text-amber-200 border border-amber-400/30 mb-2">
+            行為財務學實戰 ‧ 課堂討論題 1
+          </span>
+          <h2 class="text-2xl font-bold mb-2">先跌後漲「微笑曲線」：定期定額如何逆轉勝？</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            教科書常說「單筆長期勝率高」，但若一進場就遭遇 2000 年網路泡沫或 2008 年金融海嘯暴跌 30%–50%，投資人的心理抗壓性會如何？本實驗模擬首年重挫 30% 後逐步反彈的市場走勢，驗證定期定額平均成本之防禦威力。
+          </p>
+        </div>
+      </div>
+
+      <!-- 微笑曲線情境控制與圖表對比 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側情境說明與參數 (4 cols) -->
+        <div class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
+            <i class="fa-solid fa-mask-face text-amber-600"></i>
+            微笑曲線市場劇本設定
+          </h3>
+          <ul class="text-xs text-slate-600 space-y-2">
+            <li class="bg-rose-50 p-2.5 rounded-lg border border-rose-200 text-rose-900">
+              <strong>階段一 (第 1 年)：市場暴跌 -30%</strong><br>
+              單筆投資人本金直接縮水至 70 萬，面臨巨大心理恐慌；定期定額在此階段持續以低價撿便宜單位。
+            </li>
+            <li class="bg-amber-50 p-2.5 rounded-lg border border-amber-200 text-amber-900">
+              <strong>階段二 (第 2–3 年)：低檔盤整震盪</strong><br>
+              市場在谷底徘徊，定期定額持續累積低成本籌碼。
+            </li>
+            <li class="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200 text-emerald-900">
+              <strong>階段三 (第 4–5 年)：強勁復甦創高</strong><br>
+              市場反彈回升，低檔買入的大量單位數產生強大槓桿爆發力，定期定額淨值迅速超越單筆！
+            </li>
+          </ul>
+
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold text-slate-700">暴跌情境模擬按鈕：</span>
+              <button onclick="runSmileSimulation()" class="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded font-bold text-xs shadow transition">
+                重新執行微笑曲線
+              </button>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+              💡 <strong>核心教訓</strong>：在持續下跌或先跌後平的市場中，定期定額的「平均買進成本」顯著低於單筆投資，提供關鍵的下行保護。
+            </p>
+          </div>
+        </div>
+
+        <!-- 右側微笑曲線走勢圖與數據 (8 cols) -->
+        <div class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-amber-600"></i>
+                首年大跌 30% 後反彈之資產走勢模擬 (60期 / 5年)
+              </h4>
+              <p class="text-[11px] text-slate-500">觀察在第 12–24 個月低點，兩種策略的心態與期末反彈結果</p>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+              <span class="flex items-center gap-1.5 text-blue-600 font-semibold">
+                <span class="w-3 h-3 rounded-full bg-blue-600 inline-block"></span> 單筆投資
+              </span>
+              <span class="flex items-center gap-1.5 text-emerald-600 font-semibold">
+                <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span> 定期定額
+              </span>
+            </div>
+          </div>
+
+          <div class="h-64 sm:h-72 w-full">
+            <canvas id="chart-smile-timeline"></canvas>
+          </div>
+
+          <!-- 微笑曲線數據對照看板 -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center text-xs">
+            <div class="bg-rose-50 border border-rose-200 p-2.5 rounded-lg">
+              <span class="text-rose-700 block font-semibold">第 12 個月低點時淨值</span>
+              <span class="text-sm font-extrabold text-rose-800 font-mono">單筆 70.0 萬 vs 定期 91.2 萬</span>
+              <span class="text-[10px] text-rose-600 block">(定期定額大幅抗跌)</span>
+            </div>
+            <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg">
+              <span class="text-emerald-700 block font-semibold">5 年期末累積總資產</span>
+              <span class="text-sm font-extrabold text-emerald-800 font-mono">單筆 138 萬 vs 定期 146 萬</span>
+              <span class="text-[10px] text-emerald-600 block">(定期定額逆轉勝 +8 萬)</span>
+            </div>
+            <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg col-span-2 sm:col-span-1">
+              <span class="text-amber-800 block font-semibold">平均買進單位成本</span>
+              <span class="text-sm font-extrabold text-amber-900 font-mono">定期定額低約 14.5%</span>
+              <span class="text-[10px] text-amber-700 block">(微笑曲線發威)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 4: Vanguard 歷史實證研究 (2/3 機率) -->
+    <!-- ============================================================== -->
+    <section id="tab-vanguard" class="tab-pane hidden space-y-6">
+      
+      <!-- 導引說明 -->
+      <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-building-columns text-emerald-600"></i>
+              Vanguard 國際實證研究：單筆投資約有 2/3 (68%) 期間勝出
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              先鋒集團（Vanguard Research, 2023）跨國長達數十年的實證研究指出：在成熟市場中，單筆投資在約 68% 的期間累積財富超越分批投入。
+            </p>
+          </div>
+          <span class="badge-pill bg-blue-100 text-blue-800 font-mono">Vanguard Research 2023</span>
+        </div>
+      </div>
+
+      <!-- 研究三大核心發現 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-lg font-bold">
+            <i class="fa-solid fa-percent"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base">約 68% (三分之二) 勝率</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            在美國、英國與澳洲等主要股市歷史數據中，若投資人已有一筆現金，將其分為 6–12 個月分批投入，在約三分之二的歷史回測期間中，其期末報酬落後於立即單筆全額投入。
+          </p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-bold">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base">股票風險溢酬 (ERP)</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            股票市場長期具有向上趨勢與風險溢酬。資金「在市場中的時間（Time in the Market）」愈長，參與複利增長的機會愈大；分批進場實質上是持有過多零回報的現金。
+          </p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-lg font-bold">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base">分批投入的「心理保險」價值</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            定期定額落後的 32% 機會通常發生在市場重挫期間。儘管平均報酬可能較低，定期定額扮演了「心理防彈衣」角色，避免投資人因單筆暴跌而在谷底恐慌停損出清。
+          </p>
+        </div>
+      </div>
+
+      <!-- 統計分布圓餅圖與引用卡片 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+          <div>
+            <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-chart-pie text-blue-600"></i>
+              Vanguard 歷史勝率分布示意 (Lump-Sum vs. DCA)
+            </h4>
+            <div class="h-56 sm:h-64 w-full">
+              <canvas id="chart-vanguard-pie"></canvas>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-2 text-center">
+            資料來源：Vanguard Research (2023), <em>Cost averaging: Invest now or temporarily hold your cash?</em>
+          </p>
+        </div>
+
+        <div class="lg:col-span-6 bg-slate-50 rounded-xl border border-slate-200 p-5 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <span class="badge-pill bg-slate-200 text-slate-700">實證研究核心解讀</span>
+            <h4 class="text-base font-bold text-slate-900 leading-snug">
+              「如果單筆勝率高達 68%，為什麼定期定額依然盛行？」
+            </h4>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              在現代金融理論中，人並非完全理性的計算機器。投資成功的關鍵往往不是「數學上最完美（Optimal）的策略」，而是「<strong>能夠讓投資人在市場崩跌時依然抱得住、睡得著的策略（Sustainable）</strong>」。
+            </p>
+            <div class="bg-white p-3.5 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1.5">
+              <div class="font-bold text-emerald-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-emerald-600"></i> 折衷務實策略建議：
+              </div>
+              <p>若手握大筆資金（如繼承、分紅、賣房）但恐懼進場高點，可採取「<strong>加速分批（6–12 個月投入完畢）</strong>」，既克服了單筆進場的恐懼心理，又避免長達 10 年過度持有現金之高額機會成本。</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-200 flex justify-between text-[11px] text-slate-400 font-mono">
+            <span>Statistical Probability: ~68%</span>
+            <span>Behavioral Finance Perspective</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 5: 課堂思辨研討與結論 (Section 6) -->
+    <!-- ============================================================== -->
+    <section id="tab-discussion" class="tab-pane hidden space-y-6">
+      
+      <!-- 頂部大題說明 -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 shadow-md">
+        <div class="max-w-4xl">
+          <span class="badge-pill bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 mb-2">
+            六、課堂討論與教學提醒
+          </span>
+          <h2 class="text-2xl font-bold mb-2">深度思辨研討題庫與教學總結</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            透過 3 道經典課堂思辨問題，引導學生走出單純數字比較，深究「機會成本」、「心理承受力」與「現金流本質」之深層關聯。
+          </p>
+        </div>
+      </div>
+
+      <!-- 3道深度討論題折疊展開卡片 -->
+      <div class="space-y-4" id="discussion-accordion">
+        
+        <!-- Q1 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(1)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0">Q1</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">如果投資後第一年市場下跌 30%，兩種策略的心理壓力及後續決策可能有何差異？</span>
+            </div>
+            <i id="acc-icon-1" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-1" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2.5">
+            <p><strong>【行為財務學與決策風險解析】</strong>：</p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>單筆投資者</strong>：帳面本金直接由 100 萬萎縮至 70 萬，產生極為強烈的「損失厭惡（Loss Aversion）」。若缺乏長線信念或未預留生活備用金，容易在低點恐慌「停損砍倉」，將帳面浮虧轉化為永久實質虧損，徹底錯過後續反彈。</li>
+              <li><strong>定期定額投資者</strong>：第一年僅投入部分資金（如分 10 年者僅投入 10 萬元），其餘 90 萬仍為安全現金。面對暴跌，心理感受通常是「可以用更便宜的價格多買單位」，更容易維持紀律持續扣款。</li>
+            </ul>
+            <p class="text-emerald-800 bg-emerald-50 p-2.5 rounded border border-emerald-200">
+              💡 <strong>教學引導提示</strong>：報酬率最高的數學策略，若投資人無法堅持到底，其實際報酬將等於「恐慌斷頭的負報酬」。策略的可執行性與心理韌性往往高於理論收益率。
+            </p>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(2)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0">Q2</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">若「已有 100 萬元」與「每月從薪資存下 8,333 元」，為何不能直接以最終資產判斷策略優劣？</span>
+            </div>
+            <i id="acc-icon-2" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-2" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2.5">
+            <p><strong>【核心觀念釐清：機會成本之不同】</strong>：這是投資教學中最常見的重大混淆！</p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>情況 A（已有 100 萬）</strong>：投資人手中「已經擁有全部資金」，此時若選擇每月投 8,333 元，未投入的資金會被迫留在低利帳戶，產生龐大的<strong>「現金持有機會成本」</strong>。</li>
+              <li><strong>情況 B（從每月薪資存 8,333 元）</strong>：投資人一開始手中「根本沒有 100 萬元」，他每個月一領到薪水就全額投入市場。此時定期定額實質上是「<strong>每月現金流的立即單筆投資</strong>」，沒有任何資金閒置，是薪資族最高效的財富累積方式！</li>
+            </ul>
+            <p class="text-blue-800 bg-blue-50 p-2.5 rounded border border-blue-200">
+              💡 <strong>教學引導提示</strong>：評估「單筆 vs 定期定額」必須以「初始總資金相同」為前提；薪資定投是現金流規劃，分批投入則是資金配置決策，兩者不可混為一談。
+            </p>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(3)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0">Q3</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">假設投資人擔心短期市場高估，如何在預期報酬、現金需求、承受風險能力間取捨？</span>
+            </div>
+            <i id="acc-icon-3" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-3" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2.5">
+            <p><strong>【綜合資產配置取捨方針】</strong>：</p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>時間跨度檢驗</strong>：若資金為 10 年以上完全不用的退休老本，短期 1–2 年的高低估在 30 年長河中影響極微，應勇敢提早單筆進場。</li>
+              <li><strong>流動性安全閥</strong>：切勿將未來 1–3 年內有明確用途的資金（如買房頭期款、創業基金、緊急醫療金）單筆投入高風險股票。</li>
+              <li><strong>分期進場折衷方案</strong>：若恐慌心理過強，將 100 萬設定在 6–12 個月內分 4–12 批均勻投完。這能在「克服擇時焦慮」與「減少現金機會成本」之間取得最佳平衡。</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 全篇教學結論彙整 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+          <i class="fa-solid fa-circle-check text-emerald-600"></i>
+          全課堂核心決策準則與總結
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-700">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+            <strong class="text-blue-900 block font-bold text-sm sm:text-base">
+              <i class="fa-solid fa-rocket text-blue-600 mr-1.5"></i> 單筆投資適用情境
+            </strong>
+            <ul class="list-disc pl-4 space-y-1 text-xs text-slate-600">
+              <li>已有一筆長期閒置資金（5–10 年以上無需動用）。</li>
+              <li>理解股票長期具有風險溢酬，追求「期望總報酬最大化」。</li>
+              <li>具備高心理抗壓性，能忍受帳面 30% 級別的短期波動不恐慌砍倉。</li>
+            </ul>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+            <strong class="text-emerald-900 block font-bold text-sm sm:text-base">
+              <i class="fa-solid fa-layer-group text-emerald-600 mr-1.5"></i> 定期定額適用情境
+            </strong>
+            <ul class="list-disc pl-4 space-y-1 text-xs text-slate-600">
+              <li>薪資穩定、需養成每月儲蓄投資紀律的小資上班族。</li>
+              <li>手握大筆資金但極度焦慮進場高點者（折衷分 6–12 個月分批進場）。</li>
+              <li>在不確定性高的市場環境中，優先追求「睡眠品質與情緒安定」。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- 原始文件圖像 Modal -->
+  <div id="image-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xs" onclick="if(event.target===this)closeImageModal()">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-slate-900 text-white px-6 py-3.5 flex justify-between items-center border-b border-slate-800">
+        <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-image text-emerald-400"></i> 教材原檔圖像對照檢驗
+        </h3>
+        <button onclick="closeImageModal()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 custom-scroll text-xs">
+        <div>
+          <span class="font-bold text-slate-800 block text-sm mb-1.5">圖1｜固定報酬率示意曲線（原 Word 文件內嵌圖）</span>
+          <img src="assets/image1.png" alt="圖1 固定報酬率示意曲線" class="w-full max-w-2xl mx-auto rounded-lg border border-slate-200 shadow-xs">
+          <p class="text-slate-500 mt-1 text-center">原圖呈現單筆資產隨時間呈指數成長 vs 定期定額因分批進場而初期坡度較緩之對照。</p>
+        </div>
+        <div class="border-t border-slate-200 pt-4">
+          <span class="font-bold text-slate-800 block text-sm mb-1.5">圖2｜策略比較資訊圖（原 Word 文件內嵌圖）</span>
+          <img src="assets/image2.png" alt="圖2 策略比較資訊圖" class="w-full max-w-2xl mx-auto rounded-lg border border-slate-200 shadow-xs">
+          <p class="text-slate-500 mt-1 text-center">原圖詳細歸納單筆投資與定期定額在不同市場情境下的特性與適合族群。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 公式透視解析器 MODAL DIALOG -->
+  <div id="formula-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs transition-opacity duration-200" onclick="if(event.target===this)closeFormulaModal()">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-150">
+      
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-slate-900 to-emerald-950 text-white px-6 py-4 flex items-center justify-between border-b border-emerald-900">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400/40 text-amber-400 flex items-center justify-center text-base">
+            <i class="fa-solid fa-square-root-variable"></i>
+          </div>
+          <div>
+            <h3 id="modal-formula-title" class="font-extrabold text-white text-base">公式透視解析器</h3>
+            <span id="modal-formula-badge" class="text-[11px] text-amber-300 font-medium">財務數學模型推導</span>
+          </div>
+        </div>
+        <button onclick="closeFormulaModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm custom-scroll">
+        <!-- 財務指標定義 -->
+        <div>
+          <span class="text-slate-500 text-xs font-bold block mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-info text-emerald-600"></i> 指標定義與理論內涵：
+          </span>
+          <div id="modal-formula-def" class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-slate-800 leading-relaxed font-medium"></div>
+        </div>
+
+        <!-- 數學模型與公式 -->
+        <div>
+          <span class="text-slate-500 text-xs font-bold block mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-superscript text-indigo-600"></i> 數學模型公式 (Mathematical Model)：
+          </span>
+          <div id="modal-formula-math" class="font-mono bg-slate-900 text-amber-300 p-3.5 rounded-xl border border-slate-800 whitespace-pre-wrap leading-relaxed text-xs sm:text-sm shadow-inner"></div>
+        </div>
+
+        <!-- 當前數值代入演算 -->
+        <div>
+          <span class="text-slate-500 text-xs font-bold block mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-calculator text-emerald-600"></i> 當前參數即時代入運算過程 (Step-by-Step Substitution)：
+          </span>
+          <div id="modal-formula-steps" class="font-mono bg-emerald-50 text-emerald-950 p-3.5 rounded-xl border border-emerald-200 whitespace-pre-wrap leading-relaxed text-xs sm:text-sm"></div>
+        </div>
+
+        <!-- 輸出結果與對應 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <span class="text-slate-500 text-xs font-bold block mb-1">當前試算輸出結果：</span>
+            <div id="modal-formula-val" class="font-mono bg-blue-50 p-3 rounded-xl border border-blue-200 text-blue-800 font-extrabold text-base sm:text-lg flex items-center gap-2"></div>
+          </div>
+          <div>
+            <span class="text-slate-500 text-xs font-bold block mb-1">教材章節與規範對應：</span>
+            <div id="modal-formula-ref" class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-2"></div>
+          </div>
+        </div>
+
+        <!-- 教學意涵 -->
+        <div>
+          <span class="text-slate-500 text-xs font-bold block mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-lightbulb text-amber-500"></i> 財務決策與教學反思提示 (Financial Insights)：
+          </span>
+          <div id="modal-formula-insight" class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-amber-900 text-xs leading-relaxed"></div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+        <span><i class="fa-solid fa-keyboard mr-1"></i> 按 ESC 鍵或點擊外部任意處即可關閉</span>
+        <button onclick="closeFormulaModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition">關閉</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 頁腳 Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-xs mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <div>
+        <p class="text-slate-300 font-semibold">115學年度 財務計算與分析課程教學平台</p>
+        <p class="text-slate-500 mt-0.5">單筆投資 VS. 定期定額 ‧ 互動式網頁版</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://williamslchang-blip.github.io/master-portal/" class="hover:text-emerald-400 transition">Master Portal 首頁</a>
+        <span>•</span>
+        <button onclick="window.print()" class="hover:text-emerald-400 transition"><i class="fa-solid fa-print mr-1"></i>友善列印</button>
+        <span>•</span>
+        <a href="#" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;" class="hover:text-emerald-400 transition">回到頂端</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- 核心計算與圖表 JAVASCRIPT ENGINE -->
+  <!-- ============================================================== -->
+  <script>
+    // 全域圖表變數
+    let chartTab1Compare = null;
+    let chartSimTimeline = null;
+    let chartSimBar = null;
+    let chartSmileTimeline = null;
+    let chartVanguardPie = null;
+
+    let cachedSimData = [];
+    let formulaMode = false;
+
+    // 格式化函數
+    const fmtNum = (v) => Math.round(v).toLocaleString('zh-TW');
+    const fmtWan = (v) => (v / 10000).toFixed(2);
+
+    // 頁籤切換
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'text-emerald-700', 'bg-emerald-50', 'border', 'border-emerald-200');
+        btn.classList.add('text-slate-600');
+      });
+
+      const pane = document.getElementById(tabId);
+      if (pane) pane.classList.remove('hidden');
+
+      const btn = document.getElementById('btn-' + tabId);
+      if (btn) {
+        btn.classList.add('active', 'text-emerald-700', 'bg-emerald-50', 'border', 'border-emerald-200');
+        btn.classList.remove('text-slate-600');
+      }
+
+      setTimeout(() => {
+        if (tabId === 'tab-compare' && chartTab1Compare) chartTab1Compare.resize();
+        if (tabId === 'tab-simulator') {
+          if (chartSimTimeline) chartSimTimeline.resize();
+          if (chartSimBar) chartSimBar.resize();
+        }
+        if (tabId === 'tab-smile' && chartSmileTimeline) chartSmileTimeline.resize();
+        if (tabId === 'tab-vanguard' && chartVanguardPie) chartVanguardPie.resize();
+      }, 50);
+    }
+
+    // 摺疊題庫
+    function toggleAccordion(id) {
+      const body = document.getElementById('acc-body-' + id);
+      const icon = document.getElementById('acc-icon-' + id);
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        body.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    // Modal
+    function openImageModal() { document.getElementById('image-modal').classList.remove('hidden'); }
+    function closeImageModal() { document.getElementById('image-modal').classList.add('hidden'); }
+    function closeFormulaModal() { document.getElementById('formula-modal').classList.add('hidden'); }
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeFormulaModal(); closeImageModal(); }
+    });
+
+    // 算式透視開關
+    function toggleFormulaMode() {
+      formulaMode = !formulaMode;
+      const statusEl = document.getElementById('formula-mode-status');
+      const btnEl = document.getElementById('btn-toggle-formula');
+
+      if (formulaMode) {
+        statusEl.innerText = '開';
+        statusEl.className = 'text-[10px] px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-black';
+        btnEl.classList.remove('bg-slate-800', 'border-slate-700', 'text-slate-200');
+        btnEl.classList.add('bg-amber-500/20', 'border-amber-500', 'text-amber-300', 'ring-2', 'ring-amber-400/30');
+        document.body.classList.add('formula-mode-active');
+      } else {
+        statusEl.innerText = '關';
+        statusEl.className = 'text-[10px] px-1.5 py-0.2 rounded bg-slate-700 text-slate-300 font-bold';
+        btnEl.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-200');
+        btnEl.classList.remove('bg-amber-500/20', 'border-amber-500', 'text-amber-300', 'ring-2', 'ring-amber-400/30');
+        document.body.classList.remove('formula-mode-active');
+      }
+    }
+
+    // =========================================================================
+    // 模組一：Tab 1 基準圖表渲染
+    // =========================================================================
+    function initTab1Compare() {
+      const P = 1000000;
+      const r_mo = Math.pow(1 + 0.08, 1 / 12) - 1;
+      const pmt = P / 120;
+
+      const labels = [];
+      const lumpData = [];
+      const dcaData = [];
+
+      let dcaAccum = 0;
+      for (let m = 0; m <= 120; m += 6) {
+        labels.push(m === 0 ? '期初' : '第 ' + (m / 12).toFixed(1) + ' 年');
+        
+        // 單筆價值
+        const lumpVal = P * Math.pow(1 + r_mo, m);
+        lumpData.push(Math.round(lumpVal / 10000));
+
+        // 定期定額累積價值 (前 m 個月底投入之複利合)
+        let dcaVal = 0;
+        if (m > 0) {
+          dcaVal = pmt * ((Math.pow(1 + r_mo, m) - 1) / r_mo);
+        }
+        dcaData.push(Math.round(dcaVal / 10000));
+      }
+
+      const ctx = document.getElementById('chart-tab1-compare').getContext('2d');
+      if (chartTab1Compare) chartTab1Compare.destroy();
+
+      chartTab1Compare = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '單筆投資 (100萬期初一次投入)',
+              data: lumpData,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.08)',
+              fill: true,
+              borderWidth: 2.5,
+              tension: 0.1,
+              pointRadius: 2
+            },
+            {
+              label: '定期定額 (分120月投入)',
+              data: dcaData,
+              borderColor: '#059669',
+              backgroundColor: 'rgba(5, 150, 105, 0.08)',
+              fill: true,
+              borderWidth: 2.5,
+              tension: 0.1,
+              pointRadius: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y) + ' 萬元'
+              }
+            }
+          },
+          scales: {
+            y: { ticks: { callback: (v) => v + ' 萬' }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 模組二：Tab 2 互動試算與多參數模擬 (Table 2)
+    // =========================================================================
+    function runInteractiveSim() {
+      const capitalWan = parseFloat(document.getElementById('ctrl-capital').value);
+      const years = parseInt(document.getElementById('ctrl-years').value);
+      const retPct = parseFloat(document.getElementById('ctrl-return').value);
+      const dcaMonths = parseInt(document.getElementById('ctrl-dca-months').value);
+
+      document.getElementById('ctrl-capital-val').innerText = fmtNum(capitalWan) + ' 萬元';
+      document.getElementById('ctrl-years-val').innerText = years + ' 年 (' + (years * 12) + ' 期)';
+      document.getElementById('ctrl-return-val').innerText = (retPct > 0 ? '+' : '') + retPct.toFixed(1) + ' %';
+      document.getElementById('ctrl-dca-months-val').innerText = dcaMonths + ' 個月 (' + (dcaMonths / 12).toFixed(1) + ' 年)';
+
+      const P = capitalWan * 10000;
+      const m = years * 12; // 總投資期數 (月)
+      const k = dcaMonths;  // 預計分批投入總月數
+      const pmt = P / k;    // 每期投入額
+      document.getElementById('ctrl-monthly-pmt').innerText = fmtNum(pmt) + ' 元';
+
+      const r_mo = retPct === 0 ? 0 : (Math.pow(1 + (retPct / 100), 1 / 12) - 1);
+
+      // 單筆 30年 終值
+      const fv_lump = retPct === 0 ? P : P * Math.pow(1 + (retPct / 100), years);
+      const profit_lump = fv_lump - P;
+
+      // 定期定額逐月模擬
+      const sim = [];
+      let dca_invested_portfolio = 0; // 已投入市場之股票資產
+      let dca_cumulative_contributed = 0; // 累計已投入本金
+
+      const step = Math.max(1, Math.floor(m / 40));
+      const timelineLabels = [];
+      const timelineLump = [];
+      const timelineDCAInvested = [];
+      const timelineDCATotalWealth = [];
+
+      for (let t = 1; t <= m; t++) {
+        // 月初或月底增長
+        dca_invested_portfolio = dca_invested_portfolio * (1 + r_mo);
+
+        // 若尚未超過 k 個月，投入新的一期
+        if (t <= k) {
+          dca_invested_portfolio += pmt;
+          dca_cumulative_contributed += pmt;
+        }
+
+        const uninvested_cash = Math.max(0, P - dca_cumulative_contributed);
+        const total_wealth = dca_invested_portfolio + uninvested_cash;
+
+        const lumpCurrent = P * Math.pow(1 + r_mo, t);
+
+        sim.push({
+          month: t,
+          year: (t / 12).toFixed(1),
+          lumpVal: lumpCurrent,
+          dcaPortfolio: dca_invested_portfolio,
+          uninvestedCash: uninvested_cash,
+          totalWealth: total_wealth,
+          contributedPrincipal: dca_cumulative_contributed
+        });
+
+        if (t % step === 0 || t === m) {
+          timelineLabels.push('第' + (t / 12).toFixed(1) + '年');
+          timelineLump.push(Math.round(lumpCurrent / 10000));
+          timelineDCAInvested.push(Math.round(dca_invested_portfolio / 10000));
+          timelineDCATotalWealth.push(Math.round(total_wealth / 10000));
+        }
+      }
+
+      cachedSimData = sim;
+      const lastPoint = sim[m - 1];
+
+      // 檢查限制提示 (Spec P19)
+      const limitBox = document.getElementById('sim-limit-box');
+      if (k > m) {
+        limitBox.className = 'p-3 rounded-lg border text-xs leading-relaxed bg-amber-50 border-amber-300 text-amber-900';
+        limitBox.innerHTML = `⚠️ <strong>投入期超出投資期限制 (Spec P19)</strong>：分批設定 ${k} 個月大於投資期 ${m} 個月。在第 ${years} 年期末，尚有 <strong>${fmtWan(lastPoint.uninvestedCash)} 萬元現金未投入市場</strong>。比較總財富時，已自動加上未投入現金！`;
+      } else if (k < m) {
+        limitBox.className = 'p-3 rounded-lg border text-xs leading-relaxed bg-indigo-50 border-indigo-200 text-indigo-900';
+        limitBox.innerHTML = `ℹ️ <strong>分批提前完成</strong>：資金已於前 ${k} 個月 (${(k/12).toFixed(1)} 年) 全數投入，後續 ${(m - k)} 個月 100% 資金於市場中持續複利。`;
+      } else {
+        limitBox.className = 'p-3 rounded-lg border text-xs leading-relaxed bg-blue-50 border-blue-200 text-blue-900';
+        limitBox.innerHTML = `✅ <strong>投入期與投資期完全對齊</strong>：分批資金於最後一期恰好 100% 全數進場完畢。`;
+      }
+
+      // 更新統計看板
+      document.getElementById('stat-lump-total').innerText = fmtWan(fv_lump) + ' 萬';
+      document.getElementById('stat-lump-profit').innerText = '(淨賺 ' + (profit_lump >= 0 ? '+' : '') + fmtWan(profit_lump) + ' 萬)';
+
+      document.getElementById('stat-dca-invested').innerText = fmtWan(lastPoint.dcaPortfolio) + ' 萬';
+      const dcaProfit = lastPoint.dcaPortfolio - lastPoint.contributedPrincipal;
+      document.getElementById('stat-dca-profit').innerText = '(淨賺 ' + (dcaProfit >= 0 ? '+' : '') + fmtWan(dcaProfit) + ' 萬)';
+
+      document.getElementById('stat-dca-total-wealth').innerText = fmtWan(lastPoint.totalWealth) + ' 萬';
+      document.getElementById('stat-dca-cash-rem').innerText = '(含未投現金 ' + fmtWan(lastPoint.uninvestedCash) + ' 萬)';
+
+      const diffTotal = fv_lump - lastPoint.totalWealth;
+      const winnerLabel = document.getElementById('stat-winner-label');
+      const winnerDiff = document.getElementById('stat-winner-diff');
+
+      if (diffTotal >= 0) {
+        winnerLabel.innerText = '單筆投資勝出';
+        winnerLabel.className = 'text-base sm:text-lg font-extrabold text-blue-700 block mt-0.5';
+        winnerDiff.innerText = '領先 +' + fmtWan(diffTotal) + ' 萬元';
+        winnerDiff.className = 'text-[10px] text-blue-600 font-bold block';
+      } else {
+        winnerLabel.innerText = '定期定額勝出';
+        winnerLabel.className = 'text-base sm:text-lg font-extrabold text-emerald-700 block mt-0.5';
+        winnerDiff.innerText = '領先 +' + fmtWan(Math.abs(diffTotal)) + ' 萬元';
+        winnerDiff.className = 'text-[10px] text-emerald-600 font-bold block';
+      }
+
+      // 渲染折線圖與柱狀圖
+      renderSimTimelineChart(timelineLabels, timelineLump, timelineDCAInvested, timelineDCATotalWealth);
+      renderSimBarChart(fv_lump, profit_lump, lastPoint, P);
+    }
+
+    function renderSimTimelineChart(labels, lump, dcaInv, dcaTot) {
+      const ctx = document.getElementById('chart-sim-timeline').getContext('2d');
+      if (chartSimTimeline) chartSimTimeline.destroy();
+
+      chartSimTimeline = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '單筆投資淨值',
+              data: lump,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.05)',
+              borderWidth: 2.5,
+              tension: 0.1,
+              pointRadius: 1
+            },
+            {
+              label: '定期定額已投資產',
+              data: dcaInv,
+              borderColor: '#059669',
+              backgroundColor: 'rgba(5, 150, 105, 0.05)',
+              borderWidth: 2.5,
+              tension: 0.1,
+              pointRadius: 1
+            },
+            {
+              label: '定期定額總財富(含現金)',
+              data: dcaTot,
+              borderColor: '#94a3b8',
+              borderDash: [4, 4],
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              tension: 0.1,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y) + ' 萬元'
+              }
+            }
+          },
+          scales: {
+            y: { ticks: { callback: (v) => v + ' 萬' }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } }
+          }
+        }
+      });
+    }
+
+    function renderSimBarChart(fv_lump, profit_lump, lastPoint, P) {
+      const ctx = document.getElementById('chart-sim-bar').getContext('2d');
+      if (chartSimBar) chartSimBar.destroy();
+
+      const lumpPrincipal = P / 10000;
+      const lumpProfit = profit_lump / 10000;
+
+      const dcaContributed = lastPoint.contributedPrincipal / 10000;
+      const dcaProfit = (lastPoint.dcaPortfolio - lastPoint.contributedPrincipal) / 10000;
+      const dcaCash = lastPoint.uninvestedCash / 10000;
+
+      chartSimBar = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['方案 A：單筆投資', '方案 B：定期定額'],
+          datasets: [
+            {
+              label: '已投入本金',
+              data: [lumpPrincipal, dcaContributed],
+              backgroundColor: '#94a3b8',
+              borderRadius: 6
+            },
+            {
+              label: '投資累計淨獲利',
+              data: [lumpProfit, dcaProfit],
+              backgroundColor: '#10b981',
+              borderRadius: 6
+            },
+            {
+              label: '未投入現金部位',
+              data: [0, dcaCash],
+              backgroundColor: '#cbd5e1',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' 萬元'
+              }
+            }
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: { stacked: true, ticks: { callback: (v) => v + ' 萬' }, grid: { color: '#f1f5f9' } }
+          }
+        }
+      });
+    }
+
+    // 恢復預設值
+    function resetToDefaults() {
+      document.getElementById('ctrl-capital').value = 100;
+      document.getElementById('ctrl-years').value = 10;
+      document.getElementById('ctrl-return').value = 8.0;
+      document.getElementById('ctrl-dca-months').value = 120;
+      runInteractiveSim();
+    }
+
+    // 快速情境 Preset
+    function applyPreset(type) {
+      switchTab('tab-simulator');
+      if (type === 'baseline') {
+        resetToDefaults();
+      } else if (type === 'bull') {
+        document.getElementById('ctrl-capital').value = 100;
+        document.getElementById('ctrl-years').value = 10;
+        document.getElementById('ctrl-return').value = 12.0;
+        document.getElementById('ctrl-dca-months').value = 120;
+        runInteractiveSim();
+      } else if (type === 'dip') {
+        switchTab('tab-smile');
+        runSmileSimulation();
+      } else if (type === 'bear') {
+        document.getElementById('ctrl-capital').value = 100;
+        document.getElementById('ctrl-years').value = 10;
+        document.getElementById('ctrl-return').value = -5.0;
+        document.getElementById('ctrl-dca-months').value = 120;
+        runInteractiveSim();
+      }
+    }
+
+    // =========================================================================
+    // 模組三：Tab 3 微笑曲線模擬 (首年重挫 30%)
+    // =========================================================================
+    function runSmileSimulation() {
+      const months = 60; // 5年 60期
+      const P = 1000000;
+      const pmt = P / 60; // 60期定期定額
+
+      // 構建月價格路徑：第 1 年由 100 跌至 70 (-30%)；第 2-3 年在 70-75 徘徊；第 4-5 年漲回 138 (+38%)
+      const pricePath = [100];
+      for (let m = 1; m <= months; m++) {
+        if (m <= 12) {
+          // 第1年：跌至 70
+          pricePath.push(100 - (30 * (m / 12)));
+        } else if (m <= 36) {
+          // 第2-3年：由 70 溫和到 80
+          pricePath.push(70 + (10 * ((m - 12) / 24)));
+        } else {
+          // 第4-5年：由 80 飆升至 138
+          pricePath.push(80 + (58 * ((m - 36) / 24)));
+        }
+      }
+
+      // 單筆投資淨值 = P * (當前價格 / 100)
+      // 定期定額：每月買入單位數 = pmt / 當月價格，淨值 = 累計單位數 * 當月價格
+      const labels = [];
+      const lumpNet = [];
+      const dcaNet = [];
+
+      let dcaUnits = 0;
+      for (let m = 0; m <= months; m++) {
+        labels.push(m === 0 ? '期初' : '第' + m + '月');
+        const curPrice = pricePath[m];
+
+        // 單筆淨值
+        lumpNet.push(Math.round((P * (curPrice / 100)) / 10000));
+
+        // 定期定額投入
+        if (m > 0) {
+          dcaUnits += pmt / curPrice;
+        }
+        dcaNet.push(Math.round((dcaUnits * curPrice) / 10000));
+      }
+
+      const ctx = document.getElementById('chart-smile-timeline').getContext('2d');
+      if (chartSmileTimeline) chartSmileTimeline.destroy();
+
+      chartSmileTimeline = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '單筆投資 (暴跌時淨值重挫)',
+              data: lumpNet,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.05)',
+              borderWidth: 2.5,
+              tension: 0.1,
+              pointRadius: 0
+            },
+            {
+              label: '定期定額 (微笑曲線逆轉勝)',
+              data: dcaNet,
+              borderColor: '#059669',
+              backgroundColor: 'rgba(5, 150, 105, 0.08)',
+              fill: true,
+              borderWidth: 2.5,
+              tension: 0.1,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y) + ' 萬元'
+              }
+            }
+          },
+          scales: {
+            y: { ticks: { callback: (v) => v + ' 萬' }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 模組四：Tab 4 Vanguard 實證研究圓餅圖
+    // =========================================================================
+    function initVanguardPie() {
+      const ctx = document.getElementById('chart-vanguard-pie').getContext('2d');
+      if (chartVanguardPie) chartVanguardPie.destroy();
+
+      chartVanguardPie = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['單筆投資勝出 (約 68%)', '定期定額勝出 (約 32%)'],
+          datasets: [{
+            data: [68, 32],
+            backgroundColor: ['#2563eb', '#10b981'],
+            borderWidth: 3,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ' ' + ctx.label + ': 歷史回測涵蓋率 ' + ctx.parsed + '%'
+              }
+            }
+          },
+          cutout: '62%'
+        }
+      });
+    }
+
+    // =========================================================================
+    // 匯出 CSV 明細
+    // =========================================================================
+    function exportCSV() {
+      if (!cachedSimData || cachedSimData.length === 0) {
+        alert('請先載入試算數據');
+        return;
+      }
+      let csv = '﻿';
+      csv += '期數(月),年數,單筆投資市值(元),定期定額已投資產(元),定期定額未投現金(元),定期定額總財富(元),單筆領先差額(元)
+';
+
+      cachedSimData.forEach(r => {
+        const diff = r.lumpVal - r.totalWealth;
+        csv += `${r.month},${r.year},${Math.round(r.lumpVal)},${Math.round(r.dcaPortfolio)},${Math.round(r.uninvestedCash)},${Math.round(r.totalWealth)},${Math.round(diff)}
+`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '單筆投資vs定期定額_逐月模擬數據.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // =========================================================================
+    // 算式透視資料庫 (Formula Inspector Registry)
+    // =========================================================================
+    function openFormulaInspector(key) {
+      const capitalWan = parseFloat(document.getElementById('ctrl-capital').value);
+      const years = parseInt(document.getElementById('ctrl-years').value);
+      const retPct = parseFloat(document.getElementById('ctrl-return').value);
+      const dcaMonths = parseInt(document.getElementById('ctrl-dca-months').value);
+
+      const P = capitalWan * 10000;
+      const m = years * 12;
+      const k = dcaMonths;
+      const pmt = P / k;
+      const r_mo = retPct === 0 ? 0 : (Math.pow(1 + (retPct / 100), 1 / 12) - 1);
+
+      let info = null;
+
+      switch(key) {
+        case 'lump_case':
+          const fv_lump = retPct === 0 ? P : P * Math.pow(1 + (retPct / 100), years);
+          const profit_lump = fv_lump - P;
+          info = {
+            title: '單筆投資期末終值 (Lump-Sum Future Value)',
+            badge: '規格 Table 1 ‧ 單筆複利模型',
+            ref: '腳本第二節 P6–P7、Table 1',
+            def: '初始資金於第 1 個月初 100% 全額投入市場，在整個投資期間內毫無資金閒置，完整享有年化複合增長之期末價值。',
+            math: '單筆期末價值 = 原始本金 P × (1 + r_mo)^m = P × (1 + R_yr)^Y\n累積獲利 = 單筆期末價值 - 原始本金 P',
+            steps: `1. 原始本金 P = ${fmtNum(capitalWan)} 萬元 = ${fmtNum(P)} 元\n2. 假設年化報酬率 R_yr = ${retPct.toFixed(1)}% (等效月報酬率 r = ${(r_mo * 100).toFixed(4)}%)\n3. 投資總期間 = ${years} 年 (${m} 個月)\n4. 複利增長倍數 = (1 + ${(retPct/100).toFixed(4)})^${years} = ${Math.pow(1 + (retPct/100), years).toFixed(6)} 倍\n5. 期末終值 = ${fmtNum(P)} × ${Math.pow(1 + (retPct/100), years).toFixed(6)} = ${fv_lump.toFixed(0)} 元 (${fmtWan(fv_lump)} 萬元)\n6. 累積淨獲利 = ${fv_lump.toFixed(0)} - ${fmtNum(P)} = ${profit_lump.toFixed(0)} 元 (${fmtWan(profit_lump)} 萬元)`,
+            val: `${fmtWan(fv_lump)} 萬元 (獲利 ${fmtWan(profit_lump)} 萬)`,
+            insight: '單筆投資的核心優勢在於「最大化資金在市場內（Time in the market）的時間」，在長期向上的資本市場中能最充分發揮複利乘數。'
+          };
+          break;
+
+        case 'dca_case':
+          let fv_dca = 0;
+          if (retPct === 0) {
+            fv_dca = pmt * Math.min(m, k);
+          } else {
+            // 普通年金終值 (若 k == m)
+            if (k === m) {
+              fv_dca = pmt * ((Math.pow(1 + r_mo, m) - 1) / r_mo);
+            } else {
+              // 逐期複利加總
+              for (let i = 1; i <= Math.min(m, k); i++) {
+                fv_dca += pmt * Math.pow(1 + r_mo, m - i);
+              }
+            }
+          }
+          const contPrincipal = pmt * Math.min(m, k);
+          const dcaProfit = fv_dca - contPrincipal;
+          info = {
+            title: '定期定額期末價值 (DCA Annuity Future Value)',
+            badge: '規格 Table 1 ‧ 分批投入年金模型',
+            ref: '腳本第二節 P7、Table 1',
+            def: '將現有資金切分為等額，於每期月底定期買入之普通年金終值公式。每筆資金在市場內複利的時間依序遞減。',
+            math: '月報酬率 r = (1 + R_yr)^(1/12) - 1\n每月投入金額 PMT = 本金 P ÷ 投入月數 k\n定期定額期末價值 = Σ [ PMT × (1 + r)^(m - i) ] (i = 1 .. min(m, k))',
+            steps: `1. 本金 P = ${fmtNum(P)} 元，分批月數 k = ${k} 個月 → 每月投入額 PMT = ${fmtNum(P)} ÷ ${k} = ${pmt.toFixed(2)} 元\n2. 等效月報酬率 r = (1 + ${(retPct/100).toFixed(4)})^(1/12) - 1 = ${(r_mo).toFixed(8)}\n3. 在基準 120 期下之年金累積因子 = [ (1 + ${(r_mo).toFixed(6)})^${m} - 1 ] ÷ ${(r_mo).toFixed(6)} = ${( (Math.pow(1 + r_mo, m) - 1) / r_mo ).toFixed(4)}\n4. 期末累積市場資產 = ${pmt.toFixed(2)} × 因子 = ${fv_dca.toFixed(0)} 元 (${fmtWan(fv_dca)} 萬元)\n5. 已投入本金 = ${fmtNum(contPrincipal)} 元，淨獲利 = ${dcaProfit.toFixed(0)} 元 (${fmtWan(dcaProfit)} 萬元)`,
+            val: `${fmtWan(fv_dca)} 萬元 (獲利 ${fmtWan(dcaProfit)} 萬)`,
+            insight: '定期定額在牛市中落後的原因，正是因為大部分資金前期留在場外擔任「預備隊」，延遲了享受複利增長的機會。'
+          };
+          break;
+
+        case 'diff_case':
+          const f_lump = retPct === 0 ? P : P * Math.pow(1 + (retPct / 100), years);
+          let f_dca_mkt = 0;
+          for (let i = 1; i <= Math.min(m, k); i++) {
+            f_dca_mkt += pmt * Math.pow(1 + r_mo, m - i);
+          }
+          const uninvCash = Math.max(0, P - pmt * Math.min(m, k));
+          const f_dca_tot = f_dca_mkt + uninvCash;
+          const diff = f_lump - f_dca_tot;
+          info = {
+            title: '策略績效差額與超額報酬 (Strategy Performance Gap)',
+            badge: '規格 Table 1 ‧ 決策指標',
+            ref: '腳本第二節 P7–P8、Table 1 延伸',
+            def: '衡量在完全相同的初始資金與時間下，單筆投資相對於定期定額總財富之超額回報金額。',
+            math: '策略差額 = 單筆期末總資產 - 定期定額期末總財富 (含未投現金)\n差額 > 0 代表單筆勝出；差額 < 0 代表定期定額勝出',
+            steps: `1. 單筆期末價值 = ${fmtWan(f_lump)} 萬元\n2. 定期定額總財富 = ${fmtWan(f_dca_tot)} 萬元 (市場部位 ${fmtWan(f_dca_mkt)} 萬 + 未投現金 ${fmtWan(uninvCash)} 萬)\n3. 策略績效差距 = ${fmtWan(f_lump)} 萬 - ${fmtWan(f_dca_tot)} 萬 = ${fmtWan(diff)} 萬元\n4. 結論：單筆投資在年化 ${retPct.toFixed(1)}% 多頭情境下領先約 ${fmtWan(diff)} 萬元！`,
+            val: diff >= 0 ? `單筆領先 +${fmtWan(diff)} 萬元` : `定期領先 +${fmtWan(Math.abs(diff))} 萬元`,
+            insight: '差額本質上是「承擔市場波動所獲得的風險溢酬補償」。單筆投資人承擔了全額下跌風險，因此享有較高預期回報。'
+          };
+          break;
+
+        case 'total_wealth':
+          const uninvestedC = Math.max(0, P - pmt * Math.min(m, k));
+          info = {
+            title: '定期定額總財富與未投現金處理 (Total Wealth & Cash Balance)',
+            badge: '規格 Table 2 ‧ 邊界條件 (Spec P19)',
+            ref: '腳本第五節 P19 重要限制說明',
+            def: '若設定的分批投入月數 k 大於投資期間 m，期末時部分本金尚未進入市場。評估投資人總財富時，必須將「未投入現金」一併加總，才符合公平比較原則。',
+            math: '已投入本金 = PMT × min(m, k)\n未投入現金部位 = 初始本金 P - 已投入本金\n期末總財富 = 定期定額已投資產 + 未投入現金 (假設無利息)',
+            steps: `1. 初始總本金 P = ${fmtNum(P)} 元\n2. 總投資月數 m = ${m} 個月，設定分批月數 k = ${k} 個月\n3. 已投入期數 = ${Math.min(m, k)} 期 → 已投入本金 = ${fmtNum(pmt * Math.min(m, k))} 元\n4. 未投入現金部位 = ${fmtNum(P)} - ${fmtNum(pmt * Math.min(m, k))} = ${fmtNum(uninvestedC)} 元 (${fmtWan(uninvestedC)} 萬元)\n5. 總財富 = 已投資產市值 + 現金 = 總合`,
+            val: `含未投現金 ${fmtWan(uninvestedC)} 萬元`,
+            insight: '許多坊間試算器忽略了未投入現金，誤把尚未進場的錢算為「蒸發消失」，造成嚴重失真；本系統依規格 P19 完整還原整體資產負債表。'
+          };
+          break;
+
+        default:
+          return;
+      }
+
+      document.getElementById('modal-formula-title').innerText = info.title;
+      document.getElementById('modal-formula-badge').innerText = info.badge;
+      document.getElementById('modal-formula-ref').innerText = info.ref;
+      document.getElementById('modal-formula-def').innerText = info.def;
+      document.getElementById('modal-formula-math').innerText = info.math;
+      document.getElementById('modal-formula-steps').innerText = info.steps;
+      document.getElementById('modal-formula-val').innerText = info.val;
+      document.getElementById('modal-formula-insight').innerText = info.insight;
+
+      document.getElementById('formula-modal').classList.remove('hidden');
+    }
+
+    // 初始化執行
+    window.addEventListener('DOMContentLoaded', () => {
+      initTab1Compare();
+      runInteractiveSim();
+      runSmileSimulation();
+      initVanguardPie();
+    });
+  </script>
+</body>
+</html>
