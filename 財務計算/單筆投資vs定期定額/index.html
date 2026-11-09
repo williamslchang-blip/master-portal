@@ -1568,14 +1568,22 @@
         alert('請先載入試算數據');
         return;
       }
-      let csv = '﻿';
-      csv += '期數(月),年數,單筆投資市值(元),定期定額已投資產(元),定期定額未投現金(元),定期定額總財富(元),單筆領先差額(元)
-';
+      let csv = '\uFEFF';
+      const headers = '期數(月),年數,單筆投資市值(元),定期定額已投資產(元),定期定額未投現金(元),定期定額總財富(元),單筆領先差額(元)';
+      csv += headers + '\n';
 
       cachedSimData.forEach(r => {
         const diff = r.lumpVal - r.totalWealth;
-        csv += `${r.month},${r.year},${Math.round(r.lumpVal)},${Math.round(r.dcaPortfolio)},${Math.round(r.uninvestedCash)},${Math.round(r.totalWealth)},${Math.round(diff)}
-`;
+        const line = [
+          r.month,
+          r.year,
+          Math.round(r.lumpVal),
+          Math.round(r.dcaPortfolio),
+          Math.round(r.uninvestedCash),
+          Math.round(r.totalWealth),
+          Math.round(diff)
+        ].join(',');
+        csv += line + '\n';
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
