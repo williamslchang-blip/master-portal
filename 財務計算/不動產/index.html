@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>不動產：買房、房貸、租屋與投資財務決策 | 互動式教學系統</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- 頂部導航列 Header -->
+  <header class="bg-slate-900 text-white sticky top-0 z-50 border-b border-blue-500 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <a href="https://williamslchang-blip.github.io/master-portal/" class="text-slate-400 hover:text-white transition flex items-center gap-1.5 text-sm" title="返回 Master Portal">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="hidden sm:inline">Master Portal</span>
+        </a>
+        <span class="text-slate-600">|</span>
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm">
+            <i class="fa-solid fa-house-chimney-crack text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-base font-bold text-white tracking-wide leading-tight">不動產財務決策精算系統</h1>
+            <p class="text-xs text-blue-300">買房 ‧ 房貸 ‧ 租屋 ‧ 0050投資與少子化模擬</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 快速情境按鈕與匯出 -->
+      <div class="flex items-center gap-2 flex-wrap text-xs">
+        <span class="text-slate-400 hidden lg:inline"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>快速情境：</span>
+        <button onclick="applyScenario('baseline')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">基準停滯 (0%)</button>
+        <button onclick="applyScenario('history')" class="px-2.5 py-1 rounded bg-blue-900/60 hover:bg-blue-800 text-blue-200 border border-blue-700 transition">台北歷史 (4.85%)</button>
+        <button onclick="applyScenario('aging')" class="px-2.5 py-1 rounded bg-rose-950/60 hover:bg-rose-900 text-rose-200 border border-rose-800 transition">少子化衝擊 (-1%)</button>
+        <button onclick="applyScenario('inflation')" class="px-2.5 py-1 rounded bg-amber-950/60 hover:bg-amber-900 text-amber-200 border border-amber-800 transition">通膨租金漲 (2%)</button>
+        <button onclick="export360CSV()" class="ml-2 px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-medium shadow transition flex items-center gap-1">
+          <i class="fa-solid fa-file-csv"></i>
+          <span>匯出 360 期 CSV</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 模組頁籤切換器 -->
+  <nav class="bg-white border-b border-slate-200 sticky top-[57px] z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto space-x-1 sm:space-x-4 py-2 custom-scroll text-sm font-medium">
+      <button onclick="switchTab('tab-concept')" id="btn-tab-concept" class="tab-btn active px-3.5 py-2 rounded-lg text-blue-600 bg-blue-50 border border-blue-200 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-book-open"></i>
+        <span>一、基本觀念與資金結構 (B1)</span>
+      </button>
+      <button onclick="switchTab('tab-mortgage')" id="btn-tab-mortgage" class="tab-btn px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-calculator"></i>
+        <span>二、房貸攤還與寬限期 (B2-B4)</span>
+      </button>
+      <button onclick="switchTab('tab-rent-vs-buy')" id="btn-tab-rent-vs-buy" class="tab-btn px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-scale-balanced"></i>
+        <span>三、租房 vs 買房資產精算 (B5)</span>
+      </button>
+      <button onclick="switchTab('tab-simulation')" id="btn-tab-simulation" class="tab-btn px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>四、少子化 360 期動態長推 (B6)</span>
+      </button>
+      <button onclick="switchTab('tab-discussion')" id="btn-tab-discussion" class="tab-btn px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap transition">
+        <i class="fa-solid fa-comments"></i>
+        <span>五、課堂研討題庫與結論</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 主內容區域 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+
+    <!-- ============================================================== -->
+    <!-- TAB 1: 基本觀念與資金結構 (B1) -->
+    <!-- ============================================================== -->
+    <section id="tab-concept" class="tab-pane space-y-6">
+      <!-- 頂部資訊卡片 -->
+      <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
+        <div class="relative z-10 max-w-4xl">
+          <span class="badge-pill bg-blue-500/30 text-blue-200 border border-blue-400/40 mb-3">
+            <i class="fa-solid fa-graduation-cap mr-1.5"></i> 課堂教材核心案例 ‧ 房價1,000萬元、LTV 80%
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">不動產法律本質、資產特性與購屋資金結構</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            依臺灣《民法》第66條，不動產為土地及其定著物。不動產具備資金需求大、異質性高、流動性低及財務槓桿高之特性。本單元透過互動試算器解析 LTV 貸款成數、銀行鑑價落差以及隱藏自備交屋成本。
+          </p>
+        </div>
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white pointer-events-none">
+          <i class="fa-solid fa-building"></i>
+        </div>
+      </div>
+
+      <!-- 不動產 vs 動產 比較表格卡片 -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-landmark text-blue-600"></i>
+                民法定義與動產比較
+              </h3>
+              <span class="text-xs text-slate-400 font-mono">Table 0</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left">
+                <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                  <tr>
+                    <th class="py-2 px-2">比較項目</th>
+                    <th class="py-2 px-2 text-blue-700">不動產</th>
+                    <th class="py-2 px-2 text-slate-600">動產</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-slate-700">
+                  <tr>
+                    <td class="py-2 px-2 font-medium">典型例子</td>
+                    <td class="py-2 px-2 text-blue-700 font-semibold">土地、住宅、辦公大樓</td>
+                    <td class="py-2 px-2">汽車、手機、家具</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-2 font-medium">空間移動性</td>
+                    <td class="py-2 px-2">通常固定，不可移動</td>
+                    <td class="py-2 px-2">通常可自由移動</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-2 font-medium">物權移轉方式</td>
+                    <td class="py-2 px-2 text-rose-600 font-semibold">非經登記，不生效力</td>
+                    <td class="py-2 px-2">原則以交付為要件</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-2 font-medium">投資財務特性</td>
+                    <td class="py-2 px-2">資金規模大、變現慢</td>
+                    <td class="py-2 px-2">單價差異大、折舊快</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 bg-slate-50 rounded-lg p-2.5">
+            <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>
+            <strong>毛租金報酬率公式</strong>：毛租金報酬率 = 年租金 ÷ 房屋總價。<br>
+            以1,000萬房屋、月租25,000元為例：$300,000 ÷ 10,000,000 = 3.0\%$（尚未扣除稅費、修繕與折舊）。
+          </div>
+        </div>
+
+        <!-- 購屋資金結構試算器 B1 控制區 -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                  <i class="fa-solid fa-sliders text-blue-600"></i>
+                  互動模擬器 B1：購屋資金結構與鑑價差額試算
+                </h3>
+                <p class="text-xs text-slate-500 mt-0.5">拉動滑桿調整房屋總價與貸款成數，並測試銀行鑑價落差時的實際自備款負擔</p>
+              </div>
+              <span class="badge-pill bg-blue-100 text-blue-700">規格 B1</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <!-- 房屋總價滑桿 -->
+              <div>
+                <div class="flex justify-between items-center mb-1 text-sm font-semibold">
+                  <span>房屋成交總價：</span>
+                  <span id="b1-price-val" class="text-blue-600 text-base font-bold">1,000 萬元</span>
+                </div>
+                <input type="range" id="b1-price" min="500" max="3000" step="100" value="1000"
+                       oninput="updateB1()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                  <span>500萬</span>
+                  <span>1,000萬(預設)</span>
+                  <span>2,000萬</span>
+                  <span>3,000萬</span>
+                </div>
+              </div>
+
+              <!-- LTV 貸款成數滑桿 -->
+              <div>
+                <div class="flex justify-between items-center mb-1 text-sm font-semibold">
+                  <span>銀行核貸成數 (LTV)：</span>
+                  <span id="b1-ltv-val" class="text-emerald-600 text-base font-bold">80% (貸款 8 成)</span>
+                </div>
+                <input type="range" id="b1-ltv" min="40" max="80" step="5" value="80"
+                       oninput="updateB1()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                  <span>40% (高自備)</span>
+                  <span>60%</span>
+                  <span>70%</span>
+                  <span>80% (常態)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 鑑價落差開關 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3.5 mb-5">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+                  <span class="text-xs sm:text-sm font-bold text-amber-900">情境模擬：銀行鑑價低於成交價（保守估價風險）</span>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="b1-bank-discount" onchange="updateB1()" class="sr-only peer">
+                  <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-600"></div>
+                  <span class="ml-2 text-xs font-semibold text-amber-900">啟用 9 折鑑價</span>
+                </label>
+              </div>
+              <p id="b1-discount-desc" class="text-xs text-amber-800 mt-1.5 leading-relaxed">
+                若成交價1,000萬，銀行鑑價僅900萬時，銀行最高僅撥付鑑價的80%（720萬），造成買方實質自備款暴增至280萬（自備率攀升至28%）。
+              </p>
+            </div>
+
+            <!-- 數據統計看板 -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-4">
+              <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-lg">
+                <span class="text-[11px] text-slate-500 block">銀行核貸金額</span>
+                <span id="b1-loan-display" class="text-base sm:text-lg font-bold text-blue-700">800 萬元</span>
+                <span id="b1-loan-pct" class="text-[10px] text-slate-400 block">(佔成交 80%)</span>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-lg">
+                <span class="text-[11px] text-slate-500 block">實質自備頭期款</span>
+                <span id="b1-down-display" class="text-base sm:text-lg font-bold text-emerald-700">200 萬元</span>
+                <span id="b1-down-pct" class="text-[10px] text-slate-400 block">(佔成交 20%)</span>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-lg">
+                <span class="text-[11px] text-slate-500 block">交屋額外稅雜費(約5%)</span>
+                <span id="b1-extra-fee" class="text-base sm:text-lg font-bold text-slate-700">50 萬元</span>
+                <span class="text-[10px] text-slate-400 block">(契稅/代書/仲介)</span>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-lg">
+                <span class="text-[11px] text-slate-500 block">交屋前總需準備資金</span>
+                <span id="b1-total-cash" class="text-base sm:text-lg font-bold text-rose-700">250 萬元</span>
+                <span class="text-[10px] text-slate-400 block">(頭期款 + 雜支)</span>
+              </div>
+            </div>
+
+            <!-- 動態比例長條圖 -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold text-slate-600">
+                <span>資金結構分佈比例條：</span>
+                <span id="b1-bar-legend">自備款 20% ｜ 貸款 80%</span>
+              </div>
+              <div class="w-full h-6 bg-slate-200 rounded-full overflow-hidden flex shadow-inner">
+                <div id="b1-bar-down" class="bg-emerald-500 h-full flex items-center justify-center text-[10px] text-white font-bold transition-all duration-300" style="width: 20%;">
+                  自備 200萬
+                </div>
+                <div id="b1-bar-loan" class="bg-blue-600 h-full flex items-center justify-center text-[10px] text-white font-bold transition-all duration-300" style="width: 80%;">
+                  銀行貸款 800萬
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span><i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> 務必預留至少6個月生活費之緊急預備金，不可全數投入頭期款</span>
+            <span class="font-mono">LTV Formula: Loan / Value</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 2: 房貸攤還與寬限期 (B2 - B4) -->
+    <!-- ============================================================== -->
+    <section id="tab-mortgage" class="tab-pane hidden space-y-6">
+      
+      <!-- 導引說明 -->
+      <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-calculator text-blue-600"></i>
+            房貸兩大還款方式比較與寬限期跳升陷阱
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            共同基本條件：貸款 800 萬元、固定年利率 2.5%、30 年（360期）。解析本息平均攤還（CPM）與本金平均攤還（CAM）之月付曲線差異。
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="badge-pill bg-blue-100 text-blue-700">規格 B2 ‧ B3 ‧ B4</span>
+        </div>
+      </div>
+
+      <!-- 模擬器 B2 & B3 核心控制與圖表區 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側控制面板 (4 cols) -->
+        <div class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-5">
+          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-blue-600"></i>
+            房貸參數控制項
+          </h3>
+
+          <!-- 貸款金額 -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>貸款金額 (P)：</span>
+              <span id="b2-loan-val" class="text-blue-600 font-bold">800 萬元</span>
+            </div>
+            <input type="range" id="b2-loan" min="300" max="2000" step="50" value="800" oninput="updateB2B3()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+          </div>
+
+          <!-- 年利率 -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>房貸年利率 (r)：</span>
+              <span id="b2-rate-val" class="text-blue-600 font-bold">2.50 %</span>
+            </div>
+            <input type="range" id="b2-rate" min="1.5" max="4.5" step="0.05" value="2.5" oninput="updateB2B3()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+          </div>
+
+          <!-- 貸款年限 -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>貸款年限 (n)：</span>
+              <span id="b2-years-val" class="text-blue-600 font-bold">30 年 (360 期)</span>
+            </div>
+            <input type="range" id="b2-years" min="20" max="40" step="5" value="30" oninput="updateB2B3()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+          </div>
+
+          <!-- 寬限期選擇 (B3) -->
+          <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-3.5">
+            <span class="text-xs font-bold text-indigo-900 block mb-2">
+              <i class="fa-solid fa-hourglass-half text-indigo-600 mr-1"></i> 寬限期設定 (Grace Period)
+            </span>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="setGrace(0)" id="grace-btn-0" class="grace-btn py-1.5 text-xs font-bold rounded border bg-indigo-600 text-white border-indigo-600 transition">0 年 (無)</button>
+              <button type="button" onclick="setGrace(3)" id="grace-btn-3" class="grace-btn py-1.5 text-xs font-bold rounded border bg-white text-indigo-800 border-indigo-200 hover:bg-indigo-100 transition">3 年</button>
+              <button type="button" onclick="setGrace(5)" id="grace-btn-5" class="grace-btn py-1.5 text-xs font-bold rounded border bg-white text-indigo-800 border-indigo-200 hover:bg-indigo-100 transition">5 年</button>
+            </div>
+            <p id="grace-summary-text" class="text-[11px] text-indigo-800 mt-2 leading-relaxed">
+              寬限期間僅繳利息，本金不變；寬限期滿後月付金將面臨大幅跳升！
+            </p>
+          </div>
+
+          <!-- 家庭月收入與 DSR 壓力測試 (B4) -->
+          <div class="bg-rose-50 border border-rose-200 rounded-lg p-3.5">
+            <div class="flex justify-between text-xs font-bold text-rose-900 mb-1">
+              <span><i class="fa-solid fa-wallet text-rose-600 mr-1"></i> 家庭月收入 (B4 測試)：</span>
+              <span id="b4-income-val" class="text-rose-700">70,000 元</span>
+            </div>
+            <input type="range" id="b4-income" min="40000" max="150000" step="5000" value="70000" oninput="updateB4()"
+                   class="w-full h-2 bg-rose-200 rounded-lg appearance-none cursor-pointer accent-rose-600">
+            <div class="mt-3 space-y-1.5 text-xs">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-600">前期房貸負擔比 (DSR)：</span>
+                <span id="b4-dsr-pre" class="font-bold text-slate-800">45.2%</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-600">期滿後房貸負擔比：</span>
+                <span id="b4-dsr-post" class="font-bold text-rose-700">51.3%</span>
+              </div>
+              <div id="b4-warning-box" class="mt-2 p-2 bg-white rounded border border-rose-300 text-[11px] text-rose-800 font-medium">
+                ⚠️ 提示：房貸負擔比大於 40%，現金流抗壓性較弱（註：此為理財安全參考，非銀行強制法規門檻）。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右側圖表與數據對比 (8 cols) -->
+        <div class="lg:col-span-8 space-y-5">
+          
+          <!-- 核心數值摘要卡片 -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center">
+              <span class="text-[11px] text-slate-500 block">本息平均 (前期月付)</span>
+              <span id="b2-cpm-monthly" class="text-lg font-extrabold text-blue-700">31,610 元</span>
+              <span id="b2-cpm-sub" class="text-[10px] text-slate-400 block">30年每月固定</span>
+            </div>
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center">
+              <span class="text-[11px] text-slate-500 block">本金平均 (首月/末月)</span>
+              <span id="b2-cam-monthly" class="text-base sm:text-lg font-extrabold text-emerald-700">38,889 / 22,269</span>
+              <span class="text-[10px] text-slate-400 block">每月遞減約 46 元</span>
+            </div>
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center">
+              <span class="text-[11px] text-slate-500 block">30年總利息 (本息 vs 本金)</span>
+              <span id="b2-interest-diff" class="text-base sm:text-lg font-extrabold text-indigo-700">338萬 vs 301萬</span>
+              <span id="b2-save-interest" class="text-[10px] text-emerald-600 font-bold block">本金平均省 37.1 萬</span>
+            </div>
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center">
+              <span class="text-[11px] text-slate-500 block">寬限期多付利息 (B3)</span>
+              <span id="b3-extra-interest" class="text-lg font-extrabold text-rose-600">+0 萬元</span>
+              <span id="b3-jump-label" class="text-[10px] text-rose-500 font-semibold block">期滿月付跳升: 0%</span>
+            </div>
+          </div>
+
+          <!-- 圖表區：月付金走勢圖 & 寬限期跳升圖 -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-chart-area text-blue-600"></i>
+                月還款金額曲線比較（360期）
+              </h4>
+              <div class="flex items-center gap-3 text-xs">
+                <span class="flex items-center gap-1.5 text-blue-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-blue-600 inline-block"></span> 本息平均
+                </span>
+                <span class="flex items-center gap-1.5 text-emerald-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span> 本金平均
+                </span>
+                <span class="flex items-center gap-1.5 text-rose-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-rose-600 inline-block"></span> 寬限期階梯
+                </span>
+              </div>
+            </div>
+            <div class="h-64 sm:h-72 w-full">
+              <canvas id="chart-mortgage"></canvas>
+            </div>
+          </div>
+
+          <!-- Table 2 & Table 3 對照整理 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+              <h5 class="text-xs font-bold text-slate-700 mb-2 flex items-center justify-between">
+                <span><i class="fa-solid fa-table-list mr-1.5 text-blue-600"></i>本息 vs 本金 特性對比</span>
+                <span class="text-[10px] text-slate-400 font-mono">Table 2</span>
+              </h5>
+              <ul class="text-xs text-slate-600 space-y-1.5">
+                <li class="flex justify-between py-1 border-b border-slate-200/60">
+                  <span>初期現金流負擔</span>
+                  <span class="font-semibold text-blue-700">本息較輕 (31,610元) ｜ 本金較重 (38,889元)</span>
+                </li>
+                <li class="flex justify-between py-1 border-b border-slate-200/60">
+                  <span>月薪5萬支出佔比</span>
+                  <span class="font-semibold text-rose-700">本息 63.2% ｜ 本金首月高達 77.8%</span>
+                </li>
+                <li class="flex justify-between py-1">
+                  <span>教學反思</span>
+                  <span class="font-semibold text-slate-800">總利息低不一定好，需看流動性承受力！</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- 寬限期風險與房價下跌衝擊 -->
+            <div class="bg-rose-50/60 border border-rose-200 rounded-xl p-4">
+              <h5 class="text-xs font-bold text-rose-900 mb-2 flex items-center justify-between">
+                <span><i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-600"></i>寬限期負資產風險警示</span>
+                <span class="text-[10px] text-rose-600 font-mono">Table 3 延伸</span>
+              </h5>
+              <p class="text-xs text-rose-800 leading-relaxed mb-2">
+                若使用 5 年寬限期，第 5 年期滿時本金<strong>仍為 800 萬元</strong>。此時若房價回跌 20%（由1,000萬跌至800萬）：
+              </p>
+              <div class="bg-white rounded p-2 border border-rose-200 text-xs flex justify-between items-center text-rose-900">
+                <span>擔保品跌價後 LTV：</span>
+                <span class="font-bold text-rose-600">800萬 ÷ 800萬 = 100% (甚至恐破百陷入負資產)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 3: 租房 vs 買房資產精算 (B5) -->
+    <!-- ============================================================== -->
+    <section id="tab-rent-vs-buy" class="tab-pane hidden space-y-6">
+      
+      <!-- 概念架構 -->
+      <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-scale-balanced text-blue-600"></i>
+              買房 vs 租房投資：相同現金流的機會成本精算法
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              買房本金不是純消費，而是轉化為房屋淨值；租房者省下頭期款200萬一次買入0050，並將每月現金流差額（房貸月付+持有費-房租）定期定額投資。
+            </p>
+          </div>
+          <div class="text-right">
+            <span class="badge-pill bg-emerald-100 text-emerald-800 font-mono">等額現金流法 (B5)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心試算器與比較控制項 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側參數控制項 (4 cols) -->
+        <div class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-5">
+          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-blue-600"></i>
+            長線經濟情境參數
+          </h3>
+
+          <!-- 房價年化變動率 -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>房價年化變動率 (House CAGR)：</span>
+              <span id="b5-house-growth-val" class="text-blue-600 font-bold">0.0 % (平盤)</span>
+            </div>
+            <input type="range" id="b5-house-growth" min="-2.0" max="6.0" step="0.5" value="0.0" oninput="updateB5()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>-2% (少子化)</span>
+              <span>0% (預設)</span>
+              <span>2.66% (兩平點)</span>
+              <span>4.85% (歷史)</span>
+              <span>6%</span>
+            </div>
+          </div>
+
+          <!-- 0050 年化總報酬率 -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>0050 股票年化總報酬：</span>
+              <span id="b5-etf-return-val" class="text-emerald-600 font-bold">6.0 % (含息)</span>
+            </div>
+            <input type="range" id="b5-etf-return" min="0.0" max="12.0" step="0.5" value="6.0" oninput="updateB5()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>0% (僅儲蓄)</span>
+              <span>4% (保守)</span>
+              <span>6% (基準)</span>
+              <span>8%</span>
+              <span>12%</span>
+            </div>
+          </div>
+
+          <!-- 初始月租金 -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>同等品質每月租金：</span>
+              <span id="b5-rent-val" class="text-indigo-600 font-bold">25,000 元</span>
+            </div>
+            <input type="range" id="b5-rent" min="15000" max="35000" step="1000" value="25000" oninput="updateB5()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>15,000</span>
+              <span>20,000</span>
+              <span>25,000(預設)</span>
+              <span>30,000</span>
+              <span>35,000</span>
+            </div>
+          </div>
+
+          <!-- 現金流拆解小結 -->
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5 space-y-2 text-xs">
+            <div class="font-bold text-slate-700 flex items-center justify-between">
+              <span>每月現金支出平衡檢視</span>
+              <span class="text-[10px] bg-slate-200 px-1.5 py-0.5 rounded text-slate-600">預算對等</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>買房每月房貸 (本息)：</span>
+              <span class="font-mono font-semibold">31,610 元</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>買房房屋持有月均成本：</span>
+              <span class="font-mono font-semibold">+ 4,167 元 (年5萬)</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>買方每月總現金流出：</span>
+              <span class="font-mono font-bold text-slate-900">= 35,777 元</span>
+            </div>
+            <div class="border-t border-slate-200 pt-1.5 flex justify-between text-emerald-700 font-bold">
+              <span>租房者每月可額外投資額：</span>
+              <span id="b5-monthly-invest-diff" class="font-mono text-sm">10,776 元</span>
+            </div>
+          </div>
+
+          <!-- 台北歷史漲幅參考提醒 -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-900 leading-relaxed">
+            <i class="fa-solid fa-chart-column mr-1 text-blue-600"></i>
+            <strong>信義房價指數參考</strong>：台北市 2006Q3 指數 55.63 攀升至 2026Q3 的 143.55，20年累積漲幅 158.04%，換算年化複合成長率（CAGR）約為 <strong>4.85%</strong>。
+          </div>
+        </div>
+
+        <!-- 右側 30年資產期末對決看板 (8 cols) -->
+        <div class="lg:col-span-8 space-y-5">
+          
+          <!-- 期末結果大對決 Banner -->
+          <div id="b5-result-banner" class="p-5 rounded-xl border transition-all flex flex-col sm:flex-row items-center justify-between gap-4 bg-emerald-50 border-emerald-300 text-emerald-950 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div id="b5-result-icon" class="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xl shrink-0">
+                <i class="fa-solid fa-trophy"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider block" id="b5-winner-tag">30年後總資產勝出方案</span>
+                <h4 id="b5-winner-title" class="text-xl font-extrabold text-emerald-900">租房＋投資 0050 勝出！</h4>
+                <p id="b5-winner-desc" class="text-xs mt-0.5 text-emerald-800">在房價 0% 平盤情境下，租房累積金融資產領先買房達 1,199 萬元。</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0 bg-white/80 px-4 py-2 rounded-lg border border-emerald-200">
+              <span class="text-[11px] text-slate-500 block">期末總財富差額</span>
+              <span id="b5-diff-amount" class="text-xl font-black text-emerald-700">+ 1,199 萬元</span>
+            </div>
+          </div>
+
+          <!-- 30年期末資產堆疊柱狀圖 (Chart.js) -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex justify-between items-center mb-3">
+              <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-chart-simple text-blue-600"></i>
+                30年期末總資產拆解比較 (單位：新台幣萬元)
+              </h4>
+              <span class="text-xs font-mono text-slate-400">End of Year 30</span>
+            </div>
+            <div class="h-64 sm:h-72 w-full">
+              <canvas id="chart-rent-buy"></canvas>
+            </div>
+          </div>
+
+          <!-- 詳細資產分解數據格 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- 買房資產明細 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+              <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
+                <span class="text-xs font-bold text-blue-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-house text-blue-600"></i> 【買房方案】期末房屋淨值
+                </span>
+                <span id="b5-house-final" class="text-base font-bold text-blue-700">1,000 萬元</span>
+              </div>
+              <ul class="text-xs space-y-1 text-slate-600">
+                <li class="flex justify-between">
+                  <span>初始購屋成本：</span>
+                  <span>1,000 萬元</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>30年房貸本息總繳：</span>
+                  <span>1,137.95 萬元</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>30年持有稅費總支出：</span>
+                  <span>150.00 萬元 (每年5萬)</span>
+                </li>
+                <li class="flex justify-between font-semibold text-slate-800 pt-1 border-t border-slate-100">
+                  <span>30年後已清償剩餘房貸：</span>
+                  <span class="text-emerald-600">0 元 (100%自有產權)</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- 租房資產明細 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+              <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
+                <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-chart-pie text-emerald-600"></i> 【租房+0050】期末金融資產
+                </span>
+                <span id="b5-rent-final" class="text-base font-bold text-emerald-700">2,199 萬元</span>
+              </div>
+              <ul class="text-xs space-y-1 text-slate-600">
+                <li class="flex justify-between">
+                  <span>初始200萬單筆投入 (30年FV)：</span>
+                  <span id="b5-lump-fv" class="font-mono">約 1,149 萬元</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>每月差額定期定額 (30年FV)：</span>
+                  <span id="b5-dca-fv" class="font-mono">約 1,050 萬元</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>30年累計支付總租金：</span>
+                  <span>900 萬元 (未計通膨)</span>
+                </li>
+                <li class="flex justify-between font-semibold text-slate-800 pt-1 border-t border-slate-100">
+                  <span>損益兩平房價CAGR門檻：</span>
+                  <span class="text-indigo-600 font-bold">約 2.66%</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Table 5 快速對照矩陣 -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div class="flex justify-between items-center mb-2">
+              <h5 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-table mr-1 text-blue-600"></i> 房價不同年化變動率與租房投資 2,199 萬元對照表 (Table 5)
+              </h5>
+              <span class="text-[10px] text-slate-400 font-mono">基準 0050 6%</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-center border-collapse">
+                <thead class="bg-slate-200 text-slate-700 font-semibold">
+                  <tr>
+                    <th class="py-1.5 px-2">房價年化變動</th>
+                    <th class="py-1.5 px-2">0% (平盤)</th>
+                    <th class="py-1.5 px-2">2.0% (溫和)</th>
+                    <th class="py-1.5 px-2 text-indigo-700">2.66% (兩平)</th>
+                    <th class="py-1.5 px-2">3.0%</th>
+                    <th class="py-1.5 px-2">4.0%</th>
+                    <th class="py-1.5 px-2 text-blue-700">4.85% (歷史)</th>
+                    <th class="py-1.5 px-2">6.0%</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 bg-white text-slate-700">
+                  <tr>
+                    <td class="py-1.5 px-2 font-medium">30年房屋市值</td>
+                    <td class="py-1.5 px-2">1,000萬</td>
+                    <td class="py-1.5 px-2">1,811萬</td>
+                    <td class="py-1.5 px-2 font-bold text-indigo-700">約 2,199萬</td>
+                    <td class="py-1.5 px-2">2,427萬</td>
+                    <td class="py-1.5 px-2">3,243萬</td>
+                    <td class="py-1.5 px-2 font-bold text-blue-700">約 4,140萬</td>
+                    <td class="py-1.5 px-2">5,743萬</td>
+                  </tr>
+                  <tr>
+                    <td class="py-1.5 px-2 font-medium">勝出方案</td>
+                    <td class="py-1.5 px-2 text-emerald-600 font-bold">租房勝</td>
+                    <td class="py-1.5 px-2 text-emerald-600 font-bold">租房勝</td>
+                    <td class="py-1.5 px-2 text-indigo-600 font-bold">打平</td>
+                    <td class="py-1.5 px-2 text-blue-600 font-bold">買房勝</td>
+                    <td class="py-1.5 px-2 text-blue-600 font-bold">買房勝</td>
+                    <td class="py-1.5 px-2 text-blue-600 font-bold">買房大勝</td>
+                    <td class="py-1.5 px-2 text-blue-600 font-bold">買房勝</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-2">
+              💡 <strong>核心財務意涵</strong>：雖然 0050 假設 6% 大於房價漲幅 4.85%，但買房因享有 5 倍資金槓桿（200萬控制1,000萬資產），當房價年增率超過 2.66% 時，資產累積絕對金額即可超越租房投資！
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 4: 少子化趨勢與 360 期動態長推 (B6) -->
+    <!-- ============================================================== -->
+    <section id="tab-simulation" class="tab-pane hidden space-y-6">
+      
+      <!-- 導言與少子化情境卡片 -->
+      <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-chart-line text-blue-600"></i>
+              少子化長線情境分析與 360 期逐月動態推演引擎 (B6)
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              國發會推估 2026 年台灣人口約 2,319 萬人至 2055 年降至 1,752 萬人（-24.5%）。本高階引擎考量<strong>租金年化調漲</strong>與每月複利再投資遞推，計算動態財富路徑。
+            </p>
+          </div>
+          <button onclick="export360CSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs shadow flex items-center gap-2 transition">
+            <i class="fa-solid fa-download"></i> 下載 360 期完整 CSV 報表
+          </button>
+        </div>
+      </div>
+
+      <!-- 少子化六大情境 Table 6 互動切換列 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-users-line text-indigo-600"></i> 國發會少子化趨勢對照 6 大情境 (Table 6)
+          </span>
+          <span class="text-[11px] text-slate-400">點擊按鈕直接套用情境參數</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
+          <button onclick="applyB6Scenario(-1.0, 6.0, 0.0, '人口衝擊較大')" class="p-2.5 rounded-lg border text-left hover:border-blue-500 bg-slate-50 transition">
+            <div class="font-bold text-slate-800">1. 人口衝擊較大</div>
+            <div class="text-[11px] text-rose-600 font-semibold">房價 -1.0%</div>
+            <div class="text-[10px] text-slate-400">30年後約 740萬</div>
+          </button>
+          <button onclick="applyB6Scenario(0.0, 6.0, 0.0, '長期停滯')" class="p-2.5 rounded-lg border text-left hover:border-blue-500 bg-slate-50 transition">
+            <div class="font-bold text-slate-800">2. 長期停滯</div>
+            <div class="text-[11px] text-slate-600 font-semibold">房價 0.0%</div>
+            <div class="text-[10px] text-slate-400">30年後 1,000萬</div>
+          </button>
+          <button onclick="applyB6Scenario(1.0, 6.0, 1.0, '溫和上漲')" class="p-2.5 rounded-lg border text-left hover:border-blue-500 bg-slate-50 transition">
+            <div class="font-bold text-slate-800">3. 溫和上漲</div>
+            <div class="text-[11px] text-blue-600 font-semibold">房價 +1.0% 租+1%</div>
+            <div class="text-[10px] text-slate-400">30年後約 1,348萬</div>
+          </button>
+          <button onclick="applyB6Scenario(2.0, 6.0, 1.5, '需求仍強')" class="p-2.5 rounded-lg border text-left hover:border-blue-500 bg-slate-50 transition">
+            <div class="font-bold text-slate-800">4. 需求仍強</div>
+            <div class="text-[11px] text-blue-600 font-semibold">房價 +2.0% 租+1.5%</div>
+            <div class="text-[10px] text-slate-400">30年後約 1,811萬</div>
+          </button>
+          <button onclick="applyB6Scenario(3.0, 6.0, 2.0, '較強成長')" class="p-2.5 rounded-lg border text-left hover:border-blue-500 bg-slate-50 transition">
+            <div class="font-bold text-slate-800">5. 較強成長</div>
+            <div class="text-[11px] text-indigo-600 font-semibold">房價 +3.0% 租+2%</div>
+            <div class="text-[10px] text-slate-400">30年後約 2,427萬</div>
+          </button>
+          <button onclick="applyB6Scenario(4.85, 6.0, 2.0, '歷史延續假設')" class="p-2.5 rounded-lg border text-left hover:border-blue-500 bg-slate-50 transition">
+            <div class="font-bold text-slate-800">6. 歷史延續假設</div>
+            <div class="text-[11px] text-purple-600 font-semibold">房價 +4.85% 租+2%</div>
+            <div class="text-[10px] text-slate-400">30年後約 4,140萬</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- B6 模擬引擎控制與即時折線走勢 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側控制面板 (4 cols) -->
+        <div class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-5">
+          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2 flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-gears text-blue-600"></i>
+              360期逐月動態參數 (B6)
+            </span>
+            <span class="badge-pill bg-blue-100 text-blue-700 text-[10px]">即時遞推</span>
+          </h3>
+
+          <!-- 房價年化變動率 (-2% to 5%) -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>房價年化變動率：</span>
+              <span id="b6-house-val" class="text-blue-600 font-bold">+1.0 %</span>
+            </div>
+            <input type="range" id="b6-house" min="-2.0" max="5.0" step="0.5" value="1.0" oninput="runSimulation360()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>-2% (衝擊)</span>
+              <span>1% (預設)</span>
+              <span>3%</span>
+              <span>5%</span>
+            </div>
+          </div>
+
+          <!-- 0050 年化報酬率 (0% to 10%) -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>0050 年化總報酬率：</span>
+              <span id="b6-etf-val" class="text-emerald-600 font-bold">6.0 %</span>
+            </div>
+            <input type="range" id="b6-etf" min="0.0" max="10.0" step="0.5" value="6.0" oninput="runSimulation360()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>0% (存款)</span>
+              <span>4%</span>
+              <span>6% (預設)</span>
+              <span>10%</span>
+            </div>
+          </div>
+
+          <!-- 租金年漲幅 (0% to 4%) -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>租金年成長率 (Rent Inflation)：</span>
+              <span id="b6-rent-growth-val" class="text-amber-600 font-bold">0.0 % (平盤)</span>
+            </div>
+            <input type="range" id="b6-rent-growth" min="0.0" max="4.0" step="0.5" value="0.0" oninput="runSimulation360()"
+                   class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-600">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>0% (凍漲)</span>
+              <span>1% (溫和)</span>
+              <span>2% (常態)</span>
+              <span>4% (通膨)</span>
+            </div>
+          </div>
+
+          <!-- 現金流逆轉提示盒 (B6規格要求) -->
+          <div id="b6-cashflow-alert" class="p-3.5 rounded-lg border text-xs leading-relaxed bg-slate-50 border-slate-200 text-slate-700">
+            <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>
+            <strong>現金流充裕狀態</strong>：當前月租金低於買房月支出，租房者每月維持正向現金流持續買進 0050。
+          </div>
+
+          <!-- 計算邏輯數學卡片 -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-900 space-y-1.5">
+            <div class="font-bold flex items-center justify-between">
+              <span>遞推演算法邏輯：</span>
+              <span class="font-mono text-[10px]">m = 1..360</span>
+            </div>
+            <p class="font-mono text-[11px] text-blue-800">
+              第 m 月房租 = 25,000 × (1+g_rent)^((m-1)/12)<br>
+              月可投資 = 房貸月付 + 4,167 - 當月房租<br>
+              V_m = V_(m-1) × (1+r_mo) + 月可投資 (V_0=200萬)
+            </p>
+          </div>
+        </div>
+
+        <!-- 右側 360期動態累積走勢圖與數據預覽 (8 cols) -->
+        <div class="lg:col-span-8 space-y-5">
+          
+          <!-- 360期即時統計看板 -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+              <span class="text-[11px] text-slate-500 block">30年後房屋總市值</span>
+              <span id="b6-stat-house" class="text-base sm:text-lg font-bold text-blue-700">1,348 萬元</span>
+              <span id="b6-stat-house-growth" class="text-[10px] text-slate-400 block">(年化 +1.0%)</span>
+            </div>
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+              <span class="text-[11px] text-slate-500 block">30年後租房投資組合</span>
+              <span id="b6-stat-invest" class="text-base sm:text-lg font-bold text-emerald-700">2,199 萬元</span>
+              <span id="b6-stat-invest-growth" class="text-[10px] text-slate-400 block">(0050複利累積)</span>
+            </div>
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+              <span class="text-[11px] text-slate-500 block">最終勝出方案</span>
+              <span id="b6-stat-winner" class="text-base sm:text-lg font-bold text-emerald-600">租房投資勝</span>
+              <span id="b6-stat-diff" class="text-[10px] text-slate-500 block">高出約 851 萬元</span>
+            </div>
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+              <span class="text-[11px] text-slate-500 block">第360月最終租金</span>
+              <span id="b6-stat-final-rent" class="text-base sm:text-lg font-bold text-amber-700">25,000 元/月</span>
+              <span id="b6-stat-rent-growth" class="text-[10px] text-slate-400 block">(凍漲情境)</span>
+            </div>
+          </div>
+
+          <!-- 360 期動態財富折線圖 (Chart.js) -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                  <i class="fa-solid fa-chart-line text-blue-600"></i>
+                  360 期（30年）資產累積逐月軌跡
+                </h4>
+                <p class="text-[11px] text-slate-500">即時模擬買房房屋資產 vs 租房投資組合市值之消長曲線</p>
+              </div>
+              <div class="flex items-center gap-3 text-xs">
+                <span class="flex items-center gap-1.5 text-blue-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-blue-600 inline-block"></span> 房屋資產市值
+                </span>
+                <span class="flex items-center gap-1.5 text-emerald-600 font-semibold">
+                  <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span> 0050 投資組合淨值
+                </span>
+              </div>
+            </div>
+            <div class="h-72 sm:h-80 w-full">
+              <canvas id="chart-timeline360"></canvas>
+            </div>
+          </div>
+
+          <!-- 360期關鍵時間點檢視 (5年、10年、15年、20年、25年、30年) -->
+          <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+            <div class="flex justify-between items-center mb-2.5 pb-2 border-b border-slate-100">
+              <h5 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> 關鍵年份資產對照檢驗點 (五年為週期)
+              </h5>
+              <button onclick="export360CSV()" class="text-xs text-blue-600 hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-file-arrow-down"></i> 完整 360 期明細下載
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-center border-collapse">
+                <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                  <tr>
+                    <th class="py-2 px-2">時間節點</th>
+                    <th class="py-2 px-2">期數 (月)</th>
+                    <th class="py-2 px-2">當期月租金</th>
+                    <th class="py-2 px-2 text-blue-700">買房房屋價值</th>
+                    <th class="py-2 px-2 text-emerald-700">0050 投資組合</th>
+                    <th class="py-2 px-2">淨資產差額 (買-租)</th>
+                    <th class="py-2 px-2">當前領先者</th>
+                  </tr>
+                </thead>
+                <tbody id="b6-checkpoint-body" class="divide-y divide-slate-100 text-slate-700">
+                  <!-- 動態填入 5, 10, 15, 20, 25, 30 年節點 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 5: 課堂研討題庫與結論 -->
+    <!-- ============================================================== -->
+    <section id="tab-discussion" class="tab-pane hidden space-y-6">
+      
+      <!-- 頂部大題說明 -->
+      <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-900 text-white rounded-2xl p-6 shadow-md">
+        <div class="max-w-4xl">
+          <span class="badge-pill bg-blue-500/30 text-blue-200 border border-blue-400/30 mb-2">八、課堂活動與思辨題</span>
+          <h2 class="text-2xl font-bold mb-2">房地產財務決策深度思辨與教學指引</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            本單元提供 8 道具備教學深度的研討問題。點擊每道題目即可展開解析、財務模型內涵及教師引導要點。
+          </p>
+        </div>
+      </div>
+
+      <!-- 8道討論題折疊展開卡片 -->
+      <div class="space-y-3.5" id="discussion-accordion">
+        
+        <!-- Q1 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(1)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">Q1</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">為什麼房貸月付 31,610 元不能全部當成買房成本？請區分本金、利息及持有成本。</span>
+            </div>
+            <i id="acc-icon-1" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-1" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2">
+            <p><strong>【核心觀念解析】</strong>：房貸月付金包含「還本」與「付息」兩大部分：</p>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>本金償還</strong>：屬於「資產內部的科目挪移」，現金減少但換得房屋產權淨值增加（強制儲蓄），不是消費性支出。</li>
+              <li><strong>房貸利息</strong>：屬於借貸資金的使用代價，為純費用成本。</li>
+              <li><strong>房屋持有成本</strong>：包含房屋稅、地價稅、火險地震險、管理費、例行修繕費（案例假設每年5萬元，月均4,167元），是維持房屋使用價值的實質消耗。</li>
+            </ul>
+            <p class="text-blue-800 bg-blue-50 p-2.5 rounded">💡 <strong>教學引導提示</strong>：若誤將全部房貸視為支出，會嚴重低估買房累積實質財富的效果；但若忽略維護修繕與稅費，則會高估房屋淨投報。</p>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(2)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">Q2</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">本金平均攤還可省利息，但初期月付較高；月薪5萬元的購屋者應如何評估？</span>
+            </div>
+            <i id="acc-icon-2" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-2" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2">
+            <p><strong>【核心觀念解析】</strong>：本金平均（CAM）雖然 30 年總利息節省約 37.11 萬元，但首月月付金高達 38,889 元。</p>
+            <p>若購屋者月薪僅 5 萬元，本金平均首月負擔比高達 <strong>77.8%</strong>（只剩 11,111 元生活費），極易引發流動性危機或違約風險。而本息平均月付 31,610 元佔薪水約 63.2%，壓力雖仍偏重但相對可控。</p>
+            <p class="text-emerald-800 bg-emerald-50 p-2.5 rounded">💡 <strong>教學引導提示</strong>：在財務決策中，「總成本最低」不等於「最適選擇」；現金流的抗壓性與生存彈性往往先於利息節省。</p>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(3)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">Q3</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">5年寬限期讓月付減半，為什麼不代表房貸變便宜？</span>
+            </div>
+            <i id="acc-icon-3" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-3" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2">
+            <p><strong>【核心觀念解析】</strong>：寬限期並未免除本金，而只是「延後償還」：</p>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>前5年雖然每月只需繳利息 16,667 元，但本金分毫未減（仍為 800 萬）。</li>
+              <li>原本 30 年的攤還本金壓縮至剩下的 25 年，導致第6年起月付金暴增至 <strong>35,889 元</strong>（跳升 115%！）。</li>
+              <li>30年累計利息比無寬限期<strong>多付了 38.73 萬元</strong>。</li>
+            </ul>
+            <p class="text-rose-800 bg-rose-50 p-2.5 rounded">⚠️ <strong>負資產風險</strong>：若5年後房價跌至800萬，本金仍為800萬，LTV升至100%，賣房甚至不足以清償仲介費與規費！</p>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(4)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">Q4</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">如果房價30年不漲，200萬元頭期款改投0050，結果有何差異？</span>
+            </div>
+            <i id="acc-icon-4" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-4" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2">
+            <p><strong>【精算對照】</strong>：</p>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>買房者</strong>：30年後擁有市值 1,000 萬元的無貸款房屋。</li>
+              <li><strong>租房投資者</strong>：初始200萬投入0050（年化6%）終值約 1,149 萬元；加上每月差額 10,776 元持續定投，終值約 1,050 萬元，期末金融總資產達 <strong>2,199 萬元</strong>。</li>
+            </ul>
+            <p class="text-indigo-800 bg-indigo-50 p-2.5 rounded">💡 <strong>結論</strong>：若房價長期不漲（0%成長），租房＋紀律投資的期末財富將高出買房者約 <strong>1,199 萬元</strong>！</p>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(5)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">Q5</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">為什麼房價年化漲幅4.85%，可能讓買房期末資產高於0050年化6%的投資？</span>
+            </div>
+            <i id="acc-icon-5" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-5" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2">
+            <p><strong>【財務槓桿原理】</strong>：關鍵在於<strong>「資產母數與財務槓桿」</strong>的倍數放大！</p>
+            <p>買房者僅投入 200 萬元自有資金，但享受的是 <strong>1,000 萬元總資產</strong> 以 4.85% 複合增長（5倍槓桿）。30年後房屋增值至約 4,140 萬元。</p>
+            <p>租房者 0050 雖然報酬率較高（6%），但本金是從小規模逐步累積。因此當房價年增率只要超過 <strong>2.66%</strong> 的損益兩平點，買房期末總資產就能超越租房投資。</p>
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(6)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">Q6</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">若少子化使房價年漲幅降至1%，買房與租房投資的結果如何變化？</span>
+            </div>
+            <i id="acc-icon-6" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-6" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2">
+            <p><strong>【少子化情境精算】</strong>：</p>
+            <p>若房價年漲幅僅有 1%，30年後房屋價值僅約 1,348 萬元；若0050仍維持 6% 成長，租房投資累積資產為 2,199 萬元，<strong>租房投資勝出約 851 萬元</strong>。</p>
+            <p class="text-slate-700 bg-slate-100 p-2.5 rounded">💡 <strong>提醒</strong>：少子化並不保證全台房價必然齊跌，都會蛋黃區可能因人口集中效應維持高檔，而蛋白或偏遠區域衝擊較深。</p>
+          </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(7)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">Q7</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">若房價、租金與股票報酬都不確定，應如何比較兩種選擇的風險？</span>
+            </div>
+            <i id="acc-icon-7" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-7" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2">
+            <p><strong>【三方風險對比】</strong>：</p>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>買房風險</strong>：流動性極低、集中於單一資產、槓桿放大跌價風險、利率上調風險、大型修繕突發費用。</li>
+              <li><strong>租房+股票風險</strong>：股市市場波動與心理恐慌（能否堅持紀律不斷頭）、租金持續上漲侵蝕可投資額、年老租屋市場歧視與被迫搬遷風險。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+          <button onclick="toggleAccordion(8)" class="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">Q8</span>
+              <span class="font-bold text-slate-800 text-sm sm:text-base">除財務績效外，居住穩定、工作流動性與家庭需求如何影響決策？</span>
+            </div>
+            <i id="acc-icon-8" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div id="acc-body-8" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-2">
+            <p><strong>【非財務效用評估】</strong>：財務數字只是決策的一半：</p>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>買房的非財務價值</strong>：安定感、自主裝修權、子女學區穩定、不受房東收回威脅的心理安全感。</li>
+              <li><strong>租房的非財務優勢</strong>：靈活工作遷移（隨職涯轉換城市）、房屋坪數隨家庭生命週期彈性調整、無需承擔房屋折舊維護心力。</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 九、整體教學結論 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+          <i class="fa-solid fa-circle-check text-blue-600"></i>
+          九、整體教學核心結論彙整
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+          <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-1.5">
+            <strong class="text-blue-900 block text-sm"><i class="fa-solid fa-1 mr-1"></i> 嚴謹對齊現金流</strong>
+            <p>買房與租房不可單純比「房貸月付」與「房租」，必須以相同的自備頭期款與每月總現金支出為基準，評估期末累積資產。</p>
+          </div>
+          <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-1.5">
+            <strong class="text-blue-900 block text-sm"><i class="fa-solid fa-2 mr-1"></i> 槓桿效應雙面刃</strong>
+            <p>買房享有 5 倍槓桿，使 2.66% 的房價漲幅即可抗衡 6% 的股票報酬；但若房價停滯或下跌，槓桿將大幅侵蝕本金甚至導致負資產。</p>
+          </div>
+          <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-1.5">
+            <strong class="text-blue-900 block text-sm"><i class="fa-solid fa-3 mr-1"></i> 財務與人生需求平衡</strong>
+            <p>追求財富極大化且能忍受股市波動者適合租房定投；重視自住安定與家庭生活者，買房亦為合理之終身資產配置。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 附錄C 資料注意事項與參考資料 -->
+      <div class="bg-slate-100 rounded-xl p-5 border border-slate-200 text-xs text-slate-600 space-y-2">
+        <div class="font-bold text-slate-800 flex items-center gap-1.5">
+          <i class="fa-solid fa-book-bookmark text-slate-500"></i> 附錄C ‧ 模型假設與官方資料來源引用
+        </div>
+        <p>1. <strong>臺灣《民法》第66條</strong>：不動產為土地及其定著物。</p>
+        <p>2. <strong>信義房價指數</strong>：台北市 2006Q3 指數 55.63、2026Q3 指數 143.55 係課堂示例數值，正式發布引用前宜核對原始發布資料 (<a href="https://www.sinyinews.com.tw/quarterly" target="_blank" class="text-blue-600 hover:underline">信義房屋季報</a>)。</p>
+        <p>3. <strong>國家發展委員會人口推估</strong>：2026 年約 2,319 萬人至 2055 年約 1,752 萬人 (<a href="https://www.ndc.gov.tw/" target="_blank" class="text-blue-600 hover:underline">國發會人口推估查詢系統</a>)。</p>
+        <p>4. <strong>模型簡化說明</strong>：本模擬系統房貸利率預設 2.5% 為固定利率假設，尚未計入買賣仲介手續費、土增稅、各類交易稅負、房屋重大結構整修支出與 ETF 股利所得稅等變數，僅供課堂決策模型探討之用。</p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- 頁腳 Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-xs mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <div>
+        <p class="text-slate-300 font-semibold">115學年度 財務計算與分析課程教學平台</p>
+        <p class="text-slate-500 mt-0.5">不動產：買房、房貸、租屋與投資財務決策 ‧ 互動式網頁版</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://williamslchang-blip.github.io/master-portal/" class="hover:text-blue-400 transition">Master Portal 首頁</a>
+        <span>•</span>
+        <button onclick="window.print()" class="hover:text-blue-400 transition"><i class="fa-solid fa-print mr-1"></i>友善列印</button>
+        <span>•</span>
+        <a href="#" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;" class="hover:text-blue-400 transition">回到頂端</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- 核心計算與圖表 JAVASCRIPT ENGINE -->
+  <!-- ============================================================== -->
+  <script>
+    // 全域圖表變數
+    let chartMortgage = null;
+    let chartRentBuy = null;
+    let chartTimeline360 = null;
+    let currentGraceYears = 0;
+
+    // 格式化數字
+    const fmtWan = (v) => (v / 10000).toFixed(2);
+    const fmtNum = (v) => Math.round(v).toLocaleString('zh-TW');
+
+    // 頁籤切換
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'text-blue-600', 'bg-blue-50', 'border', 'border-blue-200');
+        btn.classList.add('text-slate-600');
+      });
+
+      const pane = document.getElementById(tabId);
+      if (pane) pane.classList.remove('hidden');
+
+      const btn = document.getElementById('btn-' + tabId);
+      if (btn) {
+        btn.classList.add('active', 'text-blue-600', 'bg-blue-50', 'border', 'border-blue-200');
+        btn.classList.remove('text-slate-600');
+      }
+
+      // 切換時重繪圖表以適應寬度
+      setTimeout(() => {
+        if (tabId === 'tab-mortgage' && chartMortgage) chartMortgage.resize();
+        if (tabId === 'tab-rent-vs-buy' && chartRentBuy) chartRentBuy.resize();
+        if (tabId === 'tab-simulation' && chartTimeline360) chartTimeline360.resize();
+      }, 50);
+    }
+
+    // 摺疊題庫
+    function toggleAccordion(id) {
+      const body = document.getElementById('acc-body-' + id);
+      const icon = document.getElementById('acc-icon-' + id);
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        body.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    // =========================================================================
+    // 模組一：B1 資金結構計算
+    // =========================================================================
+    function updateB1() {
+      const priceWan = parseFloat(document.getElementById('b1-price').value);
+      const ltvPct = parseFloat(document.getElementById('b1-ltv').value);
+      const hasDiscount = document.getElementById('b1-bank-discount').checked;
+
+      document.getElementById('b1-price-val').innerText = fmtNum(priceWan) + ' 萬元';
+      document.getElementById('b1-ltv-val').innerText = ltvPct + '% (貸款 ' + (ltvPct/10).toFixed(1) + ' 成)';
+
+      const totalPrice = priceWan * 10000;
+      let bankValuation = totalPrice;
+      if (hasDiscount) {
+        bankValuation = totalPrice * 0.9; // 銀行打 9 折鑑價
+        document.getElementById('b1-discount-desc').innerText = 
+          '成交價 ' + fmtNum(priceWan) + ' 萬元，銀行鑑價 9 折為 ' + fmtNum(bankValuation/10000) + 
+          ' 萬元。銀行以鑑價之 ' + ltvPct + '% 核貸，自備款由常態自備額大幅提升！';
+      } else {
+        document.getElementById('b1-discount-desc').innerText = 
+          '若成交價 1,000 萬元，銀行鑑價 900 萬元時，銀行最高僅撥付鑑價的 80%（720萬元），造成實質自備款暴增至 280 萬元（自備率達 28%）。';
+      }
+
+      const loanAmount = Math.min(bankValuation * (ltvPct / 100), totalPrice);
+      const downPayment = totalPrice - loanAmount;
+      const extraFee = totalPrice * 0.05; // 估算契稅規費仲介等 5%
+      const totalCashNeeded = downPayment + extraFee;
+
+      const loanWan = loanAmount / 10000;
+      const downWan = downPayment / 10000;
+      const actualDownPct = (downPayment / totalPrice * 100).toFixed(1);
+      const actualLoanPct = (loanAmount / totalPrice * 100).toFixed(1);
+
+      document.getElementById('b1-loan-display').innerText = fmtNum(loanWan) + ' 萬元';
+      document.getElementById('b1-loan-pct').innerText = '(佔成交價 ' + actualLoanPct + '%)';
+      document.getElementById('b1-down-display').innerText = fmtNum(downWan) + ' 萬元';
+      document.getElementById('b1-down-pct').innerText = '(佔成交價 ' + actualDownPct + '%)';
+      document.getElementById('b1-extra-fee').innerText = fmtNum(extraFee / 10000) + ' 萬元';
+      document.getElementById('b1-total-cash').innerText = fmtNum(totalCashNeeded / 10000) + ' 萬元';
+
+      // 更新長條圖比例
+      const barDown = document.getElementById('b1-bar-down');
+      const barLoan = document.getElementById('b1-bar-loan');
+      barDown.style.width = actualDownPct + '%';
+      barDown.innerText = '自備 ' + fmtNum(downWan) + '萬 (' + actualDownPct + '%)';
+      barLoan.style.width = actualLoanPct + '%';
+      barLoan.innerText = '貸款 ' + fmtNum(loanWan) + '萬 (' + actualLoanPct + '%)';
+      document.getElementById('b1-bar-legend').innerText = '自備款 ' + actualDownPct + '% ｜ 貸款 ' + actualLoanPct + '%';
+    }
+
+    // =========================================================================
+    // 模組二：B2, B3, B4 房貸攤還與寬限期計算
+    // =========================================================================
+    function setGrace(years) {
+      currentGraceYears = years;
+      [0, 3, 5].forEach(y => {
+        const btn = document.getElementById('grace-btn-' + y);
+        if (y === years) {
+          btn.className = 'grace-btn py-1.5 text-xs font-bold rounded border bg-indigo-600 text-white border-indigo-600 transition';
+        } else {
+          btn.className = 'grace-btn py-1.5 text-xs font-bold rounded border bg-white text-indigo-800 border-indigo-200 hover:bg-indigo-100 transition';
+        }
+      });
+      updateB2B3();
+      updateB4();
+    }
+
+    function updateB2B3() {
+      const loanWan = parseFloat(document.getElementById('b2-loan').value);
+      const ratePct = parseFloat(document.getElementById('b2-rate').value);
+      const years = parseInt(document.getElementById('b2-years').value);
+
+      document.getElementById('b2-loan-val').innerText = fmtNum(loanWan) + ' 萬元';
+      document.getElementById('b2-rate-val').innerText = ratePct.toFixed(2) + ' %';
+      document.getElementById('b2-years-val').innerText = years + ' 年 (' + (years * 12) + ' 期)';
+
+      const P = loanWan * 10000;
+      const r = (ratePct / 100) / 12;
+      const n = years * 12;
+
+      // 1. 本息平均 (CPM, 無寬限期)
+      const cpmMonthly = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      const cpmTotalPaid = cpmMonthly * n;
+      const cpmTotalInterest = cpmTotalPaid - P;
+
+      // 2. 本金平均 (CAM)
+      const camPrinciple = P / n;
+      const camFirstMonth = camPrinciple + (P * r);
+      const camLastMonth = camPrinciple + (camPrinciple * r);
+      const camTotalInterest = ((n + 1) / 2) * P * r;
+      const camTotalPaid = P + camTotalInterest;
+      const camInterestSaved = cpmTotalInterest - camTotalInterest;
+
+      // 3. 寬限期攤還 (B3)
+      const gMonths = currentGraceYears * 12;
+      const graceInterestMonth = P * r;
+      let postGraceMonthly = cpmMonthly;
+      let graceTotalInterest = cpmTotalInterest;
+
+      if (gMonths > 0) {
+        const remainingMonths = n - gMonths;
+        postGraceMonthly = (P * r * Math.pow(1 + r, remainingMonths)) / (Math.pow(1 + r, remainingMonths) - 1);
+        graceTotalInterest = (graceInterestMonth * gMonths) + (postGraceMonthly * remainingMonths) - P;
+      }
+      const graceExtraInterest = graceTotalInterest - cpmTotalInterest;
+
+      // 更新介面
+      document.getElementById('b2-cpm-monthly').innerText = fmtNum(cpmMonthly) + ' 元';
+      document.getElementById('b2-cam-monthly').innerText = fmtNum(camFirstMonth) + ' / ' + fmtNum(camLastMonth);
+      document.getElementById('b2-interest-diff').innerText = fmtWan(cpmTotalInterest) + '萬 vs ' + fmtWan(camTotalInterest) + '萬';
+      document.getElementById('b2-save-interest').innerText = '本金平均省 ' + fmtWan(camInterestSaved) + ' 萬元';
+
+      if (currentGraceYears === 0) {
+        document.getElementById('b3-extra-interest').innerText = '+0 萬元';
+        document.getElementById('b3-jump-label').innerText = '無跳升 (基準)';
+        document.getElementById('grace-summary-text').innerText = '無寬限期：每月本息平均固定償還 ' + fmtNum(cpmMonthly) + ' 元。';
+      } else {
+        const jumpPct = ((postGraceMonthly - graceInterestMonth) / graceInterestMonth * 100).toFixed(0);
+        document.getElementById('b3-extra-interest').innerText = '+' + fmtWan(graceExtraInterest) + ' 萬元';
+        document.getElementById('b3-jump-label').innerText = '期滿跳升: +' + jumpPct + '%';
+        document.getElementById('grace-summary-text').innerText = 
+          '前 ' + currentGraceYears + ' 年月繳 ' + fmtNum(graceInterestMonth) + ' 元；第 ' + (currentGraceYears + 1) + 
+          ' 年起月付跳升至 ' + fmtNum(postGraceMonthly) + ' 元 (增加 ' + fmtNum(postGraceMonthly - graceInterestMonth) + ' 元)。';
+      }
+
+      // 繪製或更新 Chart.js
+      renderMortgageChart(n, cpmMonthly, P, r, gMonths, graceInterestMonth, postGraceMonthly);
+    }
+
+    function renderMortgageChart(n, cpmMonthly, P, r, gMonths, graceInterestMonth, postGraceMonthly) {
+      const labels = [];
+      const dataCPM = [];
+      const dataCAM = [];
+      const dataGrace = [];
+
+      const step = Math.max(1, Math.floor(n / 36)); // 約 36 個取樣點
+      for (let m = 1; m <= n; m += step) {
+        labels.push('第' + m + '期');
+        dataCPM.push(Math.round(cpmMonthly));
+
+        // CAM
+        const remainingP = P - (m - 1) * (P / n);
+        const camPay = (P / n) + remainingP * r;
+        dataCAM.push(Math.round(camPay));
+
+        // Grace
+        if (gMonths === 0) {
+          dataGrace.push(Math.round(cpmMonthly));
+        } else {
+          if (m <= gMonths) {
+            dataGrace.push(Math.round(graceInterestMonth));
+          } else {
+            dataGrace.push(Math.round(postGraceMonthly));
+          }
+        }
+      }
+
+      const ctx = document.getElementById('chart-mortgage').getContext('2d');
+      if (chartMortgage) chartMortgage.destroy();
+
+      chartMortgage = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '本息平均 (CPM)',
+              data: dataCPM,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.05)',
+              borderWidth: 2.5,
+              tension: 0.1,
+              pointRadius: 0
+            },
+            {
+              label: '本金平均 (CAM)',
+              data: dataCAM,
+              borderColor: '#10b981',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [4, 4],
+              tension: 0.1,
+              pointRadius: 0
+            },
+            {
+              label: currentGraceYears > 0 ? (currentGraceYears + '年寬限期階梯') : '無寬限期',
+              data: dataGrace,
+              borderColor: '#e11d48',
+              backgroundColor: 'transparent',
+              borderWidth: 2.5,
+              stepped: true,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y) + ' 元/月'
+              }
+            }
+          },
+          scales: {
+            y: {
+              ticks: { callback: (val) => fmtNum(val) + '元' },
+              grid: { color: '#f1f5f9' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { maxTicksLimit: 12 }
+            }
+          }
+        }
+      });
+    }
+
+    // 更新 B4 負擔比測試
+    function updateB4() {
+      const income = parseFloat(document.getElementById('b4-income').value);
+      document.getElementById('b4-income-val').innerText = fmtNum(income) + ' 元';
+
+      const loanWan = parseFloat(document.getElementById('b2-loan').value);
+      const ratePct = parseFloat(document.getElementById('b2-rate').value);
+      const years = parseInt(document.getElementById('b2-years').value);
+
+      const P = loanWan * 10000;
+      const r = (ratePct / 100) / 12;
+      const n = years * 12;
+
+      let preMonthly = 0;
+      let postMonthly = 0;
+
+      if (currentGraceYears === 0) {
+        preMonthly = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+        postMonthly = preMonthly;
+      } else {
+        preMonthly = P * r;
+        const remainingMonths = n - (currentGraceYears * 12);
+        postMonthly = (P * r * Math.pow(1 + r, remainingMonths)) / (Math.pow(1 + r, remainingMonths) - 1);
+      }
+
+      const dsrPre = (preMonthly / income * 100).toFixed(1);
+      const dsrPost = (postMonthly / income * 100).toFixed(1);
+
+      document.getElementById('b4-dsr-pre').innerText = dsrPre + '% (' + fmtNum(preMonthly) + '元)';
+      document.getElementById('b4-dsr-post').innerText = dsrPost + '% (' + fmtNum(postMonthly) + '元)';
+
+      const warningBox = document.getElementById('b4-warning-box');
+      if (parseFloat(dsrPost) > 40) {
+        warningBox.className = 'mt-2 p-2 bg-rose-50 rounded border border-rose-300 text-[11px] text-rose-800 font-medium';
+        warningBox.innerHTML = '⚠️ <strong>警示</strong>：期滿後房貸負擔比達 ' + dsrPost + '%（超過 40% 安全警戒線），家庭其餘可支配所得將大幅緊縮。';
+      } else {
+        warningBox.className = 'mt-2 p-2 bg-emerald-50 rounded border border-emerald-300 text-[11px] text-emerald-800 font-medium';
+        warningBox.innerHTML = '✅ <strong>良好</strong>：房貸負擔比皆在 40% 安全水準內，現金流防禦力相對穩健。';
+      }
+    }
+
+    // =========================================================================
+    // 模組三：B5 租房 vs 買房資產精算 (30年終值)
+    // =========================================================================
+    function updateB5() {
+      const houseGrowth = parseFloat(document.getElementById('b5-house-growth').value);
+      const etfReturn = parseFloat(document.getElementById('b5-etf-return').value);
+      const rentMonthly = parseFloat(document.getElementById('b5-rent').value);
+
+      document.getElementById('b5-house-growth-val').innerText = (houseGrowth > 0 ? '+' : '') + houseGrowth.toFixed(1) + ' %';
+      document.getElementById('b5-etf-return-val').innerText = etfReturn.toFixed(1) + ' %';
+      document.getElementById('b5-rent-val').innerText = fmtNum(rentMonthly) + ' 元';
+
+      // 買房現金流支出
+      const cpmMonthly = 31610; // 固定基準案例
+      const holdMonthly = 50000 / 12; // 年持有成本 5萬 / 12 = 4166.67
+      const totalBuyMonthly = cpmMonthly + holdMonthly;
+
+      // 租房者每月可多投資之現金流差額
+      const investMonthly = totalBuyMonthly - rentMonthly;
+      document.getElementById('b5-monthly-invest-diff').innerText = fmtNum(investMonthly) + ' 元';
+
+      // 買房30年終值
+      const initialHouseVal = 10000000;
+      const houseFinalVal = initialHouseVal * Math.pow(1 + (houseGrowth / 100), 30);
+
+      // 租房30年投資終值
+      const initialEtf = 2000000;
+      const r_etf = etfReturn / 100;
+      const lumpSumFV = initialEtf * Math.pow(1 + r_etf, 30);
+
+      let dcaFV = 0;
+      if (r_etf === 0) {
+        dcaFV = investMonthly * 360;
+      } else {
+        const r_monthly = Math.pow(1 + r_etf, 1 / 12) - 1;
+        dcaFV = investMonthly * ((Math.pow(1 + r_monthly, 360) - 1) / r_monthly);
+      }
+      const rentTotalFinalVal = lumpSumFV + dcaFV;
+
+      // 呈現數值
+      document.getElementById('b5-house-final').innerText = fmtWan(houseFinalVal) + ' 萬元';
+      document.getElementById('b5-rent-final').innerText = fmtWan(rentTotalFinalVal) + ' 萬元';
+      document.getElementById('b5-lump-fv').innerText = '約 ' + fmtWan(lumpSumFV) + ' 萬元';
+      document.getElementById('b5-dca-fv').innerText = '約 ' + fmtWan(dcaFV) + ' 萬元';
+
+      // 勝出者判定
+      const diffWan = (Math.abs(houseFinalVal - rentTotalFinalVal) / 10000).toFixed(1);
+      const banner = document.getElementById('b5-result-banner');
+      const icon = document.getElementById('b5-result-icon');
+      const title = document.getElementById('b5-winner-title');
+      const desc = document.getElementById('b5-winner-desc');
+      const diffDisplay = document.getElementById('b5-diff-amount');
+
+      if (houseFinalVal >= rentTotalFinalVal) {
+        banner.className = 'p-5 rounded-xl border transition-all flex flex-col sm:flex-row items-center justify-between gap-4 bg-blue-50 border-blue-300 text-blue-950 shadow-sm';
+        icon.className = 'w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl shrink-0';
+        icon.innerHTML = '<i class="fa-solid fa-house"></i>';
+        title.innerText = '【買房方案】最終資產勝出！';
+        desc.innerText = '憑藉 5 倍購屋資金槓桿，房屋資產增值幅度超越了租房定投 0050 之期末金額。';
+        diffDisplay.className = 'text-xl font-black text-blue-700';
+        diffDisplay.innerText = '+ ' + fmtNum(diffWan) + ' 萬元 (買房勝)';
+      } else {
+        banner.className = 'p-5 rounded-xl border transition-all flex flex-col sm:flex-row items-center justify-between gap-4 bg-emerald-50 border-emerald-300 text-emerald-950 shadow-sm';
+        icon.className = 'w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xl shrink-0';
+        icon.innerHTML = '<i class="fa-solid fa-chart-line"></i>';
+        title.innerText = '【租房＋投資 0050】最終資產勝出！';
+        desc.innerText = '200萬初始資本與每月節省現金流持續參與股市複利，資產成長超越了不動產增值。';
+        diffDisplay.className = 'text-xl font-black text-emerald-700';
+        diffDisplay.innerText = '+ ' + fmtNum(diffWan) + ' 萬元 (租房勝)';
+      }
+
+      // 繪製 B5 柱狀圖
+      renderRentBuyChart(houseFinalVal, lumpSumFV, dcaFV);
+    }
+
+    function renderRentBuyChart(houseVal, lumpSumFV, dcaFV) {
+      const ctx = document.getElementById('chart-rent-buy').getContext('2d');
+      if (chartRentBuy) chartRentBuy.destroy();
+
+      const houseWan = Math.round(houseVal / 10000);
+      const lumpWan = Math.round(lumpSumFV / 10000);
+      const dcaWan = Math.round(dcaFV / 10000);
+
+      chartRentBuy = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['買房方案 (房屋淨值)', '租房投資方案 (0050總市值)'],
+          datasets: [
+            {
+              label: '房屋產權終值',
+              data: [houseWan, 0],
+              backgroundColor: '#2563eb',
+              borderRadius: 6
+            },
+            {
+              label: '頭期款200萬複利終值',
+              data: [0, lumpWan],
+              backgroundColor: '#10b981',
+              borderRadius: 6
+            },
+            {
+              label: '每月差額定投複利終值',
+              data: [0, dcaWan],
+              backgroundColor: '#059669',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y) + ' 萬元'
+              }
+            }
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: {
+              stacked: true,
+              ticks: { callback: (val) => val + ' 萬' },
+              grid: { color: '#f1f5f9' }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 模組四：B6 少子化、租金成長與 360期動態長推引擎
+    // =========================================================================
+    let cached360Data = [];
+
+    function applyB6Scenario(hGrowth, etfRet, rentGrow, title) {
+      document.getElementById('b6-house').value = hGrowth;
+      document.getElementById('b6-etf').value = etfRet;
+      document.getElementById('b6-rent-growth').value = rentGrow;
+      runSimulation360();
+    }
+
+    function runSimulation360() {
+      const hGrowth = parseFloat(document.getElementById('b6-house').value);
+      const etfRet = parseFloat(document.getElementById('b6-etf').value);
+      const rentGrowth = parseFloat(document.getElementById('b6-rent-growth').value);
+
+      document.getElementById('b6-house-val').innerText = (hGrowth > 0 ? '+' : '') + hGrowth.toFixed(1) + ' %';
+      document.getElementById('b6-etf-val').innerText = etfRet.toFixed(1) + ' %';
+      document.getElementById('b6-rent-growth-val').innerText = rentGrowth.toFixed(1) + ' %';
+
+      const baseRent = 25000;
+      const cpmMonthly = 31610;
+      const holdMonthly = 50000 / 12;
+      const baseBuyCost = cpmMonthly + holdMonthly; // 35,776.67
+      const r_etf_mo = etfRet === 0 ? 0 : (Math.pow(1 + (etfRet / 100), 1 / 12) - 1);
+
+      let V = 2000000; // 初始投入 200 萬
+      const simulation = [];
+      let hadNegativeCashFlow = false;
+
+      for (let m = 1; m <= 360; m++) {
+        // 當月房租 (按租金年漲幅複合)
+        const curRent = baseRent * Math.pow(1 + (rentGrowth / 100), (m - 1) / 12);
+        
+        // 當月可投資額 (買房總支出 - 當月房租)
+        const investCF = baseBuyCost - curRent;
+        if (investCF < 0) hadNegativeCashFlow = true;
+
+        // 股票資產遞推
+        V = (V * (1 + r_etf_mo)) + investCF;
+
+        // 當期房屋市值
+        const curHouseVal = 10000000 * Math.pow(1 + (hGrowth / 100), m / 12);
+
+        simulation.push({
+          month: m,
+          year: (m / 12).toFixed(1),
+          rent: curRent,
+          investCF: investCF,
+          portfolioVal: V,
+          houseVal: curHouseVal,
+          diff: curHouseVal - V // 正為買房勝，負為租房勝
+        });
+      }
+
+      cached360Data = simulation;
+
+      // 檢查現金流提示
+      const alertBox = document.getElementById('b6-cashflow-alert');
+      if (hadNegativeCashFlow) {
+        alertBox.className = 'p-3.5 rounded-lg border text-xs leading-relaxed bg-amber-50 border-amber-300 text-amber-900';
+        alertBox.innerHTML = '⚠️ <strong>注意：租金通膨逆轉</strong>：因租金持續上漲，後期月租金已超越買房月支出（現金流差額為負）。租房者須從投資帳戶中<strong>提領資金補貼房租</strong>！';
+      } else {
+        alertBox.className = 'p-3.5 rounded-lg border text-xs leading-relaxed bg-emerald-50 border-emerald-300 text-emerald-900';
+        alertBox.innerHTML = '✅ <strong>現金流充裕狀態</strong>：當前月租金全期皆低於買房月支出，租房者每月維持正向現金流持續定投 0050。';
+      }
+
+      // 期末統計看板
+      const finalPoint = simulation[359];
+      document.getElementById('b6-stat-house').innerText = fmtWan(finalPoint.houseVal) + ' 萬元';
+      document.getElementById('b6-stat-house-growth').innerText = '(年化 ' + (hGrowth >= 0 ? '+' : '') + hGrowth.toFixed(1) + '%)';
+      document.getElementById('b6-stat-invest').innerText = fmtWan(finalPoint.portfolioVal) + ' 萬元';
+      document.getElementById('b6-stat-final-rent').innerText = fmtNum(finalPoint.rent) + ' 元/月';
+      document.getElementById('b6-stat-rent-growth').innerText = '(年化漲 ' + rentGrowth.toFixed(1) + '%)';
+
+      const finalDiffWan = Math.abs(finalPoint.diff) / 10000;
+      if (finalPoint.diff >= 0) {
+        document.getElementById('b6-stat-winner').innerText = '買房方案勝出';
+        document.getElementById('b6-stat-winner').className = 'text-base sm:text-lg font-bold text-blue-700';
+        document.getElementById('b6-stat-diff').innerText = '領先約 ' + fmtNum(finalDiffWan) + ' 萬元';
+      } else {
+        document.getElementById('b6-stat-winner').innerText = '租房投資勝出';
+        document.getElementById('b6-stat-winner').className = 'text-base sm:text-lg font-bold text-emerald-700';
+        document.getElementById('b6-stat-diff').innerText = '領先約 ' + fmtNum(finalDiffWan) + ' 萬元';
+      }
+
+      // 繪製 360 期折線圖
+      renderTimeline360Chart(simulation);
+
+      // 更新關鍵節點表格
+      renderCheckpointsTable(simulation);
+    }
+
+    function renderTimeline360Chart(sim) {
+      const labels = [];
+      const houseData = [];
+      const investData = [];
+
+      // 每 12 個月取一個點 (年)
+      for (let i = 0; i < 360; i += 6) {
+        const pt = sim[i];
+        labels.push('第' + (pt.month / 12).toFixed(1) + '年');
+        houseData.push(Math.round(pt.houseVal / 10000));
+        investData.push(Math.round(pt.portfolioVal / 10000));
+      }
+      // 最後一期
+      const last = sim[359];
+      labels.push('第30年');
+      houseData.push(Math.round(last.houseVal / 10000));
+      investData.push(Math.round(last.portfolioVal / 10000));
+
+      const ctx = document.getElementById('chart-timeline360').getContext('2d');
+      if (chartTimeline360) chartTimeline360.destroy();
+
+      chartTimeline360 = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '買房房屋市值',
+              data: houseData,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.08)',
+              fill: true,
+              borderWidth: 2.5,
+              tension: 0.2,
+              pointRadius: 1
+            },
+            {
+              label: '0050 投資組合淨值',
+              data: investData,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.08)',
+              fill: true,
+              borderWidth: 2.5,
+              tension: 0.2,
+              pointRadius: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y) + ' 萬元'
+              }
+            }
+          },
+          scales: {
+            y: {
+              ticks: { callback: (val) => val + ' 萬' },
+              grid: { color: '#f1f5f9' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { maxTicksLimit: 10 }
+            }
+          }
+        }
+      });
+    }
+
+    function renderCheckpointsTable(sim) {
+      const tbody = document.getElementById('b6-checkpoint-body');
+      tbody.innerHTML = '';
+
+      const checkMonths = [60, 120, 180, 240, 300, 360];
+      checkMonths.forEach(m => {
+        const pt = sim[m - 1];
+        const year = m / 12;
+        const diffWan = Math.abs(pt.diff) / 10000;
+        const isBuyLead = pt.diff >= 0;
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+        tr.innerHTML = `
+          <td class="py-2 px-2 font-semibold text-slate-800">第 ${year} 年</td>
+          <td class="py-2 px-2 text-slate-500 font-mono">第 ${m} 期</td>
+          <td class="py-2 px-2 font-mono">${fmtNum(pt.rent)} 元</td>
+          <td class="py-2 px-2 font-mono font-bold text-blue-700">${fmtWan(pt.houseVal)} 萬</td>
+          <td class="py-2 px-2 font-mono font-bold text-emerald-700">${fmtWan(pt.portfolioVal)} 萬</td>
+          <td class="py-2 px-2 font-mono ${isBuyLead ? 'text-blue-600' : 'text-emerald-600'}">
+            ${isBuyLead ? '+' : '-'}${fmtWan(diffWan * 10000)} 萬
+          </td>
+          <td class="py-2 px-2">
+            <span class="badge-pill ${isBuyLead ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800'}">
+              ${isBuyLead ? '買房領先' : '租房領先'}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 匯出 360期 CSV
+    function export360CSV() {
+      if (!cached360Data || cached360Data.length === 0) {
+        alert('請先載入模擬數據');
+        return;
+      }
+      let csv = '\uFEFF'; // UTF-8 BOM
+      csv += '期數(月),年數,當期月租金(元),每月可投資額(元),0050累計資產(元),買房房屋價值(元),淨資產差額(買房-租房)\n';
+
+      cached360Data.forEach(row => {
+        csv += `${row.month},${row.year},${Math.round(row.rent)},${Math.round(row.investCF)},${Math.round(row.portfolioVal)},${Math.round(row.houseVal)},${Math.round(row.diff)}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `不動產財務決策_360期動態模擬明細.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // 快速套用情境 Presets
+    function applyScenario(type) {
+      if (type === 'baseline') {
+        // 基準停滯
+        document.getElementById('b5-house-growth').value = 0.0;
+        document.getElementById('b5-etf-return').value = 6.0;
+        document.getElementById('b5-rent').value = 25000;
+        updateB5();
+        applyB6Scenario(0.0, 6.0, 0.0, '基準停滯');
+        switchTab('tab-rent-vs-buy');
+      } else if (type === 'history') {
+        // 台北歷史 4.85%
+        document.getElementById('b5-house-growth').value = 4.85;
+        document.getElementById('b5-etf-return').value = 6.0;
+        document.getElementById('b5-rent').value = 25000;
+        updateB5();
+        applyB6Scenario(4.85, 6.0, 1.5, '台北歷史延續');
+        switchTab('tab-rent-vs-buy');
+      } else if (type === 'aging') {
+        // 少子化衝擊 -1%
+        document.getElementById('b5-house-growth').value = -1.0;
+        document.getElementById('b5-etf-return').value = 6.0;
+        document.getElementById('b5-rent').value = 25000;
+        updateB5();
+        applyB6Scenario(-1.0, 6.0, 0.0, '少子化衝擊');
+        switchTab('tab-simulation');
+      } else if (type === 'inflation') {
+        // 通膨租金上漲
+        document.getElementById('b5-house-growth').value = 2.0;
+        document.getElementById('b5-etf-return').value = 7.0;
+        document.getElementById('b5-rent').value = 25000;
+        updateB5();
+        applyB6Scenario(2.0, 7.0, 2.0, '通膨租金漲');
+        switchTab('tab-simulation');
+      }
+    }
+
+    // 初始化執行
+    window.addEventListener('DOMContentLoaded', () => {
+      updateB1();
+      updateB2B3();
+      updateB4();
+      updateB5();
+      runSimulation360();
+    });
+  </script>
+</body>
+</html>
