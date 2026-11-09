@@ -50,6 +50,44 @@
       background-color: #cbd5e1;
       border-radius: 3px;
     }
+  
+    /* 算式透視 FX 標籤與高亮效果 */
+    .fx-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      background-color: #f8fafc;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      vertical-align: middle;
+      user-select: none;
+    }
+    .fx-badge:hover {
+      background-color: #fef3c7 !important;
+      color: #b45309 !important;
+      border-color: #f59e0b !important;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+    }
+    body.formula-mode-active .fx-badge {
+      background-color: #fef3c7;
+      color: #92400e;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+      animation: pulse-fx 2.2s infinite ease-in-out;
+    }
+    @keyframes pulse-fx {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.35); }
+    }
+
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
@@ -85,6 +123,13 @@
           <i class="fa-solid fa-file-csv"></i>
           <span>匯出 360 期 CSV</span>
         </button>
+        <!-- 算式透視開關 -->
+        <button id="btn-toggle-formula" onclick="toggleFormulaMode()" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-square-root-variable text-amber-400"></i>
+          <span>算式透視</span>
+          <span id="formula-mode-status" class="text-[10px] px-1.5 py-0.2 rounded bg-slate-700 text-slate-300 font-bold">關</span>
+        </button>
+
       </div>
     </div>
   </header>
@@ -185,7 +230,7 @@
           </div>
           <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 bg-slate-50 rounded-lg p-2.5">
             <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>
-            <strong>毛租金報酬率公式</strong>：毛租金報酬率 = 年租金 ÷ 房屋總價。<br>
+            <strong>毛租金報酬率公式</strong> <span class="fx-badge" onclick="openFormulaInspector('gross_yield')" title="點擊透視公式"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>：毛租金報酬率 = 年租金 ÷ 房屋總價。<br>
             以1,000萬房屋、月租25,000元為例：$300,000 ÷ 10,000,000 = 3.0\%$（尚未扣除稅費、修繕與折舊）。
           </div>
         </div>
@@ -259,12 +304,12 @@
             <!-- 數據統計看板 -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-4">
               <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-lg">
-                <span class="text-[11px] text-slate-500 block">銀行核貸金額</span>
+                <div class="flex items-center justify-center gap-1"><span class="text-[11px] text-slate-500">銀行核貸金額</span> <span class="fx-badge" onclick="openFormulaInspector('b1_loan')" title="透視核貸成數"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span></div>
                 <span id="b1-loan-display" class="text-base sm:text-lg font-bold text-blue-700">800 萬元</span>
                 <span id="b1-loan-pct" class="text-[10px] text-slate-400 block">(佔成交 80%)</span>
               </div>
               <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-lg">
-                <span class="text-[11px] text-slate-500 block">實質自備頭期款</span>
+                <div class="flex items-center justify-center gap-1"><span class="text-[11px] text-slate-500">實質自備頭期款</span> <span class="fx-badge" onclick="openFormulaInspector('b1_down')" title="透視頭期款與鑑價"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span></div>
                 <span id="b1-down-display" class="text-base sm:text-lg font-bold text-emerald-700">200 萬元</span>
                 <span id="b1-down-pct" class="text-[10px] text-slate-400 block">(佔成交 20%)</span>
               </div>
@@ -384,7 +429,7 @@
           <!-- 家庭月收入與 DSR 壓力測試 (B4) -->
           <div class="bg-rose-50 border border-rose-200 rounded-lg p-3.5">
             <div class="flex justify-between text-xs font-bold text-rose-900 mb-1">
-              <span><i class="fa-solid fa-wallet text-rose-600 mr-1"></i> 家庭月收入 (B4 測試)：</span>
+              <span><i class="fa-solid fa-wallet text-rose-600 mr-1"></i> 家庭月收入 (B4 測試)：</span> <span class="fx-badge ml-1" onclick="openFormulaInspector('b4_dsr')" title="透視 DSR 計算"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
               <span id="b4-income-val" class="text-rose-700">70,000 元</span>
             </div>
             <input type="range" id="b4-income" min="40000" max="150000" step="5000" value="70000" oninput="updateB4()"
@@ -411,22 +456,22 @@
           <!-- 核心數值摘要卡片 -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center">
-              <span class="text-[11px] text-slate-500 block">本息平均 (前期月付)</span>
+              <div class="flex items-center justify-center gap-1"><span class="text-[11px] text-slate-500">本息平均 (前期月付)</span> <span class="fx-badge" onclick="openFormulaInspector('b2_cpm')" title="透視 CPM 公式"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span></div>
               <span id="b2-cpm-monthly" class="text-lg font-extrabold text-blue-700">31,610 元</span>
               <span id="b2-cpm-sub" class="text-[10px] text-slate-400 block">30年每月固定</span>
             </div>
             <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center">
-              <span class="text-[11px] text-slate-500 block">本金平均 (首月/末月)</span>
+              <div class="flex items-center justify-center gap-1"><span class="text-[11px] text-slate-500">本金平均 (首月/末月)</span> <span class="fx-badge" onclick="openFormulaInspector('b2_cam')" title="透視 CAM 公式"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span></div>
               <span id="b2-cam-monthly" class="text-base sm:text-lg font-extrabold text-emerald-700">38,889 / 22,269</span>
               <span class="text-[10px] text-slate-400 block">每月遞減約 46 元</span>
             </div>
             <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center">
-              <span class="text-[11px] text-slate-500 block">30年總利息 (本息 vs 本金)</span>
+              <div class="flex items-center justify-center gap-1"><span class="text-[11px] text-slate-500">30年總利息 (本息 vs 本金)</span> <span class="fx-badge" onclick="openFormulaInspector('b2_interest_diff')" title="透視總利息差額"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span></div>
               <span id="b2-interest-diff" class="text-base sm:text-lg font-extrabold text-indigo-700">338萬 vs 301萬</span>
               <span id="b2-save-interest" class="text-[10px] text-emerald-600 font-bold block">本金平均省 37.1 萬</span>
             </div>
             <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center">
-              <span class="text-[11px] text-slate-500 block">寬限期多付利息 (B3)</span>
+              <div class="flex items-center justify-center gap-1"><span class="text-[11px] text-slate-500">寬限期多付利息 (B3)</span> <span class="fx-badge" onclick="openFormulaInspector('b3_grace')" title="透視寬限期跳升"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span></div>
               <span id="b3-extra-interest" class="text-lg font-extrabold text-rose-600">+0 萬元</span>
               <span id="b3-jump-label" class="text-[10px] text-rose-500 font-semibold block">期滿月付跳升: 0%</span>
             </div>
@@ -482,7 +527,7 @@
             <!-- 寬限期風險與房價下跌衝擊 -->
             <div class="bg-rose-50/60 border border-rose-200 rounded-xl p-4">
               <h5 class="text-xs font-bold text-rose-900 mb-2 flex items-center justify-between">
-                <span><i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-600"></i>寬限期負資產風險警示</span>
+                <span><i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-600"></i>寬限期負資產風險警示</span> <span class="fx-badge ml-2" onclick="openFormulaInspector('b3_underwater')" title="透視負資產成因"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
                 <span class="text-[10px] text-rose-600 font-mono">Table 3 延伸</span>
               </h5>
               <p class="text-xs text-rose-800 leading-relaxed mb-2">
@@ -602,7 +647,7 @@
               <span class="font-mono font-bold text-slate-900">= 35,777 元</span>
             </div>
             <div class="border-t border-slate-200 pt-1.5 flex justify-between text-emerald-700 font-bold">
-              <span>租房者每月可額外投資額：</span>
+              <span>租房者每月可額外投資額：</span> <span class="fx-badge" onclick="openFormulaInspector('b5_invest_cf')" title="透視月可投資現金流"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
               <span id="b5-monthly-invest-diff" class="font-mono text-sm">10,776 元</span>
             </div>
           </div>
@@ -610,7 +655,7 @@
           <!-- 台北歷史漲幅參考提醒 -->
           <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-900 leading-relaxed">
             <i class="fa-solid fa-chart-column mr-1 text-blue-600"></i>
-            <strong>信義房價指數參考</strong>：台北市 2006Q3 指數 55.63 攀升至 2026Q3 的 143.55，20年累積漲幅 158.04%，換算年化複合成長率（CAGR）約為 <strong>4.85%</strong>。
+            <strong>信義房價指數參考</strong> <span class="fx-badge" onclick="openFormulaInspector('xinyi_cagr')" title="透視 4.85% 複合漲幅"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>：台北市 2006Q3 指數 55.63 攀升至 2026Q3 的 143.55，20年累積漲幅 158.04%，換算年化複合成長率（CAGR）約為 <strong>4.85%</strong>。
           </div>
         </div>
 
@@ -655,7 +700,7 @@
             <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
               <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
                 <span class="text-xs font-bold text-blue-800 flex items-center gap-1.5">
-                  <i class="fa-solid fa-house text-blue-600"></i> 【買房方案】期末房屋淨值
+                  <i class="fa-solid fa-house text-blue-600"></i> 【買房方案】期末房屋淨值 <span class="fx-badge ml-1" onclick="openFormulaInspector('b5_house_fv')" title="透視房屋複利終值"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
                 </span>
                 <span id="b5-house-final" class="text-base font-bold text-blue-700">1,000 萬元</span>
               </div>
@@ -683,7 +728,7 @@
             <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
               <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
                 <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
-                  <i class="fa-solid fa-chart-pie text-emerald-600"></i> 【租房+0050】期末金融資產
+                  <i class="fa-solid fa-chart-pie text-emerald-600"></i> 【租房+0050】期末金融資產 <span class="fx-badge ml-1" onclick="openFormulaInspector('b5_rent_total_fv')" title="透視租房總資產"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
                 </span>
                 <span id="b5-rent-final" class="text-base font-bold text-emerald-700">2,199 萬元</span>
               </div>
@@ -701,7 +746,7 @@
                   <span>900 萬元 (未計通膨)</span>
                 </li>
                 <li class="flex justify-between font-semibold text-slate-800 pt-1 border-t border-slate-100">
-                  <span>損益兩平房價CAGR門檻：</span>
+                  <span>損益兩平房價CAGR門檻：</span> <span class="fx-badge" onclick="openFormulaInspector('b5_breakeven_cagr')" title="透視 2.66% 損益兩平點"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
                   <span class="text-indigo-600 font-bold">約 2.66%</span>
                 </li>
               </ul>
@@ -898,7 +943,7 @@
           <!-- 計算邏輯數學卡片 -->
           <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-900 space-y-1.5">
             <div class="font-bold flex items-center justify-between">
-              <span>遞推演算法邏輯：</span>
+              <span>遞推演算法邏輯：</span> <span class="fx-badge" onclick="openFormulaInspector('b6_recurrence')" title="透視 360 期動態遞推"><i class="fa-solid fa-square-root-variable text-amber-500"></i> fx</span>
               <span class="font-mono text-[10px]">m = 1..360</span>
             </div>
             <p class="font-mono text-[11px] text-blue-800">
@@ -1927,5 +1972,84 @@
       runSimulation360();
     });
   </script>
+
+  <!-- ============================================================== -->
+  <!-- 公式透視解析器 MODAL DIALOG -->
+  <!-- ============================================================== -->
+  <div id="formula-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs transition-opacity duration-200" onclick="if(event.target===this)closeFormulaModal()">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-150">
+      
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white px-6 py-4 flex items-center justify-between border-b border-indigo-900">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400/40 text-amber-400 flex items-center justify-center text-base">
+            <i class="fa-solid fa-square-root-variable"></i>
+          </div>
+          <div>
+            <h3 id="modal-formula-title" class="font-extrabold text-white text-base">公式透視解析器</h3>
+            <span id="modal-formula-badge" class="text-[11px] text-amber-300 font-medium">財務數學模型推導</span>
+          </div>
+        </div>
+        <button onclick="closeFormulaModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm custom-scroll">
+        <!-- 財務指標定義 -->
+        <div>
+          <span class="text-slate-500 text-xs font-bold block mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-info text-blue-600"></i> 指標定義與理論內涵：
+          </span>
+          <div id="modal-formula-def" class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-slate-800 leading-relaxed font-medium"></div>
+        </div>
+
+        <!-- 數學模型與公式 -->
+        <div>
+          <span class="text-slate-500 text-xs font-bold block mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-superscript text-indigo-600"></i> 數學模型公式 (Mathematical Model)：
+          </span>
+          <div id="modal-formula-math" class="font-mono bg-slate-900 text-amber-300 p-3.5 rounded-xl border border-slate-800 whitespace-pre-wrap leading-relaxed text-xs sm:text-sm shadow-inner"></div>
+        </div>
+
+        <!-- 當前數值代入演算 -->
+        <div>
+          <span class="text-slate-500 text-xs font-bold block mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-calculator text-emerald-600"></i> 當前參數即時代入運算過程 (Step-by-Step Substitution)：
+          </span>
+          <div id="modal-formula-steps" class="font-mono bg-emerald-50 text-emerald-950 p-3.5 rounded-xl border border-emerald-200 whitespace-pre-wrap leading-relaxed text-xs sm:text-sm"></div>
+        </div>
+
+        <!-- 輸出結果與對應 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <span class="text-slate-500 text-xs font-bold block mb-1">當前試算輸出結果：</span>
+            <div id="modal-formula-val" class="font-mono bg-blue-50 p-3 rounded-xl border border-blue-200 text-blue-800 font-extrabold text-base sm:text-lg flex items-center gap-2"></div>
+          </div>
+          <div>
+            <span class="text-slate-500 text-xs font-bold block mb-1">教材章節與規範對應：</span>
+            <div id="modal-formula-ref" class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-2"></div>
+          </div>
+        </div>
+
+        <!-- 教學意涵 -->
+        <div>
+          <span class="text-slate-500 text-xs font-bold block mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-lightbulb text-amber-500"></i> 財務決策與教學反思提示 (Financial Insights)：
+          </span>
+          <div id="modal-formula-insight" class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-amber-900 text-xs leading-relaxed"></div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+        <span><i class="fa-solid fa-keyboard mr-1"></i> 按 ESC 鍵或點擊外部任意處即可關閉</span>
+        <button onclick="closeFormulaModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition">關閉</button>
+      </div>
+
+    </div>
+  </div>
+
 </body>
 </html>
