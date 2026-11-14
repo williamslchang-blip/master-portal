@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hubbard Computer, Inc.（HCI）非上市企業資本成本估計與資本預算決策｜財務金融理論完整教學講義</title>
+  
+  <!-- MathJax Configuration for Word Equation Editor Style -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      },
+      chtml: {
+        fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+
+  <style>
+    /* 全案指定中文字體為標楷體，英文與數字為 Times New Roman */
+    body {
+      font-family: 'Times New Roman', '標楷體', 'DFKai-SB', 'BiauKai', serif;
+      line-height: 1.85;
+      color: #1a1a1a;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 0;
+      font-size: 17px;
+    }
+
+    /* 容器佈局 */
+    .page-wrapper {
+      max-width: 1080px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 50px 70px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* 頂部導航條 */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: #143652;
+      color: #ffffff;
+      border-radius: 6px;
+      margin-bottom: 35px;
+      font-size: 15px;
+    }
+    .top-nav a {
+      color: #63b3ed;
+      text-decoration: none;
+      margin-left: 15px;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    .top-nav a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    /* 標題體系 */
+    h1.doc-title {
+      font-size: 30px;
+      color: #143652;
+      text-align: center;
+      margin-bottom: 8px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    .doc-subtitle {
+      font-size: 19px;
+      color: #1f4e79;
+      text-align: center;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    .doc-meta {
+      font-size: 15px;
+      color: #4a5568;
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #cbd5e1;
+    }
+
+    h2.heading-1 {
+      font-size: 23px;
+      color: #14496F;
+      border-bottom: 2px solid #14496F;
+      padding-bottom: 8px;
+      margin-top: 45px;
+      margin-bottom: 18px;
+      font-weight: bold;
+    }
+
+    h3.heading-2 {
+      font-size: 19px;
+      color: #1F5C81;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      font-weight: bold;
+      border-left: 4px solid #1F5C81;
+      padding-left: 12px;
+    }
+
+    /* 段落與清單 */
+    p {
+      margin-bottom: 14px;
+      text-align: justify;
+      text-justify: inter-ideograph;
+    }
+    ul.bullet-list {
+      margin: 12px 0 16px 25px;
+      padding: 0;
+    }
+    ul.bullet-list li {
+      margin-bottom: 8px;
+      line-height: 1.75;
+    }
+
+    /* Word 方程式編輯器外觀風格 (Cambria Math / Times New Roman / Office Math Styling) */
+    .word-equation-box {
+      background-color: #fbfcfe;
+      border: 1px solid #dbe2ea;
+      border-left: 5px solid #1F5C81;
+      border-radius: 6px;
+      padding: 16px 24px;
+      margin: 20px 0;
+      text-align: center;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.03);
+      overflow-x: auto;
+    }
+    .word-equation-box .eq-label {
+      float: right;
+      font-size: 14px;
+      color: #64748b;
+      font-style: normal;
+      margin-top: 5px;
+    }
+    .word-equation-box .mjx-chtml {
+      font-size: 1.18em !important;
+      color: #0f172a;
+    }
+
+    /* 表格樣式 (Light Shading Accent 1) */
+    .table-container {
+      overflow-x: auto;
+      margin: 25px 0 35px 0;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      background-color: #ffffff;
+      border: 1px solid #cbd5e1;
+    }
+    table.data-table th {
+      background-color: #1F4E79;
+      color: #ffffff;
+      font-weight: bold;
+      padding: 12px 14px;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+      font-size: 15px;
+    }
+    table.data-table td {
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      line-height: 1.6;
+    }
+    table.data-table tr:nth-child(even) {
+      background-color: #f1f5f9;
+    }
+    table.data-table tr:hover {
+      background-color: #e2e8f0;
+    }
+
+    /* 重點提示方塊 */
+    .highlight-card {
+      background-color: #f0f7ff;
+      border-left: 4px solid #2563eb;
+      padding: 14px 20px;
+      margin: 20px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* 目錄快速導覽 */
+    .toc-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px 30px;
+      margin: 25px 0 35px 0;
+    }
+    .toc-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #143652;
+      margin-bottom: 12px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 8px 20px;
+      font-size: 15px;
+    }
+    .toc-grid a {
+      color: #1f5c81;
+      text-decoration: none;
+    }
+    .toc-grid a:hover {
+      text-decoration: underline;
+      color: #0f172a;
+    }
+
+    /* 頁尾 */
+    .doc-footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #cbd5e1;
+      text-align: center;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    @media print {
+      body { background: #fff; font-size: 12pt; }
+      .page-wrapper { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .top-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- 頂部快速導覽列 -->
+  <div class="top-nav">
+    <div><strong>11501 領導與管理</strong> ｜ 財務個案教學與資本預算研究</div>
+    <div>
+      <a href="index.html">← 返回個案簡報網站</a>
+      <a href="財務個案2_Hubbard_Computer_互動式財務模型.html">📊 互動式財務模型</a>
+      <a href="HCI_財務個案_財務理論與實證應用_第3至8章強化版.docx" download>📥 下載 Word 原檔 (.docx)</a>
+    </div>
+  </div>
+  <div class="toc-box">
+    <div class="toc-title">📑 講義章節目錄導覽</div>
+    <div class="toc-grid">
+      <div><a href="#sec-1">閱讀指引</a></div>
+      <div><a href="#sec-2">一、個案概況與核心決策</a></div>
+      <div><a href="#sec-3">二、理論知識地圖</a></div>
+      <div><a href="#sec-4">三、基礎理論：貨幣時間價值、機會成本與資本權重</a></div>
+      <div><a href="#sec-5">四、股權資本成本：CAPM、Beta與DDM</a></div>
+      <div><a href="#sec-6">五、純業務法與Hamada去槓桿／再加槓桿</a></div>
+      <div><a href="#sec-7">六、規模、流動性溢酬與擴充型CAPM的實證爭議</a></div>
+      <div><a href="#sec-8">七、債務成本、稅盾與WACC：從公式到實務估計</a></div>
+      <div><a href="#sec-9">八、資本預算：FCFF、NPV、IRR與決策檢驗</a></div>
+      <div><a href="#sec-10">九、敏感度、情境分析與實質選擇權</a></div>
+      <div><a href="#sec-11">十、延伸理論：資本結構與治理</a></div>
+      <div><a href="#sec-12">十一、關鍵理論爭點與常見誤解</a></div>
+      <div><a href="#sec-13">十二、教學活動與教師參考要點</a></div>
+      <div><a href="#sec-14">十三、綜合討論題與示範答案</a></div>
+      <div><a href="#sec-15">十四、課程結論與學習成果</a></div>
+      <div><a href="#sec-16">資料來源與理論參考</a></div>
+    </div>
+  </div>
+  <h1 class="doc-title">Hubbard Computer, Inc.（HCI）</h1>
+  <div class="doc-subtitle">非上市企業資本成本估計與資本預算決策｜財務金融理論完整教學講義</div>
+  <div class="doc-meta">適用：碩士在職專班／領導與管理／企業財務個案教學</div>
+  <div class="doc-meta">編製日期：2026年11月｜版本：教學整合與理論深化版</div>
+  <h2 class="heading-1" id="sec-1">閱讀指引</h2>
+  <p>本講義聚焦指定之HCI財務個案，將案例中的數字、財務理論、估計假設、管理判斷與課堂討論整合。案例數值依本次對話已整理之網站材料；非現行Dell或任何企業的即時市場數據。部分結果因四捨五入可能有微小差異。</p>
+  <h2 class="heading-1" id="sec-2">一、個案概況與核心決策</h2>
+  <p>HCI為非上市伺服器相關企業，考慮投入800萬美元於自動化產線及資料中心。公司缺乏可直接觀察的股價與股權Beta，因此參照上市公司Dell，使用純業務法（pure-play approach）調整風險，估計HCI的股權成本與WACC。</p>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>估計方法</th>
+          <th>折現率</th>
+          <th>案例NPV（約）</th>
+          <th>決策</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>帳面權重法</td>
+          <td>9.42%</td>
+          <td>+96萬美元</td>
+          <td style="color: #166534; font-weight: bold; background-color: #f0fdf4;">接受</td>
+        </tr>
+        <tr>
+          <td>Dell市場權重法</td>
+          <td>10.61%</td>
+          <td>+58萬美元</td>
+          <td style="color: #166534; font-weight: bold; background-color: #f0fdf4;">接受</td>
+        </tr>
+        <tr>
+          <td>HCI風險調整法</td>
+          <td>13.47%</td>
+          <td>−23.5萬美元</td>
+          <td style="color: #991b1b; font-weight: bold; background-color: #fef2f2;">原條件下拒絕</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>核心問題：同一組專案現金流，為何不同資本成本估計會導致相反結論？關鍵不在於挑選使NPV較高的利率，而在於找到與專案風險、現金流定義及融資政策一致的必要報酬率。</p>
+  <h2 class="heading-1" id="sec-3">二、理論知識地圖</h2>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>層次</th>
+          <th>核心概念</th>
+          <th>對應決策</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>基礎</td>
+          <td>貨幣時間價值、機會成本、帳面與市場價值</td>
+          <td>辨識資金的經濟成本</td>
+        </tr>
+        <tr>
+          <td>風險定價</td>
+          <td>CAPM、Beta、系統性風險、DDM</td>
+          <td>估計股權必要報酬率</td>
+        </tr>
+        <tr>
+          <td>非上市調整</td>
+          <td>純業務法、Hamada去槓桿／再加槓桿</td>
+          <td>移轉可比較公司的營運風險</td>
+        </tr>
+        <tr>
+          <td>融資結構</td>
+          <td>WACC、稅盾、債務成本、目標資本結構</td>
+          <td>選擇合理折現率</td>
+        </tr>
+        <tr>
+          <td>投資判斷</td>
+          <td>NPV、IRR、敏感度、實質選擇權</td>
+          <td>接受、拒絕、重新談判或分階段投資</td>
+        </tr>
+        <tr>
+          <td>延伸治理</td>
+          <td>代理理論、融資順位、權衡理論</td>
+          <td>辨識決策誘因與模型限制</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>問題</th>
+          <th>應有的理論判斷</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>小公司是否一定要加規模溢酬？</td>
+          <td>不一定；須有適切的實證與估值目的支持。</td>
+        </tr>
+        <tr>
+          <td>非上市股權一定要加流動性溢酬？</td>
+          <td>不一定；也可能以股權價值折價方式處理，須避免重複計算。</td>
+        </tr>
+        <tr>
+          <td>HCI 17.24%是否為客觀真值？</td>
+          <td>否；它是個案假設下的估計值，應呈現範圍與敏感度。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>金額／結果</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>初始投資</td>
+          <td>8,000,000美元</td>
+        </tr>
+        <tr>
+          <td>未來現金流折現現值（HCI WACC下）</td>
+          <td>約7,764,816美元</td>
+        </tr>
+        <tr>
+          <td>NPV</td>
+          <td>約−235,184美元</td>
+        </tr>
+        <tr>
+          <td>使NPV=0的最大初始投資</td>
+          <td>約7,764,816美元</td>
+        </tr>
+        <tr>
+          <td>至少需減少的初始投資</td>
+          <td>約235,184美元</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 class="heading-1" id="sec-4">三、基礎理論：貨幣時間價值、機會成本與資本權重</h2>
+  <h3 class="heading-2">3.1 貨幣時間價值：折現是跨期資源配置的共同尺度</h3>
+  <p>【理論基礎與經濟學本質】貨幣時間價值（Time Value of Money, TVM）是現代財務學的核心基石。其本質源於個體對即期消費的時間偏好（Marginal Rate of Time Preference, MRTP）以及生產性資產的邊際資本生產力。在無套利均衡條件下，今天的1美元能即刻投入生產活動或金融市場創造增額回報，因而在經濟實質上不等同於未來的1美元。折現率（Discount Rate）扮演了跨期資源配置的「跨期價格（Intertemporal Price）」，將不同未來時點分布的預期現金流統一折算為當期可公允比較的經濟尺度。</p>
+  <p>【數學模型與核心公式】</p>
+<div class="word-equation-box">
+  <span class="eq-label">(公式 3.1)</span>
+  $$PV = \sum_{t=1}^{n} \frac{CF_t}{(1 + r)^t}, \quad FV = PV \times (1 + r)^n$$
+</div>
+<div class="word-equation-box">
+  <span class="eq-label">(公式 3.1)</span>
+  $$PV = \sum_{t=1}^{n} \frac{CF_t}{(1 + r)^t}, \quad FV = PV \times (1 + r)^n$$
+</div>
+  <p>2. 連續複利型態（常用於衍生性金融商品評價）：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(公式 3.2)</span>
+  $$PV = \int_{0}^{T} CF(t) \cdot e^{-rt} \, dt$$
+</div>
+  <p>【折現率變動的非線性凸性（Convexity）效應】現值對折現率的一階導數為負（$$\frac{\partial PV}{\partial r} < 0$$），二階導數為正（$$\frac{\partial^2 PV}{\partial r^2} > 0$$），顯示現值曲線隨利率上升呈現下凹凸性。這意味著：期限越長（t 越大）的遠期現金流，其現值對折現率變動的彈性與敏感度呈幾何級數放大。以HCI個案為例，伺服器產線自動化與資料中心建置具備「期初資本支出龐大、營運收益長達5–10年」的特徵，當折現率自帳面法的 9.42% 升至 HCI 調整法的 13.47% 時，遠期現金流的現值縮水幅度遠劇烈於近期現金流，直接導致專案淨現值由正翻負。</p>
+  <p>【實證應用與口徑嚴格對齊原則】</p>
+  <ul class="bullet-list">
+    <li>名目 vs. 實質嚴格匹配：若專案預測現金流中已包含通膨預期（名目自由現金流），則必須採用名目折現率折現；若現金流已扣除通膨（實質自由現金流），則必須以實質折現率折現。兩者依 Fisher 方程式對齊：(1 + r_nominal) = (1 + r_real)(1 + π)。嚴禁以名目現金流搭配實質折現率，否則將嚴重高估專案價值。</li>
+    <li>幣別一致性：現金流若以美元計價，無風險利率與市場風險溢酬必須全數取自美元金融市場基準。</li>
+    <li>稅後口徑一致性：資本成本中的債務利率必須採稅後加權成本，與稅後增額自由現金流量（FCFF）保持完全一致。</li>
+  </ul>
+  <h3 class="heading-2">3.2 機會成本與必要報酬率</h3>
+  <p>【理論基礎】機會成本（Opportunity Cost）是微觀經濟學中資源配置的最核心概念，定義為「將資源配置於某一特定用途時，所放棄之次優替代用途的最高預期價值」。在公司財務架構下，資本提供者（股東與債權人）投入企業的每一塊錢，都放棄了在外部資本市場投資於同等風險金融資產的機會。因此，必要報酬率（Required Rate of Return）是資金的客觀市場邊際價格，代表投資人要求補償的「時間價值＋系統性風險承擔」。</p>
+  <p>【破解「保留盈餘零成本」的致命認知陷阱】非上市公司（如 HCI）常見的決策誤區在於：管理階層常認為「本次自動化產線投入 800 萬美元完全使用公司帳上歷年累積的未分配利潤（保留盈餘），既未對外發行新股稀釋股權，也未向銀行借款承擔利息，因此這筆資金成本為零」。</p>
+  <ul class="bullet-list">
+    <li>理論辨析：保留盈餘實質上是全體股東的既得權益。公司若不執行此 800 萬美元專案，本可將此資金以現金股利發放給股東，由股東自行投入公開市場購買具有相近風險特徵的科技股（如 Dell 或 Nasdaq 伺服器同業）。因此，保留盈餘的機會成本「恰好完全等於普通股股權成本（Re）」，絕非零成本。</li>
+    <li>決策危害：若將保留盈餘誤視為零成本或以歷史獲利率作為門檻，將誘發過度投資（Overinvestment），使股東財富蒙受實質毀滅。</li>
+  </ul>
+  <p>【實證指引】資本成本必須由外部客觀市場數據（無風險利率、可比資產 Beta 與市場風險溢酬）推導而得，絕不可因公司歷史財務績效優異或資金充裕而任意調降投資審查門檻。</p>
+  <h3 class="heading-2">3.3 帳面、市場與目標資本結構</h3>
+  <p>【三大權重口徑的理論辨析】加權平均資本成本（WACC）的本質是衡量企業「為新專案募集邊際資金時的綜合市場機會成本」。因此，各類資金的權重配置至關重要：</p>
+  <ul class="bullet-list">
+    <li>帳面價值權重（Book Value Weights）：依歷史會計原則入帳並提列折舊，反映「沉沒的歷史會計成本」。股權帳面淨值完全無法反映無形資產、品牌價值、專利技術以及未來的成長機會（Growth Options）。</li>
+    <li>當前市場價值權重（Current Market Value Weights）：反映資本市場當前對公司未來預期現金流與總體風險的現時定價，為計算當期邊際資本成本的唯一理論正統標準。</li>
+    <li>目標資本結構（Target Capital Structure）：反映公司董事會與管理層在中長期內承諾維持的財務槓桿政策。在長週期資本預算中，若專案存續期跨越多年，長期目標權重較能精確代表專案生命週期內的平均資金成本。</li>
+  </ul>
+  <p>【案例數據深度拆解：Dell 市場權重推導】</p>
+  <p>個案中可比上市公司 Dell 的公開市場數據如下：</p>
+  <ul class="bullet-list">
+    <li>股價 P = 35.00 美元；流通在外總股數 N = 2.50 億股。</li>
+    <li>股權市場價值：E = P × N = 35.00 × 2.50 億 = 87.50 億美元。</li>
+    <li>負債市場價值：D = 31.00 億美元（以公開交易債券市價與銀行貸款公允價值估計）。</li>
+    <li>企業總市場價值：V = D + E = 31.00 + 87.50 = 118.50 億美元。</li>
+    <li>市場負債比重：w_D = D / V = 31.00 / 118.50 = 26.1603% ≈ 26.16%。</li>
+    <li>市場股權比重：w_E = E / V = 87.50 / 118.50 = 73.8397% ≈ 73.84%。</li>
+    <li>市場負債股權比：D / E = 31.00 / 87.50 ≈ 0.354286。</li>
+  </ul>
+  <p>【帳面權重（40% 負債 / 60% 股權）的重大失真機制】若評價人員便宜行事，直接採信 Dell 財務報表上的帳面權重（40% 負債、60% 股權），將嚴重高估低成本負債的權重（自 26.16% 虛增至 40%），同時低估高成本股權的權重（自 73.84% 縮減至 60%）。這將使算出的 WACC 畸低至 9.42%，人為吹捧專案 NPV 高達 +96 萬美元，造成虛假的投資可行性假象。</p>
+  <p>【非上市公司實務推估策略】非上市企業（如 HCI）無可觀察的公開股票市價，實務上可採取三種推估途徑：(1) 參照純業務可比上市公司池之市場資本結構中位數；(2) 依據公司正式核准之目標財務槓桿政策（本案 HCI 目標為 30% 負債 / 70% 股權）；(3) 採用現金流折現法（DCF）迭代反推企業內在股權價值。</p>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>權重口徑</th>
+          <th>定義與評價依據</th>
+          <th>優點與理論基礎</th>
+          <th>缺點與潛在偏誤</th>
+          <th>本案數值與對應 WACC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>帳面價值權重</td>
+          <td>資產負債表歷史會計淨值 (D=40%, E=60%)</td>
+          <td>數據取得容易、波動極小，審計報表直觀</td>
+          <td>嚴重忽略無形資產與成長價值，高估低成本負債影響</td>
+          <td>Dell 帳面 WACC = 9.42% (NPV = +96萬美元)</td>
+        </tr>
+        <tr>
+          <td>當前市場權重</td>
+          <td>公開市場股價乘總股數與債券市價 (D=26.16%, E=73.84%)</td>
+          <td>符合現代金融理論，反映當前資金真實邊際機會成本</td>
+          <td>受二級市場短期情緒波動干擾，非上市公司無法直接取得</td>
+          <td>Dell 市場 WACC = 10.61% (NPV = +58萬美元)</td>
+        </tr>
+        <tr>
+          <td>目標資本結構</td>
+          <td>管理層中長期規劃維持之融資結構 (HCI: D=30%, E=70%)</td>
+          <td>平滑市場短期非理性波動，精確反映長期專案生命週期融資政策</td>
+          <td>需管理層具備嚴謹的資本結構紀律，否則易淪為主觀假設</td>
+          <td>HCI 目標 WACC = 13.47% (NPV = −23.5萬美元)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 class="heading-1" id="sec-5">四、股權資本成本：CAPM、Beta與DDM</h2>
+  <h3 class="heading-2">4.1 CAPM的均衡直覺與證券市場線（SML）</h3>
+  <p>【理論根基與市場均衡假定】Sharpe（1964）與 Lintner（1965）建立的資本資產定價模型（Capital Asset Pricing Model, CAPM），以 Markowitz（1952）現代資產組合理論（MPT）為微觀基礎。模型假定：投資人為理性均值-變異數偏好者、資訊完全對稱、不存在交易成本與賦稅限制，且所有人皆可在無風險利率下自由借貸。在資本市場出清均衡下：</p>
+  <ul class="bullet-list">
+    <li>特有風險（Idiosyncratic Risk）：個別企業的管理疏失、產線偶發故障等非系統性風險，可藉由跨產業投資組合被完全分散消除，故市場不會給予任何預期報酬補償。</li>
+    <li>系統性風險（Systematic Risk）：總體經濟衰退、通貨膨脹、利率劇烈變動等影響整體市場的風險無法被分散，投資人承擔此風險必須獲得風險溢酬（Risk Premium）補償。</li>
+  </ul>
+  <p>【證券市場線（Security Market Line, SML）模型】</p>
+<div class="word-equation-box">
+  <span class="eq-label">(SML 證券市場線)</span>
+  $$R_e = R_f + \beta_L \times \left[ E(R_m) - R_f \right]$$
+</div>
+  <p>其中：R_f 為無風險利率；MRP = E(R_m) - R_f 為市場風險溢酬；$\beta_L$ 為有槓桿股權 Beta。</p>
+  <p>【個案 Dell 股權資本成本計算】</p>
+  <ul class="bullet-list">
+    <li>無風險利率 R_f 取 3.50%（代表評價當時長期公債殖利率基準）。</li>
+    <li>市場風險溢酬 MRP 取 7.50%（代表市場投資人對股票市場相對於公債的長期超額報酬要求）。</li>
+    <li>Dell 有槓桿股權 Beta $\beta_L$ 取 1.25。</li>
+    <li>Dell 股權必要報酬率：R_{e,Dell} = 3.50% + 1.25 × 7.50% = 3.50% + 9.375% = 12.875%。</li>
+  </ul>
+  <p>【理論本質辨析】12.875% 是資本市場在 Dell 承擔之系統性風險與資本結構下所要求的「事前必要報酬率（Ex-ante Required Return）」，絕非 Dell 過去的歷史已實現報酬率（Ex-post Realized Return），亦非公司未來必然兌現的獲利承諾。</p>
+  <h3 class="heading-2">4.2 Beta的統計估計與經濟意義</h3>
+  <p>【統計定義與計量經濟模型】Beta 是資產超額報酬對市場投資組合超額報酬的標準化共變異數：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(Beta 統計定義)</span>
+  $$\beta_i = \frac{\text{Cov}(R_i, R_m)}{\text{Var}(R_m)} = \rho_{i,m} \frac{\sigma_i}{\sigma_m}$$
+</div>
+  <p>實證上以特徵線（Characteristic Line）進行普通最小平方法（OLS）時間序列回歸：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(特徵線回歸)</span>
+  $$(R_{i,t} - R_{f,t}) = \alpha_i + \beta_i (R_{m,t} - R_{f,t}) + \varepsilon_{i,t}$$
+</div>
+  <p>【Beta 的經濟決定因素】Beta 並不等於公司的「總波動度（標準差 σ_i）」，亦非個別公司的「違約倒閉機率」。Beta 的高低本質上由兩項核心經濟變數決定：</p>
+  <ul class="bullet-list">
+    <li>營業收入的週期敏感度（Cyclicality of Sales）：企業所生產產品的需求價格彈性與總體景氣關聯度。伺服器與資料中心屬於企業重大資本開支（CapEx），景氣大好時企業擴大採購，景氣下滑時預算首遭凍結，因此伺服器產業 Beta 普遍顯著大於 1.0（本案 Dell β = 1.25）。</li>
+    <li>營運槓桿（Degree of Operating Leverage, DOL）：固定成本占總營運成本的比重。固定成本佔比越高，營業利益（EBIT）隨營收波動的敏感度越劇烈，進而放大股權的系統性共變異數。</li>
+  </ul>
+  <p>【實務計量規範與收縮調整（Blume Adjustment）】實證計量需注意：(1) 通常採用 60 個月月資料或 2–3 年週資料回歸；(2) 檢驗標準誤（Standard Error）、95% 信賴區間與 R²（通常在 0.2–0.4 之間）；(3) 考慮向均值回歸傾向：實證顯示極端高或低 Beta 在長期會向市場平均值 1.0 收縮，實務常用 Blume 收縮公式：β_adjusted = (2/3) × β_raw + (1/3) × 1.0。</p>
+  <h3 class="heading-2">4.3 DDM與CAPM的不同資訊基礎</h3>
+  <p>【Gordon 股利折現模型（Dividend Discount Model, DDM）】</p>
+<div class="word-equation-box">
+  <span class="eq-label">(Gordon 股利折現模型)</span>
+  $$P_0 = \frac{D_1}{R_e - g} \implies R_e = \frac{D_1}{P_0} + g \quad (\text{約束條件：} R_e > g)$$
+</div>
+  <p>其中 D_1 為預期次期現金股利，P_0 為當前公開交易市價，g 為長期股利可持續成長率（g = ROE × 保留率 b）。</p>
+  <p>【資訊基礎對比與交互驗證】</p>
+  <ul class="bullet-list">
+    <li>DDM 的資訊基礎在於「公司內部微觀基本面」，依賴公司的現金流發放歷史、股利政策承諾與長期盈餘再投資效率。適用於公用事業、成熟型銀行等現金流平穩且長期高比例配息之企業。</li>
+    <li>CAPM 的資訊基礎在於「外部宏觀資本市場」，聚焦於資產與市場總體共變異性，不依賴企業是否發放股利。</li>
+    <li>科技業適用局限：對於伺服器硬體與科技成長型企業，利潤多數保留投入研發與擴廠（D_1 接近於 0），硬套單階段 DDM 會產生無效或極不穩定的估計。對於非上市企業 HCI，由於缺乏市場定價 P_0，無法直接操作 DDM，但可將上市公司 Dell 的 DDM 作為 CAPM 估計之輔助驗證。</li>
+  </ul>
+  <h3 class="heading-2">4.4 實證常見偏誤</h3>
+  <ul class="bullet-list">
+    <li>前視偏誤（Look-ahead Bias）：在回溯評估特定時點的投資決策時，錯誤引用了決策當時市場參與者尚未掌握的未來市場數據或 Beta 歷史回歸值。</li>
+    <li>存活者偏誤（Survivorship Bias）：在同業池篩選中，僅選取營運至今仍維持穩健的上市同業，剔除過去幾年因財務困境或技術淘汰而下市的伺服器廠商，導致下偏估計整體產業的真實系統性風險與破產成本。</li>
+    <li>總報酬（Total Return）與價格報酬（Price Return）混淆：回歸時若未將股票除息後的現金股利再投資計入，將人為扭曲股票真實波動與回報率。</li>
+    <li>以歷史實現報酬替代前瞻必要報酬：直接套用過去 20 年牛市的高年化報酬率作為未來的必要報酬，忽視當前利率環境與估值倍數之週期性位置。</li>
+  </ul>
+  <h2 class="heading-1" id="sec-6">五、純業務法與Hamada去槓桿／再加槓桿</h2>
+  <h3 class="heading-2">5.1 Pure-play的識別邏輯與操作程序</h3>
+  <p>【非上市企業的評價困境】非上市公司（如 HCI）既無公開掛牌交易股票，亦無歷史股價波動數據，無法透過統計回歸直接求取其股權 Beta。</p>
+  <p>【純業務法（Pure-play Approach）的核心哲學】在公開資本市場中，尋找一家主營業務、營收結構與技術產品線與評價目標專案高度一致的單一業務上市公司（Pure-play Comparable，如專注於伺服器硬體之上市公司 Dell），以其公開交易之股權 Beta 作為「風險中介代理」，透過現代資本結構理論剝離其特定財務槓桿，再重新注入目標公司的財務槓桿。</p>
+  <p>【純業務同業可比性篩選標準】</p>
+  <ul class="bullet-list">
+    <li>核心業務匹配度：營收主要來自伺服器硬體與資料中心設備，避免受消費級 PC 或軟體服務業績交叉補貼。</li>
+    <li>營運成本結構：固定成本與變動成本比率相似，確保營運槓桿（DOL）具備實質可比性。</li>
+    <li>目標市場與客戶階層：以企業級（Enterprise）B2B 客戶為主，而非消費級大眾通路。</li>
+  </ul>
+  <h3 class="heading-2">5.2 Hamada公式的來源、推導與限制</h3>
+  <p>【理論淵源：MM 定理與 CAPM 的融合】Modigliani & Miller（1963）含稅定理證明，在存在企業所得稅（T_c）且債務具備永久利息稅盾之條件下，負債企業價值（V_L）等於無負債企業價值（V_U）加上稅盾現值：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(MM 含稅企業價值)</span>
+  $$V_L = V_U + T_c \times D$$
+</div>
+  <p>資產負債表右側的資金總價值等於股權市值加上負債市值（V_L = E + D）。在完全市場與無套利定價下，企業整體資產之系統性風險等於各索償權人之加權組合：</p>
+  <p>E × $\beta_L$ + D × $\beta_D$ = V_U × $\beta_U$ + (T_c × D) × β_TS</p>
+  <p>【經典 Hamada（1972）模型的關鍵假設】</p>
+  <ul class="bullet-list">
+    <li>假設一：企業債務無系統性違約風險，債務 Beta 為零（$\beta_D$ = 0）。</li>
+    <li>假設二：利息稅盾的系統性風險與債務本金一致，故稅盾 Beta 亦為零（β_TS = $\beta_D$ = 0）。</li>
+  </ul>
+  <p>【數學推導過程】代入假設後，公式簡化為：</p>
+  <p>E × $\beta_L$ = V_U × $\beta_U$ = (V_L - T_c × D) × $\beta_U$ = (E + D - T_c × D) × $\beta_U$ = [ E + (1 - T_c) × D ] × $\beta_U$</p>
+  <p>等式兩端同除以股權價值 E：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(Hamada 去槓桿與再加槓桿)</span>
+  $$\beta_L = \beta_U \left[ 1 + (1 - T_c)\frac{D}{E} \right] \iff \beta_U = \frac{\beta_L}{1 + (1 - T_c)\frac{D}{E}}$$
+</div>
+  <p>反推無槓桿資產 Beta（去槓桿公式）：</p>
+  <p>$\beta_U$ = $\beta_L$ / [ 1 + (1 - T_c) × (D / E) ]</p>
+  <p>【理論邊界與局限】當企業舉債過高、債務評等落入投機級（高收益債 / 垃圾債）時，債權人實質承擔了顯著的企業營運波動，此時 $\beta_D$ > 0，若仍機械套用 Hamada 簡化式將導致估出的資產 Beta 產生系統性高估；此外，若公司採取動態融資政策（維持固定債務比重），Miles-Ezzell 模型或 Harris-Pringle 模型可能更具理論精確度。</p>
+  <h3 class="heading-2">5.3 Dell→HCI完整數值逐步推導</h3>
+  <p>本個案的數值推導分為去槓桿（剝離 Dell 財務風險）與再加槓桿（注入 HCI 目標財務風險）兩大步驟：</p>
+  <p>【步驟一：可比公司 Dell 去槓桿（提取純資產風險 $\beta_U$）】</p>
+  <ul class="bullet-list">
+    <li>Dell 市場權益價值：E_Dell = 87.50 億美元；市場負債價值：D_Dell = 31.00 億美元。</li>
+    <li>Dell 市場負債股權比：(D / E)_Dell = 31.00 / 87.50 = 0.354286。</li>
+    <li>有效邊際所得稅率：T_c = 35%  =>  (1 - T_c) = 0.65。</li>
+    <li>Dell 稅後財務槓桿調整項：(1 - T_c) × (D / E)_Dell = 0.65 × 0.354286 = 0.230286。</li>
+    <li>Dell 觀察股權 Beta：$\beta_{L,\text{Dell}}$ = 1.25。</li>
+    <li>解出 Dell 無槓桿資產 Beta（$\beta_U$）：</li>
+    <li>$\beta_{U,\text{Dell}}$ = 1.25 / [ 1 + 0.230286 ] = 1.25 / 1.230286 ≈ 1.016024 ≈ 1.0160。</li>
+  </ul>
+  <p>【步驟二：HCI 目標資本結構再加槓桿（Relevering）】</p>
+  <ul class="bullet-list">
+    <li>HCI 經董事會核准之目標融資結構：30% 負債、70% 股權（w_D = 0.30, w_E = 0.70）。</li>
+    <li>HCI 目標負債股權比：(D / E)_HCI = 0.30 / 0.70 = 3 / 7 ≈ 0.428571。</li>
+    <li>HCI 稅後財務槓桿調整項：(1 - T_c) × (D / E)_HCI = 0.65 × 0.428571 ≈ 0.278571。</li>
+    <li>計算 HCI 再加槓桿後之專屬股權 Beta：</li>
+    <li>$\beta_{L,\text{HCI}}$ = $\beta_U$ × [ 1 + 0.278571 ] = 1.016024 × 1.278571 ≈ 1.299059 ≈ 1.2991。</li>
+  </ul>
+  <p>【重大財務管理結論剖析】HCI 的股權 Beta（1.2991）高於 Dell（1.25），這絕非意味著 HCI 的伺服器產線在生產技術或良率上比 Dell 更差、更危險。兩家公司的底層資產風險完全相等（均為 $\beta_U$ = 1.0160）。Beta 之所以上升，純粹是因為 HCI 選擇了較為激進的目標資本結構（D/E 為 0.4286，顯著高於 Dell 市場水準之 0.3543），多出的系統性風險完全是股東承擔的財務槓桿風險。</p>
+  <h3 class="heading-2">5.4 多公司實證估計與穩健性</h3>
+  <ul class="bullet-list">
+    <li>同業池中位數實證程序：實務上為避免受單一公司特異事件（如 Dell 某季存貨減損或收購案）干擾，應選取 3–5 家業務相近之上市同業（如 HP Enterprise, Supermicro 等），逐一計算各公司之 $\beta_U$，再取其「中位數（Median）」或「四分位距修減平均數（Trimmed Mean）」，以確保資產 Beta 之代表性。</li>
+    <li>專案層級風險分離（Project WACC）：HCI 本次 800 萬美元專案包含「產線自動化」與「資料中心」。產線自動化本質上是製造工藝改良，其風險取決於伺服器硬體出貨量週期與營運固定成本；資料中心則面臨機房租賃合約、電力能源價格波動與雲端運算彈性需求。若兩者風險特徵不同，理想上應分別尋找「自動化設備製造業」與「雲端基礎設施營運商」兩組不同可比公司分別去槓桿，而非統一以 Dell Beta 估算整個專案。</li>
+  </ul>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>推導步驟</th>
+          <th>標的對象</th>
+          <th>計量公式 / 模型</th>
+          <th>輸入參數與數值來源</th>
+          <th>輸出計算結果</th>
+          <th>管理與財務意義</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>步驟 1：市場數據收集</td>
+          <td>Dell (可比上市公司)</td>
+          <td>D/E = D / E</td>
+          <td>負債市價 D = $3.10B, 股權市價 E = $87.50B</td>
+          <td>Dell D/E = 0.354286</td>
+          <td>確保持續採用公允市場價值而非會計帳面數值</td>
+        </tr>
+        <tr>
+          <td>步驟 2：去槓桿 (Unlever)</td>
+          <td>Dell -> 純資產風險</td>
+          <td>β_U = β_L / [1 + (1−T_c)(D/E)]</td>
+          <td>Dell β_L = 1.25, T_c = 35%, D/E = 0.3543</td>
+          <td>Dell β_U = 1.016024</td>
+          <td>成功剝離 Dell 財務槓桿，提煉純營運資產系統性風險</td>
+        </tr>
+        <tr>
+          <td>步驟 3：確定目標結構</td>
+          <td>HCI (非上市目標)</td>
+          <td>D/E = w_D / w_E</td>
+          <td>目標負債比 30%, 目標股權比 70%</td>
+          <td>HCI D/E = 0.428571</td>
+          <td>確立 HCI 長期資本結構與政策融資承諾</td>
+        </tr>
+        <tr>
+          <td>步驟 4：再加槓桿 (Relever)</td>
+          <td>純資產 -> HCI 股權</td>
+          <td>β_L = β_U × [1 + (1−T_c)(D/E)]</td>
+          <td>β_U = 1.016024, T_c = 35%, D/E = 0.4286</td>
+          <td>HCI β_L = 1.299059</td>
+          <td>將營運風險注入 HCI 目標財務槓桿，推導專屬股權 Beta</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 class="heading-1" id="sec-7">六、規模、流動性溢酬與擴充型CAPM的實證爭議</h2>
+  <h3 class="heading-2">6.1 從標準CAPM到估值調整</h3>
+  <p>【擴充型 CAPM（Build-up / Extended CAPM）模型構建】傳統 CAPM 假定資產流動性無限制且投資人充分分散。然而在評估非上市、中小型企業時，實務估值界（如 Duff & Phelps / Kroll）普遍主張傳統 CAPM 低估了該類企業股東所承擔的額外風險，因而引進擴充型模型：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(擴充型 CAPM 模型)</span>
+  $$R_{e,\text{HCI}} = R_f + \beta_{L,\text{HCI}} \times MRP + SP + LP$$
+</div>
+  <p>其中：SP 為規模溢酬（Size Premium）；LP 為缺乏流動性溢酬（Liquidity Premium）。</p>
+  <p>【個案 HCI 股權資本成本完整數值計算】</p>
+  <ul class="bullet-list">
+    <li>無風險基準利率：R_f = 3.50%。</li>
+    <li>系統性風險補償項：$\beta_{L,\text{HCI}}$ × MRP = 1.299059 × 7.50% ≈ 9.7429%。</li>
+    <li>個案給定規模溢酬：SP = 2.50%（反映 HCI 相對 Dell 之小型企業規模補償）。</li>
+    <li>個案給定流動性溢酬：LP = 1.50%（反映非上市股權不可隨時變現之鎖定補償）。</li>
+    <li>HCI 股權資本成本：R_{e,HCI} = 3.50% + 9.7429% + 2.50% + 1.50% = 17.2429% ≈ 17.24%。</li>
+  </ul>
+  <h3 class="heading-2">6.2 規模溢酬：經驗現象與模型依賴</h3>
+  <p>【理論來源】Banz（1981）與 Fama-French（1992, 1993）實證發現小市值上市公司歷史長期報酬顯著超越 CAPM 預測，因而提出三因子模型中的 SMB（Small Minus Big）因子。</p>
+  <p>【學術界與實務界的重大爭端】</p>
+  <ul class="bullet-list">
+    <li>實證穩健性衰退：近年學術實證（如 Hou, Xue & Zhang 等）指出，在排除極端微型股（Micro-caps）或控制了企業獲利品質（Profitability）與投資因子（Investment）後，傳統的規模效應在統計上變得不顯著。</li>
+    <li>非上市公司適格性疑問：公開市場的小型股具有流動性二級市場與嚴格財務審計監管；非上市公司若僅依營業額或資產規模就機械式加計 2.50% 的 SP，在金融理論上缺乏嚴格的微觀因果支撐。</li>
+  </ul>
+  <h3 class="heading-2">6.3 缺乏市場流動性與控制權</h3>
+  <p>【流動性缺陷的定價補償】非上市公司股權缺乏公開次級撮合市場，股東欲出售持股往往面臨漫長尋找買方之時間成本與折價風險。</p>
+  <p>【實務致命操作陷阱：防範「重複計價（Double Counting）」】</p>
+  <p>在企管顧問與資產評價實務中，處理解決非上市流動性不足有兩大平行途徑：</p>
+  <ul class="bullet-list">
+    <li>途徑 A（折現率端加成法）：在股權成本 Re 中加計 LP（如本案之 1.50%），以提高折現門檻壓低專案價值。</li>
+    <li>途徑 B（估值後折價法）：折現率保持標準 CAPM，先算出專案或企業價值，再依私募交易折價率扣除「缺乏市場流動性折價（Discount for Lack of Marketability, DLOM，通常 15%–30%）」。</li>
+    <li>重大紅線：分析師若在折現率端加了 1.50% 的 LP，又在最終求出的資產價值上乘上 DLOM 折價，將對同一項非流動性風險施加雙重懲罰，嚴重扭曲投資決策！</li>
+  </ul>
+  <h3 class="heading-2">6.4 溢酬敏感度：把爭議轉化為決策分析</h3>
+  <p>【股權溢酬對 WACC 的傳導效應】由於 HCI 資本結構中股權權重高達 70%（w_E = 0.70），股權成本的每 1 個百分點變動，將直接傳導至整體 WACC 提升 0.70 個百分點（ΔWACC = 0.70 × ΔR_e）。</p>
+  <p>【情境矩陣與決策反轉】</p>
+  <ul class="bullet-list">
+    <li>基準情境（加計 SP 2.5% + LP 1.5% = 4.0%）：Re = 17.24%  =>  WACC = 13.47%  =>  NPV = −23.5 萬美元（原條件拒絕）。</li>
+    <li>移除流動性溢酬（僅留 SP 2.5%）：Re = 15.74%  =>  WACC = 12.42%  =>  NPV ≈ +7.5 萬美元（反轉為接受！）。</li>
+    <li>回歸標準 CAPM（完全不加 SP 與 LP）：Re = 13.24%  =>  WACC = 10.67%  =>  NPV ≈ +55.8 萬美元（大幅接受！）。</li>
+  </ul>
+  <p>【教師與管理提示】這項敏感度對比揭示了冷酷的現實：專案是否值得投資，往往不在於工程師在產線上的實體生產力，而在於財務長在辦公室中對 SP 與 LP 的主觀信念。評價報告必須完整揭示基準假設與敏感度區間，避免將主觀估值假設偽裝成客觀真理。</p>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>情境編號</th>
+          <th>溢酬設定假設 (SP / LP)</th>
+          <th>股權要求報酬率 (Re)</th>
+          <th>綜合加權成本 (WACC)</th>
+          <th>專案淨現值 (NPV)</th>
+          <th>投資決策結論</th>
+          <th>實務代表立場</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>情境 1 (基準個案)</td>
+          <td>加計 SP 2.5% + LP 1.5% (共+4.0%)</td>
+          <td>17.24%</td>
+          <td>13.47%</td>
+          <td>−23.5 萬美元</td>
+          <td style="color: #991b1b; font-weight: bold; background-color: #fef2f2;">原條件下拒絕</td>
+          <td>保守型財務顧問 / 審慎放貸銀行</td>
+        </tr>
+        <tr>
+          <td>情境 2 (部分溢酬)</td>
+          <td>加計 SP 2.5% + LP 0.0% (共+2.5%)</td>
+          <td>15.74%</td>
+          <td>12.42%</td>
+          <td>+7.5 萬美元</td>
+          <td>同意投資</td>
+          <td>中立型評價師 (流動性另行控管)</td>
+        </tr>
+        <tr>
+          <td>情境 3 (標準 CAPM)</td>
+          <td>SP 0.0% + LP 0.0% (完全不加成)</td>
+          <td>13.24%</td>
+          <td>10.67%</td>
+          <td>+55.8 萬美元</td>
+          <td>強烈同意投資</td>
+          <td>學術標準派 / 內部業務推廣部門</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 class="heading-1" id="sec-8">七、債務成本、稅盾與WACC：從公式到實務估計</h2>
+  <h3 class="heading-2">7.1 債務成本是邊際資金價格</h3>
+  <p>【前瞻性邊際定價原則】資本預算評價所依據的債務成本 R_d，是指企業「為當前新專案募集新增一筆負債時，市場債權人所要求的前瞻性必要報酬率（到期殖利率, Yield to Maturity, YTM）」，而不是資產負債表上過去發行之舊債券的票面利率（Coupon Rate），亦非歷史平均借款利息。</p>
+  <p>【信用利差定價架構】</p>
+  <p>R_d = R_f + 信用違約利差 (Credit Default Spread) + 期限溢酬 (Term Premium)</p>
+  <p>【個案數值與利差分析】</p>
+  <ul class="bullet-list">
+    <li>上市公司 Dell 稅前借款利率為 6.50%。</li>
+    <li>非上市公司 HCI 稅前借款利率為 7.20%。</li>
+    <li>信用利差差距：7.20% - 6.50% = 0.70%（70 個基點, bps）。這 70 bps 精準反映了非上市企業相較於 S&P 500 大型權值股在信用評級、財務資訊透明度、抵押擔保品以及再融資抗風險能力上的客觀落差。</li>
+  </ul>
+  <h3 class="heading-2">7.2 稅盾的現值與適用條件</h3>
+  <p>【利息稅盾（Interest Tax Shield）機制】依據現代公司所得稅法規，負債利息支出列為營業外費用，可在計算企業應納稅所得額時全額或限額扣除。因此，負債的實質經濟成本為稅後成本：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(稅後債務成本)</span>
+  $$R_{d,\text{after-tax}} = R_d \times (1 - T_c)$$
+</div>
+  <p>【個案 HCI 稅後負債成本計算】</p>
+  <p>R_{d,after-tax} = 7.20% × (1 - 0.35) = 7.20% × 0.65 = 4.68%。</p>
+  <p>【利息稅盾生效的三大邊界約束】</p>
+  <ul class="bullet-list">
+    <li>充足應稅利潤前提：利息稅盾生效的前提是企業或專案必須有充裕的息稅前利潤（EBIT）以供扣抵。若企業未來處於嚴重虧損或景氣寒冬，無所得可抵，當期稅盾效益為零，必須遞延結轉，其折現現值將大打折扣。</li>
+    <li>稅法利息扣除上限（如美國 IRC § 163(j)）：許多國家稅制規定利息扣除額不得超過經調整所得（如 EBITDA 或 EBIT）之 30%，過度舉債可能導致利息無法即期抵稅。</li>
+    <li>非債務稅盾（Non-debt Tax Shields）排擠：資料中心與自動化產線的大額加速折舊（Depreciation Tax Shield）已大幅沖抵課稅所得，可能使邊際利息稅盾的效益縮水。</li>
+  </ul>
+  <h3 class="heading-2">7.3 WACC的正確口徑</h3>
+  <p>【加權平均資本成本公式】</p>
+<div class="word-equation-box">
+  <span class="eq-label">(WACC 加權平均資本成本)</span>
+  $$WACC = w_E R_e + w_D R_d (1 - T_c)$$
+</div>
+  <p>【個案 HCI 綜合 WACC 逐步計算】</p>
+  <ul class="bullet-list">
+    <li>股權權重 w_E = 0.70，股權成本 R_e = 17.2429%。</li>
+    <li>負債權重 w_D = 0.30，稅後負債成本 R_{d,after-tax} = 4.6800%。</li>
+    <li>代入加權計算：WACC = (0.70 × 17.2429%) + (0.30 × 4.6800%) = 12.0700% + 1.4040% = 13.4740% ≈ 13.47%。</li>
+  </ul>
+  <p>【三大嚴格口徑對齊原則】</p>
+  <ul class="bullet-list">
+    <li>現金流與折現率口徑嚴格對齊：折現率為稅後 WACC 時，折現的現金流必須是屬於「全體資本提供者（股東與債權人）」的企業自由現金流量（FCFF）。若評價屬於股東的股權現金流（FCFE），折現率必須使用股權成本 Re，絕不可混用 WACC。</li>
+    <li>嚴禁在現金流中重複扣除利息：由於利息負擔與稅盾利益已在 WACC 公式中完全處理，在預測 FCFF 時絕不能再扣除利息支出，否則將造成利息費用的重複扣減！</li>
+    <li>幣別與名目實質對齊：嚴格保持折現率與現金流名目/實質與計價幣別的一致性。</li>
+  </ul>
+  <h3 class="heading-2">7.4 資本結構與WACC的非單調關係</h3>
+  <p>【負債越多 WACC 就越低嗎？】直觀上，稅後負債成本（4.68%）遠低於股權成本（17.24%），管理層常有衝動：「若將負債比自 30% 提高到 60%，是否能大幅降低 WACC、使負 NPV 專案轉正？」</p>
+  <p>【靜態權衡理論（Static Trade-off Theory）解析】</p>
+  <p>負債與 WACC 的關係並非單調遞減，而是呈現經典的「U 型曲線」：</p>
+  <ul class="bullet-list">
+    <li>第一階段（稅盾主導）：在適度槓桿區間，增加負債的稅盾節稅效益大於財務風險溢價，推動 WACC 下降。</li>
+    <li>第二階段（極值拐點）：當負債比率達到某一臨界最優資本結構（Optimal Capital Structure）時，WACC 降至最低點，公司價值最大化。</li>
+    <li>第三階段（財務困境主導）：當槓桿進一步攀升，債券違約與破產機率劇增，債權人大幅調高借款利率（R_d 飆升），股東承擔的財務破產風險使股權成本（R_e）呈指數型上升，最終抵銷並完全壓垮利息稅盾利益，導致 WACC 急遽惡化反彈。</li>
+  </ul>
+  <p>【結論】HCI 設定 30% 目標負債比，正是為了在享受稅盾利益的同時，保留充裕的財務彈性與破產緩衝空間。</p>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>現金流量類型</th>
+          <th>對應折現率</th>
+          <th>融資利息處理原則</th>
+          <th>利息稅盾處理位置</th>
+          <th>實務常見重大錯誤</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>企業自由現金流 (FCFF)</td>
+          <td>加權平均資本成本 (WACC)</td>
+          <td>在現金流中嚴格排除 (不扣除利息)</td>
+          <td>隱含於 WACC 的 (1−T_c) 項中</td>
+          <td>在 FCFF 扣除利息後又以 WACC 折現 (雙重懲罰)</td>
+        </tr>
+        <tr>
+          <td>股權自由現金流 (FCFE)</td>
+          <td>股權資本成本 (Re)</td>
+          <td>在現金流中扣除稅後利息與本金變動</td>
+          <td>直接顯性反映於 FCFE 現金流內部</td>
+          <td>使用 WACC 去折現 FCFE (嚴重低估折現率)</td>
+        </tr>
+        <tr>
+          <td>調整現值法 (APV 基準流)</td>
+          <td>無槓桿資產成本 (R_U / R_0)</td>
+          <td>在現金流中嚴格排除</td>
+          <td>獨立於專案本體之外單獨折現稅盾</td>
+          <td>將加槓桿之 Re 誤套入無槓桿營運資產現金流</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 class="heading-1" id="sec-9">八、資本預算：FCFF、NPV、IRR與決策檢驗</h2>
+  <h3 class="heading-2">8.1 增額自由現金流量的建構</h3>
+  <p>【企業自由現金流量（FCFF）標準架構】資本預算的核心在於衡量專案對企業整體現金流的淨增量（Incremental Cash Flows）。標準 FCFF 計算公式如下：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(FCFF 自由現金流量)</span>
+  $$FCFF_t = \text{EBIT}_t (1 - T_c) + DA_t - \text{CapEx}_t - \Delta NWC_t$$
+</div>
+  <p>其中：EBIT_t 為息稅前利潤；DA_t 為折舊與攤銷；CapEx_t 為資本支出；ΔNWC_t 為淨營運資金變動。</p>
+  <p>【資本預算編製的六大黃金法則】</p>
+  <ul class="bullet-list">
+    <li>1. 增額原則（With-and-Without Principle）：僅計算採納該專案相對於不採納該專案所產生的差額現金流。</li>
+    <li>2. 沉沒成本無關（Ignore Sunk Costs）：專案評估日前已發生或不可回收之支出（如前期向諮詢顧問支付的 20 萬美元規劃費），無論決策結果為何均無法改變，嚴禁納入專案現金流。</li>
+    <li>3. 納入機會成本（Include Opportunity Costs）：若專案使用既有廠房空間，該空間原本可對外出租年收 10 萬美元，則每年必須計入 10 萬美元之現金流出作為機會成本。</li>
+    <li>4. 淨營運資金（NWC）動態平衡：專案營運初期因增加安全庫存與應收帳款，導致 ΔNWC > 0（現金流出）；專案結束清算時，應收帳款收回、存貨去化，NWC 將全數回收變現為現金流入。</li>
+    <li>5. 稅後資產殘值（After-tax Salvage Value）：設備處分所得扣除帳面淨值若有資本利得，必須課稅：稅後殘值 = 處分收入 - (處分收入 - 期末帳面價值) × T_c。</li>
+    <li>6. 嚴格剔除融資利息：絕不可在 EBIT 中減去利息，融資成本已全數由 WACC 吸收。</li>
+  </ul>
+  <h3 class="heading-2">8.2 NPV的價值創造準則</h3>
+  <p>【淨現值（NPV）基本模型】</p>
+<div class="word-equation-box">
+  <span class="eq-label">(NPV 淨現值)</span>
+  $$NPV = -I_0 + \sum_{t=1}^{n} \frac{FCFF_t}{(1 + WACC)^t}$$
+</div>
+  <p>【經濟實質含義】</p>
+  <ul class="bullet-list">
+    <li>NPV > 0：代表專案未來產生的現金流量現值，不僅足以全額償付債權人利息本金，並滿足股東對系統性風險的要求報酬，還能為公司股東創造額外的超額財富增量。</li>
+    <li>NPV < 0：代表專案收益率低於資本市場的機會成本，採納該專案將實質破壞公司既有股東權益價值。</li>
+  </ul>
+  <h3 class="heading-2">8.3 IRR的解釋與侷限</h3>
+  <p>【內部報酬率（Internal Rate of Return, IRR）定義】內部報酬率是使專案淨現值恰好等於零時的內生折現率：</p>
+<div class="word-equation-box">
+  <span class="eq-label">(IRR 內部報酬率)</span>
+  $$NPV(IRR) = -I_0 + \sum_{t=1}^{n} \frac{FCFF_t}{(1 + IRR)^t} = 0$$
+</div>
+  <p>【個案數值對比】HCI 專案之內在收益率 IRR 約為 12.60%。</p>
+  <ul class="bullet-list">
+    <li>當基準 WACC 為 13.47% 時：由於專案真實收益率（12.60%）低於資金必要成本（13.47%），故必然得到 NPV < 0（−23.5 萬美元），兩者方向完全一致。</li>
+  </ul>
+  <p>【IRR 模型的兩大致命理論缺陷】</p>
+  <ul class="bullet-list">
+    <li>再投資率假設嚴重失真：IRR 模型在數學上隱含假設專案期中回收的現金流量，能持續以「IRR 本身（12.60%）」的高收益率進行再投資，這在現實市場中往往不切實際；相較之下，NPV 模型合理假設期中現金流以「市場邊際機會成本（WACC = 13.47%）」再投資，更具真實性。</li>
+    <li>非常規現金流之多重根問題：若專案在營運中後期出現重大設備換新或除役復原費用（現金流符號正負交替多次），IRR 方程將出現多個實數解或無解，無法提供決策依據。互斥專案時，IRR 亦可能與 NPV 出現排序衝突，財務學界一致公認：當兩者衝突時，必須無條件以 NPV 為最終決策依歸。</li>
+  </ul>
+  <h3 class="heading-2">8.4 個案三種折現率與投資結論</h3>
+  <p>【三種資本成本評估結果全景對比】同一組初始投資 800 萬美元之伺服器專案，在不同折現率下的評估結果如下：</p>
+  <ul class="bullet-list">
+    <li>1. 帳面權重法（WACC = 9.42%）：專案折現現值約 896 萬美元，NPV 約 +96 萬美元。結論：強烈建議接受。偏誤根源：嚴重低估真實市場股權成本與股權權重。</li>
+    <li>2. Dell 市場法（WACC = 10.61%）：專案折現現值約 858 萬美元，NPV 約 +58 萬美元。結論：建議接受。偏誤根源：未考量 HCI 目標負債比差異，且未反映非上市之額外風險。</li>
+    <li>3. HCI 風險調整法（WACC = 13.47%）：專案折現現值約 776.48 萬美元，NPV 約 −23.5 萬美元。結論：原條件下應予拒絕。評語：唯一符合 HCI 專案風險與融資結構之基準估計。</li>
+  </ul>
+  <p>【決策損益兩平門檻分析（Break-even CapEx）】</p>
+  <p>在基準 13.47% WACC 下，專案未來現金流之折現現值為 7,764,816 美元：</p>
+  <ul class="bullet-list">
+    <li>原初始投資預算：I_0 = 8,000,000 美元。</li>
+    <li>淨現值虧損：NPV = 7,764,816 - 8,000,000 = −235,184 美元。</li>
+    <li>損益兩平最大初始投資上限：I_0* = PV = 7,764,816 美元。</li>
+    <li>初始採購支出至少需壓降差額：ΔI_0 = 8,000,000 - 7,764,816 = 235,184 美元（約 23.52 萬美元）。</li>
+  </ul>
+  <h3 class="heading-2">8.5 實證敏感度與穩健性檢驗</h3>
+  <p>【雙變數敏感度分析矩陣】在實務董事會報告中，不應僅呈現單一 NPV 點估計，而應編製雙維度敏感度測試：</p>
+  <ul class="bullet-list">
+    <li>橫軸：WACC（設定自 10.0% 至 16.0%，步長 1.0%）。</li>
+    <li>縱軸：初始設備投資額（設定自 740 萬美元至 840 萬美元，步長 20 萬美元）。</li>
+    <li>分析核心：繪製 NPV = 0 的無差異邊界線，明確向董事會揭露專案的安全邊際（Margin of Safety）。</li>
+  </ul>
+  <p>【蒙地卡羅模擬（Monte Carlo Simulation）】利用電腦演算法，對「伺服器單價成長率、產能利用率、電費成本上漲率、設備折舊年限」設定連續機率分配（如三角分配或常態分配），執行 10,000 次隨機抽樣，生成專案 NPV 之完整機率密度函數，計算專案 NPV 小於零之破產機率 P(NPV < 0)，提供機率化之風控量化依據。</p>
+  <h3 class="heading-2">8.6 管理決策與實質選擇權</h3>
+  <p>【超越「接受 vs. 拒絕」的靜態教條】在傳統教科書中，NPV < 0 的標準答案就是一刀切「拒絕」。但在實體企業經營中，靜態 DCF 假設管理層在投資後只能被動承受市場結果；現代公司財務理論強調管理層具備積極應變之「實質選擇權（Real Options）」：</p>
+  <ul class="bullet-list">
+    <li>1. 商務合約重談選擇權（Option to Renegotiate）：財務長可持 NPV = −23.5 萬美元的量化分析，向自動化產線設備供應商進行殘酷議價。只要供應商願意在 800 萬美元總價中讓利 23.52 萬美元（降幅僅約 2.94%），專案 NPV 即刻由負翻正！</li>
+    <li>2. 延後投資選擇權（Option to Delay / Wait）：若當前次世代伺服器晶片架構尚未完全確立，等待 6–12 個月能大幅降低技術過時淘汰風險，等待所產生的資訊價值可遠大於提早開工之收益。</li>
+    <li>3. 分階段擴充選擇權（Staged Investment / Option to Expand）：將 800 萬美元工程拆分為兩期：第一期先投入 400 萬美元建構核心資料中心模組；待運算需求驗證爆發後，再行使第二期選擇權追加 400 萬興建全自動產線；若市場疲弱，則及時停損，避免全額損失。</li>
+  </ul>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>檢核科目項目</th>
+          <th>處理原則 (納入/剔除)</th>
+          <th>背後財務理論依據</th>
+          <th>實務作業常見嚴重疏漏</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>前期市場調研與諮詢費</td>
+          <td>嚴格剔除 (不計入)</td>
+          <td>沉沒成本原理 (Sunk Cost Principle)</td>
+          <td>誤將已付之調研費列為專案成本，導致優質專案被扼殺</td>
+        </tr>
+        <tr>
+          <td>現有閒置廠房與土地</td>
+          <td>必須納入 (按市價計為流出)</td>
+          <td>機會成本原則 (Opportunity Cost)</td>
+          <td>誤認自己既有廠房「免租金」，低估專案真實經濟投入</td>
+        </tr>
+        <tr>
+          <td>專案利息費用與本金償還</td>
+          <td>嚴格剔除 (不可由 EBIT 扣除)</td>
+          <td>WACC 資本結構與折現率匹配原則</td>
+          <td>在現金流中扣除利息造成與 WACC 重複扣除 (Double Counting)</td>
+        </tr>
+        <tr>
+          <td>期初存貨與應收帳款增加</td>
+          <td>納入初期現金流出 (ΔNWC > 0)</td>
+          <td>淨營運資金投入 (Working Capital Need)</td>
+          <td>忽略營運資金的流動性佔用，導致專案初期現金流斷裂</td>
+        </tr>
+        <tr>
+          <td>期末未收回營運資金與設備</td>
+          <td>納入期末現金流入 (回收與稅後殘值)</td>
+          <td>專案清算終值 (Terminal Value Recovery)</td>
+          <td>忘記計算資產處分利得稅，虛報期末現金回收現值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 class="heading-1" id="sec-10">九、敏感度、情境分析與實質選擇權</h2>
+  <p>敏感度分析逐一改變Beta、MRP、規模溢酬、流動性溢酬、負債比、債務利率、初始成本或營運現金流；情境分析則讓多項變數同步變動。應辨識使NPV由負轉正的門檻，而非只報告單一點估計。</p>
+  <p>實質選擇權包含延後投資、分期投資、擴張與放棄選擇權。原始投資方案NPV為負，不必然表示所有替代方案皆無價值；但選擇權價值必須有實際可行的決策彈性與合理估值支持。</p>
+  <h2 class="heading-1" id="sec-11">十、延伸理論：資本結構與治理</h2>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>理論</th>
+          <th>核心命題</th>
+          <th>本案連結</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MM無關理論</td>
+          <td>完美市場下融資組合不改變企業總價值</td>
+          <td>建立資本結構分析基準</td>
+        </tr>
+        <tr>
+          <td>含稅MM與稅盾</td>
+          <td>符合假設時舉債產生節稅價值</td>
+          <td>理解稅後債務成本</td>
+        </tr>
+        <tr>
+          <td>靜態權衡理論</td>
+          <td>稅盾利益與財務困境成本相互權衡</td>
+          <td>30%負債比是否適當</td>
+        </tr>
+        <tr>
+          <td>融資順位理論</td>
+          <td>資訊不對稱下傾向先內部資金、再負債、最後新股</td>
+          <td>HCI融資方式</td>
+        </tr>
+        <tr>
+          <td>代理理論</td>
+          <td>管理者、股東及債權人目標可能不一致</td>
+          <td>避免為擴張而高估NPV</td>
+        </tr>
+        <tr>
+          <td>風險調整折現率</td>
+          <td>不同風險專案須使用相應必要報酬率</td>
+          <td>產線與資料中心分別評估</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 class="heading-1" id="sec-12">十一、關鍵理論爭點與常見誤解</h2>
+  <p>誤解：WACC越低越好。 釐清：不應為使專案通過而選較低折現率；WACC必須與風險相符。</p>
+  <p>誤解：Beta衡量公司全部風險。 釐清：CAPM中的Beta衡量與市場共同變動的系統性風險。</p>
+  <p>誤解：非上市公司必須固定加4%溢酬。 釐清：溢酬屬估值判斷，可能與其他調整重複。</p>
+  <p>誤解：負債增加一定使WACC下降。 釐清：稅盾利益可能被股權與債務風險成本上升抵銷。</p>
+  <p>誤解：NPV為負只能永久放棄。 釐清：應拒絕原條件方案，但可評估降價、延期及分期等選項。</p>
+  <h2 class="heading-1" id="sec-13">十二、教學活動與教師參考要點</h2>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>活動</th>
+          <th>學生任務</th>
+          <th>教師評量重點</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. 折現率爭議</td>
+          <td>解釋9.42%、10.61%、13.47%為何不同</td>
+          <td>權重、風險、估值口徑</td>
+        </tr>
+        <tr>
+          <td>2. 純業務法演算</td>
+          <td>由Dell β=1.25推算HCI β</td>
+          <td>去槓桿、目標D/E、再加槓桿</td>
+        </tr>
+        <tr>
+          <td>3. 溢酬辯論</td>
+          <td>支持與反對加入SP、LP各提出理由</td>
+          <td>實證依據與重複計價</td>
+        </tr>
+        <tr>
+          <td>4. 投資委員會</td>
+          <td>就800萬美元專案提出決策</td>
+          <td>NPV、替代方案、假設揭露</td>
+        </tr>
+        <tr>
+          <td>5. 反事實分析</td>
+          <td>改變成本或現金流，尋找NPV=0門檻</td>
+          <td>敏感度與談判策略</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 class="heading-1" id="sec-14">十三、綜合討論題與示範答案</h2>
+  <h3 class="heading-2">1. 為何HCI不能直接採用Dell股權Beta？</h3>
+  <p>參考要點：Dell的股權Beta含其特有財務槓桿。須先估計營運資產Beta，再依HCI目標資本結構重新加槓桿；且必須先確認兩者營運風險可比。</p>
+  <h3 class="heading-2">2. 為何市場價值權重較帳面權重合適？</h3>
+  <p>參考要點：WACC衡量當前資金的機會成本，應依當前經濟價值配置權重；非上市企業可採估計市場價值或合理目標權重。</p>
+  <h3 class="heading-2">3. 13.47%是否是唯一正確的HCI WACC？</h3>
+  <p>參考要點：不是。它取決於可比公司、Beta、風險溢酬、稅率、負債成本及目標權重，應以區間與敏感度呈現。</p>
+  <h3 class="heading-2">4. 若董事會要求通過投資，CFO能否改用10.61%？</h3>
+  <p>參考要點：不應以通過決策為目的選擇折現率。必須先證明專案風險與Dell相符且其他調整不適用，才有理由改變模型。</p>
+  <h3 class="heading-2">5. 如何讓原本負NPV專案變得可接受？</h3>
+  <p>參考要點：在其餘條件不變下，降低初始投資至少約23.52萬美元可達損益兩平；也可增加可驗證的增額現金流，或評估延後／分期選擇權。</p>
+  <h3 class="heading-2">6. 是否應把產線與資料中心合併使用一個WACC？</h3>
+  <p>參考要點：若兩項業務的需求波動、營運槓桿與市場風險不同，應考慮分別估計專案折現率與NPV。</p>
+  <h2 class="heading-1" id="sec-15">十四、課程結論與學習成果</h2>
+  <p>完整推理鏈：可比較上市公司 → 股權Beta → 去槓桿資產Beta → HCI再加槓桿Beta → 股權成本 → 稅後債務成本 → WACC → NPV → 管理選擇。</p>
+  <p>完成個案後，學生應能：（1）辨識財務成本與機會成本；（2）估算非上市企業股權Beta與WACC；（3）區分標準理論與額外估值假設；（4）利用NPV與敏感度支持管理決策；（5）對單一點估計提出合理批判。</p>
+  <h2 class="heading-1" id="sec-16">資料來源與理論參考</h2>
+  <p>個案教學網站：Hubbard Computer, Inc. 財務個案（二），https://williamslchang-blip.github.io/11501-leadership-and-management/財務個案/財務個案2/index.html</p>
+  <ul class="bullet-list">
+    <li>Modigliani, F., & Miller, M. H. (1958). The Cost of Capital, Corporation Finance and the Theory of Investment. American Economic Review, 48(3), 261–297.</li>
+    <li>Modigliani, F., & Miller, M. H. (1963). Corporate Income Taxes and the Cost of Capital: A Correction. American Economic Review, 53(3), 433–443.</li>
+    <li>Sharpe, W. F. (1964). Capital Asset Prices: A Theory of Market Equilibrium under Conditions of Risk. Journal of Finance, 19(3), 425–442.</li>
+    <li>Hamada, R. S. (1972). The Effect of the Firm’s Capital Structure on the Systematic Risk of Common Stocks. Journal of Finance, 27(2), 435–452.</li>
+    <li>Myers, S. C. (1977). Determinants of Corporate Borrowing. Journal of Financial Economics, 5(2), 147–175.</li>
+    <li>Myers, S. C., & Majluf, N. S. (1984). Corporate Financing and Investment Decisions When Firms Have Information That Investors Do Not Have. Journal of Financial Economics, 13(2), 187–221.</li>
+    <li>Brealey, R. A., Myers, S. C., & Allen, F. Principles of Corporate Finance. McGraw Hill（相關章節）.</li>
+  </ul>
+  <div class="doc-footer">
+    <p>Hubbard Computer, Inc. (HCI) 財務個案教學系列講義 ｜ 國立臺灣大學 領導與管理個案教材 ｜ 編製日期：2026年11月</p>
+    <p><a href="index.html" style="color: #1f5c81; text-decoration: none;">← 回到 財務個案（二）總目錄</a> ｜ <a href="HCI_財務個案_財務理論與實證應用_第3至8章強化版.docx" download style="color: #1f5c81; text-decoration: none;">📥 下載本講義 Word 原檔</a></p>
+  </div>
+
+</div>
+
+</body>
+</html>
