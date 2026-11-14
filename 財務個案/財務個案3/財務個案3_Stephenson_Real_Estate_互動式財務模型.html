@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stephenson Real Estate (SRE) 資本結構重組與利息稅盾｜哈佛商學院互動式決策平台</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F0F4F9',
+              100: '#E1E9F2',
+              200: '#B8CBE0',
+              500: '#1B365D',
+              600: '#142947',
+              700: '#0E1D33',
+              900: '#060D17',
+            },
+            accent: {
+              500: '#C07D2B',
+              600: '#A4661F',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Top Navbar -->
+  <header class="sticky top-0 z-50 bg-brand-500 text-white shadow-lg border-b border-brand-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-accent-500 flex items-center justify-center font-bold text-white text-xl shadow">
+          SRE
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight">Stephenson Real Estate Company</h1>
+          <p class="text-xs text-brand-200">資本結構重組、利息稅盾與融資決策｜互動模擬模型</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+          ● 模式：即時敏感度精算
+        </span>
+        <button onclick="resetDefaults()" class="px-3 py-1.5 text-xs font-semibold rounded bg-white/10 hover:bg-white/20 transition">
+          重置基準參數
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- KPI Summary Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <!-- KPI 1 -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">利息稅盾現值 (PV of Tax Shield)</div>
+        <div id="kpi-tax-shield" class="text-2xl font-black text-emerald-600 mt-2">$44,000,000</div>
+        <div class="text-xs text-slate-500 mt-1">計算公式：<code class="font-mono bg-slate-100 px-1 py-0.5 rounded">Tc × D</code></div>
+      </div>
+      <!-- KPI 2 -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">方案 B 宣告後每股股價</div>
+        <div id="kpi-stock-price" class="text-2xl font-black text-brand-500 mt-2">$37.43</div>
+        <div class="text-xs text-emerald-600 font-semibold mt-1">每股淨增值 <span id="kpi-stock-delta">+$2.93</span> (+8.50%)</div>
+      </div>
+      <!-- KPI 3 -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">既有股東財富增加總額</div>
+        <div id="kpi-wealth-gain" class="text-2xl font-black text-emerald-600 mt-2">+$44,000,000</div>
+        <div class="text-xs text-slate-500 mt-1">1,500 萬股舊股東獨享稅盾</div>
+      </div>
+      <!-- KPI 4 -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">方案 B 綜合資金成本 (WACC)</div>
+        <div id="kpi-wacc" class="text-2xl font-black text-blue-600 mt-2">9.34%</div>
+        <div class="text-xs text-slate-500 mt-1">較全股權降幅 <span class="font-semibold text-blue-600">-66 bps</span></div>
+      </div>
+    </div>
+
+    <!-- Parameter Sliders & Dynamic Interaction -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Left Column: Sliders Controller -->
+      <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h2 class="text-base font-bold text-brand-500 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+            </svg>
+            決策參數即時調整控制器
+          </h2>
+          <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">可拉動滑桿</span>
+        </div>
+
+        <!-- Slider 1: Tax Rate -->
+        <div>
+          <div class="flex justify-between text-sm font-medium mb-1">
+            <label for="input-tax" class="text-slate-700">綜合企業所得稅率 (Tc)</label>
+            <span id="label-tax" class="font-mono font-bold text-brand-500">40.0%</span>
+          </div>
+          <input id="input-tax" type="range" min="0" max="50" step="1" value="40" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500" oninput="updateCalculations()">
+          <div class="flex justify-between text-xs text-slate-400 mt-1">
+            <span>0% (MM 無稅基準)</span>
+            <span>25%</span>
+            <span>50%</span>
+          </div>
+        </div>
+
+        <!-- Slider 2: Debt Amount -->
+        <div>
+          <div class="flex justify-between text-sm font-medium mb-1">
+            <label for="input-debt" class="text-slate-700">債務融資規模 (Debt, D)</label>
+            <span id="label-debt" class="font-mono font-bold text-brand-500">$110M</span>
+          </div>
+          <input id="input-debt" type="range" min="0" max="200" step="5" value="110" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500" oninput="updateCalculations()">
+          <div class="flex justify-between text-xs text-slate-400 mt-1">
+            <span>$0M (方案 A)</span>
+            <span>$110M (基準)</span>
+            <span>$200M</span>
+          </div>
+        </div>
+
+        <!-- Slider 3: Cost of Debt -->
+        <div>
+          <div class="flex justify-between text-sm font-medium mb-1">
+            <label for="input-rd" class="text-slate-700">長期發債利率 (Rd)</label>
+            <span id="label-rd" class="font-mono font-bold text-brand-500">8.0%</span>
+          </div>
+          <input id="input-rd" type="range" min="4" max="15" step="0.25" value="8.0" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500" oninput="updateCalculations()">
+          <div class="flex justify-between text-xs text-slate-400 mt-1">
+            <span>4.0%</span>
+            <span>8.0%</span>
+            <span>15.0%</span>
+          </div>
+        </div>
+
+        <!-- Slider 4: Cost of Unlevered Assets -->
+        <div>
+          <div class="flex justify-between text-sm font-medium mb-1">
+            <label for="input-ru" class="text-slate-700">無負債資產成本 (RU)</label>
+            <span id="label-ru" class="font-mono font-bold text-brand-500">10.0%</span>
+          </div>
+          <input id="input-ru" type="range" min="6" max="16" step="0.5" value="10.0" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500" oninput="updateCalculations()">
+          <div class="flex justify-between text-xs text-slate-400 mt-1">
+            <span>6.0%</span>
+            <span>10.0%</span>
+            <span>16.0%</span>
+          </div>
+        </div>
+
+        <!-- Callout Box -->
+        <div class="bg-brand-50 border-l-4 border-brand-500 p-4 rounded text-xs text-slate-600 space-y-1">
+          <div class="font-bold text-brand-500">💡 試驗重點：</div>
+          <div>• 將稅率拉至 0%，驗證 MM 無稅定理下每股股價完全不變（$34.50）。</div>
+          <div>• 隨負債比率增加，觀察股權成本 Re 攀升但 WACC 反而因稅盾下降。</div>
+        </div>
+
+      </div>
+
+      <!-- Right 2 Columns: Charts & Side-by-Side Comparison -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Chart Container -->
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-slate-800">資本結構對加權平均資金成本 (WACC) 與股權成本 (Re) 影響曲線</h3>
+            <span class="text-xs text-slate-500 font-mono">MM Proposition II with Taxes</span>
+          </div>
+          <div class="h-64">
+            <canvas id="waccChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Side-by-Side Comparison Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Card Plan A -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-200 text-slate-700">方案 A (全額發股)</span>
+              <span class="text-xs text-slate-400">執行長主張</span>
+            </div>
+            <div class="mt-4 space-y-2 text-sm">
+              <div class="flex justify-between py-1 border-b border-slate-200">
+                <span class="text-slate-600">總市場價值 (VL)</span>
+                <span class="font-mono font-bold">$627.50M</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-200">
+                <span class="text-slate-600">流通股數</span>
+                <span class="font-mono">1,818.84 萬股</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-200">
+                <span class="text-slate-600">每股股票價格</span>
+                <span class="font-mono font-bold text-slate-800">$34.50</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-200">
+                <span class="text-slate-600">利息稅盾</span>
+                <span class="font-mono text-slate-500">$0</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-slate-600">舊股東財富</span>
+                <span class="font-mono">$517.50M (零增長)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Plan B -->
+          <div class="bg-emerald-50/50 border border-emerald-200 rounded-xl p-5">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-600 text-white">方案 B (全額發債)</span>
+              <span class="text-xs text-emerald-600 font-semibold">財務顧問強烈推薦</span>
+            </div>
+            <div class="mt-4 space-y-2 text-sm">
+              <div class="flex justify-between py-1 border-b border-emerald-100">
+                <span class="text-slate-600">總市場價值 (VL)</span>
+                <span id="dyn-planB-vl" class="font-mono font-bold text-emerald-700">$671.50M</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-emerald-100">
+                <span class="text-slate-600">流通股數</span>
+                <span class="font-mono">1,500.00 萬股 (無稀釋)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-emerald-100">
+                <span class="text-slate-600">每股股票價格</span>
+                <span id="dyn-planB-price" class="font-mono font-bold text-emerald-700">$37.43</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-emerald-100">
+                <span class="text-slate-600">利息稅盾</span>
+                <span id="dyn-planB-ts" class="font-mono text-emerald-600 font-bold">$44.00M</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-slate-600">舊股東財富</span>
+                <span id="dyn-planB-wealth" class="font-mono font-bold text-emerald-700">$561.50M (+44M)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Market Value Balance Sheet Comparison -->
+    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+      <h3 class="text-base font-bold text-brand-500 mb-4 flex items-center">
+        <svg class="w-5 h-5 mr-2 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+        </svg>
+        動態市場價值資產負債表（Market Value Balance Sheet）即時核算
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm divide-y divide-slate-200 border border-slate-200 rounded-lg">
+          <thead class="bg-brand-500 text-white">
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold">資產端 (Assets)</th>
+              <th class="px-4 py-3 text-right font-semibold">市場價值 (USD)</th>
+              <th class="px-4 py-3 text-left font-semibold">負債與股權端 (Liabilities & Equity)</th>
+              <th class="px-4 py-3 text-right font-semibold">市場價值 (USD)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono">
+            <tr>
+              <td class="px-4 py-3 font-sans text-slate-700">既有營運房地產資產 (Existing Assets)</td>
+              <td class="px-4 py-3 text-right text-slate-800">$517,500,000</td>
+              <td class="px-4 py-3 font-sans text-slate-700">長期公司債券 (Debt, D)</td>
+              <td id="bs-debt" class="px-4 py-3 text-right text-slate-800">$110,000,000</td>
+            </tr>
+            <tr class="bg-slate-50">
+              <td class="px-4 py-3 font-sans text-slate-700">新購置高科技商業地塊 (New Land)</td>
+              <td class="px-4 py-3 text-right text-slate-800">$110,000,000</td>
+              <td class="px-4 py-3 font-sans text-slate-700">股東權益總市值 (Equity, S: 1,500 萬股)</td>
+              <td id="bs-equity" class="px-4 py-3 text-right text-emerald-700 font-bold">$561,500,000</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-sans text-emerald-700 font-semibold">利息稅盾折現現值 (PV of Tax Shield)</td>
+              <td id="bs-taxshield" class="px-4 py-3 text-right text-emerald-600 font-bold">$44,000,000</td>
+              <td class="px-4 py-3 font-sans text-slate-400 italic">（每股定價對應）</td>
+              <td id="bs-pershare" class="px-4 py-3 text-right text-slate-500 font-sans">每股 $37.43</td>
+            </tr>
+            <tr class="bg-slate-100 font-bold border-t-2 border-brand-500">
+              <td class="px-4 py-3 font-sans text-brand-900">總資產市場價值 (Total Assets)</td>
+              <td id="bs-total-assets" class="px-4 py-3 text-right text-brand-900">$671,500,000</td>
+              <td class="px-4 py-3 font-sans text-brand-900">負債與股權總額 (Total L & E)</td>
+              <td id="bs-total-le" class="px-4 py-3 text-right text-brand-900">$671,500,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Governance Section -->
+    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <h3 class="text-base font-bold text-slate-900">董事會信託責任與公司治理核心決策矩陣</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <div class="p-4 rounded-lg bg-red-50 border border-red-100">
+          <div class="font-bold text-red-800 mb-1">創辦人個人偏誤 (Trauma Bias)</div>
+          <p class="text-xs text-red-700 leading-relaxed">
+            1980 年代承包商破產痛苦記憶使執行長產生強烈「損失厭惡」，將個人「追求無債的安全感」凌駕於股東財富之上，造成 4,400 萬美元代理損失。
+          </p>
+        </div>
+        <div class="p-4 rounded-lg bg-amber-50 border border-amber-100">
+          <div class="font-bold text-amber-800 mb-1">商業地產低風險特質</div>
+          <p class="text-xs text-amber-700 leading-relaxed">
+            SRE 出租率長年高達 96%，現金流極為平穩。發債後負債比率僅 16.38%，遠低於同業 50% 之平均，根本不存在破產違約風險。
+          </p>
+        </div>
+        <div class="p-4 rounded-lg bg-emerald-50 border border-emerald-100">
+          <div class="font-bold text-emerald-800 mb-1">董事會法定信託義務 (Fiduciary Duty)</div>
+          <p class="text-xs text-emerald-700 leading-relaxed">
+            董事會必須以客觀量化模型引導決策，果斷表決通過方案 B，並透過股票增值紅利與管理層達成共贏，履行對全體股東的信託承諾！
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs border-t border-slate-800">
+    Stephenson Real Estate Company (SRE) 互動式財務決策平台 ｜ 國立大學商管碩士在職專班 領導與管理課程 ｜ 版權所有 © 2026
+  </footer>
+
+  <!-- Simulation Logic Script -->
+  <script>
+    const N0 = 15000000; // 15 million shares
+    const P0 = 34.50;
+    const VU = N0 * P0; // $517,500,000
+    const LandCost = 110000000; // $110,000,000
+
+    let chartInstance = null;
+
+    function formatMoney(num) {
+      return '$' + Math.round(num).toLocaleString('en-US');
+    }
+
+    function formatNumber(num, decimals = 2) {
+      return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    }
+
+    function updateCalculations() {
+      const tc = parseFloat(document.getElementById('input-tax').value) / 100.0;
+      const debtM = parseFloat(document.getElementById('input-debt').value);
+      const D = debtM * 1000000.0;
+      const rd = parseFloat(document.getElementById('input-rd').value) / 100.0;
+      const ru = parseFloat(document.getElementById('input-ru').value) / 100.0;
+
+      // Update Labels
+      document.getElementById('label-tax').textContent = (tc * 100).toFixed(1) + '%';
+      document.getElementById('label-debt').textContent = '$' + debtM.toFixed(0) + 'M';
+      document.getElementById('label-rd').textContent = (rd * 100).toFixed(2) + '%';
+      document.getElementById('label-ru').textContent = (ru * 100).toFixed(1) + '%';
+
+      // 1. Tax Shield
+      const pvTS = tc * D;
+
+      // 2. Firm Value & Equity
+      const VL = VU + LandCost + pvTS;
+      const S = VL - D;
+
+      // 3. Stock Price
+      const P1 = S / N0;
+      const deltaP = P1 - P0;
+      const pctGain = (deltaP / P0) * 100.0;
+
+      // 4. Wealth Gain
+      const totalWealthGain = N0 * deltaP;
+
+      // 5. Cost of Equity & WACC
+      const debtToEquity = S > 0 ? (D / S) : 0;
+      const Re = ru + (ru - rd) * (1 - tc) * debtToEquity;
+      const we = VL > 0 ? (S / VL) : 0;
+      const wd = VL > 0 ? (D / VL) : 0;
+      const afterTaxRd = rd * (1 - tc);
+      const wacc = (we * Re) + (wd * afterTaxRd);
+
+      // Update KPIs
+      document.getElementById('kpi-tax-shield').textContent = formatMoney(pvTS);
+      document.getElementById('kpi-stock-price').textContent = '$' + formatNumber(P1, 2);
+      document.getElementById('kpi-stock-delta').textContent = (deltaP >= 0 ? '+' : '') + '$' + formatNumber(deltaP, 2) + ' (' + (pctGain >= 0 ? '+' : '') + formatNumber(pctGain, 2) + '%)';
+      document.getElementById('kpi-wealth-gain').textContent = (totalWealthGain >= 0 ? '+' : '') + formatMoney(totalWealthGain);
+      document.getElementById('kpi-wacc').textContent = formatNumber(wacc * 100, 2) + '%';
+
+      // Update Dynamic Cards
+      document.getElementById('dyn-planB-vl').textContent = '$' + formatNumber(VL / 1e6, 2) + 'M';
+      document.getElementById('dyn-planB-price').textContent = '$' + formatNumber(P1, 2);
+      document.getElementById('dyn-planB-ts').textContent = '$' + formatNumber(pvTS / 1e6, 2) + 'M';
+      document.getElementById('dyn-planB-wealth').textContent = '$' + formatNumber((N0 * P1) / 1e6, 2) + 'M (+' + formatNumber(totalWealthGain / 1e6, 1) + 'M)';
+
+      // Update Balance Sheet
+      document.getElementById('bs-debt').textContent = formatMoney(D);
+      document.getElementById('bs-equity').textContent = formatMoney(S);
+      document.getElementById('bs-taxshield').textContent = formatMoney(pvTS);
+      document.getElementById('bs-pershare').textContent = '每股 $' + formatNumber(P1, 2);
+      document.getElementById('bs-total-assets').textContent = formatMoney(VL);
+      document.getElementById('bs-total-le').textContent = formatMoney(VL);
+
+      // Update Chart
+      updateChart(tc, rd, ru);
+    }
+
+    function updateChart(tc, rd, ru) {
+      const labels = [];
+      const waccList = [];
+      const reList = [];
+
+      for (let dRatio = 0; dRatio <= 0.60; dRatio += 0.05) {
+        labels.push((dRatio * 100).toFixed(0) + '%');
+        const d_val = dRatio * (VU + LandCost);
+        const pv_ts = tc * d_val;
+        const cur_VL = VU + LandCost + pv_ts;
+        const cur_S = cur_VL - d_val;
+        const de_ratio = cur_S > 0 ? (d_val / cur_S) : 0;
+        const cur_Re = ru + (ru - rd) * (1 - tc) * de_ratio;
+        const cur_WACC = ru * (1 - tc * dRatio);
+
+        waccList.push((cur_WACC * 100).toFixed(2));
+        reList.push((cur_Re * 100).toFixed(2));
+      }
+
+      if (chartInstance) {
+        chartInstance.data.labels = labels;
+        chartInstance.data.datasets[0].data = waccList;
+        chartInstance.data.datasets[1].data = reList;
+        chartInstance.update();
+      } else {
+        const ctx = document.getElementById('waccChart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: '加權平均資金成本 (WACC %)',
+                data: waccList,
+                borderColor: '#2563EB',
+                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                borderWidth: 3,
+                tension: 0.3,
+                fill: true,
+              },
+              {
+                label: '股權資本成本 (Re %)',
+                data: reList,
+                borderColor: '#DC2626',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                tension: 0.3,
+                fill: false,
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                title: { display: true, text: '負債比率 (Debt Ratio D / VL)' }
+              },
+              y: {
+                title: { display: true, text: '資本成本 (%)' },
+                min: 4,
+                max: 16
+              }
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return context.dataset.label + ': ' + context.parsed.y + '%';
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function resetDefaults() {
+      document.getElementById('input-tax').value = 40;
+      document.getElementById('input-debt').value = 110;
+      document.getElementById('input-rd').value = 8.0;
+      document.getElementById('input-ru').value = 10.0;
+      updateCalculations();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCalculations();
+    });
+  </script>
+</body>
+</html>

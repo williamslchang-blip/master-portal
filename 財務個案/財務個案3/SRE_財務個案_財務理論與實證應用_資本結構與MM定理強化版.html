@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stephenson Real Estate Company（SRE）資本結構重組、利息稅盾與融資決策｜財務金融理論完整教學講義</title>
+  
+  <!-- MathJax Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+  <style>
+    :root {
+      --primary: #1B365D;
+      --primary-light: #2A4D7F;
+      --secondary: #556677;
+      --accent: #C07D2B;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --success: #059669;
+      --danger: #DC2626;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif;
+      line-height: 1.75;
+      color: var(--text);
+      background-color: var(--bg);
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    
+    .header-card {
+      background: linear-gradient(135deg, #1B365D 0%, #0F172A 100%);
+      color: white;
+      padding: 40px 36px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+      margin-bottom: 32px;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin: 0 0 12px 0;
+      letter-spacing: -0.02em;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+      color: #CBD5E1;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+    
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 16px;
+      font-size: 0.9rem;
+      color: #94A3B8;
+    }
+    
+    .meta-item strong {
+      color: #F8FAFC;
+    }
+    
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      color: var(--primary);
+      border-bottom: 2px solid #E2E8F0;
+      padding-bottom: 10px;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    
+    h3 {
+      font-size: 1.2rem;
+      color: var(--primary-light);
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    
+    p {
+      margin: 0 0 16px 0;
+    }
+    
+    .callout {
+      background: #F1F5F9;
+      border-left: 4px solid var(--primary);
+      padding: 18px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+    
+    .callout-success {
+      background: #ECFDF5;
+      border-left-color: var(--success);
+      color: #065F46;
+    }
+    
+    .callout-quote {
+      background: #F8FAFC;
+      border-left-color: var(--accent);
+      font-style: italic;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+    
+    th {
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    tr:nth-child(even) {
+      background-color: #F8FAFC;
+    }
+    
+    tr:hover {
+      background-color: #F1F5F9;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    .highlight-val {
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    .success-val {
+      font-weight: bold;
+      color: var(--success);
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 30px 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header Banner -->
+  <div class="header-card">
+    <div class="badge">HBS-FIN-11501-TH03 ｜ 財務金融理論深化專題</div>
+    <h1>Stephenson Real Estate Company（SRE）<br>資本結構重組、利息稅盾與融資決策</h1>
+    <div class="subtitle">MM 定理、利息稅盾價值（Interest Tax Shield）、市場價值資產負債表與公司治理代理衝突</div>
+    <div class="meta-grid">
+      <div class="meta-item">適用對象：<strong>EMBA / MBA / 財務碩士專案</strong></div>
+      <div class="meta-item">授課領域：<strong>領導與管理 / 公司財務策略</strong></div>
+      <div class="meta-item">編製日期：<strong>2026 年 11 月</strong></div>
+      <div class="meta-item">版本：<strong>教學整合與理論深化強化版</strong></div>
+    </div>
+  </div>
+
+  <!-- Reading Guide -->
+  <div class="section-card">
+    <h2>閱讀指引</h2>
+    <p>本講義聚焦指定之 <strong>Stephenson Real Estate Company（SRE）</strong> 財務個案，將案例中的精算數字、現代公司金融學理論、行為財務學經理人偏誤、公司治理信託責任與商用不動產實證研究整合。個案數值依本次決策會議之基準數據；本講義提供完整的數學推導、模型架構與教學指引，協助學員建構嚴謹的公司金融決策邏輯。</p>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="section-card">
+    <h2>一、個案概況與核心決策</h2>
+    <p>Stephenson Real Estate Company（SRE）為一家營運逾 25 年的優質商用不動產投資與租賃企業，長年堅持 100% 全股權（All-Equity）運作，零負債。目前公司流通在外普通股 1,500 萬股，公開市價每股 $34.50 美元，無負債總市值為 5.175 億美元。綜合企業所得稅率為 40.0%。</p>
+    <p>公司面臨一處總成本 1.1 億美元（$110M）高科技走廊核心商業地塊的收購良機。該專案在未考慮融資稅盾下的永續現金流折現現值恰好為 1.1 億美元（即專案無槓桿淨現值 NPV 恰為零）。董事會面臨兩大針鋒相對的融資方案：</p>
+    
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>融資評估維度</th>
+            <th>方案 A：全額增發新股 (Equity)</th>
+            <th>方案 B：全額發行債券 (Debt)</th>
+            <th>方案 B 優勢與理論本質</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>新增籌資規模</strong></td>
+            <td>$110,000,000 美元</td>
+            <td>$110,000,000 美元</td>
+            <td>均可完全滿足 1.1 億美元購地資金缺口</td>
+          </tr>
+          <tr>
+            <td><strong>融資工具與結構</strong></td>
+            <td>以每股 $34.50 增發 318.84 萬股</td>
+            <td>發行 1.1 億美元長期公司債券</td>
+            <td>方案 B 資本結構負債比率升至 16.38%（仍極低）</td>
+          </tr>
+          <tr>
+            <td><strong>利息稅盾折現現值</strong></td>
+            <td>$0 美元（無節稅）</td>
+            <td class="success-val">$44,000,000 美元</td>
+            <td>政府所得稅法對負債利息支出的合法補貼</td>
+          </tr>
+          <tr>
+            <td><strong>宣告後每股股票價格</strong></td>
+            <td>$34.50 美元（持平）</td>
+            <td class="success-val">$37.43 美元</td>
+            <td>每股股價淨暴增 +$2.93 美元（增幅 +8.50%）</td>
+          </tr>
+          <tr>
+            <td><strong>既有股東總財富</strong></td>
+            <td>$517,500,000 美元</td>
+            <td class="success-val">$561,500,000 美元</td>
+            <td>股東實質享有 4,400 萬美元純現金財富溢價</td>
+          </tr>
+          <tr>
+            <td><strong>加權平均資金成本 (WACC)</strong></td>
+            <td>10.00%（不變）</td>
+            <td class="success-val">9.34%（顯著下降）</td>
+            <td>低成本稅後負債拉低綜合折現率，推升市值</td>
+          </tr>
+          <tr>
+            <td><strong>決策建言</strong></td>
+            <td>堅決否決（代理失靈、剝奪股東）</td>
+            <td class="success-val">強烈採納（股東價值最大化）</td>
+            <td>董事會必須發揮信託防線通過方案 B</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section-card">
+    <h2>二、理論知識地圖</h2>
+    <p>貫穿本個案決策的核心金融理論可劃分為五個邏輯遞進的層次：</p>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>層次</th>
+            <th>核心概念</th>
+            <th>定價模型與工具</th>
+            <th>個案決策應用環節</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>基礎層</strong></td>
+            <td>市場價值資產負債表</td>
+            <td>Market Value Balance Sheet, Cash Flow Discounting</td>
+            <td>以未來現金流折現編制宣告前與宣告後公允資產負債表</td>
+          </tr>
+          <tr>
+            <td><strong>基準層</strong></td>
+            <td>MM 定理無稅世界 (1958)</td>
+            <td>$V_L = V_U$, Homemade Leverage（自製槓桿）</td>
+            <td>理解在無摩擦市場中資本結構與企業價值無關的基準線</td>
+          </tr>
+          <tr>
+            <td><strong>稅盾層</strong></td>
+            <td>MM 定理有稅世界 (1963)</td>
+            <td>$V_L = V_U + T_c \times D$, 利息稅盾現值</td>
+            <td>量化發債 1.1 億美元帶來的 4,400 萬美元政府實質稅務補貼</td>
+          </tr>
+          <tr>
+            <td><strong>演化層</strong></td>
+            <td>MM 第二定理與 WACC 動態</td>
+            <td>$R_e = R_U + (R_U - R_d)(1-T_c)(D/S)$, WACC 下降</td>
+            <td>解析財務風險提高推升 $R_e$ 的同時，WACC 為何驟降</td>
+          </tr>
+          <tr>
+            <td><strong>治理層</strong></td>
+            <td>行為財務與代理理論</td>
+            <td>Trauma Bias, Free Cash Flow, Fiduciary Duty</td>
+            <td>剖析執行長 1980 年代破產陰影引發的次優決策與董事會職責</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section-card">
+    <h2>三、基礎理論：市場價值資產負債表與經濟實質</h2>
+    <p>在標準公司金融學中，資產負債表的唯一衡量標準是<strong>市場價值（Market Value）</strong>，而非歷史成本帳面價值（Book Value）：</p>
+    <div class="callout">
+      <strong>總餅理論（The Pie Model of Capital Structure）：</strong><br>
+      企業所有營運資產未來產生的總自由現金流量之餅，最終被三方瓜分：
+      $$\text{總營業利潤之餅} = \text{股東 (Equity)} + \text{債權人 (Debt)} + \text{政府稅負 (Taxes)}$$
+      管理層的財務使命是<strong>透過合法的融資結構安排，縮小上繳給政府的稅負之餅，將節省下來的價值最大程度留給股東與債權人</strong>！
+    </div>
+  </div>
+
+  <!-- Section 4 & 5 -->
+  <div class="section-card">
+    <h2>四、MM 定理有稅世界：利息稅盾價值創造</h2>
+    <p>根據 Modigliani & Miller (1963)，在考慮企業所得稅的體系下：</p>
+    <p>每年企業因為支付利息而獲得的現金節稅額為：$$\text{年度利息節稅額} = (D \times R_d) \times T_c$$</p>
+    <p>在永續債務假設下，採用與債務相同風險的折現率 $R_d$ 折現，利息稅盾的累計折現現值為：</p>
+    $$\text{PV(Tax Shield)} = \frac{(D \times R_d) \times T_c}{R_d} = T_c \times D$$
+    <div class="callout callout-success">
+      <strong>Stephenson Real Estate 數值驗證：</strong><br>
+      $$\text{PV(Tax Shield)} = 40.0\% \times \$110,000,000 = \$44,000,000 \text{ 美元}$$
+      宣告發債當下，公司總市值跳升：
+      $$V_L = V_U + \text{新購土地} + \text{PV(TS)} = \$517.5M + \$110.0M + \$44.0M = \$671,500,000 \text{ 美元}$$
+      股權市值：$$S = V_L - D = \$671.5M - \$110.0M = \$561,500,000 \text{ 美元}$$
+      由於股數鎖定在 1,500 萬股，新每股股價為：
+      $$P_1 = \frac{\$561,500,000}{15,000,000 \text{ 股}} = \$37.4333 \approx \$37.43 \text{ 美元}$$
+      每股淨增加：$$\Delta P = \frac{\$44,000,000}{15,000,000 \text{ 股}} = +\$2.9333 \text{ 美元（+8.50%）}$$
+    </div>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="section-card">
+    <h2>五、MM 第二定理：資本成本演化與 WACC 下降機制</h2>
+    <p>MM 第二定理揭示了槓桿對股權資本成本的影響：</p>
+    $$R_e = R_U + (R_U - R_d) \times (1 - T_c) \times \left(\frac{D}{S}\right)$$
+    <p>代入基準參數（設 $R_U = 10.0\%$, $R_d = 8.0\%$, $D/S = 110/561.5 = 0.1959$）：</p>
+    $$R_e = 10.0\% + (10.0\% - 8.0\%) \times (1 - 0.40) \times 0.1959 = 10.0\% + 0.2351\% = 10.2351\% \approx 10.24\%$$
+    <div class="callout">
+      <strong>WACC 綜合加權資金成本推導：</strong><br>
+      $$WACC = \left(\frac{S}{V_L}\right) R_e + \left(\frac{D}{V_L}\right) R_d (1 - T_c)$$
+      $$WACC = \left(\frac{561.5}{671.5}\right) \times 10.2351\% + \left(\frac{110.0}{671.5}\right) \times 4.80\% = 8.5585\% + 0.7863\% = 9.3448\% \approx 9.34\%!$$
+      <br>
+      亦可透過 MM 簡化有稅公式直接驗算：
+      $$WACC = R_U \times \left[ 1 - T_c \left(\frac{D}{V_L}\right) \right] = 10.0\% \times [ 1 - 0.40 \times 0.163812 ] = 9.3448\%!$$
+      <strong>核心洞見：</strong>負債稅後成本僅 4.80%，其低成本資金的加權效應，遠遠超過了股權成本微升 0.24% 的影響，推動整體 WACC 大幅下降 66 個基點，從而推動公司價值躍升！
+    </div>
+  </div>
+
+  <!-- Section 7 & 8 -->
+  <div class="section-card">
+    <h2>六、權衡理論、代理成本與經理人創傷偏誤</h2>
+    <h3>1. 資本結構權衡理論（Trade-off Theory）</h3>
+    <p>企業最適資本結構是「利息稅盾現值」與「財務困境成本現值（PV of Financial Distress Costs）」的邊際權衡。在 SRE 案例中，收購土地後負債比率僅 16.38%，遠低於商用不動產同業平均的 50%，且出租率長年高達 96%，違約破產概率趨近於零。SRE 處於純粹享受稅盾紅利的極致安全區間。</p>
+    
+    <h3>2. 行為財務學：經理人個人創傷偏誤（Trauma Bias）</h3>
+    <p>執行長羅伯特·史蒂芬森在 1980 年代經歷高利率下承包商破產的痛苦創傷，產生了嚴重的<strong>「損失厭惡」與「過度保守偏誤」</strong>。他將個人追求無債的心理舒適感置於理性財務分析之上，寧可犧牲全體股東 4,400 萬美元的真金白銀，也要堅守零負債。</p>
+    
+    <h3>3. 公司治理信託防線（Fiduciary Duty）</h3>
+    <p>這是典型的高階經理人個人偏好與外部股東利益背離的<strong>「代理問題（Agency Dilemma）」</strong>。董事會作為全體股東財富的守門人，必須以量化實證模型化解執行長心理障礙，堅定通過方案 B，履行對股東的法定受託義務！</p>
+  </div>
+
+  <!-- Section 9: References -->
+  <div class="section-card">
+    <h2>七、參考文獻（Literature References）</h2>
+    <ul style="font-size: 0.9rem; color: #475569; padding-left: 20px;">
+      <li>Modigliani, F., & Miller, M. H. (1958). The Cost of Capital, Corporation Finance and the Theory of Investment. <em>American Economic Review</em>, 48(3), 261-297.</li>
+      <li>Modigliani, F., & Miller, M. H. (1963). Corporate Income Taxes and the Cost of Capital: A Correction. <em>American Economic Review</em>, 53(3), 433-443.</li>
+      <li>Miller, M. H. (1977). Debt and Taxes. <em>Journal of Finance</em>, 32(2), 261-275.</li>
+      <li>Jensen, M. C., & Meckling, W. H. (1976). Theory of the Firm: Managerial Behavior, Agency Costs and Ownership Structure. <em>Journal of Financial Economics</em>, 3(4), 305-360.</li>
+      <li>Jensen, M. C. (1986). Agency Costs of Free Cash Flow, Corporate Finance, and Takeovers. <em>American Economic Review</em>, 76(2), 323-329.</li>
+      <li>Myers, S. C. (1984). The Capital Structure Puzzle. <em>Journal of Finance</em>, 39(3), 575-592.</li>
+      <li>Malmendier, U., & Nagel, S. (2011). Depression Babies: Do Macroeconomic Experiences Affect Risk Taking? <em>Quarterly Journal of Economics</em>, 126(1), 373-416.</li>
+      <li>Ross, S. A., Westerfield, R. W., Jaffe, J., & Jordan, B. D. (2022). <em>Corporate Finance</em> (13th ed.). McGraw-Hill Education.</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    Stephenson Real Estate Company (SRE) 財務個案教學講義 ｜ 國立大學商管碩士在職專班 領導與管理課程專用 ｜ 版權所有 © 2026
+  </div>
+
+</div>
+
+</body>
+</html>
