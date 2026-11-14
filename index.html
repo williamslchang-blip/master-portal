@@ -513,7 +513,16 @@
               { code: '第9週', title: '保險基礎風險管理與個人保障規劃', desc: '保險金字塔、純保障 vs 儲蓄險、醫療實支實付、產險與人生各階段風險對沖。', html: '11501 管理探索二NEW/W9_保險基礎風險管理與個人保障規劃.html', docx: '11501 管理探索二NEW/第九週_課程教學指引_保險基礎風險管理與個人保障規劃.docx' },
               { code: '第10週', title: '不動產房地產與租買決策財務學', desc: '買房 vs 租房精算模型、房貸本息攤還、寬限期陷阱、青年安心成家貸款解析。', html: '11501 管理探索二NEW/W10_不動產房地產與租買決策財務學.html', docx: '11501 管理探索二NEW/第十週_課程教學指引_不動產房地產與租買決策財務學.docx' },
               { code: '第11週', title: '個人綜合所得稅節稅規劃與報稅實務', desc: '台灣五級累進稅率、免稅額與各項扣除額、首報族報稅攻略與合法節稅思維。', html: '11501 管理探索二NEW/W11_個人綜合所得稅節稅規劃與報稅實務.html', docx: '11501 管理探索二NEW/第十一週_課程教學指引_個人綜合所得稅節稅規劃與報稅實務.docx' },
-              { code: '第12週', title: '個人與家庭資產負債表現金流管理與生涯理財規劃', desc: '個人資產負債表編製、緊急預備金、人生三階段理財目標（結婚、退休、購屋）。', html: '11501 管理探索二NEW/W12_個人與家庭資產負債表現金流管理與生涯理財規劃.html', docx: '11501 管理探索二NEW/第十二週_課程教學指引_個人與家庭資產負債表現金流管理與生涯理財規劃.docx' },
+              {
+                code: '第12週',
+                title: '個人與家庭資產負債表現金流管理與生涯理財規劃',
+                desc: '個人資產負債表編製、緊急預備金、人生三階段理財目標（結婚、退休、購屋）。含第3-7項財務計算分析（緊急預備金、債務雪球vs雪崩、四年存30萬、提早儲蓄時間價值與FIRE退休規劃）互動試算系統與Word原生公式手冊。',
+                html: '11501 管理探索二NEW/W12_個人與家庭資產負債表現金流管理與生涯理財規劃.html',
+                interactiveTool: '11501 管理探索二NEW/W12_財務計算分析_五大決策互動試算系統.html',
+                htmlTheory: '11501 管理探索二NEW/管理探索二_W12_第3至7項財務知識與計算分析_教學指引.html',
+                docxTheory: '11501 管理探索二NEW/管理探索二_W12_第3至7項財務知識與計算分析.docx',
+                docx: '11501 管理探索二NEW/第十二週_課程教學指引_個人與家庭資產負債表現金流管理與生涯理財規劃.docx'
+              },
               { code: '第13週', title: '半導體產業護國神山台積電與台灣科技供應鏈', desc: '晶圓代工商業模式、摩爾定律、台積電競爭護城河與台灣科技供應鏈戰略價值。', html: '11501 管理探索二NEW/W13_半導體產業護國神山台積電與台灣科技供應鏈.html', docx: '11501 管理探索二NEW/第十三週_課程教學指引_半導體產業護國神山台積電與台灣科技供應鏈.docx' },
               { code: '第14週', title: '生成式AI革命人工智慧產業鏈與未來職場轉型', desc: 'GenAI 商業落地、AI 晶片與雲端伺服器生態、大專新鮮人未來必備之 AI 賦能。', html: '11501 管理探索二NEW/W14_生成式AI革命人工智慧產業鏈與未來職場轉型.html', docx: '11501 管理探索二NEW/第十四週_課程教學指引_生成式AI革命人工智慧產業鏈與未來職場轉型.docx' },
               { code: '第15週', title: '綠色金融ESG永續投資與碳定價經濟學', desc: '綠色通膨（Greenflation）、歐盟 CBAM 碳關稅衝擊、碳定價與企業 ESG 轉型商機。', html: '11501 管理探索二NEW/W15_綠色金融ESG永續投資與碳定價經濟學.html', docx: '11501 管理探索二NEW/第十五週_課程教學指引_綠色金融ESG永續投資與碳定價經濟學.docx' },
@@ -777,6 +786,33 @@
               }
             ]
           },
+          personal_finance: {
+            id: 'personal_finance',
+            name: '個人理財五大核心決策與計算分析',
+            shortName: '個人理財五大決策模型',
+            badge: '通識核心 ‧ 5大模組',
+            icon: 'fa-piggy-bank text-emerald-400',
+            sub: '緊急預備金、債務雪球vs雪崩、四年存30萬、提早儲蓄時間價值與FIRE退休規劃',
+            homeUrl: '財務計算/個人財務決策與計算分析/index.html',
+            items: [
+              {
+                code: '互動運算模型',
+                title: '個人理財五大核心決策與計算分析互動試算系統',
+                desc: '涵蓋緊急預備金達標（覆蓋月數與資金缺口）、債務雪球法 vs 雪崩法（逐月利息遞推與清償時程）、四年存30萬元（月年金與波動風險）、提早 vs 延後儲蓄（時間複利 vs 本金正交拆解）、FIRE與退休金規劃（Trinity 4%法則與通膨衝擊）。支援敏感度滑桿、雙策略折線圖與學生學習歷程 CSV 匯出。',
+                html: '財務計算/個人財務決策與計算分析/index.html',
+                interactiveTool: '財務計算/個人財務決策與計算分析/index.html',
+                htmlTheory: '財務計算/管理探索二_W12_第3至7項財務知識與計算分析_教學指引.html',
+                docx: '財務計算/管理探索二_W12_第3至7項財務知識與計算分析.docx'
+              },
+              {
+                code: '教學講義與方程式',
+                title: '第12週 財務知識與計算分析教學手冊（教學用網頁Word形式）',
+                desc: '完整五大模組理論公式推導、數值精算案例、跨情境敏感度矩陣、學生分析與申論思考題。含 MathJax 與 Microsoft Word 原生方程式編輯器公式。',
+                html: '財務計算/管理探索二_W12_第3至7項財務知識與計算分析_教學指引.html',
+                docx: '財務計算/管理探索二_W12_第3至7項財務知識與計算分析.docx'
+              }
+            ]
+          },
         }
       },
 
@@ -887,7 +923,8 @@
       sre_capital_structure: 'https://williamslchang-blip.github.io/11501-leadership-and-management/',
       climate: 'https://williamslchang-blip.github.io/master-portal/',
       hubbard_wacc: 'https://williamslchang-blip.github.io/master-portal/',
-      aerotaiwan_pension: 'https://williamslchang-blip.github.io/master-portal/'
+      aerotaiwan_pension: 'https://williamslchang-blip.github.io/master-portal/',
+      personal_finance: 'https://williamslchang-blip.github.io/master-portal/'
     };
 
     const GITHUB_RAW_BASE = {
