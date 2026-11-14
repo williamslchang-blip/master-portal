@@ -426,6 +426,240 @@
       .word-equation-box { border: 1px solid #000; box-shadow: none; }
       table.data-table th { background-color: #ddd !important; color: #000 !important; }
     }
+  
+    /* 互動試算模型專屬樣式 (Interactive Simulator Styles) */
+    .sim-container {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 26px 30px;
+      margin: 32px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+    .sim-header {
+      border-bottom: 2px solid #1f4e79;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .sim-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #143652;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sim-desc {
+      font-size: 14.5px;
+      color: #475569;
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+    .sim-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+    .sim-preset-btn {
+      background: #ffffff;
+      border: 1px solid #94a3b8;
+      color: #1e293b;
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sim-preset-btn:hover {
+      background: #1f4e79;
+      color: #ffffff;
+      border-color: #1f4e79;
+    }
+    .sim-preset-btn.active {
+      background: #1f4e79;
+      color: #ffffff;
+      border-color: #1f4e79;
+      box-shadow: 0 2px 4px rgba(31, 78, 121, 0.25);
+    }
+    .sim-preset-btn.reset {
+      background: #f1f5f9;
+      color: #475569;
+      border-color: #cbd5e1;
+      margin-left: auto;
+    }
+    .sim-preset-btn.reset:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .sim-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+    .sim-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 16px;
+    }
+    .sim-card-title {
+      font-size: 14.5px;
+      font-weight: bold;
+      color: #1e3a8a;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sim-card.dell-card {
+      border-top: 3px solid #0284c7;
+    }
+    .sim-card.hci-card {
+      border-top: 3px solid #b91c1c;
+    }
+    .sim-card.market-card {
+      border-top: 3px solid #475569;
+    }
+    .sim-card.proj-card {
+      border-top: 3px solid #16a34a;
+    }
+    .sim-control-group {
+      margin-bottom: 12px;
+    }
+    .sim-control-group:last-child {
+      margin-bottom: 0;
+    }
+    .sim-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+      color: #334155;
+    }
+    .sim-val-display {
+      font-weight: bold;
+      font-family: 'Times New Roman', serif;
+      color: #0f172a;
+    }
+    .sim-range-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .sim-range-row input[type="range"] {
+      flex: 1;
+      height: 5px;
+      accent-color: #1f4e79;
+      cursor: pointer;
+    }
+    .sim-range-row input[type="number"] {
+      width: 72px;
+      padding: 3px 6px;
+      font-size: 13px;
+      font-family: 'Times New Roman', serif;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      text-align: right;
+    }
+
+    /* 成果展示大看板 (Result KPI Grid) */
+    .sim-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+    .sim-kpi-card {
+      border-radius: 6px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sim-kpi-card.view2-kpi {
+      background: #f0fdf4;
+      border-left: 5px solid #16a34a;
+    }
+    .sim-kpi-card.view3-kpi {
+      background: #fef2f2;
+      border-left: 5px solid #dc2626;
+    }
+    .sim-kpi-card.diff-kpi {
+      background: #eff6ff;
+      border-left: 5px solid #2563eb;
+    }
+    .kpi-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kpi-badge {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .badge-accept {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .badge-reject {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+    .kpi-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #475569;
+    }
+    .kpi-stat-val {
+      font-weight: bold;
+      font-family: 'Times New Roman', serif;
+      color: #0f172a;
+    }
+    .kpi-npv-large {
+      font-size: 24px;
+      font-weight: bold;
+      font-family: 'Times New Roman', serif;
+      margin-top: 8px;
+      text-align: right;
+    }
+    .kpi-npv-positive {
+      color: #16a34a;
+    }
+    .kpi-npv-negative {
+      color: #dc2626;
+    }
+    .kpi-decision-text {
+      font-size: 13.5px;
+      font-weight: bold;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(0,0,0,0.15);
+      text-align: right;
+    }
+
   </style>
 </head>
 <body>
@@ -588,7 +822,7 @@
   <p>在傳統公司財務學中，股權資本成本（$R_e$）除了採用資本資產定價模型（CAPM），亦常引述高登股利折現模型（Gordon Dividend Growth Model）：</p>
   
   <div class="word-equation-box">
-    $$R_e = rac{D_1}{P_0} + g = rac{D_0 	imes (1 + g)}{P_0} + g$$
+    $$R_e = \frac{D_1}{P_0} + g = \frac{D_0 \times (1 + g)}{P_0} + g$$
     <span class="eq-number">(1)</span>
   </div>
 
@@ -653,7 +887,7 @@
   
   <h3 class="heading-2">1. 股權資本成本（Cost of Equity, $R_{e,Dell}$）計算（採用 CAPM 模型）：</h3>
   <div class="word-equation-box">
-    $$R_e = R_f + eta_L 	imes [E(R_m) - R_f] = R_f + eta_L 	imes MRP$$
+    $$R_e = R_f + \beta_L \times [E(R_m) - R_f] = R_f + \beta_L \times MRP$$
     <span class="eq-number">(2)</span>
   </div>
   <ul class="bullet-list">
@@ -663,14 +897,14 @@
     <li>市場風險溢酬（$MRP = E(R_m) - R_f$）= 11.00% - 3.50% = 7.50%</li>
   </ul>
   <div class="word-equation-box">
-    $$R_{e,Dell} = 3.5000\% + 1.2500 	imes 7.5000\% = 3.5000\% + 9.3750\% = 12.8750\% \quad (12.875\%)$$
+    $$R_{e,Dell} = 3.5000\% + 1.2500 \times 7.5000\% = 3.5000\% + 9.3750\% = 12.8750\% \quad (12.875\%)$$
     <span class="eq-number">(3)</span>
   </div>
 
   <h3 class="heading-2">2. 稅後債務資本成本（After-tax Cost of Debt, 稅後 $R_{d,Dell}$）計算：</h3>
   <p>在現代公司財務學中，債務利息費用在計算企業所得稅時享有稅前全額扣除之利息稅盾（Interest Tax Shield），因此企業真正承擔的邊際債務成本為稅後殖利率：</p>
   <div class="word-equation-box">
-    $$	ext{稅後 } R_d = R_{d,Dell} 	imes (1 - T_c)$$
+    $$\text{稅後 } R_d = R_{d,Dell} \times (1 - T_c)$$
     <span class="eq-number">(4)</span>
   </div>
   <ul class="bullet-list">
@@ -678,7 +912,7 @@
     <li>適用綜合企業所得稅率（$T_c$）= 35.00%</li>
   </ul>
   <div class="word-equation-box">
-    $$	ext{稅後 } R_{d,Dell} = 6.5000\% 	imes (1 - 0.35) = 6.5000\% 	imes 0.65 = 4.2250\% \quad (4.225\%)$$
+    $$\text{稅後 } R_{d,Dell} = 6.5000\% \times (1 - 0.35) = 6.5000\% \times 0.65 = 4.2250\% \quad (4.225\%)$$
     <span class="eq-number">(5)</span>
   </div>
 
@@ -751,25 +985,25 @@
   
   <h3 class="heading-2">1. 分別使用帳面價值權重與市場價值權重計算 Dell 的加權平均資金成本（WACC）：</h3>
   <div class="word-equation-box">
-    $$	ext{WACC} = w_e 	imes R_e + w_d 	imes R_d 	imes (1 - T_c)$$
+    $$\text{WACC} = w_e \times R_e + w_d \times R_d \times (1 - T_c)$$
     <span class="eq-number">(6)</span>
   </div>
 
   <p><strong>• 【基準 A：依據帳面價值權重（Book Value Basis）計算】：</strong></p>
   <div class="word-equation-box">
-    $$	ext{WACC}_{BV} = (0.6000 	imes 12.8750\%) + (0.4000 	imes 4.2250\%) = 7.7250\% + 1.6900\% = 9.4150\% \quad (9.415\%)$$
+    $$\text{WACC}_{BV} = (0.6000 \times 12.8750\%) + (0.4000 \times 4.2250\%) = 7.7250\% + 1.6900\% = 9.4150\% \quad (9.415\%)$$
     <span class="eq-number">(7)</span>
   </div>
 
   <p><strong>• 【基準 B：依據市場價值權重（Market Value Basis）計算】：</strong></p>
   <div class="word-equation-box">
-    $$	ext{WACC}_{MV} = (0.738397 	imes 12.8750\%) + (0.261603 	imes 4.2250\%) = 9.50686\% + 1.10527\% = 10.61213\% \quad (10.612\% pprox 10.61\%)$$
+    $$\text{WACC}_{MV} = (0.738397 \times 12.8750\%) + (0.261603 \times 4.2250\%) = 9.50686\% + 1.10527\% = 10.61213\% \quad (10.612\% \approx 10.61\%)$$
     <span class="eq-number">(8)</span>
   </div>
 
   <p><strong>• 【兩種權重計算結果之差異】：</strong></p>
   <div class="word-equation-box">
-    $$\Delta 	ext{WACC} = 	ext{WACC}_{MV} - 	ext{WACC}_{BV} = 10.6121\% - 9.4150\% = +1.1971\% \quad (	ext{高出約 } 1.20\% 	ext{ 或 } 120 	ext{ 個基點})$$
+    $$\Delta \text{WACC} = \text{WACC}_{MV} - \text{WACC}_{BV} = 10.6121\% - 9.4150\% = +1.1971\% \quad (\text{高出約 } 1.20\% \text{ 或 } 120 \text{ 個基點})$$
     <span class="eq-number">(9)</span>
   </div>
 
@@ -852,7 +1086,7 @@
   <h3 class="heading-2">步驟 A：利用 Hamada 方程將 Dell 的負債貝塔去槓桿化（Unlevering Beta）</h3>
   <p>根據 Robert Hamada（1972）理論，在存在企業所得稅條件下，負債貝塔（$\beta_L$）與無負債資產貝塔（$\beta_U$）滿足以下關係：</p>
   <div class="word-equation-box">
-    $$eta_U = rac{eta_L}{1 + (1 - T_c) 	imes \left(rac{D}{E}ight)_{Dell}}$$
+    $$\beta_U = \frac{\beta_L}{1 + (1 - T_c) \times \left(\frac{D}{E}\right)_{Dell}}$$
     <span class="eq-number">(10)</span>
   </div>
   <ul class="bullet-list">
@@ -862,7 +1096,7 @@
     <li>分母去槓桿調整因子 $= 1 + 0.65 \times 0.3542857 = 1 + 0.2302857 = 1.2302857$</li>
   </ul>
   <div class="word-equation-box">
-    $$eta_U = rac{1.2500}{1.2302857} = 1.0160244 \quad (	ext{約 } 1.0160)$$
+    $$\beta_U = \frac{1.2500}{1.2302857} = 1.0160244 \quad (\text{約 } 1.0160)$$
     <span class="eq-number">(11)</span>
   </div>
   <div class="teaching-box">
@@ -872,16 +1106,16 @@
   <h3 class="heading-2">步驟 B：根據 HCI 的目標資本結構重新加槓桿（Relevering Beta）</h3>
   <p>HCI 管理層設定之長期目標資本結構為：負債比率 Target $D/V = 30.00\%$，股權比率 Target $E/V = 70.00\%$。其對應之目標債股比為：</p>
   <div class="word-equation-box">
-    $$\left(rac{D}{E}ight)_{HCI} = rac{30.00\%}{70.00\%} = rac{3}{7} pprox 0.4285714 \quad (42.86\%)$$
+    $$\left(\frac{D}{E}\right)_{HCI} = \frac{30.00\%}{70.00\%} = \frac{3}{7} \approx 0.4285714 \quad (42.86\%)$$
     <span class="eq-number">(12)</span>
   </div>
   <p>利用 Hamada 方程將產業資產貝塔（$\beta_U$）按照 HCI 的目標槓桿重新加槓桿：</p>
   <div class="word-equation-box">
-    $$eta_{L,HCI} = eta_U 	imes \left[ 1 + (1 - T_c) 	imes \left(rac{D}{E}ight)_{HCI} ight]$$
+    $$\beta_{L,HCI} = \beta_U \times \left[ 1 + (1 - T_c) \times \left(\frac{D}{E}\right)_{HCI} \right]$$
     <span class="eq-number">(13)</span>
   </div>
   <div class="word-equation-box">
-    $$eta_{L,HCI} = 1.0160244 	imes [1 + 0.65 	imes 0.4285714] = 1.0160244 	imes 1.2785714 = 1.299059 \quad (	ext{約 } 1.2991)$$
+    $$\beta_{L,HCI} = 1.0160244 \times [1 + 0.65 \times 0.4285714] = 1.0160244 \times 1.2785714 = 1.299059 \quad (\text{約 } 1.2991)$$
     <span class="eq-number">(14)</span>
   </div>
   <div class="teaching-box">
@@ -891,7 +1125,7 @@
   <h3 class="heading-2">步驟 C：納入小型企業規模溢價與非流動性溢價，計算 HCI 股權資本成本（$R_{e,HCI}$）</h3>
   <p>採用專業資產評價之擴充型 CAPM 模型（Build-Up / Extended CAPM）：</p>
   <div class="word-equation-box">
-    $$R_{e,HCI} = R_f + eta_{L,HCI} 	imes MRP + 	ext{規模溢價 (s)} + 	ext{非流動性溢價 (i)}$$
+    $$R_{e,HCI} = R_f + \beta_{L,HCI} \times MRP + \text{規模溢價 (s)} + \text{非流動性溢價 (i)}$$
     <span class="eq-number">(15)</span>
   </div>
   <ul class="bullet-list">
@@ -901,22 +1135,22 @@
     <li>缺乏流通性溢價（$i$）= 1.5000%（私營非上市股權之流動性貼水）</li>
   </ul>
   <div class="word-equation-box">
-    $$R_{e,HCI} = 3.5000\% + 9.74294\% + 2.5000\% + 1.5000\% = 17.24294\% \quad (	ext{約 } 17.2429\% pprox 17.24\%)$$
+    $$R_{e,HCI} = 3.5000\% + 9.74294\% + 2.5000\% + 1.5000\% = 17.24294\% \quad (\text{約 } 17.2429\% \approx 17.24\%)$$
     <span class="eq-number">(16)</span>
   </div>
 
-  <h3 class="heading-2">步驟 D：計算 HCI 最終專屬加權平均資金成本（$	ext{WACC}_{HCI}$）</h3>
+  <h3 class="heading-2">步驟 D：計算 HCI 最終專屬加權平均資金成本（$\text{WACC}_{HCI}$）</h3>
   <ul class="bullet-list">
     <li>HCI 商業銀行借款利率 $R_{d,HCI} = 7.2000\%$</li>
     <li>HCI 稅後債務資本成本 $= 7.2000\% \times (1 - 0.35) = 7.2000\% \times 0.65 = 4.6800\% \text{（4.68%）}$</li>
     <li>依 HCI 目標權重（$w_e = 70.00\%, w_d = 30.00\%$）進行加權平均：</li>
   </ul>
   <div class="word-equation-box">
-    $$	ext{WACC}_{HCI} = w_e 	imes R_{e,HCI} + w_d 	imes 	ext{稅後 } R_{d,HCI}$$
+    $$\text{WACC}_{HCI} = w_e \times R_{e,HCI} + w_d \times \text{稅後 } R_{d,HCI}$$
     <span class="eq-number">(17)</span>
   </div>
   <div class="word-equation-box">
-    $$	ext{WACC}_{HCI} = (0.7000 	imes 17.24294\%) + (0.3000 	imes 4.6800\%) = 12.07006\% + 1.40400\% = 13.47406\% \quad (	ext{約 } 13.4741\% pprox 13.47\%)$$
+    $$\text{WACC}_{HCI} = (0.7000 \times 17.24294\%) + (0.3000 \times 4.6800\%) = 12.07006\% + 1.40400\% = 13.47406\% \quad (\text{約 } 13.4741\% \approx 13.47\%)$$
     <span class="eq-number">(18)</span>
   </div>
 
@@ -1029,12 +1263,12 @@
   <h3 class="heading-2">1. 專案內部報酬率（Internal Rate of Return, IRR）精算：</h3>
   <p>內部報酬率是使專案淨現值恰好等於零之折現率：</p>
   <div class="word-equation-box">
-    $$\sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 	ext{IRR})^t} - 8,000,000 = 0$$
+    $$\sum_{t=1}^{8} \frac{\text{FCF}_t}{(1 + \text{IRR})^t} - 8,000,000 = 0$$
     <span class="eq-number">(19)</span>
   </div>
   <p>透過數值疊代求解得出：</p>
   <div class="word-equation-box">
-    $$	ext{IRR} = 12.6021\% \quad (	ext{約 } 12.60\%)$$
+    $$\text{IRR} = 12.6021\% \quad (\text{約 } 12.60\%)$$
     <span class="eq-number">(20)</span>
   </div>
 
@@ -1042,21 +1276,21 @@
   
   <p><strong>• 【情境一：使用 Dell 帳面價值 WACC（9.4150%）】：</strong></p>
   <div class="word-equation-box">
-    $$	ext{PV}_{inflow} = \sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 0.09415)^t} = \$8,961,220 \implies 	ext{NPV} = \$8,961,220 - \$8,000,000 = +\$961,220$$
+    $$\text{PV}_{inflow} = \sum_{t=1}^{8} \frac{\text{FCF}_t}{(1 + 0.09415)^t} = \$8,961,220 \implies \text{NPV} = \$8,961,220 - \$8,000,000 = +\$961,220$$
     <span class="eq-number">(21)</span>
   </div>
   <p style="color: #b91c1c; font-weight: bold;">決策結論：NPV 呈現高達近百萬美元之虛假正值（False Positive），導致管理層在幻覺中全票通過！</p>
 
   <p><strong>• 【情境二：使用 Dell 市場價值 WACC（10.6121%）】：</strong></p>
   <div class="word-equation-box">
-    $$	ext{PV}_{inflow} = \sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 0.106121)^t} = \$8,580,103 \implies 	ext{NPV} = \$8,580,103 - \$8,000,000 = +\$580,103$$
+    $$\text{PV}_{inflow} = \sum_{t=1}^{8} \frac{\text{FCF}_t}{(1 + 0.106121)^t} = \$8,580,103 \implies \text{NPV} = \$8,580,103 - \$8,000,000 = +\$580,103$$
     <span class="eq-number">(22)</span>
   </div>
   <p style="color: #b91c1c; font-weight: bold;">決策結論：NPV 仍高達 58 萬美元，營運副總 Dave 據此強烈主張核准推動。</p>
 
   <p><strong>• 【情境三：使用 HCI 專屬客製化真實 WACC（13.4741%）】：</strong></p>
   <div class="word-equation-box">
-    $$	ext{PV}_{inflow} = \sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 0.134741)^t} = \$7,764,816 \implies 	ext{NPV} = \$7,764,816 - \$8,000,000 = -\$235,184$$
+    $$\text{PV}_{inflow} = \sum_{t=1}^{8} \frac{\text{FCF}_t}{(1 + 0.134741)^t} = \$7,764,816 \implies \text{NPV} = \$7,764,816 - \$8,000,000 = -\$235,184$$
     <span class="eq-number">(23)</span>
   </div>
   <div class="teaching-box danger">
@@ -1190,73 +1424,211 @@
     
     <h4 class="heading-3">步驟 1｜以 CAPM 估計 Dell 股權成本</h4>
     <div class="word-equation-box">
-      $$R_e = R_f + eta_L 	imes MRP = 3.50\% + 1.25 	imes 7.50\% = 12.875\%$$
+      $$R_e = R_f + \beta_L \times MRP = 3.50\% + 1.25 \times 7.50\% = 12.875\%$$
     </div>
 
     <h4 class="heading-3">步驟 2｜估計 Dell 稅後債務成本</h4>
     <div class="word-equation-box">
-      $$R_d(1 - T_c) = 6.50\% 	imes (1 - 35\%) = 4.225\%$$
+      $$R_d(1 - T_c) = 6.50\% \times (1 - 35\%) = 4.225\%$$
     </div>
 
     <h4 class="heading-3">步驟 3｜依市場價值計算資本權重</h4>
     <p>Dell 股權市場價值 $E = 87.5 \text{ 億}$；負債市場價值 $D = 31.0 \text{ 億}$；總資本 $V = 118.5 \text{ 億}$。</p>
     <div class="word-equation-box">
-      $$w_E = rac{87.5}{118.5} = 73.8397\%, \quad w_D = rac{31.0}{118.5} = 26.1603\%$$
+      $$w_E = \frac{87.5}{118.5} = 73.8397\%, \quad w_D = \frac{31.0}{118.5} = 26.1603\%$$
     </div>
 
     <h4 class="heading-3">步驟 4｜計算 Dell WACC</h4>
     <div class="word-equation-box">
-      $$	ext{WACC} = w_E 	imes R_e + w_D 	imes R_d(1 - T_c) = 0.738397 	imes 12.875\% + 0.261603 	imes 4.225\% pprox 10.61\%$$
+      $$\text{WACC} = w_E \times R_e + w_D \times R_d(1 - T_c) = 0.738397 \times 12.875\% + 0.261603 \times 4.225\% \approx 10.61\%$$
     </div>
 
-    <h4 class="heading-3">步驟 5｜以 10.61% 評估 HCI 投資</h4>
+    <h4 class="heading-3">步驟 5｜以 10.612% 評估 HCI 投資案（8 年逐年現金流量折現模型）</h4>
+    <p>根據個案第 6 題資料，本項新投資案初始資本支出為 <strong>800 萬美元（$I_0 = -\$8,000,000）</strong>，預估未來 8 年營運自由現金流（FCF）累計達 <strong>1,312 萬美元（$13,120,000）</strong>。若直接套用 Dell 市場價值 WACC（10.6121%）作為折現率，其逐年自由現金流折現與淨現值計算公式如下：</p>
     <div class="word-equation-box">
-      $$	ext{NPV} = \sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 10.61\%)^t} - 8,000,000 pprox +580,000$$
+      $$\text{NPV}_{\text{View 2}} = \sum_{t=1}^{8} \frac{\text{FCF}_t}{(1 + 10.612\%)^t} - 8,000,000 = \$8,580,103 - \$8,000,000 = +\$580,103$$
     </div>
-    <p><em>注意：此數值沿用個案模型提供的折現現值；未附逐年 FCF 資料，故無法在此獨立重算逐年 NPV。</em></p>
-    
-    <div class="table-caption">附表：觀點二評估結果摘要</div>
+    <p>透過數值疊代計算專案內部報酬率（IRR）：</p>
+    <div class="word-equation-box">
+      $$\sum_{t=1}^{8} \frac{\text{FCF}_t}{(1 + \text{IRR})^t} - 8,000,000 = 0 \implies \text{IRR} = 12.6021\% \quad (\text{約 } 12.60\%)$$
+    </div>
+
+    <div class="table-caption">附表 2-A：觀點二 800 萬美元投資案 8 年逐年現金流量折現模型表（Dell 標竿 WACC = 10.612%）</div>
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>年度 (Year)</th>
+            <th>現金流性質說明 (Cash Flow Stream)</th>
+            <th>預估自由現金流 (FCF)</th>
+            <th>折現係數 $(1+10.612\%)^{-t}$</th>
+            <th>折現現值 (PV @ 10.612%)</th>
+            <th>累計流入現值 ($\sum \text{PV}$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Year 0</strong></td>
+            <td>初始產線與資料中心資本支出 ($I_0$)</td>
+            <td class="text-right">-$8,000,000</td>
+            <td class="text-right">1.000000</td>
+            <td class="text-right">-$8,000,000</td>
+            <td class="text-right">-$8,000,000</td>
+          </tr>
+          <tr>
+            <td>Year 1</td>
+            <td>產線量產初年營運現金流</td>
+            <td class="text-right">$1,500,000</td>
+            <td class="text-right">0.904060</td>
+            <td class="text-right">$1,356,091</td>
+            <td class="text-right">$1,356,091</td>
+          </tr>
+          <tr>
+            <td>Year 2</td>
+            <td>營運爬坡期自由現金流</td>
+            <td class="text-right">$1,620,000</td>
+            <td class="text-right">0.817325</td>
+            <td class="text-right">$1,324,082</td>
+            <td class="text-right">$2,680,173</td>
+          </tr>
+          <tr>
+            <td>Year 3</td>
+            <td>穩定放量期自由現金流</td>
+            <td class="text-right">$1,750,000</td>
+            <td class="text-right">0.738927</td>
+            <td class="text-right">$1,293,121</td>
+            <td class="text-right">$3,973,294</td>
+          </tr>
+          <tr>
+            <td>Year 4</td>
+            <td>產能全開高峰期自由現金流</td>
+            <td class="text-right">$1,820,000</td>
+            <td class="text-right">0.667954</td>
+            <td class="text-right">$1,215,820</td>
+            <td class="text-right">$5,189,114</td>
+          </tr>
+          <tr>
+            <td>Year 5</td>
+            <td>成熟期營運自由現金流</td>
+            <td class="text-right">$1,780,000</td>
+            <td class="text-right">0.603886</td>
+            <td class="text-right">$1,075,108</td>
+            <td class="text-right">$6,264,222</td>
+          </tr>
+          <tr>
+            <td>Year 6</td>
+            <td>產品週期後期自由現金流</td>
+            <td class="text-right">$1,680,000</td>
+            <td class="text-right">0.545934</td>
+            <td class="text-right">$917,219</td>
+            <td class="text-right">$7,181,441</td>
+          </tr>
+          <tr>
+            <td>Year 7</td>
+            <td>設備維護與更新期現金流</td>
+            <td class="text-right">$1,550,000</td>
+            <td class="text-right">0.493556</td>
+            <td class="text-right">$765,116</td>
+            <td class="text-right">$7,946,557</td>
+          </tr>
+          <tr>
+            <td>Year 8</td>
+            <td>終期營運現金流＋殘值與營運資金回收</td>
+            <td class="text-right">$1,420,000</td>
+            <td class="text-right">0.446210</td>
+            <td class="text-right">$633,546</td>
+            <td class="text-right">$8,580,103</td>
+          </tr>
+          <tr style="border-top: 2px solid #cbd5e1; background-color: #f1f5f9; font-weight: bold;">
+            <td colspan="2"><strong>未來 8 年營運自由現金流入總和 (PV of Inflows)</strong></td>
+            <td class="text-right">$13,120,000</td>
+            <td class="text-center">——</td>
+            <td class="text-right highlight-cell"><strong>$8,580,103</strong></td>
+            <td class="text-right highlight-cell"><strong>$8,580,103</strong></td>
+          </tr>
+          <tr style="background-color: #f8fafc;">
+            <td colspan="2"><strong>扣除：第 0 期初始資本支出 (Initial Outlay)</strong></td>
+            <td class="text-right">-$8,000,000</td>
+            <td class="text-center">——</td>
+            <td class="text-right">-$8,000,000</td>
+            <td class="text-center">——</td>
+          </tr>
+          <tr style="background-color: #f0fdf4; font-weight: bold;">
+            <td colspan="2"><strong>專案淨現值 (Net Present Value, NPV)</strong></td>
+            <td class="text-right">名目 +$5.12M</td>
+            <td class="text-center">——</td>
+            <td class="text-right" style="color: #16a34a; font-size: 16px;"><strong>+$580,103</strong></td>
+            <td class="text-right" style="color: #16a34a;"><strong>約 ＋58.0 萬美元</strong></td>
+          </tr>
+          <tr style="background-color: #f8fafc;">
+            <td colspan="2"><strong>專案內部報酬率 (Internal Rate of Return, IRR)</strong></td>
+            <td class="text-right"><strong>12.602%</strong></td>
+            <td class="text-center">——</td>
+            <td class="text-right" colspan="2" style="color: #16a34a; font-weight: bold;">IRR (12.60%) > WACC (10.61%)，超額 +1.99%</td>
+          </tr>
+          <tr style="background-color: #f0fdf4;">
+            <td colspan="2"><strong>資本預算決策判定 (Decision)</strong></td>
+            <td class="text-center" colspan="4" style="color: #16a34a; font-weight: bold; font-size: 15.5px;">
+              ✅ NPV > 0 且 IRR > WACC，財務決策：接受原投資方案 (Accept)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-caption">附表：觀點二評估結果摘要與指標對照</div>
     <div class="table-container">
       <table class="data-table">
         <thead>
           <tr>
             <th>評估項目</th>
-            <th>觀點二結果</th>
+            <th>觀點二精算結果</th>
+            <th>指標涵義與決策意涵</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>初始投資</td>
-            <td class="text-right">800 萬美元</td>
+            <td>初始資本支出 ($I_0$)</td>
+            <td class="text-right">-$8,000,000 美元</td>
+            <td>產線自動化改造與專屬資料中心建置成本</td>
           </tr>
           <tr>
-            <td>折現率</td>
-            <td class="text-right">10.61%</td>
+            <td>套用折現率 (Dell WACC)</td>
+            <td class="text-right">10.612%</td>
+            <td>直接沿用標竿企業 Dell 之市場加權資金成本</td>
           </tr>
           <tr>
-            <td>未來現金流量折現總現值（個案模型）</td>
-            <td class="text-right">約 858 萬美元</td>
+            <td>未來 8 年自由現金流總額</td>
+            <td class="text-right">$13,120,000 美元</td>
+            <td>名目現金流入總和（未折現）</td>
           </tr>
           <tr>
-            <td>NPV（個案模型）</td>
-            <td class="text-right" style="color: #16a34a; font-weight: bold;">約 ＋58 萬美元</td>
+            <td>現金流入折現總現值 (PV)</td>
+            <td class="text-right highlight-cell">$8,580,103 美元</td>
+            <td>按 10.612% 折現後之未來現金流總價值</td>
           </tr>
           <tr>
-            <td>IRR（個案模型）</td>
-            <td class="text-right">12.60%</td>
+            <td>專案淨現值 (NPV)</td>
+            <td class="text-right" style="color: #16a34a; font-weight: bold; font-size: 16px;">+$580,103 美元</td>
+            <td class="highlight-cell">創造股東價值逾 58 萬美元，表面利多</td>
           </tr>
           <tr>
-            <td>判斷</td>
-            <td class="highlight-cell">NPV > 0，接受原方案</td>
+            <td>內部報酬率 (IRR)</td>
+            <td class="text-right">12.602%</td>
+            <td>專案內生年化回報率，高於要求報酬率 1.99%</td>
+          </tr>
+          <tr>
+            <td>最終決策判定</td>
+            <td class="highlight-cell" style="color: #16a34a; font-weight: bold;">接受方案 (Accept)</td>
+            <td>營運副總據此主張立即簽約推動</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div class="teaching-box warning">
-      <strong>方法限制：</strong>Dell 與 HCI 的負債權重、借款成本及可能的企業特有估值條件不同，不能僅因產品相似便推定 WACC 相同。
-    </div>
-  </div>
+      <strong>方法限制：</strong>Dell 與 HCI 的負債權重（26.16% vs. 30.00%）、借款成本（6.50% vs. 7.20%）及企業規模與流動性條件顯著不同，不能僅因業務產品相似便推定其加權資本成本相同。直接套用 Dell WACC 忽略了 HCI 的特有風險溢酬，易產生過度樂觀之決策幻覺。
+    </div></div>
 
   <!-- 觀點三卡片 -->
   <div class="view-card view-3">
@@ -1315,36 +1687,169 @@
 
     <h4 class="heading-3">步驟 1｜Dell 去槓桿 Beta</h4>
     <div class="word-equation-box">
-      $$eta_U = rac{eta_L}{1 + (1 - T_c)\left(rac{D}{E}ight)} = rac{1.25}{1 + 0.65 	imes \left(rac{31}{87.5}ight)} pprox 1.0160$$
+      $$\beta_U = \frac{\beta_L}{1 + (1 - T_c)\left(\frac{D}{E}\right)} = \frac{1.25}{1 + 0.65 \times \left(\frac{31}{87.5}\right)} \approx 1.0160$$
     </div>
 
     <h4 class="heading-3">步驟 2｜按 HCI 目標資本結構重新加槓桿</h4>
     <p>HCI 目標 $D/E = 30\% / 70\% = 0.428571$</p>
     <div class="word-equation-box">
-      $$eta_{L,HCI} = eta_U 	imes \left[ 1 + (1 - T_c)\left(rac{D}{E}ight) ight] pprox 1.0160 	imes [1 + 0.65 	imes 0.428571] pprox 1.2991$$
+      $$\beta_{L,HCI} = \beta_U \times \left[ 1 + (1 - T_c)\left(\frac{D}{E}\right) \right] \approx 1.0160 \times [1 + 0.65 \times 0.428571] \approx 1.2991$$
     </div>
 
     <h4 class="heading-3">步驟 3｜擴充 CAPM 估計 HCI 股權成本</h4>
     <div class="word-equation-box">
-      $$R_{e,HCI} = R_f + eta_{L,HCI} 	imes MRP + 	ext{規模溢酬} + 	ext{流動性溢酬}$$
+      $$R_{e,HCI} = R_f + \beta_{L,HCI} \times MRP + \text{規模溢酬} + \text{流動性溢酬}$$
     </div>
     <div class="word-equation-box">
-      $$= 3.50\% + 1.2991 	imes 7.50\% + 2.50\% + 1.50\% pprox 17.24\%$$
+      $$= 3.50\% + 1.2991 \times 7.50\% + 2.50\% + 1.50\% \approx 17.24\%$$
     </div>
 
     <h4 class="heading-3">步驟 4｜HCI 稅後債務成本</h4>
     <div class="word-equation-box">
-      $$R_d(1 - T_c) = 7.20\% 	imes (1 - 35\%) = 4.68\%$$
+      $$R_d(1 - T_c) = 7.20\% \times (1 - 35\%) = 4.68\%$$
     </div>
 
     <h4 class="heading-3">步驟 5｜HCI WACC</h4>
     <div class="word-equation-box">
-      $$	ext{WACC}_{HCI} = 70\% 	imes 17.24\% + 30\% 	imes 4.68\% pprox 13.47\% \quad (	ext{採未四捨五入中間值計算})$$
+      $$\text{WACC}_{HCI} = 70\% \times 17.24\% + 30\% \times 4.68\% \approx 13.47\% \quad (\text{採未四捨五入中間值計算})$$
     </div>
 
-    <h4 class="heading-3">步驟 6｜投資判斷</h4>
-    <p>個案模型：折現率約 13.47% 時，<strong>NPV 約 −23.5 萬美元</strong>；IRR 仍為 12.60%。因 <strong>IRR &lt; WACC 且 NPV &lt; 0</strong>，拒絕原條件下的 800 萬投資方案。</p>
-  </div>
+    <h4 class="heading-3">步驟 6｜以 13.474% 評估 HCI 投資案（8 年逐年現金流量折現模型）</h4>
+    <p>在嚴謹反映 HCI 專屬財務槓桿、借款利率溢價（7.20% vs. 6.50%）、非上市規模風險溢酬（2.50%）及缺乏流動性折價（1.50%）後，HCI 真實加權平均資金成本應為 <strong>13.4741%（約 13.47%）</strong>。以其評估 800 萬美元新投資案之折現公式與逐年精算模型如下：</p>
+    <div class="word-equation-box">
+      $$\text{NPV}_{\text{View 3}} = \sum_{t=1}^{8} \frac{\text{FCF}_t}{(1 + 13.474\%)^t} - 8,000,000 = \$7,764,816 - \$8,000,000 = -\$235,184$$
+    </div>
+    <p>專案內部報酬率（IRR）依然由現金流本身決定，保持在 <strong>12.6021%</strong>。然而，因專案內生報酬率低於資本成本門檻：</p>
+    <div class="word-equation-box">
+      $$\text{IRR} = 12.602\% < \text{WACC}_{\text{HCI}} = 13.474\% \implies \text{報酬短缺 } -0.872\%$$
+    </div>
+
+    <div class="table-caption">附表 2-B：觀點三 800 萬美元投資案 8 年逐年現金流量折現模型表（HCI 真實 WACC = 13.474%）</div>
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>年度 (Year)</th>
+            <th>現金流性質說明 (Cash Flow Stream)</th>
+            <th>預估自由現金流 (FCF)</th>
+            <th>折現係數 $(1+13.474\%)^{-t}$</th>
+            <th>折現現值 (PV @ 13.474%)</th>
+            <th>累計流入現值 ($\sum \text{PV}$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Year 0</strong></td>
+            <td>初始產線與資料中心資本支出 ($I_0$)</td>
+            <td class="text-right">-$8,000,000</td>
+            <td class="text-right">1.000000</td>
+            <td class="text-right">-$8,000,000</td>
+            <td class="text-right">-$8,000,000</td>
+          </tr>
+          <tr>
+            <td>Year 1</td>
+            <td>產線量產初年營運現金流</td>
+            <td class="text-right">$1,500,000</td>
+            <td class="text-right">0.881257</td>
+            <td class="text-right">$1,321,885</td>
+            <td class="text-right">$1,321,885</td>
+          </tr>
+          <tr>
+            <td>Year 2</td>
+            <td>營運爬坡期自由現金流</td>
+            <td class="text-right">$1,620,000</td>
+            <td class="text-right">0.776617</td>
+            <td class="text-right">$1,258,011</td>
+            <td class="text-right">$2,579,896</td>
+          </tr>
+          <tr>
+            <td>Year 3</td>
+            <td>穩定放量期自由現金流</td>
+            <td class="text-right">$1,750,000</td>
+            <td class="text-right">0.684398</td>
+            <td class="text-right">$1,202,305</td>
+            <td class="text-right">$3,782,201</td>
+          </tr>
+          <tr>
+            <td>Year 4</td>
+            <td>產能全開高峰期自由現金流</td>
+            <td class="text-right">$1,820,000</td>
+            <td class="text-right">0.603126</td>
+            <td class="text-right">$1,101,846</td>
+            <td class="text-right">$4,884,047</td>
+          </tr>
+          <tr>
+            <td>Year 5</td>
+            <td>成熟期營運自由現金流</td>
+            <td class="text-right">$1,780,000</td>
+            <td class="text-right">0.531508</td>
+            <td class="text-right">$950,229</td>
+            <td class="text-right">$5,834,276</td>
+          </tr>
+          <tr>
+            <td>Year 6</td>
+            <td>產品週期後期自由現金流</td>
+            <td class="text-right">$1,680,000</td>
+            <td class="text-right">0.468388</td>
+            <td class="text-right">$790,576</td>
+            <td class="text-right">$6,624,852</td>
+          </tr>
+          <tr>
+            <td>Year 7</td>
+            <td>設備維護與更新期現金流</td>
+            <td class="text-right">$1,550,000</td>
+            <td class="text-right">0.412773</td>
+            <td class="text-right">$642,881</td>
+            <td class="text-right">$7,267,733</td>
+          </tr>
+          <tr>
+            <td>Year 8</td>
+            <td>終期營運現金流＋殘值與營運資金回收</td>
+            <td class="text-right">$1,420,000</td>
+            <td class="text-right">0.363764</td>
+            <td class="text-right">$497,083</td>
+            <td class="text-right">$7,764,816</td>
+          </tr>
+          <tr style="border-top: 2px solid #cbd5e1; background-color: #f1f5f9; font-weight: bold;">
+            <td colspan="2"><strong>未來 8 年營運自由現金流入總和 (PV of Inflows)</strong></td>
+            <td class="text-right">$13,120,000</td>
+            <td class="text-center">——</td>
+            <td class="text-right highlight-cell"><strong>$7,764,816</strong></td>
+            <td class="text-right highlight-cell"><strong>$7,764,816</strong></td>
+          </tr>
+          <tr style="background-color: #f8fafc;">
+            <td colspan="2"><strong>扣除：第 0 期初始資本支出 (Initial Outlay)</strong></td>
+            <td class="text-right">-$8,000,000</td>
+            <td class="text-center">——</td>
+            <td class="text-right">-$8,000,000</td>
+            <td class="text-center">——</td>
+          </tr>
+          <tr style="background-color: #fef2f2; font-weight: bold;">
+            <td colspan="2"><strong>專案淨現值 (Net Present Value, NPV)</strong></td>
+            <td class="text-right">名目 +$5.12M</td>
+            <td class="text-center">——</td>
+            <td class="text-right danger-cell" style="font-size: 16px;"><strong>-$235,184</strong></td>
+            <td class="text-right danger-cell"><strong>實質虧損 −23.5 萬美元</strong></td>
+          </tr>
+          <tr style="background-color: #f8fafc;">
+            <td colspan="2"><strong>專案內部報酬率 (Internal Rate of Return, IRR)</strong></td>
+            <td class="text-right"><strong>12.602%</strong></td>
+            <td class="text-center">——</td>
+            <td class="text-right danger-cell" colspan="2">IRR (12.60%) < WACC (13.47%)，短缺 -0.872%</td>
+          </tr>
+          <tr style="background-color: #fef2f2;">
+            <td colspan="2"><strong>資本預算決策判定 (Decision)</strong></td>
+            <td class="text-center danger-cell" colspan="4" style="font-size: 15.5px;">
+              ❌ NPV &lt; 0 且 IRR &lt; WACC，財務決策：<strong>堅決駁回原投資方案 (Reject)</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="teaching-box danger">
+      <strong>觀點三精算結論：</strong>折現率由 10.612% 上修至 13.474% 後，8 年自由現金流入之現值由 858 萬美元萎縮至 776 萬美元，<strong>導致專案淨現值出現 -$235,184 美元的實質赤字</strong>。原案每投入 1 美元資本，預計蒸發 2.94 美分價值，董事會若盲目核准將直接傷害股東利益！
+    </div></div>
 
   <!-- 兩種觀點比較與教學提醒 -->
   <h3 class="heading-2">兩種觀點比較與教學提醒</h3>
@@ -1403,6 +1908,694 @@
       </tbody>
     </table>
   </div>
+
+  <!-- 附表 2-C：差距透視表 -->
+  <div class="table-caption">附表 2-C：觀點二 vs. 觀點三 逐年現金流折現差距透視表（Discounting Gap & Value Erosion Analysis）</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>年度 ($t$)</th>
+          <th>預估自由現金流 ($\text{FCF}_t$)</th>
+          <th>觀點二現值 (PV @ 10.612%)</th>
+          <th>觀點三現值 (PV @ 13.474%)</th>
+          <th>當期現值差距 ($\Delta \text{PV} = \text{PV}_2 - \text{PV}_3$)</th>
+          <th>累計折現差距 ($\sum \Delta \text{PV}$)</th>
+          <th>現值侵蝕率 ($\Delta \text{PV} / \text{PV}_2$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Year 1</td>
+          <td class="text-right">$1,500,000</td>
+          <td class="text-right">$1,356,091</td>
+          <td class="text-right">$1,321,885</td>
+          <td class="text-right" style="color: #b91c1c; font-weight: bold;">+$34,206</td>
+          <td class="text-right">$34,206</td>
+          <td class="text-right">2.52%</td>
+        </tr>
+        <tr>
+          <td>Year 2</td>
+          <td class="text-right">$1,620,000</td>
+          <td class="text-right">$1,324,082</td>
+          <td class="text-right">$1,258,011</td>
+          <td class="text-right" style="color: #b91c1c; font-weight: bold;">+$66,071</td>
+          <td class="text-right">$100,277</td>
+          <td class="text-right">4.99%</td>
+        </tr>
+        <tr>
+          <td>Year 3</td>
+          <td class="text-right">$1,750,000</td>
+          <td class="text-right">$1,293,121</td>
+          <td class="text-right">$1,202,305</td>
+          <td class="text-right" style="color: #b91c1c; font-weight: bold;">+$90,816</td>
+          <td class="text-right">$191,093</td>
+          <td class="text-right">7.02%</td>
+        </tr>
+        <tr>
+          <td>Year 4</td>
+          <td class="text-right">$1,820,000</td>
+          <td class="text-right">$1,215,820</td>
+          <td class="text-right">$1,101,846</td>
+          <td class="text-right" style="color: #b91c1c; font-weight: bold;">+$113,974</td>
+          <td class="text-right">$305,067</td>
+          <td class="text-right">9.37%</td>
+        </tr>
+        <tr>
+          <td>Year 5</td>
+          <td class="text-right">$1,780,000</td>
+          <td class="text-right">$1,075,108</td>
+          <td class="text-right">$950,229</td>
+          <td class="text-right" style="color: #b91c1c; font-weight: bold;">+$124,879</td>
+          <td class="text-right">$429,946</td>
+          <td class="text-right">11.62%</td>
+        </tr>
+        <tr>
+          <td>Year 6</td>
+          <td class="text-right">$1,680,000</td>
+          <td class="text-right">$917,219</td>
+          <td class="text-right">$790,576</td>
+          <td class="text-right" style="color: #b91c1c; font-weight: bold;">+$126,643</td>
+          <td class="text-right">$556,589</td>
+          <td class="text-right">13.81%</td>
+        </tr>
+        <tr>
+          <td>Year 7</td>
+          <td class="text-right">$1,550,000</td>
+          <td class="text-right">$765,116</td>
+          <td class="text-right">$642,881</td>
+          <td class="text-right" style="color: #b91c1c; font-weight: bold;">+$122,235</td>
+          <td class="text-right">$678,824</td>
+          <td class="text-right">15.98%</td>
+        </tr>
+        <tr>
+          <td>Year 8</td>
+          <td class="text-right">$1,420,000</td>
+          <td class="text-right">$633,546</td>
+          <td class="text-right">$497,083</td>
+          <td class="text-right" style="color: #b91c1c; font-weight: bold;">+$136,463</td>
+          <td class="text-right highlight-cell" style="font-weight: bold; color: #b91c1c;">$815,287</td>
+          <td class="text-right" style="font-weight: bold; color: #b91c1c;">21.54%</td>
+        </tr>
+        <tr style="border-top: 2px solid #cbd5e1; background-color: #f1f5f9; font-weight: bold;">
+          <td><strong>流入現值總計 (Inflow PV)</strong></td>
+          <td class="text-right"><strong>$13,120,000</strong></td>
+          <td class="text-right highlight-cell"><strong>$8,580,103</strong></td>
+          <td class="text-right highlight-cell"><strong>$7,764,816</strong></td>
+          <td class="text-right danger-cell" style="font-size: 15.5px;"><strong>+$815,287</strong></td>
+          <td class="text-right danger-cell" style="font-size: 15.5px;"><strong>+$815,287</strong></td>
+          <td class="text-right danger-cell"><strong>9.50%</strong></td>
+        </tr>
+        <tr style="background-color: #f8fafc;">
+          <td>初始資本支出 ($I_0$)</td>
+          <td class="text-right">-$8,000,000</td>
+          <td class="text-right">-$8,000,000</td>
+          <td class="text-right">-$8,000,000</td>
+          <td class="text-center">$0</td>
+          <td class="text-center">——</td>
+          <td class="text-center">——</td>
+        </tr>
+        <tr style="border-top: 2px solid #94a3b8; font-weight: bold; background-color: #fffbeb;">
+          <td><strong>專案淨現值 (NPV)</strong></td>
+          <td class="text-right">名目 +$5.12M</td>
+          <td class="text-right" style="color: #16a34a; font-size: 16px;"><strong>+$580,103</strong></td>
+          <td class="text-right" style="color: #dc2626; font-size: 16px;"><strong>-$235,184</strong></td>
+          <td class="text-right danger-cell" style="font-size: 16px;"><strong>+$815,287</strong></td>
+          <td class="text-center" colspan="2" style="color: #b91c1c; font-weight: bold;">
+            ⚡ 累計差距高達 81.5 萬美元，導致決策「通過 ➔ 駁回」大翻轉！
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="teaching-box danger">
+    <div class="teaching-box-title">🔍 財務工程關鍵洞察：遠期現金流的指數級折現侵蝕效應</div>
+    觀察上表可發現：折現率相差 2.862%（13.474% vs. 10.612%）的複利威力，會隨時間呈現顯著的<strong>指數放大效應</strong>。
+    第 1 年的現值侵蝕率僅為 <strong>2.52%</strong>（差距 3.4 萬美元），但到了第 8 年，現值侵蝕率急遽膨脹至 <strong>21.54%</strong>（差距 13.6 萬美元）！
+    8 年累計侵蝕達 <strong>815,287 美元</strong>，硬生生將專案原先表面上看似豐厚的 58 萬美元淨利潤吞噬殆盡，轉為虧損 23.5 萬美元。這正是「純業務法進行風險調整」對企業長期重資本投資決策具有決定性生死影響的最佳實證教材！
+  </div>
+
+  <!-- 即時互動試算模型 -->
+  <div class="sim-container" id="simulator-section">
+    <div class="sim-header">
+      <div class="sim-title">
+        <span>🎮</span> 觀點二與觀點三 即時互動試算模型（Interactive WACC & Capital Budgeting Simulator）
+      </div>
+      <div class="sim-desc">
+        本互動模組提供即時參數微調功能。您可以拖曳滑桿或鍵入數值，觀察 CAPM、純業務去槓桿/加槓桿（Hamada）、非上市規模/流動性溢酬及資本支出規模，如何即時聯動兩大觀點之 WACC、逐年現金流折現與最終淨現值（NPV）決策判定！
+      </div>
+    </div>
+
+    <!-- 快速情境按鈕 -->
+    <div class="sim-presets">
+      <span style="font-size: 13.5px; font-weight: bold; color: #1e3a8a; display: flex; align-items: center;">⚡ 快速情境切換：</span>
+      <button class="sim-preset-btn active" id="btn-case-baseline" onclick="applyPreset('baseline')">📌 個案基準情境 (Case Baseline)</button>
+      <button class="sim-preset-btn" id="btn-no-premiums" onclick="applyPreset('no_premiums')">⚖️ 剔除 4% 額外溢酬 (0% Size/Liq)</button>
+      <button class="sim-preset-btn" id="btn-low-interest" onclick="applyPreset('low_interest')">📉 降息宏觀情境 (Rf = 2.5%)</button>
+      <button class="sim-preset-btn" id="btn-supplier-discount" onclick="applyPreset('supplier_discount')">🤝 設備降價談判 (720 萬支出)</button>
+      <button class="sim-preset-btn reset" onclick="applyPreset('reset')">🔄 重設為初始預設值</button>
+    </div>
+
+    <!-- 控制面板網格 -->
+    <div class="sim-grid">
+      <!-- 宏觀與市場環境 -->
+      <div class="sim-card market-card">
+        <div class="sim-card-title">🌐 宏觀與市場基準參數</div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>無風險利率 ($R_f$)：</span>
+            <span class="sim-val-display" id="disp-rf">3.50%</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-rf" min="1.0" max="7.0" step="0.05" value="3.50" oninput="syncParam('rf', this.value)">
+            <input type="number" id="num-rf" min="1.0" max="7.0" step="0.05" value="3.50" oninput="syncParam('rf', this.value)">
+          </div>
+        </div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>市場風險溢酬 (MRP)：</span>
+            <span class="sim-val-display" id="disp-mrp">7.50%</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-mrp" min="4.0" max="10.0" step="0.1" value="7.50" oninput="syncParam('mrp', this.value)">
+            <input type="number" id="num-mrp" min="4.0" max="10.0" step="0.1" value="7.50" oninput="syncParam('mrp', this.value)">
+          </div>
+        </div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>企業所得稅率 ($T_c$)：</span>
+            <span class="sim-val-display" id="disp-tc">35.0%</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-tc" min="15.0" max="45.0" step="0.5" value="35.0" oninput="syncParam('tc', this.value)">
+            <input type="number" id="num-tc" min="15.0" max="45.0" step="0.5" value="35.0" oninput="syncParam('tc', this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!-- 標竿企業 Dell 參數 -->
+      <div class="sim-card dell-card">
+        <div class="sim-card-title">💻 標竿企業 Dell 參數（觀點二）</div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>Dell 股權 Beta ($\beta_{L,\text{Dell}}$)：</span>
+            <span class="sim-val-display" id="disp-beta-dell">1.250</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-beta-dell" min="0.6" max="2.2" step="0.01" value="1.25" oninput="syncParam('beta_dell', this.value)">
+            <input type="number" id="num-beta-dell" min="0.6" max="2.2" step="0.01" value="1.25" oninput="syncParam('beta_dell', this.value)">
+          </div>
+        </div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>Dell 稅前債務利率 ($R_{d,\text{Dell}}$)：</span>
+            <span class="sim-val-display" id="disp-rd-dell">6.50%</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-rd-dell" min="3.0" max="11.0" step="0.05" value="6.50" oninput="syncParam('rd_dell', this.value)">
+            <input type="number" id="num-rd-dell" min="3.0" max="11.0" step="0.05" value="6.50" oninput="syncParam('rd_dell', this.value)">
+          </div>
+        </div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>Dell 負債市值 ($D$) / 股權市值 ($E$)：</span>
+            <span class="sim-val-display" id="disp-dell-cap">$31.0B / $87.5B</span>
+          </div>
+          <div class="sim-range-row" style="font-size: 12.5px; color: #64748b;">
+            <span>D: 31.0 億 / E: 87.5 億 (市值負債比 26.16%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 目標企業 HCI 專屬調整 -->
+      <div class="sim-card hci-card">
+        <div class="sim-card-title">🏢 目標企業 HCI 專屬調整（觀點三）</div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>HCI 目標負債權重 ($w_d$)：</span>
+            <span class="sim-val-display" id="disp-wd-hci">30.0%</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-wd-hci" min="10.0" max="60.0" step="1.0" value="30.0" oninput="syncParam('wd_hci', this.value)">
+            <input type="number" id="num-wd-hci" min="10.0" max="60.0" step="1.0" value="30.0" oninput="syncParam('wd_hci', this.value)">
+          </div>
+        </div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>HCI 稅前借款利率 ($R_{d,\text{HCI}}$)：</span>
+            <span class="sim-val-display" id="disp-rd-hci">7.20%</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-rd-hci" min="4.0" max="13.0" step="0.05" value="7.20" oninput="syncParam('rd_hci', this.value)">
+            <input type="number" id="num-rd-hci" min="4.0" max="13.0" step="0.05" value="7.20" oninput="syncParam('rd_hci', this.value)">
+          </div>
+        </div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>規模溢酬 (Size) + 流動性溢酬 (Liq)：</span>
+            <span class="sim-val-display" id="disp-premiums">2.50% + 1.50% = 4.00%</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-size" min="0.0" max="5.0" step="0.1" value="2.50" oninput="syncParam('size', this.value)" title="規模溢酬">
+            <input type="range" id="input-liq" min="0.0" max="4.0" step="0.1" value="1.50" oninput="syncParam('liq', this.value)" title="流動性溢酬">
+          </div>
+        </div>
+      </div>
+
+      <!-- 專案支出與投資條件 -->
+      <div class="sim-card proj-card">
+        <div class="sim-card-title">📊 專案資本支出與投資條件</div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>初始資本支出 ($I_0$)：</span>
+            <span class="sim-val-display" id="disp-inv">$800 萬美元</span>
+          </div>
+          <div class="sim-range-row">
+            <input type="range" id="input-inv" min="600" max="1000" step="10" value="800" oninput="syncParam('inv', this.value)">
+            <input type="number" id="num-inv" min="600" max="1000" step="10" value="800" oninput="syncParam('inv', this.value)">
+          </div>
+        </div>
+        <div class="sim-control-group">
+          <div class="sim-label-row">
+            <span>8 年累計名目 FCF：</span>
+            <span class="sim-val-display">$13,120,000 美元</span>
+          </div>
+          <div style="font-size: 12.5px; color: #64748b; line-height: 1.5;">
+            Y1: $1.5M, Y2: $1.62M, Y3: $1.75M, Y4: $1.82M, Y5: $1.78M, Y6: $1.68M, Y7: $1.55M, Y8: $1.42M
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 即時決策大看板 -->
+    <div class="sim-kpi-grid">
+      <!-- 觀點二卡片 -->
+      <div class="sim-kpi-card view2-kpi">
+        <div>
+          <div class="kpi-title">
+            <span>觀點二｜Dell 標竿直接套用</span>
+            <span class="kpi-badge badge-accept" id="badge-view2">✅ 接受 (ACCEPT)</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>加權資本成本 (WACC)：</span>
+            <span class="kpi-stat-val" id="kpi-wacc2" style="font-size: 16px; color: #15803d;">10.612%</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>股權成本 ($R_e$) / 稅後債務：</span>
+            <span class="kpi-stat-val" id="kpi-cost2">12.875% / 4.225%</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>未來 8 年現金流折現總現值：</span>
+            <span class="kpi-stat-val" id="kpi-pv2">$8,580,103</span>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-npv-large kpi-npv-positive" id="kpi-npv2">+$580,103</div>
+          <div class="kpi-decision-text" id="kpi-dec2" style="color: #15803d;">
+            NPV > 0 且 IRR > WACC ➔ 建議核准
+          </div>
+        </div>
+      </div>
+
+      <!-- 觀點三卡片 -->
+      <div class="sim-kpi-card view3-kpi">
+        <div>
+          <div class="kpi-title">
+            <span>觀點三｜HCI 風險調整 WACC</span>
+            <span class="kpi-badge badge-reject" id="badge-view3">❌ 駁回 (REJECT)</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>加權資本成本 (WACC)：</span>
+            <span class="kpi-stat-val" id="kpi-wacc3" style="font-size: 16px; color: #b91c1c;">13.474%</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>$\beta_U$ 1.016 ➔ 加槓桿 $\beta_{L,\text{HCI}}$：</span>
+            <span class="kpi-stat-val" id="kpi-beta-hci">1.2991</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>股權成本 ($R_e$) / 稅後債務：</span>
+            <span class="kpi-stat-val" id="kpi-cost3">17.243% / 4.680%</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>未來 8 年現金流折現總現值：</span>
+            <span class="kpi-stat-val" id="kpi-pv3">$7,764,816</span>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-npv-large kpi-npv-negative" id="kpi-npv3">-$235,184</div>
+          <div class="kpi-decision-text" id="kpi-dec3" style="color: #b91c1c;">
+            NPV &lt; 0 且 IRR &lt; WACC ➔ 實質虧損，堅決駁回
+          </div>
+        </div>
+      </div>
+
+      <!-- 兩者差異與決策落差卡片 -->
+      <div class="sim-kpi-card diff-kpi">
+        <div>
+          <div class="kpi-title">
+            <span>決策落差與財務衝擊透視</span>
+            <span class="kpi-badge" id="badge-impact" style="background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;">⚡ 決策大逆轉</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>資本成本利差 ($\Delta \text{WACC}$)：</span>
+            <span class="kpi-stat-val" id="kpi-diff-wacc" style="color: #b91c1c;">+2.862%</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>專案內部報酬率 (IRR)：</span>
+            <span class="kpi-stat-val" id="kpi-irr" style="font-size: 15px; font-weight: bold; color: #0f172a;">12.602%</span>
+          </div>
+          <div class="kpi-stat-row">
+            <span>8 年現值折現總侵蝕金額：</span>
+            <span class="kpi-stat-val" id="kpi-diff-pv" style="color: #b91c1c; font-weight: bold;">$815,287</span>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-npv-large" id="kpi-diff-npv" style="color: #1e40af;">+$815,287</div>
+          <div class="kpi-decision-text" id="kpi-diff-msg" style="color: #1e40af;">
+            觀點二虛增 81.5 萬美元利潤幻覺
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 動態逐年折現對照表 -->
+    <div class="table-caption">即時動態精算表：8 年現金流量折現與決策差距隨時動態變更</div>
+    <div class="table-container">
+      <table class="data-table" id="sim-dynamic-table">
+        <thead>
+          <tr>
+            <th>年度 (Year)</th>
+            <th>名目現金流 (FCF)</th>
+            <th>觀點二現值 (PV @ <span id="th-wacc2">10.61%</span>)</th>
+            <th>觀點三現值 (PV @ <span id="th-wacc3">13.47%</span>)</th>
+            <th>當期折現差距 ($\Delta \text{PV}$)</th>
+            <th>累計折現差距</th>
+          </tr>
+        </thead>
+        <tbody id="sim-dynamic-tbody">
+          <!-- 由 JavaScript 即時渲染 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // 財務核心資料與初始預設值
+    const DEFAULT_PARAMS = {
+      rf: 3.50,
+      mrp: 7.50,
+      tc: 35.0,
+      beta_dell: 1.25,
+      rd_dell: 6.50,
+      d_dell: 31.0,
+      e_dell: 87.5,
+      wd_hci: 30.0,
+      rd_hci: 7.20,
+      size: 2.50,
+      liq: 1.50,
+      inv: 800
+    };
+
+    let params = Object.assign({}, DEFAULT_PARAMS);
+    const FCFS = [1500000, 1620000, 1750000, 1820000, 1780000, 1680000, 1550000, 1420000];
+
+    function formatMoney(num) {
+      const isNeg = num < 0;
+      const absVal = Math.abs(Math.round(num));
+      return (isNeg ? '-$' : '$') + absVal.toLocaleString('en-US');
+    }
+
+    function formatSignedMoney(num) {
+      const isNeg = num < 0;
+      const absVal = Math.abs(Math.round(num));
+      return (isNeg ? '-$' : '+$') + absVal.toLocaleString('en-US');
+    }
+
+    function syncParam(key, val) {
+      val = parseFloat(val);
+      if (isNaN(val)) return;
+      params[key] = val;
+
+      // 同步輸入控制項
+      const rangeEl = document.getElementById('input-' + key.replace('_', '-'));
+      const numEl = document.getElementById('num-' + key.replace('_', '-'));
+      if (rangeEl && rangeEl.value != val) rangeEl.value = val;
+      if (numEl && numEl.value != val) numEl.value = val;
+
+      // 更新顯示文字
+      if (key === 'rf') document.getElementById('disp-rf').textContent = val.toFixed(2) + '%';
+      if (key === 'mrp') document.getElementById('disp-mrp').textContent = val.toFixed(2) + '%';
+      if (key === 'tc') document.getElementById('disp-tc').textContent = val.toFixed(1) + '%';
+      if (key === 'beta_dell') document.getElementById('disp-beta-dell').textContent = val.toFixed(3);
+      if (key === 'rd_dell') document.getElementById('disp-rd-dell').textContent = val.toFixed(2) + '%';
+      if (key === 'wd_hci') document.getElementById('disp-wd-hci').textContent = val.toFixed(1) + '%';
+      if (key === 'rd_hci') document.getElementById('disp-rd-hci').textContent = val.toFixed(2) + '%';
+      if (key === 'size' || key === 'liq') {
+        document.getElementById('disp-premiums').textContent = 
+          params.size.toFixed(2) + '% + ' + params.liq.toFixed(2) + '% = ' + (params.size + params.liq).toFixed(2) + '%';
+      }
+      if (key === 'inv') document.getElementById('disp-inv').textContent = '$' + val + ' 萬美元';
+
+      recalcSimulator();
+    }
+
+    function applyPreset(presetType) {
+      document.querySelectorAll('.sim-preset-btn').forEach(b => b.classList.remove('active'));
+      
+      if (presetType === 'baseline') {
+        params = Object.assign({}, DEFAULT_PARAMS);
+        document.getElementById('btn-case-baseline').classList.add('active');
+      } else if (presetType === 'no_premiums') {
+        params = Object.assign({}, DEFAULT_PARAMS, { size: 0.0, liq: 0.0 });
+        document.getElementById('btn-no-premiums').classList.add('active');
+      } else if (presetType === 'low_interest') {
+        params = Object.assign({}, DEFAULT_PARAMS, { rf: 2.50, mrp: 7.00 });
+        document.getElementById('btn-low-interest').classList.add('active');
+      } else if (presetType === 'supplier_discount') {
+        params = Object.assign({}, DEFAULT_PARAMS, { inv: 720 });
+        document.getElementById('btn-supplier-discount').classList.add('active');
+      } else if (presetType === 'reset') {
+        params = Object.assign({}, DEFAULT_PARAMS);
+        document.getElementById('btn-case-baseline').classList.add('active');
+      }
+
+      // 同步所有 UI 控制項
+      for (const [k, v] of Object.entries(params)) {
+        syncParam(k, v);
+      }
+    }
+
+    // 計算 IRR (牛頓疊代法)
+    function calcIRR(cfs, guess = 0.12) {
+      let r = guess;
+      for (let i = 0; i < 100; i++) {
+        let npv = 0;
+        let dnpv = 0;
+        for (let t = 0; t < cfs.length; t++) {
+          const denom = Math.pow(1 + r, t);
+          npv += cfs[t] / denom;
+          dnpv += -t * cfs[t] / (denom * (1 + r));
+        }
+        if (Math.abs(dnpv) < 1e-12) break;
+        const rNext = r - npv / dnpv;
+        if (Math.abs(rNext - r) < 1e-7) return rNext;
+        r = rNext;
+      }
+      return r;
+    }
+
+    function recalcSimulator() {
+      const rf = params.rf / 100;
+      const mrp = params.mrp / 100;
+      const tc = params.tc / 100;
+      const initialOutlay = params.inv * 10000;
+
+      // 1. Dell 標竿計算 (觀點二)
+      const vDell = params.d_dell + params.e_dell;
+      const wdDell = params.d_dell / vDell;
+      const weDell = params.e_dell / vDell;
+      const reDell = rf + params.beta_dell * mrp;
+      const rdDellAfter = (params.rd_dell / 100) * (1 - tc);
+      const wacc2 = weDell * reDell + wdDell * rdDellAfter;
+
+      // 2. HCI 純業務風險調整計算 (觀點三)
+      const deDell = params.d_dell / params.e_dell;
+      const betaU = params.beta_dell / (1 + (1 - tc) * deDell);
+      const wdHci = params.wd_hci / 100;
+      const weHci = 1 - wdHci;
+      const deHci = wdHci / weHci;
+      const betaLHci = betaU * (1 + (1 - tc) * deHci);
+      const reHci = rf + betaLHci * mrp + (params.size / 100) + (params.liq / 100);
+      const rdHciAfter = (params.rd_hci / 100) * (1 - tc);
+      const wacc3 = weHci * reHci + wdHci * rdHciAfter;
+
+      // 3. 逐年現金流量折現計算
+      let pv2Sum = 0;
+      let pv3Sum = 0;
+      const rowData = [];
+
+      for (let t = 1; t <= 8; t++) {
+        const fcf = FCFS[t - 1];
+        const pv2 = fcf / Math.pow(1 + wacc2, t);
+        const pv3 = fcf / Math.pow(1 + wacc3, t);
+        pv2Sum += pv2;
+        pv3Sum += pv3;
+        const diff = pv2 - pv3;
+        rowData.push({
+          year: t,
+          fcf: fcf,
+          pv2: pv2,
+          pv3: pv3,
+          diff: diff,
+          cumDiff: pv2Sum - pv3Sum
+        });
+      }
+
+      const npv2 = pv2Sum - initialOutlay;
+      const npv3 = pv3Sum - initialOutlay;
+      const diffNPV = npv2 - npv3;
+
+      // 計算專案 IRR
+      const cfs = [-initialOutlay, ...FCFS];
+      const irr = calcIRR(cfs);
+
+      // 4. 更新大看板 KPI
+      document.getElementById('kpi-wacc2').textContent = (wacc2 * 100).toFixed(3) + '%';
+      document.getElementById('kpi-cost2').textContent = (reDell * 100).toFixed(3) + '% / ' + (rdDellAfter * 100).toFixed(3) + '%';
+      document.getElementById('kpi-pv2').textContent = formatMoney(pv2Sum);
+      document.getElementById('kpi-npv2').textContent = formatSignedMoney(npv2);
+      document.getElementById('kpi-npv2').className = 'kpi-npv-large ' + (npv2 >= 0 ? 'kpi-npv-positive' : 'kpi-npv-negative');
+      
+      const badge2 = document.getElementById('badge-view2');
+      const dec2 = document.getElementById('kpi-dec2');
+      if (npv2 >= 0) {
+        badge2.className = 'kpi-badge badge-accept';
+        badge2.textContent = '✅ 接受 (ACCEPT)';
+        dec2.textContent = 'NPV > 0 且 IRR > WACC ➔ 建議核准';
+        dec2.style.color = '#15803d';
+      } else {
+        badge2.className = 'kpi-badge badge-reject';
+        badge2.textContent = '❌ 駁回 (REJECT)';
+        dec2.textContent = 'NPV < 0 ➔ 實質虧損，建議駁回';
+        dec2.style.color = '#b91c1c';
+      }
+
+      // 觀點三 KPI
+      document.getElementById('kpi-wacc3').textContent = (wacc3 * 100).toFixed(3) + '%';
+      document.getElementById('kpi-beta-hci').textContent = betaLHci.toFixed(4) + ' (資產β ' + betaU.toFixed(3) + ')';
+      document.getElementById('kpi-cost3').textContent = (reHci * 100).toFixed(3) + '% / ' + (rdHciAfter * 100).toFixed(3) + '%';
+      document.getElementById('kpi-pv3').textContent = formatMoney(pv3Sum);
+      document.getElementById('kpi-npv3').textContent = formatSignedMoney(npv3);
+      document.getElementById('kpi-npv3').className = 'kpi-npv-large ' + (npv3 >= 0 ? 'kpi-npv-positive' : 'kpi-npv-negative');
+
+      const badge3 = document.getElementById('badge-view3');
+      const dec3 = document.getElementById('kpi-dec3');
+      if (npv3 >= 0) {
+        badge3.className = 'kpi-badge badge-accept';
+        badge3.textContent = '✅ 接受 (ACCEPT)';
+        dec3.textContent = 'NPV > 0 ➔ 超額報酬覆蓋 HCI 特有風險';
+        dec3.style.color = '#15803d';
+      } else {
+        badge3.className = 'kpi-badge badge-reject';
+        badge3.textContent = '❌ 駁回 (REJECT)';
+        dec3.textContent = 'NPV < 0 且 IRR < WACC ➔ 實質虧損，堅決駁回';
+        dec3.style.color = '#b91c1c';
+      }
+
+      // 落差透視 KPI
+      document.getElementById('kpi-diff-wacc').textContent = (wacc3 >= wacc2 ? '+' : '') + ((wacc3 - wacc2) * 100).toFixed(3) + '%';
+      document.getElementById('kpi-irr').textContent = (irr * 100).toFixed(3) + '%';
+      document.getElementById('kpi-diff-pv').textContent = formatMoney(pv2Sum - pv3Sum);
+      document.getElementById('kpi-diff-npv').textContent = formatSignedMoney(diffNPV);
+
+      const impactBadge = document.getElementById('badge-impact');
+      const diffMsg = document.getElementById('kpi-diff-msg');
+      if (npv2 >= 0 && npv3 < 0) {
+        impactBadge.textContent = '⚡ 決策大逆轉';
+        impactBadge.style.background = '#fee2e2';
+        impactBadge.style.color = '#b91c1c';
+        impactBadge.style.borderColor = '#fca5a5';
+        diffMsg.textContent = '觀點二虛增 ' + formatMoney(diffNPV) + ' 利潤幻覺，觀點三及時擋下盲目投資！';
+        diffMsg.style.color = '#b91c1c';
+      } else if (npv2 >= 0 && npv3 >= 0) {
+        impactBadge.textContent = '✅ 雙雙通過';
+        impactBadge.style.background = '#dcfce7';
+        impactBadge.style.color = '#15803d';
+        impactBadge.style.borderColor = '#86efac';
+        diffMsg.textContent = '專案即使在 HCI 嚴格標準下依然創造價值，具高度防禦性！';
+        diffMsg.style.color = '#15803d';
+      } else {
+        impactBadge.textContent = '❌ 雙雙否決';
+        impactBadge.style.background = '#f1f5f9';
+        impactBadge.style.color = '#475569';
+        impactBadge.style.borderColor = '#cbd5e1';
+        diffMsg.textContent = '專案回報率完全無法滿足兩種標準，應全面重組。';
+        diffMsg.style.color = '#475569';
+      }
+
+      // 表頭折現率
+      document.getElementById('th-wacc2').textContent = (wacc2 * 100).toFixed(2) + '%';
+      document.getElementById('th-wacc3').textContent = (wacc3 * 100).toFixed(2) + '%';
+
+      // 5. 渲染動態表格
+      const tbody = document.getElementById('sim-dynamic-tbody');
+      let html = '';
+      
+      // Year 0
+      html += '<tr>' +
+        '<td><strong>Year 0 (初始支出)</strong></td>' +
+        '<td class="text-right">-' + formatMoney(initialOutlay) + '</td>' +
+        '<td class="text-right">-' + formatMoney(initialOutlay) + '</td>' +
+        '<td class="text-right">-' + formatMoney(initialOutlay) + '</td>' +
+        '<td class="text-right">$0</td>' +
+        '<td class="text-right">$0</td>' +
+        '</tr>';
+
+      // Year 1 to 8
+      for (const row of rowData) {
+        html += '<tr>' +
+          '<td>Year ' + row.year + '</td>' +
+          '<td class="text-right">' + formatMoney(row.fcf) + '</td>' +
+          '<td class="text-right">' + formatMoney(row.pv2) + '</td>' +
+          '<td class="text-right">' + formatMoney(row.pv3) + '</td>' +
+          '<td class="text-right" style="color: #b91c1c; font-weight: bold;">+' + formatMoney(row.diff) + '</td>' +
+          '<td class="text-right">' + formatMoney(row.cumDiff) + '</td>' +
+          '</tr>';
+      }
+
+      // 流入現值總計
+      html += '<tr style="border-top: 2px solid #cbd5e1; background-color: #f1f5f9; font-weight: bold;">' +
+        '<td><strong>8 年流入現值總和</strong></td>' +
+        '<td class="text-right"><strong>$13,120,000</strong></td>' +
+        '<td class="text-right highlight-cell"><strong>' + formatMoney(pv2Sum) + '</strong></td>' +
+        '<td class="text-right highlight-cell"><strong>' + formatMoney(pv3Sum) + '</strong></td>' +
+        '<td class="text-right danger-cell"><strong>+' + formatMoney(pv2Sum - pv3Sum) + '</strong></td>' +
+        '<td class="text-right danger-cell"><strong>+' + formatMoney(pv2Sum - pv3Sum) + '</strong></td>' +
+        '</tr>';
+
+      // 專案 NPV 列
+      html += '<tr style="border-top: 2px solid #94a3b8; font-weight: bold; background-color: #fffbeb;">' +
+        '<td><strong>專案淨現值 (NPV)</strong></td>' +
+        '<td class="text-right">名目 +' + formatMoney(13120000 - initialOutlay) + '</td>' +
+        '<td class="text-right" style="color: ' + (npv2 >= 0 ? '#16a34a' : '#dc2626') + '; font-size: 15.5px;">' + formatSignedMoney(npv2) + '</td>' +
+        '<td class="text-right" style="color: ' + (npv3 >= 0 ? '#16a34a' : '#dc2626') + '; font-size: 15.5px;">' + formatSignedMoney(npv3) + '</td>' +
+        '<td class="text-right danger-cell" style="font-size: 15.5px;">+' + formatMoney(diffNPV) + '</td>' +
+        '<td class="text-center" style="color: #b91c1c;">' + (npv2 >= 0 && npv3 < 0 ? '⚠️ 決策由正轉負' : (npv3 >= 0 ? '✅ 雙雙通過' : '❌ 否決')) + '</td>' +
+        '</tr>';
+
+      tbody.innerHTML = html;
+    }
+
+    // 初始化試算模組
+    window.addEventListener('DOMContentLoaded', function() {
+      recalcSimulator();
+    });
+    // 若頁面已加載則立即執行一次
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      recalcSimulator();
+    }
+  </script>
 
   <div class="teaching-box">
     <div class="teaching-box-title">📘 理論提醒 (Theoretical Note)</div>
