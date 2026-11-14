@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>信託法規篇 第一章：信託概論與分類 | 互動教學與測驗系統</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js CDN -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#16a34a',
+              600: '#15803d',
+              700: '#166534',
+              800: '#14532d',
+              900: '#052e16',
+            },
+            trust: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans TC"', 'Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    [x-cloak] { display: none !important; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+    }
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.92);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-200"
+      x-data="trustApp()">
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-emerald-700 text-white text-xs sm:text-sm py-2 px-4 shadow-sm">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2 font-medium">
+        <span class="bg-white/20 px-2 py-0.5 rounded-full text-xs font-semibold">11502 專業證照系列</span>
+        <span>信託業務人員專業測驗・數位化互動重點教材 (V8.6.0)</span>
+      </div>
+      <div class="flex items-center space-x-3 text-xs">
+        <a href="#simulator" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-calculator"></i> 分類模擬器</a>
+        <span>|</span>
+        <a href="#quiz" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-circle-question"></i> 題庫實測</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation -->
+  <header class="sticky top-0 z-50 glass-card border-b border-slate-200/80 dark:border-slate-800 shadow-sm transition-all duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md">
+          <i class="fa-solid fa-scale-balanced text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-blue-700 to-indigo-800 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">
+            信託概論與分類
+          </h1>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">信託法規篇・第一章精華互動平台</p>
+        </div>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden lg:flex items-center space-x-1 text-sm font-medium">
+        <a href="#structure" class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">信託本質</a>
+        <a href="#certainties" class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">三大確定性</a>
+        <a href="#classification" class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">信託分類</a>
+        <a href="#simulator" class="px-3 py-1.5 rounded-lg text-blue-700 dark:text-blue-300 font-semibold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-compass"></i> 管理矩陣模擬器
+        </a>
+        <a href="#quiz" class="px-3 py-1.5 rounded-lg text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-list-check"></i> 高頻測驗 (<span x-text="quizQuestions.length"></span>)
+        </a>
+        <a href="#mnemonics" class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">衝刺速記卡</a>
+      </nav>
+
+      <!-- Theme Switcher & Actions -->
+      <div class="flex items-center space-x-2">
+        <button @click="toggleTheme()" 
+                class="p-2 rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                title="切換色彩模式">
+          <i :class="darkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-slate-600'"></i>
+        </button>
+        <button @click="mobileMenuOpen = !mobileMenuOpen" 
+                class="lg:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <i :class="mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div x-show="mobileMenuOpen" x-cloak class="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 space-y-2">
+      <a @click="mobileMenuOpen = false" href="#structure" class="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">1. 信託本質與基本架構</a>
+      <a @click="mobileMenuOpen = false" href="#certainties" class="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">2. 信託成立三大確定性</a>
+      <a @click="mobileMenuOpen = false" href="#classification" class="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">3. 多維度信託分類體系</a>
+      <a @click="mobileMenuOpen = false" href="#simulator" class="block py-2 px-3 rounded-md font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40">4. 資金管理運用矩陣模擬器</a>
+      <a @click="mobileMenuOpen = false" href="#quiz" class="block py-2 px-3 rounded-md font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40">5. 歷屆高頻陷阱題測驗</a>
+      <a @click="mobileMenuOpen = false" href="#mnemonics" class="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">6. 考前衝刺速記卡片</a>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white p-8 sm:p-12 shadow-2xl border border-indigo-900/50">
+      <div class="relative z-10 max-w-3xl space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+          <i class="fa-solid fa-graduation-cap"></i> 信託業務專業測驗・歷屆命題熱點
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+          信託概論與分類<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400">
+            全景思維圖解與實戰測驗
+          </span>
+        </h2>
+        <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+          信託法規的第一道大門：掌握委託人、受託人與受益人間的實質名義分配，精通三大確定性與管理運用四象限矩陣，輕鬆破解歷屆常考陷阱！
+        </p>
+
+        <!-- Quick CTA Buttons -->
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="#simulator" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-500/30 hover:brightness-110 transition">
+            <i class="fa-solid fa-sliders"></i> 操作四象限模擬器
+          </a>
+          <a href="#quiz" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-sm border border-white/20 transition">
+            <i class="fa-solid fa-circle-play"></i> 進入 10 題高頻測驗
+          </a>
+          <a href="docs/law/ch01-trust-overview.md" target="_blank" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition text-sm">
+            <i class="fa-brands fa-markdown"></i> 閱讀 Markdown 筆記
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Stats Bar -->
+      <div class="mt-10 pt-8 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+        <div class="p-4 rounded-2xl bg-white/5 backdrop-blur-sm">
+          <div class="text-2xl sm:text-3xl font-extrabold text-blue-400">第 1 條</div>
+          <div class="text-xs text-slate-400 mt-1">信託法定定義基準</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/5 backdrop-blur-sm">
+          <div class="text-2xl sm:text-3xl font-extrabold text-teal-400">3 大原則</div>
+          <div class="text-xs text-slate-400 mt-1">意圖・標的・受益人</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/5 backdrop-blur-sm">
+          <div class="text-2xl sm:text-3xl font-extrabold text-amber-400">4 大象限</div>
+          <div class="text-xs text-slate-400 mt-1">特定/指定/單獨/集合</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/5 backdrop-blur-sm">
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">100%</div>
+          <div class="text-xs text-slate-400 mt-1">歷屆試題考點涵蓋率</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: 信託本質與基本架構 -->
+    <section id="structure" class="space-y-8 scroll-mt-20">
+      <div class="flex items-center space-x-3">
+        <span class="w-2.5 h-8 bg-blue-600 rounded-full"></span>
+        <h3 class="text-2xl font-bold tracking-tight">壹、信託法理本質與基本架構</h3>
+      </div>
+
+      <!-- Legal Definition Card -->
+      <div class="p-6 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 shadow-sm">
+        <div class="flex items-start gap-4">
+          <div class="p-3 bg-blue-600 text-white rounded-xl shadow-md hidden sm:block">
+            <i class="fa-solid fa-book-bookmark text-xl"></i>
+          </div>
+          <div class="space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">信託法第 1 條 Statutory Definition</span>
+            <blockquote class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-relaxed italic">
+              「稱信託者，謂委託人將<span class="text-blue-600 dark:text-blue-400 underline decoration-2">財產權移轉或為其他處分</span>，使受託人依<span class="text-indigo-600 dark:text-indigo-400 underline decoration-2">信託本旨</span>，為<span class="text-emerald-600 dark:text-emerald-400 underline decoration-2">受益人之利益或為特定之目的</span>，<span class="text-rose-600 dark:text-rose-400 underline decoration-2">管理或處分信託財產</span>之關係。」
+            </blockquote>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Parties Interactive Visual Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 委託人 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-hand-holding-dollar"></i>
+          </div>
+          <h4 class="text-lg font-bold text-slate-900 dark:text-white">委託人 (Trustor / Settlor)</h4>
+          <p class="text-sm font-medium text-amber-600 dark:text-amber-400 mt-1">「提供財產、設立信託」</p>
+          <ul class="text-xs text-slate-600 dark:text-slate-300 mt-3 space-y-2 leading-relaxed">
+            <li><i class="fa-solid fa-check text-emerald-500 mr-1.5"></i> 將自身有處分權之財產權移轉予受託人。</li>
+            <li><i class="fa-solid fa-check text-emerald-500 mr-1.5"></i> 移轉完成後，原則上脫離實質支配權。</li>
+            <li><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1.5"></i> 考點：委託人交出資產後，權利並非最大！</li>
+          </ul>
+        </div>
+
+        <!-- 受託人 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border-2 border-blue-500/40 dark:border-blue-500/40 shadow-sm hover:shadow-md transition relative">
+          <div class="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-600 text-white">
+            以自己名義行使
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-building-columns"></i>
+          </div>
+          <h4 class="text-lg font-bold text-slate-900 dark:text-white">受託人 (Trustee)</h4>
+          <p class="text-sm font-medium text-blue-600 dark:text-blue-400 mt-1">「名義所有人、忠實義務」</p>
+          <ul class="text-xs text-slate-600 dark:text-slate-300 mt-3 space-y-2 leading-relaxed">
+            <li><i class="fa-solid fa-check text-emerald-500 mr-1.5"></i> 取得信託財產的名義所有權。</li>
+            <li><i class="fa-solid fa-check text-emerald-500 mr-1.5"></i> <strong>以受託人自己名義</strong>對外管理或處分。</li>
+            <li><i class="fa-solid fa-check text-emerald-500 mr-1.5"></i> 負有善良管理人注意義務與信託利益交付義務。</li>
+          </ul>
+        </div>
+
+        <!-- 受益人 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <h4 class="text-lg font-bold text-slate-900 dark:text-white">受益人 (Beneficiary)</h4>
+          <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400 mt-1">「實質獲益者、權利最大」</p>
+          <ul class="text-xs text-slate-600 dark:text-slate-300 mt-3 space-y-2 leading-relaxed">
+            <li><i class="fa-solid fa-check text-emerald-500 mr-1.5"></i> 享有信託本金與孳息之經濟實質利益。</li>
+            <li><i class="fa-solid fa-check text-emerald-500 mr-1.5"></i> 信託關係中<strong>實質權利最大者</strong>。</li>
+            <li><i class="fa-solid fa-check text-emerald-500 mr-1.5"></i> 享有受託人違背任務時之撤銷與損害賠償請求權。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Comparative Table: 信託 vs 委任 vs 借名登記 -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-100/80 dark:bg-slate-700/60 text-slate-700 dark:text-slate-200 font-semibold border-b border-slate-200 dark:border-slate-700">
+            <tr>
+              <th class="p-4">比較構面</th>
+              <th class="p-4 text-blue-600 dark:text-blue-400">信託 (Trust)</th>
+              <th class="p-4">委任 (Mandate)</th>
+              <th class="p-4">借名登記 (Nominee)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-700/60 text-xs sm:text-sm">
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">名義執行主體</td>
+              <td class="p-4 font-bold text-blue-600 dark:text-blue-400">受託人以自己名義</td>
+              <td class="p-4">受任人以委託人名義</td>
+              <td class="p-4">出名人名義（無實質處分意願）</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">財產所有權移轉</td>
+              <td class="p-4 text-emerald-600 dark:text-emerald-400 font-bold">實質名義移轉（公示外觀）</td>
+              <td class="p-4">財產仍在委託人名下</td>
+              <td class="p-4">形式登記，內部實質歸借名人</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">管理與處分權限</td>
+              <td class="p-4">受託人依信託本旨全權管理處分</td>
+              <td class="p-4">受任人受委任人指示指揮</td>
+              <td class="p-4 font-bold text-rose-500">名義人無管理處分權 ➔ 非信託！</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">破產隔離獨立性</td>
+              <td class="p-4 text-emerald-600 dark:text-emerald-400 font-bold">享有信託財產獨立性，不可強制執行</td>
+              <td class="p-4">無獨立性，屬委任人責任財產</td>
+              <td class="p-4">可能遭名義人之債權人查封執行</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 2: 信託成立三大確定性 -->
+    <section id="certainties" class="space-y-8 scroll-mt-20">
+      <div class="flex items-center space-x-3">
+        <span class="w-2.5 h-8 bg-indigo-600 rounded-full"></span>
+        <h3 class="text-2xl font-bold tracking-tight">貳、信託成立要件與三大確定性</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 意圖確定性 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <div class="inline-block px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300">確定性 ①</div>
+          <h4 class="text-lg font-bold">信託設立意圖確定性</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            委託人必須有明確建立信託關係之法效意思。內容若模糊不清或無從查知，信託<strong>不成立</strong>。
+          </p>
+          <div class="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/40 text-xs text-rose-700 dark:text-rose-300 font-medium">
+            <i class="fa-solid fa-circle-exclamation mr-1"></i> <strong>歷屆陷阱</strong>：將金錢交付債權人以「清償債務」為目的者，為清償行為，<strong>非為信託</strong>！
+          </div>
+        </div>
+
+        <!-- 標的確定性 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <div class="inline-block px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300">確定性 ②</div>
+          <h4 class="text-lg font-bold">信託標的確定性</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            信託標的須為委託人<strong>有權處分之積極財產權</strong>，並具備可得特定之範圍。
+          </p>
+          <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/40 text-xs text-amber-800 dark:text-amber-300 font-medium">
+            <i class="fa-solid fa-ban mr-1"></i> <strong>不得為標的</strong>：純消極債務、事業經營權、商譽（缺乏獨立財產權實體）。
+          </div>
+        </div>
+
+        <!-- 受益人確定性 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <div class="inline-block px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300">確定性 ③</div>
+          <h4 class="text-lg font-bold">受益人確定性</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            私益信託之受益人設立時得尚未存在，但<strong>必須可得確定</strong>（例如以尚未出生之胎兒為受益人，合法有效）。
+          </p>
+          <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/40 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
+            <i class="fa-solid fa-hand-holding-heart mr-1"></i> <strong>公益特例</strong>：公益信託目的在促進公眾利益，受益人為不特定多數人，不要求具體特定。
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Subject Matter Checker -->
+      <div class="p-6 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-4">
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold text-sm sm:text-base flex items-center gap-2">
+            <i class="fa-solid fa-filter text-indigo-600"></i> 信託財產標的・互動識別檢驗儀
+          </h4>
+          <span class="text-xs text-slate-500">點選標籤查看法理判別依據</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs">
+          <button @click="selectedAsset = 'cash'" :class="selectedAsset === 'cash' ? 'bg-blue-600 text-white font-bold' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-600 transition text-center">
+            💰 金錢現金
+          </button>
+          <button @click="selectedAsset = 'realestate'" :class="selectedAsset === 'realestate' ? 'bg-blue-600 text-white font-bold' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-600 transition text-center">
+            🏢 土地與房屋
+          </button>
+          <button @click="selectedAsset = 'debt'" :class="selectedAsset === 'debt' ? 'bg-blue-600 text-white font-bold' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-600 transition text-center">
+            📜 債券與股票
+          </button>
+          <button @click="selectedAsset = 'patent'" :class="selectedAsset === 'patent' ? 'bg-blue-600 text-white font-bold' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-600 transition text-center">
+            💡 專利著作權
+          </button>
+          <button @click="selectedAsset = 'pure_debt'" :class="selectedAsset === 'pure_debt' ? 'bg-rose-600 text-white font-bold' : 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300'" class="p-2.5 rounded-xl border border-rose-200 dark:border-rose-900 transition text-center">
+            ❌ 純消極債務
+          </button>
+          <button @click="selectedAsset = 'goodwill'" :class="selectedAsset === 'goodwill' ? 'bg-rose-600 text-white font-bold' : 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300'" class="p-2.5 rounded-xl border border-rose-200 dark:border-rose-900 transition text-center">
+            ❌ 商譽與經營權
+          </button>
+        </div>
+
+        <!-- Asset Diagnostic Result -->
+        <div class="p-4 rounded-xl bg-white dark:bg-slate-700/80 border border-slate-200 dark:border-slate-600 text-sm">
+          <template x-if="selectedAsset === 'cash'">
+            <div class="text-emerald-700 dark:text-emerald-300 font-medium">
+              <i class="fa-solid fa-circle-check mr-1.5"></i> <strong>合法有效標的</strong>：金錢信託為目前我國信託業規模最大宗之業務型態，具高度流通性與管理彈性。
+            </div>
+          </template>
+          <template x-if="selectedAsset === 'realestate'">
+            <div class="text-emerald-700 dark:text-emerald-300 font-medium">
+              <i class="fa-solid fa-circle-check mr-1.5"></i> <strong>合法有效標的</strong>：屬物權信託，移轉時須辦理所有權移轉信託登記以具公示對抗要件。
+            </div>
+          </template>
+          <template x-if="selectedAsset === 'debt'">
+            <div class="text-emerald-700 dark:text-emerald-300 font-medium">
+              <i class="fa-solid fa-circle-check mr-1.5"></i> <strong>合法有效標的</strong>：屬有價證券信託，股票可分管理型、運用型（借券放款）與處分型。
+            </div>
+          </template>
+          <template x-if="selectedAsset === 'patent'">
+            <div class="text-emerald-700 dark:text-emerald-300 font-medium">
+              <i class="fa-solid fa-circle-check mr-1.5"></i> <strong>合法有效標的</strong>：屬無體財產權/權利信託，可將專利授權金收益或處分權交付受託人管理。
+            </div>
+          </template>
+          <template x-if="selectedAsset === 'pure_debt'">
+            <div class="text-rose-600 dark:text-rose-400 font-medium">
+              <i class="fa-solid fa-circle-xmark mr-1.5"></i> <strong>絕對不得信託</strong>：信託財產須為「積極財產權」，單純消極債務無法成為信託標的（亦不得以清償債務成立信託）。
+            </div>
+          </template>
+          <template x-if="selectedAsset === 'goodwill'">
+            <div class="text-rose-600 dark:text-rose-400 font-medium">
+              <i class="fa-solid fa-circle-xmark mr-1.5"></i> <strong>絕對不得信託</strong>：商譽及公司經營權缺乏獨立之財產權實體與處分可能性，依法不得單獨信託。
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: 多維度信託分類體系 -->
+    <section id="classification" class="space-y-8 scroll-mt-20">
+      <div class="flex items-center space-x-3">
+        <span class="w-2.5 h-8 bg-emerald-600 rounded-full"></span>
+        <h3 class="text-2xl font-bold tracking-tight">參、多維度信託核心分類體系</h3>
+      </div>
+
+      <!-- Categories Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- 營業信託 vs 民事信託 (必考對照) -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border-2 border-emerald-500/30 dark:border-emerald-500/30 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-briefcase text-emerald-600"></i> 營業信託 vs 民事信託
+            </h4>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">考試重中之重</span>
+          </div>
+
+          <div class="space-y-3 text-xs sm:text-sm">
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600">
+              <div class="font-bold text-slate-900 dark:text-white mb-1">🏦 營業信託（商事信託）：</div>
+              <ul class="space-y-1 text-slate-600 dark:text-slate-300">
+                <li>• 受託人：經主管機關許可之<strong>信託業（如銀行）</strong>。</li>
+                <li>• 形式要件：<strong>要式行為</strong>（必須訂立<strong>書面契約</strong>，否則無效！）。</li>
+                <li>• 適用法律：優先適用《信託業法》及相關行政規章。</li>
+                <li>• 監督機關：金融監督管理委員會（金管會）。</li>
+              </ul>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600">
+              <div class="font-bold text-slate-900 dark:text-white mb-1">👤 民事信託（非營業信託）：</div>
+              <ul class="space-y-1 text-slate-600 dark:text-slate-300">
+                <li>• 受託人：一般自然人、親友、律師、會計師。</li>
+                <li>• 形式要件：<strong>不要式行為</strong>（<strong>口頭</strong>或書面均可成立！）。</li>
+                <li>• 經理對象：除法令另有規定外，<strong>僅得受託經理特定人</strong>之財產。</li>
+                <li>• 監督機關：受<strong>法院</strong>監督。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 意定信託 vs 法定信託 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-scroll text-indigo-600"></i> 意定信託的三大形式
+            </h4>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">設立方式區分</span>
+          </div>
+
+          <div class="space-y-3 text-xs sm:text-sm">
+            <div class="p-3 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40">
+              <span class="font-bold text-indigo-700 dark:text-indigo-300">1. 契約信託（雙方行為）：</span>
+              <p class="text-slate-600 dark:text-slate-300 mt-0.5">委託人與受託人意思合意並交付財產生效。</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40">
+              <span class="font-bold text-purple-700 dark:text-purple-300">2. 遺囑信託（單方要式行為）：</span>
+              <p class="text-slate-600 dark:text-slate-300 mt-0.5">立遺囑時<strong>成立</strong>；於<strong>立遺囑人死亡且受益人存活時生效</strong>。</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40">
+              <span class="font-bold text-amber-800 dark:text-amber-300">3. 宣言信託（單獨要式行為・高頻題）：</span>
+              <ul class="text-slate-600 dark:text-slate-300 mt-1 space-y-0.5">
+                <li>• 委託人<strong>限於法人</strong>（自然人不得宣言信託）。</li>
+                <li>• 目的<strong>限於增進公共利益（公益）</strong>。</li>
+                <li>• 須經<strong>目的事業主管機關許可</strong>。</li>
+                <li>• 對外宣告自為受託人，無須財產移轉登記。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: 資金管理運用四象限矩陣（互動判定模擬器） -->
+    <section id="simulator" class="space-y-8 scroll-mt-20">
+      <div class="flex items-center space-x-3">
+        <span class="w-2.5 h-8 bg-blue-600 rounded-full"></span>
+        <h3 class="text-2xl font-bold tracking-tight">肆、資金管理運用四象限矩陣・互動判定模擬器</h3>
+      </div>
+
+      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-900 text-white shadow-xl border border-blue-800/40">
+        <div class="max-w-3xl space-y-2 mb-8">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Interactive Trust Matrix Simulator</span>
+          <h4 class="text-2xl sm:text-3xl font-extrabold text-white">點選條件・即時推導法定信託名稱與命題題型</h4>
+          <p class="text-sm text-slate-300">
+            信託業務員測驗中，考生最常混淆「特定」、「指定」與「單獨」、「集合」之定義。請切換下方參數，系統將為您自動定位矩陣並解析實例！
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Simulator Controls -->
+          <div class="lg:col-span-6 space-y-6 bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-md">
+            <!-- Control 1: 運用決定權 -->
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase mb-2">1. 受託人對信託財產是否具有運用決定權？</label>
+              <div class="grid grid-cols-2 gap-3 text-xs sm:text-sm">
+                <button @click="simHasPower = true" :class="simHasPower ? 'bg-blue-600 text-white font-bold ring-2 ring-blue-400' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'" class="p-3 rounded-xl transition text-center">
+                  <i class="fa-solid fa-user-gear mr-1"></i> 是（受託人有決定權）
+                </button>
+                <button @click="simHasPower = false" :class="!simHasPower ? 'bg-blue-600 text-white font-bold ring-2 ring-blue-400' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'" class="p-3 rounded-xl transition text-center">
+                  <i class="fa-solid fa-lock mr-1"></i> 否（委託人保留/指明標的）
+                </button>
+              </div>
+            </div>
+
+            <!-- Control 2: 營運範圍指定方式 (若有決定權) -->
+            <div x-show="simHasPower" x-transition>
+              <label class="block text-xs font-bold text-slate-300 uppercase mb-2">2. 委託人是否指定營運範圍或方法？</label>
+              <div class="grid grid-cols-2 gap-3 text-xs sm:text-sm">
+                <button @click="simSpecifiedScope = true" :class="simSpecifiedScope ? 'bg-indigo-600 text-white font-bold ring-2 ring-indigo-400' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'" class="p-3 rounded-xl transition text-center">
+                  指定範圍（如上市股票/債券）
+                </button>
+                <button @click="simSpecifiedScope = false" :class="!simSpecifiedScope ? 'bg-indigo-600 text-white font-bold ring-2 ring-indigo-400' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'" class="p-3 rounded-xl transition text-center">
+                  未指定範圍（由受託人決定）
+                </button>
+              </div>
+            </div>
+
+            <!-- Control 3: 管理集合程度 -->
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase mb-2">3. 資金是否與他人性質相同之資金集合運用？</label>
+              <div class="grid grid-cols-2 gap-3 text-xs sm:text-sm">
+                <button @click="simIsPooled = false" :class="!simIsPooled ? 'bg-emerald-600 text-white font-bold ring-2 ring-emerald-400' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'" class="p-3 rounded-xl transition text-center">
+                  <i class="fa-solid fa-user mr-1"></i> 單獨管理運用（單獨設帳）
+                </button>
+                <button @click="simIsPooled = true" :class="simIsPooled ? 'bg-emerald-600 text-white font-bold ring-2 ring-emerald-400' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'" class="p-3 rounded-xl transition text-center">
+                  <i class="fa-solid fa-users mr-1"></i> 集合管理運用（共同帳戶）
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulator Dynamic Result Output -->
+          <div class="lg:col-span-6 bg-slate-900/90 p-6 sm:p-7 rounded-2xl border-2 border-teal-500/50 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                <i class="fa-solid fa-bullseye"></i> 模擬推導結果
+              </span>
+              <span class="text-xs text-slate-400">信託法規命題標準名稱</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+              <div class="text-xs text-slate-400 mb-1">法定信託業務類型：</div>
+              <h5 class="text-xl sm:text-2xl font-black text-amber-400 tracking-tight" x-text="getSimResult().name"></h5>
+            </div>
+
+            <div class="space-y-3 text-xs sm:text-sm">
+              <div class="flex items-start gap-2">
+                <span class="font-bold text-teal-400 whitespace-nowrap">💡 實務情境：</span>
+                <span class="text-slate-300" x-text="getSimResult().scenario"></span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-bold text-blue-400 whitespace-nowrap">🎯 考題特徵：</span>
+                <span class="text-slate-300" x-text="getSimResult().examHint"></span>
+              </div>
+              <div class="p-3 rounded-xl bg-blue-950/60 border border-blue-800/50 text-xs text-blue-200">
+                <i class="fa-solid fa-key text-amber-400 mr-1"></i> <strong>秒殺解法</strong>：<span x-text="getSimResult().rule"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: 歷屆高頻試題實戰測驗 -->
+    <section id="quiz" class="space-y-8 scroll-mt-20">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <span class="w-2.5 h-8 bg-emerald-600 rounded-full"></span>
+          <h3 class="text-2xl font-bold tracking-tight">伍、歷屆高頻陷阱題・互動測驗</h3>
+        </div>
+        <div class="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">
+          已作答：<span class="text-blue-600 dark:text-blue-400 font-bold" x-text="Object.keys(userAnswers).length"></span> / <span x-text="quizQuestions.length"></span> 題
+        </div>
+      </div>
+
+      <!-- Quiz Score Card (Visible when answered at least 1) -->
+      <div x-show="Object.keys(userAnswers).length > 0" x-transition class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center space-x-4">
+          <div class="text-sm font-bold text-slate-700 dark:text-slate-200">
+            目前得分：<span class="text-2xl font-black text-emerald-600 dark:text-emerald-400" x-text="getScore()"></span> 分
+          </div>
+          <div class="text-xs text-slate-500">
+            正確率：<span class="font-bold text-slate-700 dark:text-slate-300" x-text="getAccuracy()"></span>%
+          </div>
+        </div>
+        <button @click="resetQuiz()" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-800 transition">
+          <i class="fa-solid fa-arrows-rotate mr-1"></i> 重新作答
+        </button>
+      </div>
+
+      <!-- Quiz Question Cards -->
+      <div class="space-y-6">
+        <template x-for="(q, idx) in quizQuestions" :key="q.id">
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 font-bold text-xs flex items-center justify-center" x-text="idx + 1"></span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300" x-text="q.tag"></span>
+              </div>
+              <template x-if="userAnswers[q.id]">
+                <span :class="userAnswers[q.id] === q.ans ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 dark:text-emerald-300' : 'text-rose-600 bg-rose-50 dark:bg-rose-950/60 dark:text-rose-300'" class="px-2.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
+                  <i :class="userAnswers[q.id] === q.ans ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'"></i>
+                  <span x-text="userAnswers[q.id] === q.ans ? '答對' : '答錯'"></span>
+                </span>
+              </template>
+            </div>
+
+            <!-- Question Stem -->
+            <p class="text-base font-semibold text-slate-800 dark:text-slate-100 leading-relaxed" x-text="q.stem"></p>
+
+            <!-- Options Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <template x-for="(opt, oIdx) in q.opts" :key="oIdx">
+                <button @click="answer(q.id, oIdx)"
+                        :disabled="userAnswers[q.id] !== undefined"
+                        :class="getOptionClass(q, oIdx)"
+                        class="p-3 rounded-xl border text-left transition flex items-start gap-2.5">
+                  <span class="font-bold text-xs mt-0.5 uppercase" x-text="['A', 'B', 'C', 'D'][oIdx] + '.'"></span>
+                  <span class="text-xs sm:text-sm" x-text="opt"></span>
+                </button>
+              </template>
+            </div>
+
+            <!-- Explanation Box (Appears after answer) -->
+            <div x-show="userAnswers[q.id] !== undefined" x-transition class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/60 border border-slate-200 dark:border-slate-600 text-xs sm:text-sm space-y-1.5">
+              <div class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <i class="fa-solid fa-lightbulb text-amber-500"></i> 正解：<span class="text-blue-600 dark:text-blue-400 font-black" x-text="['A', 'B', 'C', 'D'][q.ans]"></span>
+              </div>
+              <p class="text-slate-600 dark:text-slate-300 leading-relaxed" x-text="q.explain"></p>
+            </div>
+          </div>
+        </template>
+      </div>
+    </section>
+
+    <!-- SECTION 6: 考前衝刺速記卡片 -->
+    <section id="mnemonics" class="space-y-8 scroll-mt-20">
+      <div class="flex items-center space-x-3">
+        <span class="w-2.5 h-8 bg-amber-500 rounded-full"></span>
+        <h3 class="text-2xl font-bold tracking-tight">陸、考前 3 分鐘衝刺・必記口訣卡</h3>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/30 dark:border-amber-500/30 space-y-2">
+          <div class="text-2xl font-black text-amber-600 dark:text-amber-400">口訣 01</div>
+          <h4 class="font-bold text-base">出名 vs 獲利</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            委託人出錢出資，受託人<strong>以自己名義</strong>對外管理，<strong>受益人實質權利最大</strong>！
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/30 dark:border-blue-500/30 space-y-2">
+          <div class="text-2xl font-black text-blue-600 dark:text-blue-400">口訣 02</div>
+          <h4 class="font-bold text-base">營業要書面・民事可口頭</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            銀行營業信託是<strong>要式行為</strong>（必須書面契約）；一般自然人親友間之民事信託<strong>口頭即可生效</strong>。
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/30 dark:border-indigo-500/30 space-y-2">
+          <div class="text-2xl font-black text-indigo-600 dark:text-indigo-400">口訣 03</div>
+          <h4 class="font-bold text-base">法人＋公益＝宣言信託</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            宣言信託<strong>限法人</strong>設立、<strong>限公益目的</strong>、須<strong>主管機關許可</strong>、為單獨要式行為（自然人不得為之）。
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/30 dark:border-purple-500/30 space-y-2">
+          <div class="text-2xl font-black text-purple-600 dark:text-purple-400">口訣 04</div>
+          <h4 class="font-bold text-base">遺囑成立與生效</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            遺囑作成時即<strong>成立</strong>；但必須等到立遺囑人<strong>死亡且受益人存活時</strong>方才<strong>生效</strong>。
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-gradient-to-br from-teal-500/10 to-transparent border border-teal-500/30 dark:border-teal-500/30 space-y-2">
+          <div class="text-2xl font-black text-teal-600 dark:text-teal-400">口訣 05</div>
+          <h4 class="font-bold text-base">保留決定權＝特定</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            委託人只要保留投資決定權，或具體指定投資某一標的，受託人就無決定權 ➔ 一律判定為<strong>「特定」金錢信託</strong>！
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-gradient-to-br from-rose-500/10 to-transparent border border-rose-500/30 dark:border-rose-500/30 space-y-2">
+          <div class="text-2xl font-black text-rose-600 dark:text-rose-400">口訣 06</div>
+          <h4 class="font-bold text-base">房子信託收租金＝不動產</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            信託標的看「委託人移轉交付之原始財產」！交付不動產即屬<strong>物權信託</strong>，後續收取的租金收益不影響信託本質。
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-10 text-xs text-slate-500 dark:text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="space-y-1 text-center sm:text-left">
+        <p class="font-bold text-slate-700 dark:text-slate-300 text-sm">11502 學期專業證照微課程・信託業務重點教學庫</p>
+        <p>依據《JY電子檔筆記-信託業務-V8.6.0》授權編制・供學術研究與證照應試學習使用</p>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="README.md" class="hover:underline">專案 README</a>
+        <span>•</span>
+        <a href="PROJECT_STATUS.md" class="hover:underline">進度看板</a>
+        <span>•</span>
+        <a href="docs/law/ch01-trust-overview.md" class="hover:underline">章節 Markdown</a>
+        <span>•</span>
+        <a href="#structure" class="hover:text-blue-600 dark:hover:text-blue-400"><i class="fa-solid fa-arrow-up"></i> 回頂部</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Alpine.js Application Logic -->
+  <script>
+    function trustApp() {
+      return {
+        darkMode: false,
+        mobileMenuOpen: false,
+        selectedAsset: 'cash',
+
+        // Simulator parameters
+        simHasPower: true,
+        simSpecifiedScope: true,
+        simIsPooled: false,
+
+        // User Quiz State
+        userAnswers: {},
+
+        init() {
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            this.darkMode = true;
+            document.documentElement.classList.add('dark');
+          }
+        },
+
+        toggleTheme() {
+          this.darkMode = !this.darkMode;
+          if (this.darkMode) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        },
+
+        getSimResult() {
+          if (!this.simHasPower) {
+            // 受託人無運用決定權 (特定)
+            if (!this.simIsPooled) {
+              return {
+                name: '特定單獨管理運用金錢信託',
+                scenario: '王先生交給銀行 1000 萬元，指示全部購買指定之台積電股票，銀行僅依指示執行下單。',
+                examHint: '歷屆常考「委託人保留對信託資金之運用決定權」或「指明購買特定標的」。',
+                rule: '委託人保留決定權 ➔ 受託人無權 ➔ 特定；單獨設帳 ➔ 單獨。'
+              };
+            } else {
+              return {
+                name: '特定集合管理運用金錢信託',
+                scenario: '王小姐交付 500 萬指定限購買特定國內固定收益型基金，並同意與其他相同目的資金於相同部分設集合帳戶。',
+                examHint: '關鍵字：「保留運用決定權 / 限購特定標的」＋「設置集合管理運用帳戶」。',
+                rule: '保留決定權＝特定；設集合帳戶＝集合。'
+              };
+            }
+          } else {
+            // 受託人有運用決定權 (指定 or 不指定)
+            if (this.simSpecifiedScope) {
+              if (!this.simIsPooled) {
+                return {
+                  name: '指定營運範圍或方法之單獨管理運用金錢信託',
+                  scenario: '錢先生交付一千萬元，約定僅限投資於國內上市股票型基金，具體挑選哪幾檔股票由銀行專業代為操作，獨立單獨設帳。',
+                  examHint: '委託人僅「概括指定營運範圍（上市股票）」，受託人享有具體投資決策標的決定權。',
+                  rule: '有決定權＋概括指定範圍＝指定；獨立設帳＝單獨。'
+                };
+              } else {
+                return {
+                  name: '指定營運範圍或方法之集合管理運用金錢信託',
+                  scenario: '柯先生交付一百萬元，指定銀行得將資金與其他人之信託資金集合投資於國內上市公司股票，銀行具運用決定權。',
+                  examHint: '歷屆常考：「概括指定範圍」＋「與他人之信託資金集合管理運用」。',
+                  rule: '有決定權＋指定範圍＝指定；與他人集合＝集合。'
+                };
+              }
+            } else {
+              // 不指定
+              if (!this.simIsPooled) {
+                return {
+                  name: '不指定營運範圍或方法之單獨管理運用金錢信託',
+                  scenario: '委託人不限制投資範圍，由銀行全權決定投資工具與標的，獨立設帳管理。',
+                  examHint: '受託人於信託目的範圍內對信託資金全權具決定權，委託人未指定任何營運範圍。',
+                  rule: '有決定權＋未指定任何營運範圍＝不指定。'
+                };
+              } else {
+                return {
+                  name: '不指定營運範圍或方法之集合管理運用金錢信託',
+                  scenario: '委託人未指定營運範圍，同意由受託人集合運用並全權代為操作各類金融工具。',
+                  examHint: '受託人全權運用決定＋集合管理帳戶。',
+                  rule: '無指定範圍＝不指定；多方資金合併＝集合。'
+                };
+              }
+            }
+          }
+        },
+
+        // Quiz Questions Data (10 High-Yield Exam Questions from JY PDF)
+        quizQuestions: [
+          {
+            id: 'q1',
+            tag: '信託法規優先適用',
+            stem: '銀行辦理信託業務時，依我國法制規範，必須優先適用下列何種法律？',
+            opts: ['信託投資公司管理規則', '銀行法', '信託業法', '證券投資信託事業管理規則'],
+            ans: 2,
+            explain: '《信託業法》為規範營業信託機構之特別法，依特別法優於普通法原則，信託業辦理業務優先適用信託業法，次為銀行法與信託法。'
+          },
+          {
+            id: 'q2',
+            tag: '信託成立三大確定性',
+            stem: '黃小姐交付一筆金錢予其債權人楊先生，欲成立以清償該債務為目的之信託。此舉不符合信託成立法則中之何者？',
+            opts: ['受託人確定性', '信託設立意圖確定性', '信託標的確定性', '受益人確定性'],
+            ans: 1,
+            explain: '以清償債務為目的將財產移轉於債權人者，係屬債務清償履行行為，欠缺明確成立信託之法效意思，不符「信託設立意圖確定性」。'
+          },
+          {
+            id: 'q3',
+            tag: '信託標的認定',
+            stem: '下列何者依法「不得」為信託標的之財產權？',
+            opts: ['建築改良物', '金錢債權及其擔保物權', '專利著作權', '純消極債務及商譽'],
+            ans: 3,
+            explain: '信託財產標的必須是委託人有權處分之積極財產權。純消極債務不能信託；商譽與事業經營權缺乏獨立財產權實體，依法亦不得信託。'
+          },
+          {
+            id: 'q4',
+            tag: '契約形式要式性',
+            stem: '依信託法與信託業法之規定，有關信託契約形式之敘述，下列何者正確？',
+            opts: ['營業信託得隨意以口頭為之', '一般民事信託為要式行為，未訂書面者無效', '一般民事信託可以口頭為之，屬不要式行為', '所有信託一律必須至法院公證始得成立'],
+            ans: 2,
+            explain: '營業信託（信託業法）為要式行為，必須以書面契約為之；而一般民事信託（信託法）為不要式行為，當事人間口頭合意即可成立。'
+          },
+          {
+            id: 'q5',
+            tag: '移轉標的判別',
+            stem: '大明將一棟商業大樓交付甲銀行信託管理出租，並約定每年將扣除管理費後之租金收益全數給予其子小明。請問此信託屬於何種信託？',
+            opts: ['金錢信託', '不動產（物權）信託', '有價證券信託', '其他權利信託'],
+            ans: 1,
+            explain: '信託財產之種類係以「委託人原始移轉交付之財產標的」為認定標準。大明交付的是不動產房屋，故為不動產（物權）信託，租金僅是後續衍生收益。'
+          },
+          {
+            id: 'q6',
+            tag: '宣言信託核心要件',
+            stem: '依信託法第 71 條規定，有關「宣言信託」之法定要件，下列敘述何者錯誤？',
+            opts: ['委託人應為法人', '得以私益家族傳承為目的設立', '應經目的事業主管機關許可', '為單獨要式行為，對外宣言自為受託人'],
+            ans: 1,
+            explain: '宣言信託之法定要件極為嚴格：①委託人限於「法人」、②必須以「增進公共利益（公益）」為目的、③須經主管機關許可。絕不能以私益為目的！'
+          },
+          {
+            id: 'q7',
+            tag: '遺囑信託生效時點',
+            stem: '有關遺囑信託之成立與生效時點，下列敘述何者正確？',
+            opts: ['遺囑書寫完成當日即生效', '於立遺囑人死亡且受益人存活時生效', '於立遺囑人死亡滿一年後始生效', '受託人同意前即生效力'],
+            ans: 1,
+            explain: '遺囑信託成立於遺囑行為依法完成時；但遺囑係於立遺囑人死亡時發生效力，故遺囑信託於遺囑人死亡且受益人尚存活時方才生效。'
+          },
+          {
+            id: 'q8',
+            tag: '管理運用四象限',
+            stem: '王小姐交付新臺幣五百萬元予銀行，指明「保留對信託資金之運用決定權」，並限購買特定國內基金，約定與他人相同部分設置集合帳戶。此信託屬何者？',
+            opts: ['特定單獨管理運用金錢信託', '特定集合管理運用金錢信託', '指定集合管理運用金錢信託', '不指定集合管理運用金錢信託'],
+            ans: 1,
+            explain: '「委託人保留運用決定權」或「指明購買特定標的」＝受託人無決定權＝「特定」；「設置集合管理帳戶」＝「集合」，故為特定集合管理運用金錢信託。'
+          },
+          {
+            id: 'q9',
+            tag: '管理運用四象限',
+            stem: '柯先生與銀行簽訂信託契約交付 100 萬元，委託人概括指定營運範圍為上市股票，由受託銀行具運用決定權，並與他人資金併同運用。此屬何者？',
+            opts: ['特定單獨管理運用金錢信託', '指定營運範圍或方法之集合管理運用金錢信託', '不指定單獨管理運用金錢信託', '特定集合管理運用金錢信託'],
+            ans: 1,
+            explain: '「受託人具運用決定權」＋「委託人概括指定範圍（上市股票）」＝「指定」；「與他人資金集合」＝「集合管理運用」。'
+          },
+          {
+            id: 'q10',
+            tag: '金融資產證券化本質',
+            stem: '依金融資產證券化條例規定，創始機構將其房貸債權移轉予受託機構發行受益證券，該案例在信託法理上屬於下列何種信託？',
+            opts: ['有價證券信託', '物權信託', '金錢債權及其擔保物權之信託', '動產投資信託'],
+            ans: 2,
+            explain: '金融資產證券化之特殊目的信託（SPT），其信託財產為創始機構擁有之放款債權及其抵押權等擔保物權，故本質上屬於「金錢債權及其擔保物權之信託」。'
+          }
+        ],
+
+        answer(qId, oIdx) {
+          if (this.userAnswers[qId] !== undefined) return;
+          this.userAnswers[qId] = oIdx;
+        },
+
+        getOptionClass(q, oIdx) {
+          const userAns = this.userAnswers[q.id];
+          if (userAns === undefined) {
+            return 'bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600';
+          }
+          if (oIdx === q.ans) {
+            return 'bg-emerald-100 dark:bg-emerald-950/70 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold';
+          }
+          if (userAns === oIdx && userAns !== q.ans) {
+            return 'bg-rose-100 dark:bg-rose-950/70 border-rose-500 text-rose-800 dark:text-rose-200';
+          }
+          return 'opacity-50 border-slate-200 dark:border-slate-600 text-slate-500';
+        },
+
+        getScore() {
+          let correct = 0;
+          for (let q of this.quizQuestions) {
+            if (this.userAnswers[q.id] === q.ans) {
+              correct++;
+            }
+          }
+          return Math.round((correct / this.quizQuestions.length) * 100);
+        },
+
+        getAccuracy() {
+          const totalAnswered = Object.keys(this.userAnswers).length;
+          if (totalAnswered === 0) return 0;
+          let correct = 0;
+          for (let q of this.quizQuestions) {
+            if (this.userAnswers[q.id] === q.ans) {
+              correct++;
+            }
+          }
+          return Math.round((correct / totalAnswered) * 100);
+        },
+
+        resetQuiz() {
+          this.userAnswers = {};
+        }
+      }
+    }
+  </script>
+</body>
+</html>
