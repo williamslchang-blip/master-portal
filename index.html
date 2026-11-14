@@ -164,8 +164,8 @@
               onchange="onTier1Change(this.value)" 
               class="bg-slate-950 border border-slate-700 hover:border-sky-500 rounded-xl px-3 py-1.5 text-xs font-extrabold text-white focus:outline-none focus:ring-1 focus:ring-sky-500 transition cursor-pointer pr-7 appearance-none"
             >
-              <option value="sem11501">🎓 11501 學期課程主控台 (3 堂課 ‧ 47 週次)</option>
-              <option value="cases">💼 實務財務個案教學庫 (個案 1 & 2 ‧ 運算模型)</option>
+              <option value="sem11501">🎓 11501 學期課程主控台 (3 堂課 ‧ 47 週次 ‧ 3 大個案)</option>
+              <option value="cases">💼 實務財務個案教學庫 (個案 1, 2 & 3 ‧ 運算模型)</option>
               <option value="fincalc">🧮 財務計算分析 (財務決策模型 ‧ 互動試算)</option>
               <option value="sem11502">🌱 11502 學期課程 (三民高中 / 信託)</option>
               <option value="theses">📚 碩士論文與實證研究 (金金併 / 0050 ETF)</option>
@@ -405,7 +405,7 @@
             shortName: '領導與管理',
             badge: 'EMBA 碩專',
             icon: 'fa-crown text-amber-400',
-            sub: 'EMBA 碩士在職專班 ‧ 11 主題',
+            sub: 'EMBA 碩士在職專班 ‧ 11 主題 ＋ 3 大實務財務個案',
             homeUrl: '11501 領導與管理/index.html',
             items: [
               { code: 'W02', title: '從管理者到領導者：Management vs. Leadership', desc: '釐清管理者（管事）與領導者（帶人）本質差異，掌握領導四大面向與轉換心態。', html: '11501 領導與管理/第二週_從管理者到領導者_Management_vs_Leadership.html', docx: '11501 領導與管理/領導與管理_W2_第一主題_從管理者到領導者.docx' },
@@ -418,7 +418,49 @@
               { code: 'W13', title: '權力、影響力與組織政治：沒有職權也能領導嗎？', desc: 'French & Raven 五大權力來源、Cialdini 六大說服原則與跨部門橫向影響力。', html: '11501 領導與管理/W13_權力影響力與組織政治_沒有職權也能領導嗎.html', docx: '11501 領導與管理/領導與管理_W13_第八主題_權力影響力與組織政治.docx' },
               { code: 'W14', title: '管理決策與決策偏誤：為什麼好主管也會做錯決策？', desc: '快思慢想雙系統、確認偏誤、沉沒成本謬誤、過度自信與群體迷思破解。', html: '11501 領導與管理/W14_管理決策與決策偏誤_為什麼好主管也會做錯決策.html', docx: '11501 領導與管理/領導與管理_W14_第九主題_管理決策與決策偏誤.docx' },
               { code: 'W15', title: '情緒智商與領導：高EQ真的能帶出高績效嗎？', desc: 'Goleman 情緒智商四大向度、高壓自我調節、同理心與激勵性領導氛圍。', html: '11501 領導與管理/W15_情緒智商與領導_高EQ真的能帶出高績效嗎.html', docx: '11501 領導與管理/領導與管理_W15_第十主題_情緒智商與領導.docx' },
-              { code: 'W16', title: '組織文化與變革領導：為什麼員工抗拒改變？', desc: 'Edgar Schein 組織文化三層次、Kotter 八步變革領導模型與消除變革阻力。', html: '11501 領導與管理/W16_組織文化與變革領導_為什麼員工抗拒改變.html', docx: '11501 領導與管理/領導與管理_W16_第十一主題_組織文化與變革領導.docx' }
+              { code: 'W16', title: '組織文化與變革領導：為什麼員工抗拒改變？', desc: 'Edgar Schein 組織文化三層次、Kotter 八步變革領導模型與消除變革阻力。', html: '11501 領導與管理/W16_組織文化與變革領導_為什麼員工抗拒改變.html', docx: '11501 領導與管理/領導與管理_W16_第十一主題_組織文化與變革領導.docx' },
+              {
+                code: 'Case 01',
+                title: '財務個案 1：翔鷹航太科技（AeroTaiwan）',
+                desc: '國防航太製造業資本預算、自由現金流估算，新進財務分析師勞退自提 6% 節稅現值分析、員工持股信託 100% 獎勵金與台幣 ETF（0050/0056/00878）長線資產配置實戰。',
+                html: '11501 領導與管理/財務個案/財務個案1/index.html',
+                htmlPresentation: '11501 領導與管理/財務個案/財務個案1/教學簡報網站：翔鷹航太科技（AeroTaiwan）.html',
+                interactiveTool: '11501 領導與管理/財務個案/財務個案1/財務個案1_翔鷹航太_互動式財務模型.html',
+                excelModel: '11501 領導與管理/財務個案/財務個案1/財務個案1_翔鷹航太_完整解析財務模型.xlsx',
+                docxContent: '11501 領導與管理/財務個案/財務個案1/1. 個案內容：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx',
+                docxAnalysis: '11501 領導與管理/財務個案/財務個案1/1. 個案解析：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx',
+                docxGuide: '11501 領導與管理/財務個案/財務個案1/1. 教學指引：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx',
+                docx: '11501 領導與管理/財務個案/財務個案1/1. 教學指引：翔鷹航太科技（AeroTaiwan）_新進財務分析師的勞退自提、員工福利信託與台幣 ETF 資產配置抉擇.docx'
+              },
+              {
+                code: 'Case 02',
+                title: '財務個案 2：Hubbard Computer, Inc.',
+                desc: '哈佛商學院經典財務決策模型：非上市公司加權平均資本成本（WACC）精算、純業務法去除與還原財務槓桿、敏感度分析與實體資本預算決策。',
+                html: '11501 領導與管理/財務個案/財務個案2/index.html',
+                htmlPresentation: '11501 領導與管理/財務個案/財務個案2/教學簡報網站：Hubbard_Computer.html',
+                interactiveTool: '11501 領導與管理/財務個案/財務個案2/財務個案2_Hubbard_Computer_互動式財務模型.html',
+                excelModel: '11501 領導與管理/財務個案/財務個案2/財務個案2_Hubbard_Computer_完整解析財務模型.xlsx',
+                docxContent: '11501 領導與管理/財務個案/財務個案2/2. 個案內容：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx',
+                docxAnalysis: '11501 領導與管理/財務個案/財務個案2/個案二解析.docx',
+                docxGuide: '11501 領導與管理/財務個案/財務個案2/2. 教學指引：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx',
+                htmlAnalysis: '11501 領導與管理/財務個案/財務個案2/個案二解析.html',
+                docx: '11501 領導與管理/財務個案/財務個案2/2. 教學指引：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx'
+              },
+              {
+                code: 'Case 03',
+                title: '財務個案 3：Stephenson Real Estate Company (SRE)',
+                desc: '哈佛商學院經典資本結構個案：莫迪利安尼-米勒定理（MM 定理）、利息稅盾現值（PV of Tax Shield）、市場價值資產負債表（Market Value Balance Sheet）及高階經理人個人創傷偏誤與公司治理代理衝突。',
+                html: '11501 領導與管理/財務個案/財務個案3/index.html',
+                htmlPresentation: '11501 領導與管理/財務個案/財務個案3/教學簡報網站：Stephenson_Real_Estate.html',
+                interactiveTool: '11501 領導與管理/財務個案/財務個案3/財務個案3_Stephenson_Real_Estate_互動式財務模型.html',
+                excelModel: '11501 領導與管理/財務個案/財務個案3/財務個案3_Stephenson_Real_Estate_完整解析財務模型.xlsx',
+                docxContent: '11501 領導與管理/財務個案/財務個案3/3. 個案內容：Stephenson Real Estate Company_資本結構重組、利息稅盾價值與融資決策抉擇.docx',
+                docxAnalysis: '11501 領導與管理/財務個案/財務個案3/3. 個案解析：Stephenson Real Estate Company_資本結構重組、利息稅盾價值與融資決策抉擇.docx',
+                docxGuide: '11501 領導與管理/財務個案/財務個案3/3. 教學指引：Stephenson Real Estate Company_資本結構重組、利息稅盾價值與融資決策抉擇.docx',
+                docx: '11501 領導與管理/財務個案/財務個案3/3. 教學指引：Stephenson Real Estate Company_資本結構重組、利息稅盾價值與融資決策抉擇.docx',
+                htmlTheory: '11501 領導與管理/財務個案/財務個案3/SRE_財務個案_財務理論與實證應用_資本結構與MM定理強化版.html',
+                docxTheory: '11501 領導與管理/財務個案/財務個案3/SRE_財務個案_財務理論與實證應用_資本結構與MM定理強化版.docx'
+              }
             ]
           },
           ethics: {
@@ -713,7 +755,17 @@
                 html: '11501 領導與管理/財務個案/財務個案3/財務個案3_Stephenson_Real_Estate_互動式財務模型.html',
                 interactiveTool: '11501 領導與管理/財務個案/財務個案3/財務個案3_Stephenson_Real_Estate_互動式財務模型.html',
                 excelModel: '11501 領導與管理/財務個案/財務個案3/財務個案3_Stephenson_Real_Estate_完整解析財務模型.xlsx',
+                htmlPresentation: '11501 領導與管理/財務個案/財務個案3/教學簡報網站：Stephenson_Real_Estate.html',
+                htmlTheory: '11501 領導與管理/財務個案/財務個案3/SRE_財務個案_財務理論與實證應用_資本結構與MM定理強化版.html',
+                docxTheory: '11501 領導與管理/財務個案/財務個案3/SRE_財務個案_財務理論與實證應用_資本結構與MM定理強化版.docx',
                 docx: '11501 領導與管理/財務個案/財務個案3/3. 個案解析：Stephenson Real Estate Company_資本結構重組、利息稅盾價值與融資決策抉擇.docx'
+              },
+              {
+                code: '個案理論講義',
+                title: 'Stephenson Real Estate Company：資本結構重組、利息稅盾與融資決策（財務金融理論完整教學講義）',
+                desc: '哈佛商學院經典個案完整理論深化網頁版 Word 教學文件：14 章完整理論架構、MM 無稅套利、利息稅盾、MM 第二定理、權衡理論、融資順位、經理人創傷烙印與 REITs 實證。含 MathJax 方程式與 Word 公式。',
+                html: '11501 領導與管理/財務個案/財務個案3/SRE_財務個案_財務理論與實證應用_資本結構與MM定理強化版.html',
+                docx: '11501 領導與管理/財務個案/財務個案3/SRE_財務個案_財務理論與實證應用_資本結構與MM定理強化版.docx'
               }
             ]
           },
@@ -1081,7 +1133,7 @@
       const item = lvl2.items[currentTier3Index];
       if (!item) return;
 
-      const isCases = lvl1.id === 'cases';
+      const isCases = lvl1.id === 'cases' || Boolean(item.docxContent || (item.interactiveTool && item.excelModel));
       const isFinCalc = lvl1.id === 'fincalc';
 
       // Breadcrumbs
@@ -1178,10 +1230,18 @@
                   <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               ` : ''}
+
+              ${item.htmlTheory ? `
+                <a href="${resolveUrl(item.htmlTheory, currentTier2)}" target="_blank" class="py-2 px-3 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-solid fa-graduation-cap"></i>
+                  <span>個案理論講義 (Word網頁版)</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              ` : ''}
             </div>
 
             <!-- Documents Row -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-slate-800/60 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-3 ${item.docxTheory ? 'md:grid-cols-4' : ''} gap-2 pt-1 border-t border-slate-800/60 text-xs">
               <a href="${caseDoc1}" download class="py-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-center transition flex items-center justify-center gap-1">
                 <i class="fa-regular fa-file-lines text-sky-400"></i> 個案內容.docx
               </a>
@@ -1191,6 +1251,11 @@
               <a href="${caseDoc3}" download class="py-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-center transition flex items-center justify-center gap-1">
                 <i class="fa-regular fa-file-word text-emerald-400"></i> 教學指引.docx
               </a>
+              ${item.docxTheory ? `
+                <a href="${resolveUrl(item.docxTheory, currentTier2)}" download class="py-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-center transition flex items-center justify-center gap-1">
+                  <i class="fa-solid fa-graduation-cap text-teal-400"></i> 理論講義.docx
+                </a>
+              ` : ''}
             </div>
           </div>
         `;
@@ -1243,6 +1308,14 @@
                 </a>
               ` : ''}
 
+              ${item.htmlTheory ? `
+                <a href="${resolveUrl(item.htmlTheory, currentTier2)}" target="_blank" class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-solid fa-graduation-cap"></i>
+                  <span>個案理論講義 (Word網頁版)</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              ` : ''}
+
               ${finDocxUrl && !finExcelUrl ? `
                 <a href="${finDocxUrl}" download class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
                   <i class="fa-regular fa-file-word"></i>
@@ -1252,12 +1325,20 @@
               ` : ''}
             </div>
 
-            ${finDocxUrl && finExcelUrl ? `
-              <div class="pt-1 border-t border-slate-800/60 flex items-center">
-                <a href="${finDocxUrl}" download class="py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs transition flex items-center gap-1.5">
-                  <i class="fa-regular fa-file-word text-emerald-400"></i>
-                  <span>下載說明與教學指引 (.docx)</span>
-                </a>
+            ${(finDocxUrl && finExcelUrl) || item.docxTheory ? `
+              <div class="pt-1 border-t border-slate-800/60 flex flex-wrap items-center gap-2">
+                ${finDocxUrl && finExcelUrl ? `
+                  <a href="${finDocxUrl}" download class="py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs transition flex items-center gap-1.5">
+                    <i class="fa-regular fa-file-word text-emerald-400"></i>
+                    <span>下載說明與教學指引 (.docx)</span>
+                  </a>
+                ` : ''}
+                ${item.docxTheory ? `
+                  <a href="${resolveUrl(item.docxTheory, currentTier2)}" download class="py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap text-teal-400"></i>
+                    <span>下載理論講義 (.docx)</span>
+                  </a>
+                ` : ''}
               </div>
             ` : ''}
           </div>
@@ -1312,7 +1393,7 @@
       if (!item.html && !item.interactiveTool) return;
 
       let rawTargetUrl = item.html;
-      if (currentTier1 === 'cases' && currentViewerTab === 'tool' && item.interactiveTool) {
+      if ((currentTier1 === 'cases' || item.interactiveTool) && currentViewerTab === 'tool' && item.interactiveTool) {
         rawTargetUrl = item.interactiveTool;
         document.getElementById('viewerTypeLabel').textContent = '運算模型工具預覽';
       } else if (currentTier1 === 'fincalc') {
