@@ -858,8 +858,7 @@
                 title: '信託概論與分類：全景思維圖解、四象限管理模擬器與高頻題實測',
                 desc: '依據《JY電子檔筆記-信託業務-V8.6.0》，涵蓋信託法第1條法理本質、三方當事人權利義務（受益人權利最大）、三大確定性法則、信託標的合法性即時檢驗儀、營業信託vs民事信託比較、意定信託（契約/遺囑/宣言）、資金管理運用四象限互動判定模擬器，以及10道歷屆高頻陷阱題互動測驗與考前衝刺速記卡。',
                 html: '11502 信託/index.html',
-                interactiveTool: '11502 信託/index.html',
-                docx: '11502 信託/JY電子檔筆記-信託業-專案檔.docx'
+                interactiveTool: '11502 信託/index.html#simulator'
               }
             ]
           }
@@ -1399,12 +1398,12 @@
       } else {
         // Standard Course Actions
         const courseHtmlUrl = resolveUrl(item.html, currentTier2);
-        const courseDocxUrl = resolveUrl(item.docx, currentTier2);
+        const courseDocxUrl = item.docx ? resolveUrl(item.docx, currentTier2) : '';
         const hasExtraTools = Boolean(item.interactiveTool || item.htmlTheory || item.docxTheory);
 
         actionsBox.innerHTML = `
           <div class="space-y-2.5">
-            <div class="grid grid-cols-1 sm:grid-cols-2 ${hasExtraTools ? 'md:grid-cols-3' : ''} gap-3">
+            <div class="grid grid-cols-1 ${courseDocxUrl && hasExtraTools ? 'sm:grid-cols-3' : (courseDocxUrl || hasExtraTools ? 'sm:grid-cols-2' : 'sm:grid-cols-1')} gap-3">
               <a 
                 href="${courseHtmlUrl}" 
                 target="_blank" 
@@ -1416,6 +1415,7 @@
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
               </a>
 
+              ${courseDocxUrl ? `
               <a 
                 href="${courseDocxUrl}" 
                 download 
@@ -1426,16 +1426,17 @@
                 <span>下載教師教學指引 (.docx)</span>
                 <i class="fa-solid fa-download text-[10px] ml-1"></i>
               </a>
+              ` : ''}
 
               ${item.interactiveTool ? `
                 <a 
                   href="${resolveUrl(item.interactiveTool, currentTier2)}" 
                   target="_blank" 
                   class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-extrabold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 shadow-lg shadow-amber-600/30 active:scale-95"
-                  title="在新分頁開啟專案互動試算模型"
+                  title="在新分頁開啟互動運算模型或模擬器"
                 >
                   <i class="fa-solid fa-calculator"></i>
-                  <span>五大決策互動試算系統</span>
+                  <span>${currentTier2 === 'trust' ? '開啟管理矩陣模擬器' : '五大決策互動試算系統'}</span>
                   <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
                 </a>
               ` : ''}

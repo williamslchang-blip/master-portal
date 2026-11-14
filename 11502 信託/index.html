@@ -73,6 +73,8 @@
         <span>信託業務人員專業測驗・數位化互動重點教材 (V8.6.0)</span>
       </div>
       <div class="flex items-center space-x-3 text-xs">
+        <a href="../index.html" class="hover:underline flex items-center gap-1 font-semibold text-amber-200"><i class="fa-solid fa-house"></i> 回 Master Portal</a>
+        <span>|</span>
         <a href="#simulator" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-calculator"></i> 分類模擬器</a>
         <span>|</span>
         <a href="#quiz" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-circle-question"></i> 題庫實測</a>
@@ -111,6 +113,10 @@
 
       <!-- Theme Switcher & Actions -->
       <div class="flex items-center space-x-2">
+        <a href="../index.html" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300/80 dark:border-slate-700 transition" title="返回 Master Portal 總入口">
+          <i class="fa-solid fa-house text-blue-600 dark:text-blue-400"></i>
+          <span>總入口</span>
+        </a>
         <button @click="toggleTheme()" 
                 class="p-2 rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
                 title="切換色彩模式">
@@ -125,11 +131,12 @@
 
     <!-- Mobile Navigation Drawer -->
     <div x-show="mobileMenuOpen" x-cloak class="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 space-y-2">
+      <a href="../index.html" class="block py-2 px-3 rounded-md font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40">🏛️ 返回 Master Portal 總入口</a>
       <a @click="mobileMenuOpen = false" href="#structure" class="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">1. 信託本質與基本架構</a>
       <a @click="mobileMenuOpen = false" href="#certainties" class="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">2. 信託成立三大確定性</a>
       <a @click="mobileMenuOpen = false" href="#classification" class="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">3. 多維度信託分類體系</a>
-      <a @click="mobileMenuOpen = false" href="#simulator" class="block py-2 px-3 rounded-md font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40">4. 資金管理運用矩陣模擬器</a>
-      <a @click="mobileMenuOpen = false" href="#quiz" class="block py-2 px-3 rounded-md font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40">5. 歷屆高頻陷阱題測驗</a>
+      <a @click="mobileMenuOpen = false" href="#simulator" class="block py-2 px-3 rounded-md font-semibold text-blue-600 dark:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800">4. 資金管理運用矩陣模擬器</a>
+      <a @click="mobileMenuOpen = false" href="#quiz" class="block py-2 px-3 rounded-md font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800">5. 歷屆高頻陷阱題測驗</a>
       <a @click="mobileMenuOpen = false" href="#mnemonics" class="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">6. 考前衝刺速記卡片</a>
     </div>
   </header>
@@ -714,6 +721,8 @@
         <p>依據《JY電子檔筆記-信託業務-V8.6.0》授權編制・供學術研究與證照應試學習使用</p>
       </div>
       <div class="flex items-center space-x-4">
+        <a href="../index.html" class="hover:underline font-bold text-blue-600 dark:text-blue-400"><i class="fa-solid fa-house mr-1"></i>Master Portal 總門戶</a>
+        <span>•</span>
         <a href="README.md" class="hover:underline">專案 README</a>
         <span>•</span>
         <a href="PROJECT_STATUS.md" class="hover:underline">進度看板</a>
