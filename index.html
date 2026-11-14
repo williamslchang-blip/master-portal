@@ -801,15 +801,16 @@
                 desc: '涵蓋緊急預備金達標（覆蓋月數與資金缺口）、債務雪球法 vs 雪崩法（逐月利息遞推與清償時程）、四年存30萬元（月年金與波動風險）、提早 vs 延後儲蓄（時間複利 vs 本金正交拆解）、FIRE與退休金規劃（Trinity 4%法則與通膨衝擊）。支援敏感度滑桿、雙策略折線圖與學生學習歷程 CSV 匯出。',
                 html: '財務計算/個人財務決策與計算分析/index.html',
                 interactiveTool: '財務計算/個人財務決策與計算分析/index.html',
-                htmlTheory: '財務計算/管理探索二_W12_第3至7項財務知識與計算分析_教學指引.html',
-                docx: '財務計算/管理探索二_W12_第3至7項財務知識與計算分析.docx'
+                htmlTheory: '財務計算/個人財務決策與計算分析/管理探索二_W12_第3至7項財務知識與計算分析_教學指引.html',
+                docx: '財務計算/個人財務決策與計算分析/管理探索二_W12_第3至7項財務知識與計算分析.docx'
               },
               {
                 code: '教學講義與方程式',
                 title: '第12週 財務知識與計算分析教學手冊（教學用網頁Word形式）',
                 desc: '完整五大模組理論公式推導、數值精算案例、跨情境敏感度矩陣、學生分析與申論思考題。含 MathJax 與 Microsoft Word 原生方程式編輯器公式。',
-                html: '財務計算/管理探索二_W12_第3至7項財務知識與計算分析_教學指引.html',
-                docx: '財務計算/管理探索二_W12_第3至7項財務知識與計算分析.docx'
+                html: '財務計算/個人財務決策與計算分析/管理探索二_W12_第3至7項財務知識與計算分析_教學指引.html',
+                interactiveTool: '財務計算/個人財務決策與計算分析/index.html',
+                docx: '財務計算/個人財務決策與計算分析/管理探索二_W12_第3至7項財務知識與計算分析.docx'
               }
             ]
           },
@@ -937,7 +938,8 @@
       sre_capital_structure: 'https://raw.githubusercontent.com/williamslchang-blip/11501-leadership-and-management/main/',
       climate: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/',
       hubbard_wacc: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/',
-      aerotaiwan_pension: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/'
+      aerotaiwan_pension: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/',
+      personal_finance: 'https://raw.githubusercontent.com/williamslchang-blip/master-portal/main/'
     };
 
     function resolveUrl(path, courseId) {
@@ -1394,30 +1396,65 @@
         // Standard Course Actions
         const courseHtmlUrl = resolveUrl(item.html, currentTier2);
         const courseDocxUrl = resolveUrl(item.docx, currentTier2);
+        const hasExtraTools = Boolean(item.interactiveTool || item.htmlTheory || item.docxTheory);
 
         actionsBox.innerHTML = `
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <a 
-              href="${courseHtmlUrl}" 
-              target="_blank" 
-              class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-extrabold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 shadow-lg shadow-sky-600/30 active:scale-95"
-              title="在新分頁開啟全螢幕 16:9 互動簡報網站"
-            >
-              <i class="fa-solid fa-chalkboard-user"></i>
-              <span>開啟全螢幕教學網站</span>
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
-            </a>
+          <div class="space-y-2.5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 ${hasExtraTools ? 'md:grid-cols-3' : ''} gap-3">
+              <a 
+                href="${courseHtmlUrl}" 
+                target="_blank" 
+                class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-extrabold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 shadow-lg shadow-sky-600/30 active:scale-95"
+                title="在新分頁開啟全螢幕 16:9 互動簡報網站"
+              >
+                <i class="fa-solid fa-chalkboard-user"></i>
+                <span>開啟全螢幕教學網站</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
+              </a>
 
-            <a 
-              href="${courseDocxUrl}" 
-              download 
-              class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 hover:text-emerald-300 border border-slate-700 font-extrabold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 shadow-sm active:scale-95"
-              title="直接下載或以 Word 開啟教師授課指引手冊 (.docx)"
-            >
-              <i class="fa-regular fa-file-word text-emerald-400"></i>
-              <span>下載教師教學指引 (.docx)</span>
-              <i class="fa-solid fa-download text-[10px] ml-1"></i>
-            </a>
+              <a 
+                href="${courseDocxUrl}" 
+                download 
+                class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 hover:text-emerald-300 border border-slate-700 font-extrabold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 shadow-sm active:scale-95"
+                title="直接下載或以 Word 開啟教師授課指引手冊 (.docx)"
+              >
+                <i class="fa-regular fa-file-word text-emerald-400"></i>
+                <span>下載教師教學指引 (.docx)</span>
+                <i class="fa-solid fa-download text-[10px] ml-1"></i>
+              </a>
+
+              ${item.interactiveTool ? `
+                <a 
+                  href="${resolveUrl(item.interactiveTool, currentTier2)}" 
+                  target="_blank" 
+                  class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-extrabold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 shadow-lg shadow-amber-600/30 active:scale-95"
+                  title="在新分頁開啟專案互動試算模型"
+                >
+                  <i class="fa-solid fa-calculator"></i>
+                  <span>五大決策互動試算系統</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
+                </a>
+              ` : ''}
+            </div>
+
+            ${hasExtraTools ? `
+              <div class="pt-2 border-t border-slate-800/60 flex flex-wrap items-center gap-2.5 text-xs">
+                ${item.htmlTheory ? `
+                  <a href="${resolveUrl(item.htmlTheory, currentTier2)}" target="_blank" class="py-1.5 px-3 rounded-lg bg-teal-900/60 hover:bg-teal-800 text-teal-300 border border-teal-700 font-bold transition flex items-center gap-1.5 shadow">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>第3-7項財務計算講義 (Word網頁版)</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                  </a>
+                ` : ''}
+                ${item.docxTheory ? `
+                  <a href="${resolveUrl(item.docxTheory, currentTier2)}" download class="py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold transition flex items-center gap-1.5 shadow">
+                    <i class="fa-regular fa-file-word text-emerald-400"></i>
+                    <span>下載第3-7項財務計算 Word 原生公式檔 (.docx)</span>
+                    <i class="fa-solid fa-download text-[9px]"></i>
+                  </a>
+                ` : ''}
+              </div>
+            ` : ''}
           </div>
         `;
         document.getElementById('viewerTabsSwitch').classList.add('hidden');
