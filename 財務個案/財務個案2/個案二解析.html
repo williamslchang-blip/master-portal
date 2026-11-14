@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>《Hubbard Computer, Inc.：非上市公司 WACC 估算與純業務法應用》個案解析與財務推導詳解｜教學講義網頁版</title>
+  
+  <!-- MathJax Configuration for Word Equation Editor Style -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      },
+      chtml: {
+        fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+
+  <style>
+    /* 全文採用頂級學術/管理顧問規範字型：中文標楷體，英文與數字 Times New Roman */
+    body {
+      font-family: 'Times New Roman', '標楷體', 'DFKai-SB', 'BiauKai', serif;
+      line-height: 1.85;
+      color: #1a1a1a;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      font-size: 17px;
+    }
+
+    /* Word 頁面紙張容器佈局 (標準 A4 閱讀體驗) */
+    .page-wrapper {
+      max-width: 1080px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 55px 75px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+      border: 1px solid #d9e2ec;
+    }
+
+    /* 頂部導航列 (含 Master Portal 快捷連結與工具按鈕) */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: #143652;
+      color: #ffffff;
+      border-radius: 6px;
+      margin-bottom: 35px;
+      font-size: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .top-nav .nav-brand {
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+    .top-nav .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .top-nav a.btn-link {
+      color: #e2e8f0;
+      background: rgba(255, 255, 255, 0.12);
+      text-decoration: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .top-nav a.btn-link:hover {
+      background: #ffffff;
+      color: #143652;
+      border-color: #ffffff;
+      text-decoration: none;
+    }
+    .top-nav a.btn-link.highlight {
+      background: #ea580c;
+      border-color: #ea580c;
+      color: #ffffff;
+      font-weight: bold;
+    }
+    .top-nav a.btn-link.highlight:hover {
+      background: #c2410c;
+    }
+
+    /* 哈佛式表頭飾板 */
+    .hbs-banner-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+      border-top: 3px solid #143652;
+      border-bottom: 1px solid #cbd5e1;
+    }
+    .hbs-banner-table td {
+      padding: 10px 0;
+      font-size: 13.5px;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hbs-banner-table td.right {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    /* 標題體系 */
+    h1.doc-title {
+      font-size: 29px;
+      color: #143652;
+      text-align: center;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      line-height: 1.4;
+    }
+    .doc-subtitle {
+      font-size: 18px;
+      color: #1f4e79;
+      text-align: center;
+      margin-bottom: 8px;
+      font-weight: normal;
+      font-style: italic;
+    }
+    .doc-meta {
+      font-size: 14.5px;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    /* 財務決策備忘錄卡片 (Executive Memorandum) */
+    .memo-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 6px solid #1f4e79;
+      border-radius: 6px;
+      padding: 24px 28px;
+      margin-bottom: 35px;
+    }
+    .memo-header {
+      font-size: 18px;
+      font-weight: bold;
+      color: #143652;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .memo-field-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 8px 20px;
+      margin-bottom: 16px;
+      font-size: 15.5px;
+    }
+    .memo-summary-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-top: 14px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .memo-summary-list {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 15px;
+      color: #334155;
+    }
+    .memo-summary-list li {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+
+    /* 章節大標題與次標題 */
+    h2.heading-1 {
+      font-size: 22px;
+      color: #143652;
+      border-bottom: 2px solid #143652;
+      padding-bottom: 8px;
+      margin-top: 45px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3.heading-2 {
+      font-size: 18.5px;
+      color: #1F5C81;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      font-weight: bold;
+      border-left: 4px solid #1F5C81;
+      padding-left: 12px;
+    }
+    h4.heading-3 {
+      font-size: 17px;
+      color: #0f172a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    /* 段落與清單 */
+    p {
+      margin-bottom: 14px;
+      text-align: justify;
+      text-justify: inter-ideograph;
+    }
+    ul.bullet-list {
+      margin: 12px 0 16px 25px;
+      padding: 0;
+    }
+    ul.bullet-list li {
+      margin-bottom: 8px;
+      line-height: 1.75;
+    }
+
+    /* Word 方程式編輯器風格展示框 (Office Equation Look & Feel) */
+    .word-equation-box {
+      background-color: #fbfcfe;
+      border: 1px solid #dbe2ea;
+      border-left: 5px solid #1F5C81;
+      border-radius: 6px;
+      padding: 16px 24px;
+      margin: 22px 0;
+      text-align: center;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.03);
+      overflow-x: auto;
+      position: relative;
+    }
+    .word-equation-box .eq-number {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #64748b;
+      font-family: 'Times New Roman', serif;
+    }
+    .word-equation-box .mjx-chtml {
+      font-size: 1.22em !important;
+      color: #0f172a;
+    }
+
+    /* 表格樣式 (專業 Light Shading Accent 1) */
+    .table-container {
+      overflow-x: auto;
+      margin: 24px 0 35px 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+    }
+    .table-caption {
+      font-weight: bold;
+      color: #143652;
+      font-size: 16px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      background-color: #ffffff;
+    }
+    table.data-table th {
+      background-color: #1F4E79;
+      color: #ffffff;
+      font-weight: bold;
+      padding: 11px 13px;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+      font-size: 14.5px;
+      letter-spacing: 0.3px;
+    }
+    table.data-table td {
+      padding: 10px 13px;
+      border: 1px solid #e2e8f0;
+      line-height: 1.6;
+    }
+    table.data-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    table.data-table tr:hover {
+      background-color: #f1f5f9;
+    }
+    table.data-table td.text-right {
+      text-align: right;
+      font-family: 'Times New Roman', serif;
+    }
+    table.data-table td.text-center {
+      text-align: center;
+    }
+    table.data-table td.highlight-cell {
+      background-color: #eff6ff;
+      font-weight: bold;
+      color: #1e40af;
+    }
+    table.data-table td.danger-cell {
+      background-color: #fef2f2;
+      font-weight: bold;
+      color: #b91c1c;
+    }
+
+    /* 觀點比較卡片與提示方塊 */
+    .view-card {
+      background: #fdfefe;
+      border: 1px solid #dbe2ea;
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .view-card.view-2 {
+      border-top: 4px solid #0284c7;
+    }
+    .view-card.view-3 {
+      border-top: 4px solid #16a34a;
+    }
+    .view-card-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .view-card.view-2 .view-card-title { color: #0284c7; }
+    .view-card.view-3 .view-card-title { color: #16a34a; }
+
+    /* 警示與教學提要方塊 */
+    .teaching-box {
+      background-color: #f0fdf4;
+      border-left: 5px solid #16a34a;
+      border-radius: 0 6px 6px 0;
+      padding: 16px 20px;
+      margin: 22px 0;
+      font-size: 15.5px;
+    }
+    .teaching-box.warning {
+      background-color: #fffbeb;
+      border-left-color: #d97706;
+    }
+    .teaching-box.danger {
+      background-color: #fef2f2;
+      border-left-color: #dc2626;
+    }
+    .teaching-box-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 目錄導覽盒 (Table of Contents) */
+    .toc-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 22px 30px;
+      margin: 28px 0 38px 0;
+    }
+    .toc-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #143652;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 10px 25px;
+      font-size: 15px;
+    }
+    .toc-grid a {
+      color: #1f5c81;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .toc-grid a:hover {
+      text-decoration: underline;
+      color: #0c4a6e;
+    }
+
+    /* 頁尾 */
+    .doc-footer {
+      margin-top: 60px;
+      padding-top: 22px;
+      border-top: 1px solid #cbd5e1;
+      text-align: center;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    @media print {
+      body { background: #ffffff; font-size: 12pt; }
+      .page-wrapper { box-shadow: none; border: none; padding: 0; max-width: 100%; margin: 0; }
+      .top-nav { display: none; }
+      .toc-box { display: none; }
+      .word-equation-box { border: 1px solid #000; box-shadow: none; }
+      table.data-table th { background-color: #ddd !important; color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- 頂部快速導覽列 -->
+  <div class="top-nav">
+    <div class="nav-brand">📚 實務財務個案教學庫｜個案二解析</div>
+    <div class="nav-links">
+      <a href="https://williamslchang-blip.github.io/master-portal/" class="btn-link">🏠 Master Portal</a>
+      <a href="教學簡報網站：Hubbard_Computer.html" class="btn-link highlight">🖥️ 全螢幕簡報</a>
+      <a href="財務個案2_Hubbard_Computer_互動式財務模型.html" class="btn-link">📊 互動式財務模型</a>
+      <a href="HCI_財務個案_財務理論與實證應用_第3至8章強化版.html" class="btn-link">📖 財務理論講義</a>
+      <a href="個案二解析.docx" class="btn-link" download>📥 下載 Word 檔</a>
+      <a href="javascript:window.print()" class="btn-link">🖨️ 列印/轉PDF</a>
+    </div>
+  </div>
+
+  <!-- 哈佛式標頭表格 -->
+  <table class="hbs-banner-table">
+    <tr>
+      <td>HARVARD BUSINESS SCHOOL STYLE CASE SOLUTIONS & QUANTITATIVE EXHIBITS</td>
+      <td class="right">文件編號：HBS-FIN-11501-SM02 ｜ 修訂日期：2026年11月 完整解析版</td>
+    </tr>
+  </table>
+
+  <!-- 文件標題區 -->
+  <h1 class="doc-title">《Hubbard Computer, Inc.：非上市公司 WACC 估算與純業務法應用》<br>個案解析與財務推導詳解</h1>
+  <div class="doc-subtitle">Analytical Solutions & Quantitative Exhibits — Cost of Capital for Hubbard Computer, Inc. | Pure Play Approach, Hamada Adjustment, and Capital Budgeting Decision</div>
+  <div class="doc-meta">
+    適用課程：碩士在職專班／領導與管理／實務財務個案教學 ｜ 授課教師專用參考解析 ｜ 配套模型：Excel / 互動網頁模型
+  </div>
+
+  <!-- 財務決策備忘錄 (Executive Decision Memorandum) -->
+  <div class="memo-card">
+    <div class="memo-header">
+      <span>📄 財務決策備忘錄（EXECUTIVE DECISION MEMORANDUM）</span>
+      <span style="font-size: 13.5px; color: #64748b; font-weight: normal;">機密等級：內部決策使用</span>
+    </div>
+    <div class="memo-field-grid">
+      <div><strong>受文者（TO）：</strong>鮑伯·哈伯德（Bob Hubbard），創辦人兼執行長；董事會全體成員</div>
+      <div><strong>發文者（FROM）：</strong>理查·艾文斯（Richard Evans），財務總監；馬克思·休斯（Marcus Hughes），資深財務分析師</div>
+      <div><strong>日　期（DATE）：</strong>2026 年 10 月 23 日（修訂至 11 月）</div>
+      <div><strong>主　旨（SUBJECT）：</strong>新一代自動化產線暨資料中心（800 萬美元）專案之加權平均資金成本（WACC）量化推導與可行性決策建言</div>
+    </div>
+    <div class="memo-summary-title">【核心決策結論摘要】：</div>
+    <ol class="memo-summary-list">
+      <li><strong>資本結構衡量基準：</strong>標竿企業 Dell 帳面負債比為 40.00%，但市場負債比為 26.16%（股權市值達 $87.5 億美元，市淨率 P/B = 1.94 倍）。帳面價值忽略了 Dell 龐大的無形資產與未來成長機會。資本成本衡量的是募集邊際新資金所必須承諾的「前瞻性機會成本」，唯一具有理論正當性的基準絕對是<strong>【市場價值權重】</strong>。</li>
+      <li><strong>科技業 DDM 模型批判：</strong>高科技硬體與 IT 解決方案產業具備高資本支出與激烈競爭特徵，多數企業採零股利或股票回購政策，盈餘波動劇烈，完全違反高登模型「永續固定股利成長率」基本假設。若 $g \ge R_e$ 將導致分母為負或無解，科技業估算股權資本成本一律採用 <strong>CAPM 模型</strong>。</li>
+      <li><strong>Dell 資本成本與權重比較：</strong>Dell 股權成本 $R_e = 12.875\%$，稅後債務成本 $= 4.225\%$。按市場價值權重算出的真實 WACC 為 <strong>10.612%（約 10.61%）</strong>；若依帳面價值權重計算則僅為 <strong>9.415%（約 9.42%）</strong>。帳面價值嚴重低估資金成本 120 個基點，將導致核准毀損股東價值的平庸專案。</li>
+      <li><strong>純業務法四部曲與 HCI 專屬 WACC：</strong>直接套用 Dell 的 10.61% 將犯下資本結構不匹配、忽視信用利差與抹殺私營小企業風險的致命錯誤：
+        <ul style="margin-top: 5px;">
+          <li><strong>步驟 A（去槓桿）：</strong>Dell 市場 $D/E = 35.43\%$，經 Hamada 去槓桿求得電腦產業無負債資產 Beta：$\beta_U = 1.0160$。</li>
+          <li><strong>步驟 B（再加槓桿）：</strong>依 HCI 目標資本結構（$D/V=30\%$, $E/V=70\%$ $\to$ $D/E=42.86\%$）重新加槓桿，求得 HCI 目標股權 Beta：$\beta_{L,HCI} = 1.2991$。</li>
+          <li><strong>步驟 C（風險溢價疊加）：</strong>以擴充型 CAPM 疊加小型企業規模溢價（2.50%）與非流動性溢價（1.50%），得出 HCI 股權要求報酬率 $R_{e,HCI} = 17.243\%$（約 17.24%）。</li>
+          <li><strong>步驟 D（最終 WACC）：</strong>結合 HCI 商業銀行 7.20% 借款之稅後成本 4.680%，加權計算得出 HCI 專屬折現率：<strong>$\text{WACC}_{HCI} = 13.474\%$（約 13.47%）</strong>。</li>
+        </ul>
+      </li>
+      <li><strong>資本預算決策逆轉：</strong>本專案內部報酬率 IRR 為 <strong>12.602%（約 12.60%）</strong>。若誤用 Dell 帳面 WACC（9.42%），NPV 虛增為 +$961,220；若誤用 Dell 市場 WACC（10.61%），NPV 虛增為 +$580,103；但在 HCI 真實 WACC（13.47%）下，NPV 實際為<strong>【負的 23 萬 5 千美元（-$235,184）】</strong>！專案實質毀損股東價值。財務部強烈建議董事會<strong>【暫緩全額核准】</strong>，並啟動設備採購降價談判（壓低投資額至 720 萬美元以轉正 NPV）。</li>
+    </ol>
+  </div>
+
+  <!-- 目錄導覽盒 -->
+  <div class="toc-box">
+    <div class="toc-title">📑 個案解析快速目錄索引 (Table of Contents)</div>
+    <div class="toc-grid">
+      <a href="#q1">📌 問題一：Dell 資本結構權重計算與背離本質</a>
+      <a href="#q2">📌 問題二：科技產業股利折現模型 (DDM) 批判</a>
+      <a href="#q3">📌 問題三：標竿 Dell 資本成本組件精算</a>
+      <a href="#q4">📌 問題四：Dell 帳面 vs. 市場 WACC 與唯一合法性</a>
+      <a href="#q5">📌 問題五：純業務法局限與 HCI 專屬 WACC 調整</a>
+      <a href="#q6">📌 問題六：800 萬美元新投資案資本預算評估</a>
+      <a href="#part2">📌 第二部分：觀點二 vs. 觀點三 逐步推導與教學指引</a>
+      <a href="#tables">📌 附錄清單：解析附表一至附表六 (Exhibits A-F)</a>
+    </div>
+  </div>
+
+  <!-- 第一部分：六大核心問題解析 -->
+  
+  <!-- 問題一 -->
+  <h2 class="heading-1" id="q1">問題一解析：標竿企業 Dell Inc. 資本結構權重計算（帳面 vs. 市場）與背離本質</h2>
+  <p>根據個案【附錄二】標竿企業戴爾公司（Dell Inc.）公開市場交易數據與最新財務報表，分別計算其在【帳面價值基準（Book Value Basis）】與【市場價值基準（Market Value Basis）】下的資本結構權重：</p>
+  
+  <h3 class="heading-2">1. 帳面價值基準（Book Value Basis）計算：</h3>
+  <ul class="bullet-list">
+    <li>長期負債帳面價值（$D_{BV}$）= $30.00 億美元</li>
+    <li>股東權益帳面價值（$E_{BV}$）= $45.00 億美元</li>
+    <li>總資本帳面價值（$V_{BV}$）= $D_{BV} + E_{BV} = \$30.00 \text{ 億} + \$45.00 \text{ 億} = \$75.00 \text{ 億美元}$</li>
+    <li>債務帳面權重（$w_{d,BV}$）= $D_{BV} / V_{BV} = \$30.00 \text{ 億} / \$75.00 \text{ 億} = 40.0000\% \text{（40.00%）}$</li>
+    <li>股權帳面權重（$w_{e,BV}$）= $E_{BV} / V_{BV} = \$45.00 \text{ 億} / \$75.00 \text{ 億} = 60.0000\% \text{（60.00%）}$</li>
+    <li>帳面債股比（$(D/E)_{BV}$）= $\$30.00 \text{ 億} / \$45.00 \text{ 億} = 0.6667 \text{（66.67%）}$</li>
+  </ul>
+
+  <h3 class="heading-2">2. 市場價值基準（Market Value Basis）計算：</h3>
+  <ul class="bullet-list">
+    <li>普通股股權市場總價值（$E_{MV}$）= 每股市價（$P_0$）× 流通在外股數 = $\$35.00 \times 2.5 \text{ 億股} = \$87.50 \text{ 億美元}$</li>
+    <li>流通債券市場總價值（$D_{MV}$）= 公開交易債券市價總值 = $31.00 億美元</li>
+    <li>總資本市場價值（$V_{MV}$）= $E_{MV} + D_{MV} = \$87.50 \text{ 億} + \$31.00 \text{ 億} = \$118.50 \text{ 億美元}$</li>
+    <li>債務市場權重（$w_{d,MV}$）= $D_{MV} / V_{MV} = \$31.00 \text{ 億} / \$118.50 \text{ 億} = 26.1603\% \text{（約 26.16%）}$</li>
+    <li>股權市場權重（$w_{e,MV}$）= $E_{MV} / V_{MV} = \$87.50 \text{ 億} / \$118.50 \text{ 億} = 73.8397\% \text{（約 73.84%）}$</li>
+    <li>市場債股比（$(D/E)_{MV}$）= $\$31.00 \text{ 億} / \$87.50 \text{ 億} = 0.3542857 \text{（約 0.3543 或 35.43%）}$</li>
+  </ul>
+
+  <h3 class="heading-2">3. 兩者產生巨大背離（13.84 個百分點）的經濟本質剖析：</h3>
+  <p>市場價值負債權重（26.16%）較帳面價值（40.00%）大幅下降了 <strong>13.84 個百分點</strong>，而股權權重則對應上升了 13.84 個百分點。這項顯著差異深刻揭示了現代會計學與金融市場定價機制的本質差異：</p>
+  <ul class="bullet-list">
+    <li><strong>會計帳面淨值的歷史滯後性：</strong>股東權益帳面價值（$45.0 億）僅是累積歷史出資額與保留盈餘的會計沉沒記錄，並依歷史成本原則嚴格提列資產折舊與攤銷。</li>
+    <li><strong>智慧資本與成長機會的市場定價：</strong>公開市場投資人給予 Dell 的股權市場估值高達 $87.5 億美元，市淨率（P/B Ratio）達到 <strong>1.9444 倍</strong>（即每 1 美元的會計淨資產，市場願意支付 1.94 美元收購）。這 42.5 億美元的市值溢價完全體現了 Dell 擁有龐大的專利技術、全球品牌商譽、直銷通路客戶關係、高黏著度企業伺服器安裝基底（Installed Base）以及未來在邊緣運算與雲端基礎設施領域的實質成長選擇權（Growth Options）。這些決定公司未來盈利能力的無形資產，在傳統資產負債表上完全被視為費用而隱形！</li>
+  </ul>
+
+  <div class="table-caption">解析附表一（TN Exhibit A）　標竿企業 Dell Inc. 資本結構帳面與市場價值對比全景表</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>資本結構評估維度</th>
+          <th>債務規模 (D)</th>
+          <th>股權規模 (E)</th>
+          <th>總資本規模 (V)</th>
+          <th>債務權重 ($w_d$)</th>
+          <th>股權權重 ($w_e$)</th>
+          <th>債股比 (D/E)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>帳面價值基準 (Book Value)</strong></td>
+          <td class="text-right">$30.00 億美元</td>
+          <td class="text-right">$45.00 億美元</td>
+          <td class="text-right">$75.00 億美元</td>
+          <td class="text-right highlight-cell">40.0000%</td>
+          <td class="text-right">60.0000%</td>
+          <td class="text-right">0.6667 (66.67%)</td>
+        </tr>
+        <tr>
+          <td><strong>市場價值基準 (Market Value)</strong></td>
+          <td class="text-right">$31.00 億美元</td>
+          <td class="text-right">$87.50 億美元</td>
+          <td class="text-right">$118.50 億美元</td>
+          <td class="text-right highlight-cell">26.1603%</td>
+          <td class="text-right">73.8397%</td>
+          <td class="text-right">0.3543 (35.43%)</td>
+        </tr>
+        <tr>
+          <td><strong>差異幅度 (Market - Book)</strong></td>
+          <td class="text-right">+$1.00 億 (+3.3%)</td>
+          <td class="text-right">+$42.50 億 (+94.4%)</td>
+          <td class="text-right">+$43.50 億 (+58.0%)</td>
+          <td class="text-right danger-cell">-13.8397%</td>
+          <td class="text-right danger-cell">+13.8397%</td>
+          <td class="text-right">-0.3124 (-46.9%)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 問題二 -->
+  <h2 class="heading-1" id="q2">問題二解析：高登股利折現模型（DDM）在電腦 IT 科技產業之適用性批判</h2>
+  <p>在傳統公司財務學中，股權資本成本（$R_e$）除了採用資本資產定價模型（CAPM），亦常引述高登股利折現模型（Gordon Dividend Growth Model）：</p>
+  
+  <div class="word-equation-box">
+    $$R_e = rac{D_1}{P_0} + g = rac{D_0 	imes (1 + g)}{P_0} + g$$
+    <span class="eq-number">(1)</span>
+  </div>
+
+  <p>然而，創辦人 Bob 提議使用 DDM 模型評估 Dell 或 HCI 的股權成本，在科技產業評價實務中存在四大結構性致命缺陷，完全不具備可行性：</p>
+  
+  <ul class="bullet-list">
+    <li><strong>缺陷一：普遍採行零股利政策（Zero Dividend Trap）：</strong>高科技硬體、個人電腦與雲端伺服器產業屬於高度資本密集與技術密集領域。為保持技術領先與產能擴張，多數科技企業（包括早期的 Dell、Apple、Cisco 等）長年採行「零現金股利政策（Zero-Dividend Policy）」，將全部營業現金流投入研發（R&D）與資本支出，或透過股票回購（Share Repurchases）回饋股東。當次期預期股利 $D_1 = 0$ 時，模型分子為零，數學上直接崩潰！</li>
+    <li><strong>缺陷二：盈餘與股利極度不穩定，違反「永續恆常成長」核心假設：</strong>高登模型推導的數學前提是股利將以「恆常固定比率 $g$（Constant Growth Rate）永續成長至無窮遠」。然而，科技產業面臨劇烈的產品生命週期更迭（如 PC 換機潮、伺服器平台架構轉向 ARM/AI GPU），企業營收與自由現金流高度波動，根本不存在平穩可預測的恆定股利成長率。</li>
+    <li><strong>缺陷三：成長率 $g$ 估算高度敏感且易引發數學奇異點（Mathematical Singularity）：</strong>若預估的高科技成長率 $g$ 接近或大於要求報酬率 $R_e$，模型分母 $(R_e - g)$ 將趨近於零或變為負數，導致算出的股價趨近於無窮大或股權成本為負值，完全喪失經濟解釋力。</li>
+    <li><strong>缺陷四：CAPM 定價模型的壓倒性優勢：</strong>相比之下，CAPM 模型直接錨定資本市場不可分散的宏觀系統性風險（Systematic Risk），不受企業具體利潤分配政策（發股利 vs. 不發股利）之干擾。因此，全球投資銀行與學術界在評估科技製造與 IT 服務業時，一律將<strong>【CAPM 模型】</strong>視為唯一公認的黃金標準。</li>
+  </ul>
+
+  <div class="table-caption">解析附表二（TN Exhibit B）　高科技 IT 產業估值方法對比：股利折現模型 (DDM) vs. CAPM 定價模型</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>評價模型評估維度</th>
+          <th>高登股利折現模型 (Gordon DDM)</th>
+          <th>資本資產定價模型 (CAPM)</th>
+          <th>現代財務學之評估結論</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>核心輸入變數要求</strong></td>
+          <td>當前市價 $P_0$、次期股利 $D_1$、固定成長率 $g$</td>
+          <td>無風險利率 $R_f$、市場溢酬 MRP、貝塔係數 $\beta$</td>
+          <td>CAPM 變數由客觀宏觀市場數據界定，可靠度高</td>
+        </tr>
+        <tr>
+          <td><strong>對企業股利政策之依賴</strong></td>
+          <td class="danger-cell">極高。若企業不發放現金股利則完全失效</td>
+          <td class="highlight-cell">完全獨立。與個別企業是否發放股利完全無關</td>
+          <td>CAPM 能普遍適用於各類成長型與零股利科技廠</td>
+        </tr>
+        <tr>
+          <td><strong>成長率穩定度之假設</strong></td>
+          <td>要求企業盈餘與股利以恆常固定比率永續成長</td>
+          <td>僅假設資產收益率與市場大盤之協方差關係</td>
+          <td>科技業景氣波動劇烈，CAPM 假設遠較 DDM 切合現實</td>
+        </tr>
+        <tr>
+          <td><strong>實務應用之敏感度風險</strong></td>
+          <td>極端敏感。$g$ 變動 1% 導致估值翻倍或出現負值</td>
+          <td>線性穩健。$R_e$ 隨 $\beta$ 與 MRP 呈現穩定線性變動</td>
+          <td>DDM 易產生數學奇異點，CAPM 估算誤差可控</td>
+        </tr>
+        <tr>
+          <td><strong>科技產業實務採納度</strong></td>
+          <td>基本棄用（僅少數公用事業與成熟金融業使用）</td>
+          <td>全球投資銀行、公證會計師與學術界唯一標準</td>
+          <td><strong>本個案必須全面揚棄 DDM，以 CAPM 作為唯一骨幹</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 問題三 -->
+  <h2 class="heading-1" id="q3">問題三解析：標竿企業 Dell Inc. 資本成本組件精算（CAPM 股權成本與稅後債務成本）</h2>
+  <p>根據【附錄二】與【附錄三】之金融市場與標竿企業參數，計算 Dell 資本成本兩大核心組件：</p>
+  
+  <h3 class="heading-2">1. 股權資本成本（Cost of Equity, $R_{e,Dell}$）計算（採用 CAPM 模型）：</h3>
+  <div class="word-equation-box">
+    $$R_e = R_f + eta_L 	imes [E(R_m) - R_f] = R_f + eta_L 	imes MRP$$
+    <span class="eq-number">(2)</span>
+  </div>
+  <ul class="bullet-list">
+    <li>宏觀無風險利率（$R_f$）= 3.50%（美國 3 個月期國庫券殖利率）</li>
+    <li>Dell 歷史槓桿股權貝塔（$\beta_L$）= 1.2500</li>
+    <li>市場預期報酬率（$E(R_m)$）= 11.00%</li>
+    <li>市場風險溢酬（$MRP = E(R_m) - R_f$）= 11.00% - 3.50% = 7.50%</li>
+  </ul>
+  <div class="word-equation-box">
+    $$R_{e,Dell} = 3.5000\% + 1.2500 	imes 7.5000\% = 3.5000\% + 9.3750\% = 12.8750\% \quad (12.875\%)$$
+    <span class="eq-number">(3)</span>
+  </div>
+
+  <h3 class="heading-2">2. 稅後債務資本成本（After-tax Cost of Debt, 稅後 $R_{d,Dell}$）計算：</h3>
+  <p>在現代公司財務學中，債務利息費用在計算企業所得稅時享有稅前全額扣除之利息稅盾（Interest Tax Shield），因此企業真正承擔的邊際債務成本為稅後殖利率：</p>
+  <div class="word-equation-box">
+    $$	ext{稅後 } R_d = R_{d,Dell} 	imes (1 - T_c)$$
+    <span class="eq-number">(4)</span>
+  </div>
+  <ul class="bullet-list">
+    <li>Dell 債券加權平均到期殖利率（稅前 $R_d$）= 6.50%</li>
+    <li>適用綜合企業所得稅率（$T_c$）= 35.00%</li>
+  </ul>
+  <div class="word-equation-box">
+    $$	ext{稅後 } R_{d,Dell} = 6.5000\% 	imes (1 - 0.35) = 6.5000\% 	imes 0.65 = 4.2250\% \quad (4.225\%)$$
+    <span class="eq-number">(5)</span>
+  </div>
+
+  <div class="table-caption">解析附表三（TN Exhibit C）　標竿企業 Dell Inc. 資本成本組件與各項參數明細表</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>資本成本組成要素</th>
+          <th>符號標記</th>
+          <th>模型輸入數值</th>
+          <th>計算公式 / 數據來源說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>無風險利率基準 (Risk-Free Rate)</strong></td>
+          <td class="text-center">$R_f$</td>
+          <td class="text-right">3.5000%</td>
+          <td>美國 3 個月期國庫券發行殖利率</td>
+        </tr>
+        <tr>
+          <td><strong>標竿企業股票槓桿貝塔值</strong></td>
+          <td class="text-center">$\beta_L$</td>
+          <td class="text-right">1.2500</td>
+          <td>過去 60 個月相對 S&P 500 之月收益迴歸係數</td>
+        </tr>
+        <tr>
+          <td><strong>市場預期報酬率基準</strong></td>
+          <td class="text-center">$E(R_m)$</td>
+          <td class="text-right">11.0000%</td>
+          <td>標普 500 指數歷史長期平均回報</td>
+        </tr>
+        <tr>
+          <td><strong>市場風險溢酬 (Market Risk Premium)</strong></td>
+          <td class="text-center">MRP</td>
+          <td class="text-right">7.5000%</td>
+          <td>$MRP = E(R_m) - R_f = 11.00\% - 3.50\%$</td>
+        </tr>
+        <tr>
+          <td><strong>標竿企業股權要求報酬率 (CAPM)</strong></td>
+          <td class="text-center">$R_{e,Dell}$</td>
+          <td class="text-right highlight-cell">12.8750%</td>
+          <td>$R_e = R_f + \beta_L \times MRP = 3.50\% + 1.25 \times 7.50\%$</td>
+        </tr>
+        <tr>
+          <td><strong>債券市場加權殖利率 (稅前)</strong></td>
+          <td class="text-center">$R_{d,Dell}$</td>
+          <td class="text-right">6.5000%</td>
+          <td>Dell 流通長天期公司債券市場合成殖利率</td>
+        </tr>
+        <tr>
+          <td><strong>邊際企業所得稅率 (Tax Rate)</strong></td>
+          <td class="text-center">$T_c$</td>
+          <td class="text-right">35.0000%</td>
+          <td>聯邦與州綜合邊際所得稅率</td>
+        </tr>
+        <tr>
+          <td><strong>稅後邊際債務成本 (After-Tax Rd)</strong></td>
+          <td class="text-center">稅後 $R_d$</td>
+          <td class="text-right highlight-cell">4.2250%</td>
+          <td>稅後 $R_d = 6.5000\% \times (1 - 0.35) = 4.2250\%$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 問題四 -->
+  <h2 class="heading-1" id="q4">問題四解析：Dell 帳面 WACC vs. 市場 WACC 試算，及「市場價值權重絕對合法性」之嚴謹論證</h2>
+  
+  <h3 class="heading-2">1. 分別使用帳面價值權重與市場價值權重計算 Dell 的加權平均資金成本（WACC）：</h3>
+  <div class="word-equation-box">
+    $$	ext{WACC} = w_e 	imes R_e + w_d 	imes R_d 	imes (1 - T_c)$$
+    <span class="eq-number">(6)</span>
+  </div>
+
+  <p><strong>• 【基準 A：依據帳面價值權重（Book Value Basis）計算】：</strong></p>
+  <div class="word-equation-box">
+    $$	ext{WACC}_{BV} = (0.6000 	imes 12.8750\%) + (0.4000 	imes 4.2250\%) = 7.7250\% + 1.6900\% = 9.4150\% \quad (9.415\%)$$
+    <span class="eq-number">(7)</span>
+  </div>
+
+  <p><strong>• 【基準 B：依據市場價值權重（Market Value Basis）計算】：</strong></p>
+  <div class="word-equation-box">
+    $$	ext{WACC}_{MV} = (0.738397 	imes 12.8750\%) + (0.261603 	imes 4.2250\%) = 9.50686\% + 1.10527\% = 10.61213\% \quad (10.612\% pprox 10.61\%)$$
+    <span class="eq-number">(8)</span>
+  </div>
+
+  <p><strong>• 【兩種權重計算結果之差異】：</strong></p>
+  <div class="word-equation-box">
+    $$\Delta 	ext{WACC} = 	ext{WACC}_{MV} - 	ext{WACC}_{BV} = 10.6121\% - 9.4150\% = +1.1971\% \quad (	ext{高出約 } 1.20\% 	ext{ 或 } 120 	ext{ 個基點})$$
+    <span class="eq-number">(9)</span>
+  </div>
+
+  <h3 class="heading-2">2. 現代公司財務學與資本預算之核心論證：為什麼「市場價值權重」具有唯一理論合法性？</h3>
+  <p>在公司財務學與投資銀行實務中，使用帳面價值計算 WACC 被視為嚴重的技術錯誤。必須堅定採用市場價值權重之理論依據如下：</p>
+  
+  <div class="teaching-box">
+    <div class="teaching-box-title">💡 論點一：資金成本的前瞻性「機會成本」本質</div>
+    資本成本衡量的是「企業今天要在金融市場上募集 1 美元新資本以支持新專案，外部投資人（債權人與股東）所要求的邊際預期報酬率」。金融市場只會根據企業資產今日的<strong>【現時市場價值】</strong>來決定求償權定價，絕不可能參考數年前被會計規則凍結的帳面歷史成本。
+  </div>
+
+  <div class="teaching-box">
+    <div class="teaching-box-title">💡 論點二：邊際融資結構的真實對齊</div>
+    若公司今日要按照目標資本結構進行新一輪融資，其發行普通股所籌措的現金即為市值（$P_0 \times \text{新發行股數}$）。若誤用帳面負債比（40%），實質上是錯誤高估了廉價負債的比例（將負債比例虛增了近 14 個百分點），人為壓低了加權平均資本成本，這是嚴重的資本結構幻覺！
+  </div>
+
+  <div class="teaching-box danger">
+    <div class="teaching-box-title">⚠️ 論點三：避免資本配置扭曲與「毀損股東價值」之重大災難</div>
+    若採信帳面價值 WACC（9.415%），公司將以此寬鬆折現率評估投資專案。其後果是：任何內部回報率落在 9.42% ~ 10.61% 之間的次等專案都會被「誤判為具備正 NPV」而全票通過。但實際上，這些專案產生的報酬率根本無法彌補股東要求之市場機會成本（10.61%），每投資一塊錢都在實質毀損股東真實財富！
+  </div>
+
+  <div class="table-caption">解析附表四（TN Exhibit D）　Dell 帳面 WACC vs. 市場 WACC 試算對照與資本決策扭曲矩陣</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>加權資金成本評估維度</th>
+          <th>股權成本 ($R_e$)</th>
+          <th>股權權重 ($w_e$)</th>
+          <th>稅後債務成本</th>
+          <th>債務權重 ($w_d$)</th>
+          <th>最終 WACC</th>
+          <th>資本配置決策判定</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>帳面價值基準 (Book Value)</strong></td>
+          <td class="text-right">12.8750%</td>
+          <td class="text-right">60.0000%</td>
+          <td class="text-right">4.2250%</td>
+          <td class="text-right">40.0000%</td>
+          <td class="text-right danger-cell">9.4150%</td>
+          <td class="danger-cell">致命低估 120 bps；易核准價值毀損專案</td>
+        </tr>
+        <tr>
+          <td><strong>市場價值基準 (Market Value)</strong></td>
+          <td class="text-right">12.8750%</td>
+          <td class="text-right">73.8397%</td>
+          <td class="text-right">4.2250%</td>
+          <td class="text-right">26.1603%</td>
+          <td class="text-right highlight-cell">10.6121%</td>
+          <td class="highlight-cell">唯一理論正當標準；精確反映邊際機會成本</td>
+        </tr>
+        <tr>
+          <td><strong>差異影響分析 (Market - Book)</strong></td>
+          <td class="text-right">0.0000%</td>
+          <td class="text-right">+13.8397%</td>
+          <td class="text-right">0.0000%</td>
+          <td class="text-right">-13.8397%</td>
+          <td class="text-right">+1.1971%</td>
+          <td>折現率門檻上修 1.20%，守護真實股東財富</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 問題五 -->
+  <h2 class="heading-1" id="q5">問題五解析：純業務法之局限性及對 HCI 專屬 WACC 的四大調整步驟</h2>
+  <p>直接套用標竿企業 Dell 的市場 WACC（10.612%）評估 HCI 的投資專案，看似採納了市場價值權重，但實務上存在四大嚴重財務漏洞：</p>
+  <ul class="bullet-list">
+    <li><strong>① 財務槓桿不匹配：</strong>Dell 的市場負債比為 26.16%，而 HCI 管理層設定之目標負債比為 30.00%，兩者承受不同的財務風險；</li>
+    <li><strong>② 信用利差未反映：</strong>HCI 為未上市私營企業，向商業銀行借款利率為 7.20%，遠高於巨頭 Dell 在公開債券市場的 6.50% 殖利率（利差高達 70 個基點）；</li>
+    <li><strong>③ 抹殺企業規模風險（Size Premium）：</strong>Dell 營收與市值高達百億美元，抗風險能力極強；HCI 規模極小，面臨巨頭夾殺與供應鏈議價劣勢，依資本市場經驗應承擔 2.50% 的小型股溢價；</li>
+    <li><strong>④ 抹殺流動性風險貼水（Illiquidity Discount）：</strong>Dell 股票在 NYSE 具備極高流動性，可隨時變現；HCI 為閉鎖型未上市股份，股權無法在公開市場自由交易，投資人必然要求至少 1.50% 的非流動性補償。</li>
+  </ul>
+
+  <p><strong>【專業投行標準調整四部曲推導】：</strong>為推導出真正符合 HCI 專案風險的專屬折現率，必須嚴格執行專業投行標準調整四部曲：</p>
+
+  <h3 class="heading-2">步驟 A：利用 Hamada 方程將 Dell 的負債貝塔去槓桿化（Unlevering Beta）</h3>
+  <p>根據 Robert Hamada（1972）理論，在存在企業所得稅條件下，負債貝塔（$\beta_L$）與無負債資產貝塔（$\beta_U$）滿足以下關係：</p>
+  <div class="word-equation-box">
+    $$eta_U = rac{eta_L}{1 + (1 - T_c) 	imes \left(rac{D}{E}ight)_{Dell}}$$
+    <span class="eq-number">(10)</span>
+  </div>
+  <ul class="bullet-list">
+    <li>Dell 歷史槓桿貝塔 $\beta_L = 1.2500$</li>
+    <li>Dell 市場債股比 $(D/E)_{Dell} = \$31.0 \text{ 億} / \$87.5 \text{ 億} = 0.3542857$</li>
+    <li>企業所得稅率 $T_c = 35.00\% \implies (1 - T_c) = 0.65$</li>
+    <li>分母去槓桿調整因子 $= 1 + 0.65 \times 0.3542857 = 1 + 0.2302857 = 1.2302857$</li>
+  </ul>
+  <div class="word-equation-box">
+    $$eta_U = rac{1.2500}{1.2302857} = 1.0160244 \quad (	ext{約 } 1.0160)$$
+    <span class="eq-number">(11)</span>
+  </div>
+  <div class="teaching-box">
+    <strong>【財務含意】：</strong>1.0160 代表電腦硬體製造、伺服器架構與 IT 解決方案產業的純粹資產/營運風險（Pure Business Risk），已完全剝離 Dell 自身的資本結構財務槓桿。
+  </div>
+
+  <h3 class="heading-2">步驟 B：根據 HCI 的目標資本結構重新加槓桿（Relevering Beta）</h3>
+  <p>HCI 管理層設定之長期目標資本結構為：負債比率 Target $D/V = 30.00\%$，股權比率 Target $E/V = 70.00\%$。其對應之目標債股比為：</p>
+  <div class="word-equation-box">
+    $$\left(rac{D}{E}ight)_{HCI} = rac{30.00\%}{70.00\%} = rac{3}{7} pprox 0.4285714 \quad (42.86\%)$$
+    <span class="eq-number">(12)</span>
+  </div>
+  <p>利用 Hamada 方程將產業資產貝塔（$\beta_U$）按照 HCI 的目標槓桿重新加槓桿：</p>
+  <div class="word-equation-box">
+    $$eta_{L,HCI} = eta_U 	imes \left[ 1 + (1 - T_c) 	imes \left(rac{D}{E}ight)_{HCI} ight]$$
+    <span class="eq-number">(13)</span>
+  </div>
+  <div class="word-equation-box">
+    $$eta_{L,HCI} = 1.0160244 	imes [1 + 0.65 	imes 0.4285714] = 1.0160244 	imes 1.2785714 = 1.299059 \quad (	ext{約 } 1.2991)$$
+    <span class="eq-number">(14)</span>
+  </div>
+  <div class="teaching-box">
+    <strong>【財務含意】：</strong>1.2991 代表在 HCI 目標負債比率（30%）下，其股東所承受之系統性風險貝塔值（較 Dell 的 1.25 高出近 0.05，反映 HCI 較高的目標負債槓桿）。
+  </div>
+
+  <h3 class="heading-2">步驟 C：納入小型企業規模溢價與非流動性溢價，計算 HCI 股權資本成本（$R_{e,HCI}$）</h3>
+  <p>採用專業資產評價之擴充型 CAPM 模型（Build-Up / Extended CAPM）：</p>
+  <div class="word-equation-box">
+    $$R_{e,HCI} = R_f + eta_{L,HCI} 	imes MRP + 	ext{規模溢價 (s)} + 	ext{非流動性溢價 (i)}$$
+    <span class="eq-number">(15)</span>
+  </div>
+  <ul class="bullet-list">
+    <li>無風險利率 $R_f = 3.5000\%$</li>
+    <li>槓桿貝塔系統性風險溢酬 $= \beta_{L,HCI} \times MRP = 1.299059 \times 7.5000\% = 9.74294\%$</li>
+    <li>小型企業規模溢價（$s$）= 2.5000%（依 Duff & Phelps 小型股溢價）</li>
+    <li>缺乏流通性溢價（$i$）= 1.5000%（私營非上市股權之流動性貼水）</li>
+  </ul>
+  <div class="word-equation-box">
+    $$R_{e,HCI} = 3.5000\% + 9.74294\% + 2.5000\% + 1.5000\% = 17.24294\% \quad (	ext{約 } 17.2429\% pprox 17.24\%)$$
+    <span class="eq-number">(16)</span>
+  </div>
+
+  <h3 class="heading-2">步驟 D：計算 HCI 最終專屬加權平均資金成本（$	ext{WACC}_{HCI}$）</h3>
+  <ul class="bullet-list">
+    <li>HCI 商業銀行借款利率 $R_{d,HCI} = 7.2000\%$</li>
+    <li>HCI 稅後債務資本成本 $= 7.2000\% \times (1 - 0.35) = 7.2000\% \times 0.65 = 4.6800\% \text{（4.68%）}$</li>
+    <li>依 HCI 目標權重（$w_e = 70.00\%, w_d = 30.00\%$）進行加權平均：</li>
+  </ul>
+  <div class="word-equation-box">
+    $$	ext{WACC}_{HCI} = w_e 	imes R_{e,HCI} + w_d 	imes 	ext{稅後 } R_{d,HCI}$$
+    <span class="eq-number">(17)</span>
+  </div>
+  <div class="word-equation-box">
+    $$	ext{WACC}_{HCI} = (0.7000 	imes 17.24294\%) + (0.3000 	imes 4.6800\%) = 12.07006\% + 1.40400\% = 13.47406\% \quad (	ext{約 } 13.4741\% pprox 13.47\%)$$
+    <span class="eq-number">(18)</span>
+  </div>
+
+  <div class="table-caption">解析附表五（TN Exhibit E）　標竿 Dell 到私營 HCI 之資本成本逐步疊加（Build-Up）推導對照表</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>估值調整階段 / 財務參數項目</th>
+          <th>Dell Inc. (公開標竿)</th>
+          <th>HCI (目標私營企業)</th>
+          <th>差異幅度 (HCI - Dell)</th>
+          <th>財務調整原理與經濟意義說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>資本結構負債比率 (Target D/V)</strong></td>
+          <td class="text-right">26.1603%</td>
+          <td class="text-right">30.0000%</td>
+          <td class="text-right">+3.8397%</td>
+          <td>HCI 設定較高目標負債比以善用利息稅盾</td>
+        </tr>
+        <tr>
+          <td><strong>資本結構債股比 (Target D/E)</strong></td>
+          <td class="text-right">0.3543</td>
+          <td class="text-right">0.4286</td>
+          <td class="text-right">+0.0743</td>
+          <td>D/E = 30% / 70% ≈ 0.4286，財務槓桿略高於 Dell</td>
+        </tr>
+        <tr>
+          <td><strong>無負債產業資產貝塔 (Asset Beta, $\beta_U$)</strong></td>
+          <td class="text-right highlight-cell">1.0160</td>
+          <td class="text-right highlight-cell">1.0160</td>
+          <td class="text-right">0.0000</td>
+          <td>純業務法產業營運風險對齊（Hamada 去槓桿）</td>
+        </tr>
+        <tr>
+          <td><strong>目標負債股權貝塔 (Equity Beta, $\beta_L$)</strong></td>
+          <td class="text-right">1.2500</td>
+          <td class="text-right">1.2991</td>
+          <td class="text-right">+0.0491</td>
+          <td>Hamada 重新加槓桿，反映 HCI 較高負債財務風險</td>
+        </tr>
+        <tr>
+          <td><strong>基準 CAPM 股權要求報酬率</strong></td>
+          <td class="text-right">12.8750%</td>
+          <td class="text-right">13.2433%</td>
+          <td class="text-right">+0.3683%</td>
+          <td>僅反映財務槓桿上升之基本要求報酬率</td>
+        </tr>
+        <tr>
+          <td><strong>小型企業規模風險溢酬 (Size Premium)</strong></td>
+          <td class="text-right">0.0000%</td>
+          <td class="text-right">+2.5000%</td>
+          <td class="text-right">+2.5000%</td>
+          <td>補償私營中小企業面對大型巨頭之經營脆弱性</td>
+        </tr>
+        <tr>
+          <td><strong>缺乏市場流通性溢酬 (Illiquidity)</strong></td>
+          <td class="text-right">0.0000%</td>
+          <td class="text-right">+1.5000%</td>
+          <td class="text-right">+1.5000%</td>
+          <td>補償未上市私營股東股份缺乏二級變現市場貼水</td>
+        </tr>
+        <tr>
+          <td><strong>最終股權資本成本 (Cost of Equity, $R_e$)</strong></td>
+          <td class="text-right">12.8750%</td>
+          <td class="text-right highlight-cell">17.2429%</td>
+          <td class="text-right">+4.3679%</td>
+          <td>擴充型 CAPM 全面反映 HCI 總體權益投資風險</td>
+        </tr>
+        <tr>
+          <td><strong>稅前債務成本 (Pre-tax Cost of Debt)</strong></td>
+          <td class="text-right">6.5000%</td>
+          <td class="text-right">7.2000%</td>
+          <td class="text-right">+0.7000%</td>
+          <td>中小企業商業銀行借款利差 (+70 個基點)</td>
+        </tr>
+        <tr>
+          <td><strong>稅後債務成本 (After-tax Cost of Debt)</strong></td>
+          <td class="text-right">4.2250%</td>
+          <td class="text-right">4.6800%</td>
+          <td class="text-right">+0.4550%</td>
+          <td>稅後債務成本 = 稅前利率 × (1 - 35%)</td>
+        </tr>
+        <tr>
+          <td><strong>最終加權平均資金成本 (Project WACC)</strong></td>
+          <td class="text-right">10.6121%</td>
+          <td class="text-right danger-cell">13.4741%</td>
+          <td class="text-right danger-cell">+2.8620%</td>
+          <td><strong>【專案折現率應嚴格採用 13.47% 作為審批基準】</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 問題六 -->
+  <h2 class="heading-1" id="q6">問題六解析：800 萬美元新投資案之資本預算評估（NPV/IRR）與折現率敏感度衝擊</h2>
+  <p>根據【附錄一】專案工程預算，本項 800 萬美元自動化產線暨資料中心投資案之現金流預測如下：</p>
+  <ul class="bullet-list">
+    <li>第 0 期初始資本支出（$I_0$）= -$8,000,000 美元</li>
+    <li>未來 8 年營運自由現金流（FCF）：
+      <br>&nbsp;&nbsp;Year 1: $1,500,000 ； Year 2: $1,620,000 ； Year 3: $1,750,000 ； Year 4: $1,820,000
+      <br>&nbsp;&nbsp;Year 5: $1,780,000 ； Year 6: $1,680,000 ； Year 7: $1,550,000 ； Year 8: $1,420,000
+    </li>
+    <li>8 年累計名目自由現金流總額 = $13,120,000 美元</li>
+  </ul>
+
+  <h3 class="heading-2">1. 專案內部報酬率（Internal Rate of Return, IRR）精算：</h3>
+  <p>內部報酬率是使專案淨現值恰好等於零之折現率：</p>
+  <div class="word-equation-box">
+    $$\sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 	ext{IRR})^t} - 8,000,000 = 0$$
+    <span class="eq-number">(19)</span>
+  </div>
+  <p>透過數值疊代求解得出：</p>
+  <div class="word-equation-box">
+    $$	ext{IRR} = 12.6021\% \quad (	ext{約 } 12.60\%)$$
+    <span class="eq-number">(20)</span>
+  </div>
+
+  <h3 class="heading-2">2. 三種不同折現率假設下之淨現值（NPV）與決策大逆轉：</h3>
+  
+  <p><strong>• 【情境一：使用 Dell 帳面價值 WACC（9.4150%）】：</strong></p>
+  <div class="word-equation-box">
+    $$	ext{PV}_{inflow} = \sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 0.09415)^t} = \$8,961,220 \implies 	ext{NPV} = \$8,961,220 - \$8,000,000 = +\$961,220$$
+    <span class="eq-number">(21)</span>
+  </div>
+  <p style="color: #b91c1c; font-weight: bold;">決策結論：NPV 呈現高達近百萬美元之虛假正值（False Positive），導致管理層在幻覺中全票通過！</p>
+
+  <p><strong>• 【情境二：使用 Dell 市場價值 WACC（10.6121%）】：</strong></p>
+  <div class="word-equation-box">
+    $$	ext{PV}_{inflow} = \sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 0.106121)^t} = \$8,580,103 \implies 	ext{NPV} = \$8,580,103 - \$8,000,000 = +\$580,103$$
+    <span class="eq-number">(22)</span>
+  </div>
+  <p style="color: #b91c1c; font-weight: bold;">決策結論：NPV 仍高達 58 萬美元，營運副總 Dave 據此強烈主張核准推動。</p>
+
+  <p><strong>• 【情境三：使用 HCI 專屬客製化真實 WACC（13.4741%）】：</strong></p>
+  <div class="word-equation-box">
+    $$	ext{PV}_{inflow} = \sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 0.134741)^t} = \$7,764,816 \implies 	ext{NPV} = \$7,764,816 - \$8,000,000 = -\$235,184$$
+    <span class="eq-number">(23)</span>
+  </div>
+  <div class="teaching-box danger">
+    <strong>決策結論：</strong>在真實反映 HCI 邊際資本成本條件下，<strong>【專案淨現值為負的 23 萬 5 千美元（-$235,184）】</strong>！專案回報（12.60%）無法彌補資本成本（13.47%），屬於實質毀損股東財富的方案。
+  </div>
+
+  <h3 class="heading-2">3. 致董事會之核心建言與戰略談判方案：</h3>
+  <ul class="bullet-list">
+    <li><strong>本案實質為「價值毀滅專案」：</strong>專案內生報酬率 IRR（12.60%）低於公司真實加權資金成本（13.47%）。若按原案執行，每投資 1 美元，公司實質損失約 2.94 美分，累計實質蒸發股東價值 23.5 萬美元。</li>
+    <li><strong>董事會應【暫緩全額核准】：</strong>切忌受 Dell 市場 WACC 產生的 58 萬美元虛假利潤誤導。</li>
+    <li><strong>啟動反制談判策略：</strong>向設備供應商與總承包商施壓，以「專案成本超標無法通過內部收益門檻」為由要求降價。若能將總投資額由 800 萬美元壓低至 <strong>720 萬美元以下</strong>，專案 NPV 即能由負轉正，達成兼顧擴張與創造價值的雙贏目標。</li>
+  </ul>
+
+  <div class="table-caption" id="tables">解析附表六（TN Exhibit F）　800 萬美元投資案逐年現金流與多折現率情境 NPV 決策全景對照表</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>年度 (Year)</th>
+          <th>預估自由現金流 (FCF)</th>
+          <th>PV @ 帳面 9.415%</th>
+          <th>PV @ 標竿 10.612%</th>
+          <th>PV @ HCI 真實 13.474%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Year 0 (初始資本支出)</strong></td>
+          <td class="text-right">-$8,000,000</td>
+          <td class="text-right">-$8,000,000</td>
+          <td class="text-right">-$8,000,000</td>
+          <td class="text-right">-$8,000,000</td>
+        </tr>
+        <tr>
+          <td>Year 1</td>
+          <td class="text-right">$1,500,000</td>
+          <td class="text-right">$1,370,927</td>
+          <td class="text-right">$1,356,091</td>
+          <td class="text-right">$1,321,885</td>
+        </tr>
+        <tr>
+          <td>Year 2</td>
+          <td class="text-right">$1,620,000</td>
+          <td class="text-right">$1,353,230</td>
+          <td class="text-right">$1,324,082</td>
+          <td class="text-right">$1,258,011</td>
+        </tr>
+        <tr>
+          <td>Year 3</td>
+          <td class="text-right">$1,750,000</td>
+          <td class="text-right">$1,335,934</td>
+          <td class="text-right">$1,293,121</td>
+          <td class="text-right">$1,202,305</td>
+        </tr>
+        <tr>
+          <td>Year 4</td>
+          <td class="text-right">$1,820,000</td>
+          <td class="text-right">$1,270,059</td>
+          <td class="text-right">$1,215,820</td>
+          <td class="text-right">$1,101,846</td>
+        </tr>
+        <tr>
+          <td>Year 5</td>
+          <td class="text-right">$1,780,000</td>
+          <td class="text-right">$1,135,166</td>
+          <td class="text-right">$1,075,108</td>
+          <td class="text-right">$950,229</td>
+        </tr>
+        <tr>
+          <td>Year 6</td>
+          <td class="text-right">$1,680,000</td>
+          <td class="text-right">$979,252</td>
+          <td class="text-right">$917,219</td>
+          <td class="text-right">$790,576</td>
+        </tr>
+        <tr>
+          <td>Year 7</td>
+          <td class="text-right">$1,550,000</td>
+          <td class="text-right">$825,720</td>
+          <td class="text-right">$765,116</td>
+          <td class="text-right">$642,881</td>
+        </tr>
+        <tr>
+          <td>Year 8 (含殘值與營運資金回收)</td>
+          <td class="text-right">$1,420,000</td>
+          <td class="text-right">$690,932</td>
+          <td class="text-right">$633,546</td>
+          <td class="text-right">$497,083</td>
+        </tr>
+        <tr style="border-top: 2px solid #cbd5e1;">
+          <td><strong>現金流入現值總和 (PV of Inflows)</strong></td>
+          <td class="text-right"><strong>$13,120,000</strong></td>
+          <td class="text-right"><strong>$8,961,220</strong></td>
+          <td class="text-right"><strong>$8,580,103</strong></td>
+          <td class="text-right highlight-cell"><strong>$7,764,816</strong></td>
+        </tr>
+        <tr>
+          <td><strong>專案淨現值 (Net Present Value, NPV)</strong></td>
+          <td class="text-right">名目淨額 +$5.12M</td>
+          <td class="text-right" style="color: #16a34a; font-weight: bold;">+$961,220</td>
+          <td class="text-right" style="color: #16a34a; font-weight: bold;">+$580,103</td>
+          <td class="text-right danger-cell">-$235,184</td>
+        </tr>
+        <tr>
+          <td><strong>專案內部報酬率 (Internal Rate of Return)</strong></td>
+          <td class="text-right">IRR = 12.602%</td>
+          <td class="text-right">高於 9.42% (超額 3.19%)</td>
+          <td class="text-right">高於 10.61% (超額 1.99%)</td>
+          <td class="text-right danger-cell">低於 13.47% (短缺 -0.87%)</td>
+        </tr>
+        <tr>
+          <td><strong>董事會最終審批決策建言</strong></td>
+          <td class="text-center">——</td>
+          <td class="danger-cell">【假陽性】誤信虛胖利益</td>
+          <td class="danger-cell">【假陽性】盲目核准受害</td>
+          <td class="highlight-cell"><strong>【斷然否決】實質毀損財富</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 第二部分：觀點二與觀點三逐步推導與教學指引 -->
+  <h2 class="heading-1" id="part2" style="margin-top: 55px;">HCI 財務個案：觀點二與觀點三 WACC 計算及教學指引</h2>
+  <div class="doc-subtitle" style="text-align: left; margin-bottom: 15px;">Hubbard Computer, Inc.｜資本成本估計與投資決策</div>
+  <p>本講義依課堂個案給定的 Dell 與 HCI 數值，逐步說明兩種估計方法、計算過程及財務決策差異。金額單位除另註外均為美元。</p>
+
+  <!-- 觀點二卡片 -->
+  <div class="view-card view-2">
+    <div class="view-card-title">觀點二｜標竿直接套用派：Dell 市場價值 WACC</div>
+    <p><strong>核心假設：</strong>Dell 與 HCI 專案的營運風險相近，因此直接將 Dell 的市場價值加權資本成本作為 HCI 專案折現率。這是一種標竿捷徑，而非已調整 HCI 特有風險的估計。</p>
+    
+    <h4 class="heading-3">步驟 1｜以 CAPM 估計 Dell 股權成本</h4>
+    <div class="word-equation-box">
+      $$R_e = R_f + eta_L 	imes MRP = 3.50\% + 1.25 	imes 7.50\% = 12.875\%$$
+    </div>
+
+    <h4 class="heading-3">步驟 2｜估計 Dell 稅後債務成本</h4>
+    <div class="word-equation-box">
+      $$R_d(1 - T_c) = 6.50\% 	imes (1 - 35\%) = 4.225\%$$
+    </div>
+
+    <h4 class="heading-3">步驟 3｜依市場價值計算資本權重</h4>
+    <p>Dell 股權市場價值 $E = 87.5 \text{ 億}$；負債市場價值 $D = 31.0 \text{ 億}$；總資本 $V = 118.5 \text{ 億}$。</p>
+    <div class="word-equation-box">
+      $$w_E = rac{87.5}{118.5} = 73.8397\%, \quad w_D = rac{31.0}{118.5} = 26.1603\%$$
+    </div>
+
+    <h4 class="heading-3">步驟 4｜計算 Dell WACC</h4>
+    <div class="word-equation-box">
+      $$	ext{WACC} = w_E 	imes R_e + w_D 	imes R_d(1 - T_c) = 0.738397 	imes 12.875\% + 0.261603 	imes 4.225\% pprox 10.61\%$$
+    </div>
+
+    <h4 class="heading-3">步驟 5｜以 10.61% 評估 HCI 投資</h4>
+    <div class="word-equation-box">
+      $$	ext{NPV} = \sum_{t=1}^{8} rac{	ext{FCF}_t}{(1 + 10.61\%)^t} - 8,000,000 pprox +580,000$$
+    </div>
+    <p><em>注意：此數值沿用個案模型提供的折現現值；未附逐年 FCF 資料，故無法在此獨立重算逐年 NPV。</em></p>
+    
+    <div class="table-caption">附表：觀點二評估結果摘要</div>
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>評估項目</th>
+            <th>觀點二結果</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>初始投資</td>
+            <td class="text-right">800 萬美元</td>
+          </tr>
+          <tr>
+            <td>折現率</td>
+            <td class="text-right">10.61%</td>
+          </tr>
+          <tr>
+            <td>未來現金流量折現總現值（個案模型）</td>
+            <td class="text-right">約 858 萬美元</td>
+          </tr>
+          <tr>
+            <td>NPV（個案模型）</td>
+            <td class="text-right" style="color: #16a34a; font-weight: bold;">約 ＋58 萬美元</td>
+          </tr>
+          <tr>
+            <td>IRR（個案模型）</td>
+            <td class="text-right">12.60%</td>
+          </tr>
+          <tr>
+            <td>判斷</td>
+            <td class="highlight-cell">NPV > 0，接受原方案</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="teaching-box warning">
+      <strong>方法限制：</strong>Dell 與 HCI 的負債權重、借款成本及可能的企業特有估值條件不同，不能僅因產品相似便推定 WACC 相同。
+    </div>
+  </div>
+
+  <!-- 觀點三卡片 -->
+  <div class="view-card view-3">
+    <div class="view-card-title">觀點三｜風險調整派：HCI 專屬 WACC</div>
+    <p><strong>核心邏輯：</strong>先將 Dell 股權 Beta 去槓桿，得到營運資產 Beta，再按 HCI 目標資本結構加槓桿，估計 HCI 股權成本及 WACC。</p>
+
+    <div class="table-caption">附表：Dell 與 HCI 參數對比表</div>
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>參數</th>
+            <th>Dell</th>
+            <th>HCI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>股權 Beta</td>
+            <td class="text-right">1.25</td>
+            <td class="text-right">待估（依純業務法調整）</td>
+          </tr>
+          <tr>
+            <td>$R_f$ / MRP</td>
+            <td class="text-right">3.50% / 7.50%</td>
+            <td class="text-right">3.50% / 7.50%</td>
+          </tr>
+          <tr>
+            <td>所得稅率 $T_c$</td>
+            <td class="text-right">35%</td>
+            <td class="text-right">35%</td>
+          </tr>
+          <tr>
+            <td>D/E 比率</td>
+            <td class="text-right">31 / 87.5 = 0.3543</td>
+            <td class="text-right">30 / 70 = 0.4286</td>
+          </tr>
+          <tr>
+            <td>負債／股權權重</td>
+            <td class="text-right">26.16% / 73.84%</td>
+            <td class="text-right">30.00% / 70.00%</td>
+          </tr>
+          <tr>
+            <td>稅前借款利率 $R_d$</td>
+            <td class="text-right">6.50%</td>
+            <td class="text-right">7.20%</td>
+          </tr>
+          <tr>
+            <td>規模／流動性溢酬</td>
+            <td class="text-right">未加計</td>
+            <td class="text-right">2.50% / 1.50%（合計 4.00%）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="heading-3">步驟 1｜Dell 去槓桿 Beta</h4>
+    <div class="word-equation-box">
+      $$eta_U = rac{eta_L}{1 + (1 - T_c)\left(rac{D}{E}ight)} = rac{1.25}{1 + 0.65 	imes \left(rac{31}{87.5}ight)} pprox 1.0160$$
+    </div>
+
+    <h4 class="heading-3">步驟 2｜按 HCI 目標資本結構重新加槓桿</h4>
+    <p>HCI 目標 $D/E = 30\% / 70\% = 0.428571$</p>
+    <div class="word-equation-box">
+      $$eta_{L,HCI} = eta_U 	imes \left[ 1 + (1 - T_c)\left(rac{D}{E}ight) ight] pprox 1.0160 	imes [1 + 0.65 	imes 0.428571] pprox 1.2991$$
+    </div>
+
+    <h4 class="heading-3">步驟 3｜擴充 CAPM 估計 HCI 股權成本</h4>
+    <div class="word-equation-box">
+      $$R_{e,HCI} = R_f + eta_{L,HCI} 	imes MRP + 	ext{規模溢酬} + 	ext{流動性溢酬}$$
+    </div>
+    <div class="word-equation-box">
+      $$= 3.50\% + 1.2991 	imes 7.50\% + 2.50\% + 1.50\% pprox 17.24\%$$
+    </div>
+
+    <h4 class="heading-3">步驟 4｜HCI 稅後債務成本</h4>
+    <div class="word-equation-box">
+      $$R_d(1 - T_c) = 7.20\% 	imes (1 - 35\%) = 4.68\%$$
+    </div>
+
+    <h4 class="heading-3">步驟 5｜HCI WACC</h4>
+    <div class="word-equation-box">
+      $$	ext{WACC}_{HCI} = 70\% 	imes 17.24\% + 30\% 	imes 4.68\% pprox 13.47\% \quad (	ext{採未四捨五入中間值計算})$$
+    </div>
+
+    <h4 class="heading-3">步驟 6｜投資判斷</h4>
+    <p>個案模型：折現率約 13.47% 時，<strong>NPV 約 −23.5 萬美元</strong>；IRR 仍為 12.60%。因 <strong>IRR &lt; WACC 且 NPV &lt; 0</strong>，拒絕原條件下的 800 萬投資方案。</p>
+  </div>
+
+  <!-- 兩種觀點比較與教學提醒 -->
+  <h3 class="heading-2">兩種觀點比較與教學提醒</h3>
+  
+  <div class="table-caption">附表：觀點二 vs. 觀點三 核心估值與決策對照表</div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>比較項目</th>
+          <th>觀點二：Dell 直接套用</th>
+          <th>觀點三：HCI 調整</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>股權 Beta</strong></td>
+          <td class="text-right">1.2500</td>
+          <td class="text-right highlight-cell">約 1.2991</td>
+        </tr>
+        <tr>
+          <td><strong>股權成本 ($R_e$)</strong></td>
+          <td class="text-right">12.875%</td>
+          <td class="text-right highlight-cell">約 17.24%</td>
+        </tr>
+        <tr>
+          <td><strong>稅前債務成本 ($R_d$)</strong></td>
+          <td class="text-right">6.50%</td>
+          <td class="text-right">7.20%</td>
+        </tr>
+        <tr>
+          <td><strong>負債權重 ($w_d$)</strong></td>
+          <td class="text-right">26.16%</td>
+          <td class="text-right">30.00%</td>
+        </tr>
+        <tr>
+          <td><strong>加權平均資金成本 (WACC)</strong></td>
+          <td class="text-right highlight-cell">10.61%</td>
+          <td class="text-right danger-cell">13.47%</td>
+        </tr>
+        <tr>
+          <td><strong>NPV（個案模型）</strong></td>
+          <td class="text-right" style="color: #16a34a; font-weight: bold;">約 ＋58 萬美元</td>
+          <td class="text-right danger-cell">約 −23.5 萬美元</td>
+        </tr>
+        <tr>
+          <td><strong>內部報酬率 (IRR)</strong></td>
+          <td class="text-right">12.60%</td>
+          <td class="text-right">12.60%</td>
+        </tr>
+        <tr>
+          <td><strong>投資決策</strong></td>
+          <td class="highlight-cell">接受原方案 (Accept)</td>
+          <td class="danger-cell"><strong>拒絕原方案 (Reject)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="teaching-box">
+    <div class="teaching-box-title">📘 理論提醒 (Theoretical Note)</div>
+    Hamada 方程式依賴特定稅盾與債務風險假設；規模溢酬及缺乏流動性溢酬不是標準 CAPM 的必然項目，應有客觀估計依據，並防止重複計價。13.47% 是個案假設下的估計值，而非唯一正確的折現率。
+  </div>
+
+  <div class="teaching-box warning">
+    <div class="teaching-box-title">🗣️ 課堂討論題 (Class Discussion Questions)</div>
+    若只調整 HCI 資本結構與借款成本，而不加入 4% 的額外溢酬（規模 2.5% + 流動性 1.5%），此時 WACC 約為多少？決策是否仍然相同？在企業實務中，應如何選擇可比較企業以及驗證風險溢酬的合理性？
+  </div>
+
+  <p style="font-size: 14px; color: #64748b; margin-top: 20px;">
+    <strong>資料基礎：</strong>本課程 HCI 財務個案及本次對話中觀點二、觀點三之客觀計算資料。
+  </p>
+
+  <!-- 頁尾 -->
+  <div class="doc-footer">
+    <p>© 2026 國立政治大學 / 財務個案研討課程教材 ｜ 檔案格式：網頁版 Word 教學文件 (Web-Based Word Document) ｜ 內嵌 MathJax 方程式引擎</p>
+    <p>返回總入口網站：<a href="https://williamslchang-blip.github.io/master-portal/" style="color: #1f5c81;">Master Portal 總入口網站</a></p>
+  </div>
+
+</div>
+
+</body>
+</html>
