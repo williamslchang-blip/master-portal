@@ -593,7 +593,15 @@
                 interactiveTool: '財務個案/財務個案2/財務個案2_Hubbard_Computer_互動式財務模型.html',
                 excelModel: '財務個案/財務個案2/財務個案2_Hubbard_Computer_完整解析財務模型.xlsx',
                 htmlPresentation: '財務個案/財務個案2/教學簡報網站：Hubbard_Computer.html',
+                htmlAnalysis: '財務個案/財務個案2/個案二解析.html',
                 docx: '財務個案/財務個案2/2. 教學指引：Hubbard Computer, Inc._非上市公司 WACC 估算、純業務法與資本預算抉擇.docx'
+              },
+              {
+                code: '個案解析講義',
+                title: 'Hubbard Computer, Inc.：非上市公司 WACC 估算與純業務法應用（個案解析與推導詳解）',
+                desc: '哈佛商學院經典個案完整解析網頁版 Word 教學文件：六大問題深入精算、Dell vs HCI 資本結構與 WACC 比較、Hamada 去槓桿與加槓桿推導、觀點二與觀點三逐年現金流折現模型與差距透視表、即時互動試算模擬器與董事會決策備忘錄。含 MathJax 方程式與 Word OMML 方程式物件。',
+                html: '財務個案/財務個案2/個案二解析.html',
+                docx: '財務個案/財務個案2/個案二解析.docx'
               }
             ]
           },
@@ -1166,6 +1174,14 @@
                 <a href="${finPresUrl}" target="_blank" class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
                   <i class="fa-solid fa-chalkboard-user"></i>
                   <span>開啟對應教學簡報網站</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              ` : ''}
+
+              ${item.htmlAnalysis ? `
+                <a href="${resolveUrl(item.htmlAnalysis, currentTier2)}" target="_blank" class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i class="fa-solid fa-file-waveform"></i>
+                  <span>個案解析 (Word網頁版)</span>
                   <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               ` : ''}
