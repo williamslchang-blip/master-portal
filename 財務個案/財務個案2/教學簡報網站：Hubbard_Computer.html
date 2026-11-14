@@ -132,25 +132,75 @@
             <span id="timer-display-mini" class="font-mono text-amber-600 font-bold">90:00</span>
           </button>
 
-          <button onclick="openPresentationMode(1)" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 border-amber-500 bg-amber-50/80 hover:bg-amber-500 text-amber-700 hover:text-white font-extrabold text-xs shadow-xs transition transform active:scale-95" title="全螢幕簡報 (28頁 PPT)">
-            <i class="fa-solid fa-tv"></i>
-            <span>全螢幕簡報</span>
-          </button>
+          <!-- Resource Dropdown Menu -->
+          <div class="relative" id="resource-menu-container">
+            <button onclick="toggleResourceMenu()" id="resource-menu-btn" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-slate-900 to-brand-700 hover:from-slate-800 hover:to-brand-600 text-white font-extrabold text-xs shadow-sm transition transform active:scale-95" title="點擊展開教學與模型選單">
+              <i class="fa-solid fa-layer-group text-amber-300"></i>
+              <span>教材與模型選單</span>
+              <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" id="resource-menu-chevron"></i>
+            </button>
 
-          <a href="HCI_財務個案_財務理論與實證應用_第3至8章強化版.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-sm transition transform active:scale-95" title="開啟 理論講義（財務理論與實證應用深化版）">
-            <i class="fa-solid fa-book-open"></i>
-            <span>理論講義</span>
-          </a>
+            <!-- Dropdown Card -->
+            <div id="resource-menu-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-slate-200 shadow-2xl p-2 z-50 animate-fadeIn space-y-1">
+              
+              <!-- Option 1: 全螢幕簡報 (橘色框框) -->
+              <button onclick="openPresentationMode(1); toggleResourceMenu();" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl border-2 border-amber-500 bg-amber-50/70 hover:bg-amber-100/90 transition group">
+                <div class="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-tv text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-amber-900">全螢幕簡報</span>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-200 text-amber-800 font-bold">28頁 PPT</span>
+                  </div>
+                  <p class="text-[11px] text-amber-800/80 truncate">哈佛個案標準課堂投影片播放</p>
+                </div>
+              </button>
 
-          <a href="財務個案2_Hubbard_Computer_互動式財務模型.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-sm transition transform active:scale-95" title="開啟 7 頁完整互動式 Excel 財務模型網站">
-            <i class="fa-solid fa-calculator"></i>
-            <span>財務模型</span>
-          </a>
+              <!-- Option 2: 理論講義 (綠色) -->
+              <a href="HCI_財務個案_財務理論與實證應用_第3至8章強化版.html" onclick="toggleResourceMenu()" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/90 border border-emerald-200 transition group">
+                <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-book-open text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-emerald-900">理論講義</span>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-200 text-emerald-800 font-bold">第 3-8 章</span>
+                  </div>
+                  <p class="text-[11px] text-emerald-700/90 truncate">財務理論與實證應用深化版</p>
+                </div>
+              </a>
 
-          <a href="財務個案2_Hubbard_Computer_完整解析財務模型.xlsx" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-xs transition" title="下載完整 Excel 財務模型">
-            <i class="fa-solid fa-download"></i>
-            <span class="hidden md:inline">下載 Excel</span>
-          </a>
+              <!-- Option 3: 財務模型 (藍色) -->
+              <a href="財務個案2_Hubbard_Computer_互動式財務模型.html" onclick="toggleResourceMenu()" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl bg-blue-50 hover:bg-blue-100/90 border border-blue-200 transition group">
+                <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-calculator text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-blue-900">財務模型</span>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-200 text-blue-800 font-bold">7大工作表</span>
+                  </div>
+                  <p class="text-[11px] text-blue-700/90 truncate">互動式 Excel 網頁試算模型</p>
+                </div>
+              </a>
+
+              <!-- Option 4: 下載 Excel -->
+              <a href="財務個案2_Hubbard_Computer_完整解析財務模型.xlsx" onclick="toggleResourceMenu()" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-100 border border-slate-200 transition group">
+                <div class="w-9 h-9 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-file-excel text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-slate-800">下載 Excel 模型</span>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-bold">.xlsx</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 truncate">包含完整函數與敏感度矩陣</p>
+                </div>
+              </a>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1579,6 +1629,34 @@
     ];
 
     // -------------------------------------------------------------
+    // RESOURCE DROPDOWN MENU LOGIC
+    // -------------------------------------------------------------
+    function toggleResourceMenu() {
+      const menu = document.getElementById('resource-menu-dropdown');
+      const chevron = document.getElementById('resource-menu-chevron');
+      if (!menu) return;
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+      } else {
+        menu.classList.add('hidden');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Close resource dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const container = document.getElementById('resource-menu-container');
+      const menu = document.getElementById('resource-menu-dropdown');
+      const chevron = document.getElementById('resource-menu-chevron');
+      if (!container || !menu || menu.classList.contains('hidden')) return;
+      if (!container.contains(e.target)) {
+        menu.classList.add('hidden');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      }
+    });
+
     // PRESENTATION MODE LOGIC
     // -------------------------------------------------------------
     let curSlide = 0;
