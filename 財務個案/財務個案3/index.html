@@ -3,46 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stephenson Real Estate (SRE) 資本結構重組與利息稅盾｜哈佛商學院互動式決策平台</title>
+  <title>財務個案3｜Stephenson Real Estate Company：資本結構重組、利息稅盾價值與融資決策抉擇 - 互動教學簡報網站</title>
   
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#F0F4F9',
-              100: '#E1E9F2',
-              200: '#B8CBE0',
-              500: '#1B365D',
-              600: '#142947',
-              700: '#0E1D33',
-              900: '#060D17',
-            },
-            accent: {
-              500: '#C07D2B',
-              600: '#A4661F',
-            }
-          },
-          fontFamily: {
-            sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          }
-        }
-      }
-    }
-  </script>
-
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <!-- MathJax -->
   <script>
@@ -56,229 +31,300 @@
   </script>
   <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            hbs: {
+              crimson: '#A51C30',
+              dark: '#7A1222',
+              light: '#FDECEF',
+            },
+            brand: {
+              50: '#F0F5FA',
+              100: '#E1EBF5',
+              500: '#1B365D',
+              600: '#142947',
+              700: '#0E1D33',
+              800: '#0A1526',
+              900: '#060D17',
+            },
+            accent: {
+              400: '#F59E0B',
+              500: '#D97706',
+              600: '#B45309',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .custom-scroll::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 9999px;
+    .animate-fadeIn { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .slide-card { max-width: 1120px; width: 100%; animation: fadeIn 0.3s ease-out; }
+    .tab-active-case { background: linear-gradient(135deg, #1B365D, #0E1D33) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(27, 54, 93, 0.4); }
+    .tab-active-tn { background: linear-gradient(135deg, #0f766e, #115e59) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(15, 118, 110, 0.4); }
+    .tab-active-sm { background: linear-gradient(135deg, #A51C30, #7A1222) !important; color: #fff !important; box-shadow: 0 10px 20px -5px rgba(165, 28, 48, 0.4); }
+    @media print {
+      header, footer, #timer-modal, #presentation-overlay, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .pillar-section { display: block !important; page-break-after: always; }
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col">
 
-  <!-- Top Navbar -->
-  <header class="sticky top-0 z-50 bg-brand-500 text-white shadow-lg border-b border-brand-600">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-lg bg-accent-500 flex items-center justify-center font-bold text-white text-xl shadow">
-          SRE
+  <!-- ============================================================== -->
+  <!-- TOP STICKY NAVIGATION BAR                                       -->
+  <!-- ============================================================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md text-slate-900 border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Left Branding -->
+        <div class="flex items-center space-x-3">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-500 via-sky-700 to-indigo-900 flex items-center justify-center shadow-md shadow-sky-100 ring-2 ring-slate-100">
+            <i class="fa-solid fa-building text-white text-lg"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-brand-800 bg-brand-50 px-2 py-0.5 rounded border border-brand-200">HBS Case Method ‧ 資本結構重組</span>
+              <span class="text-xs text-slate-500 hidden md:inline font-mono">HBS-FIN-11501-C03</span>
+            </div>
+            <h1 class="text-sm sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+              財務個案(三)：Stephenson Real Estate Company
+              <span class="text-xs text-slate-500 font-normal hidden xl:inline">｜MM定理、利息稅盾價值與融資決策抉擇</span>
+            </h1>
+          </div>
         </div>
-        <div>
-          <h1 class="text-lg font-bold tracking-tight">Stephenson Real Estate Company</h1>
-          <p class="text-xs text-brand-200">資本結構重組、利息稅盾與融資決策｜互動模擬模型</p>
+
+        <!-- Center 3-Pillar Switcher -->
+        <div class="hidden lg:flex items-center space-x-1.5 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+          <button id="nav-btn-case" onclick="switchPillar('case')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-2 tab-active-case">
+            <i class="fa-solid fa-book-open"></i> 區塊一：個案內容
+          </button>
+          <button id="nav-btn-tn" onclick="switchPillar('tn')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-white flex items-center gap-2">
+            <i class="fa-solid fa-chalkboard-user"></i> 區塊二：教學指引
+          </button>
+          <button id="nav-btn-sm" onclick="switchPillar('sm')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-white flex items-center gap-2">
+            <i class="fa-solid fa-calculator"></i> 區塊三：個案解析與試算
+          </button>
         </div>
-      </div>
-      <div class="flex items-center space-x-3">
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-          ● 模式：即時敏感度精算
-        </span>
-        <button onclick="resetDefaults()" class="px-3 py-1.5 text-xs font-semibold rounded bg-white/10 hover:bg-white/20 transition">
-          重置基準參數
-        </button>
+
+        <!-- Right Quick Controls -->
+        <div class="flex items-center space-x-2 sm:space-x-2.5">
+          <button onclick="toggleTimerModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-300 shadow-xs transition" title="90分鐘/180分鐘課堂計時器">
+            <i class="fa-solid fa-stopwatch text-amber-500"></i>
+            <span id="timer-display-mini" class="font-mono text-amber-600 font-bold">90:00</span>
+          </button>
+
+          <!-- Resource Dropdown Menu -->
+          <div class="relative" id="resource-menu-container">
+            <button onclick="toggleResourceMenu()" id="resource-menu-btn" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-slate-900 to-brand-700 hover:from-slate-800 hover:to-brand-600 text-white font-extrabold text-xs shadow-sm transition transform active:scale-95" title="點擊展開教學與模型選單">
+              <i class="fa-solid fa-layer-group text-amber-300"></i>
+              <span>教材與模型選單</span>
+              <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" id="resource-menu-chevron"></i>
+            </button>
+
+            <!-- Dropdown Card -->
+            <div id="resource-menu-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-slate-200 shadow-2xl p-2 z-50 animate-fadeIn space-y-1">
+              
+              <!-- Option 1: 全螢幕簡報 -->
+              <button onclick="openPresentationMode(1); toggleResourceMenu();" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl border-2 border-amber-500 bg-amber-50/70 hover:bg-amber-100/90 transition group">
+                <div class="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-tv text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-amber-900">全螢幕簡報</span>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-200 text-amber-800 font-bold">28頁 PPT</span>
+                  </div>
+                  <p class="text-[11px] text-amber-800/80 truncate">哈佛個案標準課堂投影片播放</p>
+                </div>
+              </button>
+
+              <!-- Option 2: 理論講義 -->
+              <a href="SRE_財務個案_財務理論與實證應用_資本結構與MM定理強化版.html" onclick="toggleResourceMenu()" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/90 border border-emerald-200 transition group">
+                <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-book-open text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-emerald-900">理論講義</span>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-200 text-emerald-800 font-bold">14大章節</span>
+                  </div>
+                  <p class="text-[11px] text-emerald-700/90 truncate">MM定理與資本結構深化強化版</p>
+                </div>
+              </a>
+
+              <!-- Option 3: 財務模型 -->
+              <a href="財務個案3_Stephenson_Real_Estate_互動式財務模型.html" onclick="toggleResourceMenu()" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl bg-blue-50 hover:bg-blue-100/90 border border-blue-200 transition group">
+                <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-calculator text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-blue-900">財務模型</span>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-200 text-blue-800 font-bold">即時模擬</span>
+                  </div>
+                  <p class="text-[11px] text-blue-700/90 truncate">動態滑桿與 WACC 敏感度曲線</p>
+                </div>
+              </a>
+
+              <!-- Option 4: 個案解析講義 -->
+              <a href="個案三解析.html" onclick="toggleResourceMenu()" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl bg-purple-50 hover:bg-purple-100/90 border border-purple-200 transition group">
+                <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-file-waveform text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-purple-900">個案解析講義</span>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-200 text-purple-800 font-bold">網頁/Word</span>
+                  </div>
+                  <p class="text-[11px] text-purple-700/90 truncate">五大問題數學推導與備忘錄詳解</p>
+                </div>
+              </a>
+
+              <!-- Option 5: 下載 Excel -->
+              <a href="財務個案3_Stephenson_Real_Estate_完整解析財務模型.xlsx" download onclick="toggleResourceMenu()" class="w-full text-left flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition group">
+                <div class="w-9 h-9 rounded-lg bg-slate-700 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition">
+                  <i class="fa-solid fa-file-excel text-sm text-emerald-400"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800">下載 Excel 模型</span>
+                    <span class="text-[10px] font-mono text-slate-500">.XLSX</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 truncate">6大工作表完整精算公式底稿</p>
+                </div>
+              </a>
+
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
   </header>
 
-  <!-- Main Container -->
+  <!-- ============================================================== -->
+  <!-- MAIN CONTENT CONTAINER                                         -->
+  <!-- ============================================================== -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-    <!-- KPI Summary Row -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- KPI 1 -->
-      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">利息稅盾現值 (PV of Tax Shield)</div>
-        <div id="kpi-tax-shield" class="text-2xl font-black text-emerald-600 mt-2">$44,000,000</div>
-        <div class="text-xs text-slate-500 mt-1">計算公式：<code class="font-mono bg-slate-100 px-1 py-0.5 rounded">Tc × D</code></div>
-      </div>
-      <!-- KPI 2 -->
-      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">方案 B 宣告後每股股價</div>
-        <div id="kpi-stock-price" class="text-2xl font-black text-brand-500 mt-2">$37.43</div>
-        <div class="text-xs text-emerald-600 font-semibold mt-1">每股淨增值 <span id="kpi-stock-delta">+$2.93</span> (+8.50%)</div>
-      </div>
-      <!-- KPI 3 -->
-      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">既有股東財富增加總額</div>
-        <div id="kpi-wealth-gain" class="text-2xl font-black text-emerald-600 mt-2">+$44,000,000</div>
-        <div class="text-xs text-slate-500 mt-1">1,500 萬股舊股東獨享稅盾</div>
-      </div>
-      <!-- KPI 4 -->
-      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">方案 B 綜合資金成本 (WACC)</div>
-        <div id="kpi-wacc" class="text-2xl font-black text-blue-600 mt-2">9.34%</div>
-        <div class="text-xs text-slate-500 mt-1">較全股權降幅 <span class="font-semibold text-blue-600">-66 bps</span></div>
-      </div>
-    </div>
-
-    <!-- Parameter Sliders & Dynamic Interaction -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- ============================================================== -->
+    <!-- PILLAR 1: 個案內容                                              -->
+    <!-- ============================================================== -->
+    <div id="pillar-case" class="pillar-section space-y-8 animate-fadeIn">
       
-      <!-- Left Column: Sliders Controller -->
-      <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-6">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h2 class="text-base font-bold text-brand-500 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-            </svg>
-            決策參數即時調整控制器
-          </h2>
-          <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">可拉動滑桿</span>
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-r from-brand-900 via-brand-800 to-indigo-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-700/50">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/40 border border-brand-400/40 text-sky-200 text-xs font-bold mb-4">
+          <i class="fa-solid fa-crown text-amber-400"></i> 哈佛商學院風格個案教材 ‧ 文件編號 HBS-FIN-11501-C03
         </div>
-
-        <!-- Slider 1: Tax Rate -->
-        <div>
-          <div class="flex justify-between text-sm font-medium mb-1">
-            <label for="input-tax" class="text-slate-700">綜合企業所得稅率 (Tc)</label>
-            <span id="label-tax" class="font-mono font-bold text-brand-500">40.0%</span>
-          </div>
-          <input id="input-tax" type="range" min="0" max="50" step="1" value="40" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500" oninput="updateCalculations()">
-          <div class="flex justify-between text-xs text-slate-400 mt-1">
-            <span>0% (MM 無稅基準)</span>
-            <span>25%</span>
-            <span>50%</span>
-          </div>
+        <h2 class="text-2xl sm:text-4xl font-black tracking-tight leading-tight mb-4">
+          Stephenson Real Estate Company：<br class="hidden sm:inline">資本結構重組、利息稅盾價值與融資決策抉擇
+        </h2>
+        <p class="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed mb-6">
+          面對一筆高達 1.1 億美元（USD 110,000,000）的高科技走廊核心商業地塊法拍收購良機，堅持 25 年「零負債」的創辦人兼執行長，與堅持 MM 定理利息稅盾的財務長在董事會爆發正面攤牌！
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono pt-4 border-t border-slate-700/60">
+          <div><span class="text-slate-400">目前流通股數：</span><strong class="text-white">1,500 萬股</strong></div>
+          <div><span class="text-slate-400">目前公開市價：</span><strong class="text-white">$34.50 美元</strong></div>
+          <div><span class="text-slate-400">無負債總市值：</span><strong class="text-white">$5.175 億美元</strong></div>
+          <div><span class="text-slate-400">綜合所得稅率：</span><strong class="text-emerald-400">40.0%</strong></div>
         </div>
-
-        <!-- Slider 2: Debt Amount -->
-        <div>
-          <div class="flex justify-between text-sm font-medium mb-1">
-            <label for="input-debt" class="text-slate-700">債務融資規模 (Debt, D)</label>
-            <span id="label-debt" class="font-mono font-bold text-brand-500">$110M</span>
-          </div>
-          <input id="input-debt" type="range" min="0" max="200" step="5" value="110" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500" oninput="updateCalculations()">
-          <div class="flex justify-between text-xs text-slate-400 mt-1">
-            <span>$0M (方案 A)</span>
-            <span>$110M (基準)</span>
-            <span>$200M</span>
-          </div>
-        </div>
-
-        <!-- Slider 3: Cost of Debt -->
-        <div>
-          <div class="flex justify-between text-sm font-medium mb-1">
-            <label for="input-rd" class="text-slate-700">長期發債利率 (Rd)</label>
-            <span id="label-rd" class="font-mono font-bold text-brand-500">8.0%</span>
-          </div>
-          <input id="input-rd" type="range" min="4" max="15" step="0.25" value="8.0" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500" oninput="updateCalculations()">
-          <div class="flex justify-between text-xs text-slate-400 mt-1">
-            <span>4.0%</span>
-            <span>8.0%</span>
-            <span>15.0%</span>
-          </div>
-        </div>
-
-        <!-- Slider 4: Cost of Unlevered Assets -->
-        <div>
-          <div class="flex justify-between text-sm font-medium mb-1">
-            <label for="input-ru" class="text-slate-700">無負債資產成本 (RU)</label>
-            <span id="label-ru" class="font-mono font-bold text-brand-500">10.0%</span>
-          </div>
-          <input id="input-ru" type="range" min="6" max="16" step="0.5" value="10.0" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500" oninput="updateCalculations()">
-          <div class="flex justify-between text-xs text-slate-400 mt-1">
-            <span>6.0%</span>
-            <span>10.0%</span>
-            <span>16.0%</span>
-          </div>
-        </div>
-
-        <!-- Callout Box -->
-        <div class="bg-brand-50 border-l-4 border-brand-500 p-4 rounded text-xs text-slate-600 space-y-1">
-          <div class="font-bold text-brand-500">💡 試驗重點：</div>
-          <div>• 將稅率拉至 0%，驗證 MM 無稅定理下每股股價完全不變（$34.50）。</div>
-          <div>• 隨負債比率增加，觀察股權成本 Re 攀升但 WACC 反而因稅盾下降。</div>
-        </div>
-
       </div>
 
-      <!-- Right 2 Columns: Charts & Side-by-Side Comparison -->
-      <div class="lg:col-span-2 space-y-6">
+      <!-- Narrative Section -->
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-scale-unbalanced text-brand-500"></i> 決策衝突場景：十月下旬的董事會融資攤牌
+        </h3>
         
-        <!-- Chart Container -->
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-base font-bold text-slate-800">資本結構對加權平均資金成本 (WACC) 與股權成本 (Re) 影響曲線</h3>
-            <span class="text-xs text-slate-500 font-mono">MM Proposition II with Taxes</span>
+        <!-- Quote Boxes -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3">
+            <div class="flex items-center justify-between text-amber-900 font-bold text-xs uppercase tracking-wider">
+              <span>執行長主張：零負債防線</span>
+              <span class="text-amber-600">方案 A (全額發股)</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 italic leading-relaxed">
+              「四十年前，我創辦的建築承包公司在沃爾克 20% 高利率下被債務利息生生勒死。那場個人破產讓我失去了聲譽與十年心血。二十五年來，SRE 堅持零負債運作！增發股票雖然增加股數，但永遠不需還本付息，絕無破產風險！」
+            </p>
+            <div class="text-right text-xs font-bold text-amber-900">— 羅伯特·史蒂芬森，創辦人兼執行長</div>
           </div>
-          <div class="h-64">
-            <canvas id="waccChart"></canvas>
+
+          <div class="p-6 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-3">
+            <div class="flex items-center justify-between text-emerald-900 font-bold text-xs uppercase tracking-wider">
+              <span>財務長建言：利息稅盾紅利</span>
+              <span class="text-emerald-600">方案 B (全額發債)</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 italic leading-relaxed">
+              「在 40% 企業所得稅體系下，堅守『零負債』是白白浪費 4,400 萬美元的利息稅盾價值（Tc × D）！發行債券能讓既有股東每股實質增值 $2.93 美元，股價自 $34.50 飆升至 $37.43。董事會負有對全體股東的信託責任，不發債即代理失靈！」
+            </p>
+            <div class="text-right text-xs font-bold text-emerald-900">— 馬克·普萊斯，財務長 (CFO)</div>
           </div>
         </div>
 
-        <!-- Side-by-Side Comparison Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Card Plan A -->
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-200 text-slate-700">方案 A (全額發股)</span>
-              <span class="text-xs text-slate-400">執行長主張</span>
-            </div>
-            <div class="mt-4 space-y-2 text-sm">
-              <div class="flex justify-between py-1 border-b border-slate-200">
-                <span class="text-slate-600">總市場價值 (VL)</span>
-                <span class="font-mono font-bold">$627.50M</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-slate-200">
-                <span class="text-slate-600">流通股數</span>
-                <span class="font-mono">1,818.84 萬股</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-slate-200">
-                <span class="text-slate-600">每股股票價格</span>
-                <span class="font-mono font-bold text-slate-800">$34.50</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-slate-200">
-                <span class="text-slate-600">利息稅盾</span>
-                <span class="font-mono text-slate-500">$0</span>
-              </div>
-              <div class="flex justify-between py-1">
-                <span class="text-slate-600">舊股東財富</span>
-                <span class="font-mono">$517.50M (零增長)</span>
-              </div>
-            </div>
+        <!-- Parameters Table -->
+        <div class="space-y-3 pt-4">
+          <h4 class="font-bold text-slate-800 text-sm">個案附表一（Exhibit 1）：公司現行資本結構與專案財務參數</h4>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-xs sm:text-sm divide-y divide-slate-200 border border-slate-200 rounded-lg">
+              <thead class="bg-slate-100 text-slate-700 font-bold">
+                <tr>
+                  <th class="px-4 py-2.5 text-left">財務參數項目</th>
+                  <th class="px-4 py-2.5 text-center">基準數值</th>
+                  <th class="px-4 py-2.5 text-left">管理決策與估值備註</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-mono">
+                <tr><td class="px-4 py-2.5 font-sans">宣告前流通在外股數 (N0)</td><td class="px-4 py-2.5 text-center">1,500 萬股</td><td class="px-4 py-2.5 font-sans">既有舊股東持股總數</td></tr>
+                <tr class="bg-slate-50"><td class="px-4 py-2.5 font-sans">宣告前每股公開交易股價 (P0)</td><td class="px-4 py-2.5 text-center">$34.50 美元</td><td class="px-4 py-2.5 font-sans">市場公開公允成交市價</td></tr>
+                <tr><td class="px-4 py-2.5 font-sans">宣告前無負債總市值 (VU)</td><td class="px-4 py-2.5 text-center">$517,500,000 美元</td><td class="px-4 py-2.5 font-sans">15,000,000 股 × $34.50 (零負債)</td></tr>
+                <tr class="bg-slate-50"><td class="px-4 py-2.5 font-sans">新購商業地塊所需資金 (I)</td><td class="px-4 py-2.5 text-center">$110,000,000 美元</td><td class="px-4 py-2.5 font-sans">高科技產業走廊核心地塊法拍成本</td></tr>
+                <tr><td class="px-4 py-2.5 font-sans">新地塊未來現金流現值 (PV)</td><td class="px-4 py-2.5 text-center">$110,000,000 美元</td><td class="px-4 py-2.5 font-sans">專案自身無槓桿淨現值恰為零 (NPV = $0)</td></tr>
+                <tr class="bg-slate-50"><td class="px-4 py-2.5 font-sans">企業綜合所得稅率 (Tc)</td><td class="px-4 py-2.5 text-center text-emerald-700 font-bold">40.0%</td><td class="px-4 py-2.5 font-sans">利息支出全額稅前扣抵之邊際稅率</td></tr>
+              </tbody>
+            </table>
           </div>
+        </div>
 
-          <!-- Card Plan B -->
-          <div class="bg-emerald-50/50 border border-emerald-200 rounded-xl p-5">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-600 text-white">方案 B (全額發債)</span>
-              <span class="text-xs text-emerald-600 font-semibold">財務顧問強烈推薦</span>
+        <!-- Discussion Questions -->
+        <div class="space-y-4 pt-4 border-t border-slate-200">
+          <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-question text-brand-500"></i> 個案五大核心研討問題（Discussion Questions）
+          </h4>
+          <div class="space-y-3 text-xs sm:text-sm text-slate-700">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <strong class="text-brand-500">問題一（融資建議）：</strong>如果董事會的目標是最大化股東財富與公司價值，應選擇發債還是發股？闡述 MM 定理利息稅盾的創造原理。
             </div>
-            <div class="mt-4 space-y-2 text-sm">
-              <div class="flex justify-between py-1 border-b border-emerald-100">
-                <span class="text-slate-600">總市場價值 (VL)</span>
-                <span id="dyn-planB-vl" class="font-mono font-bold text-emerald-700">$671.50M</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-emerald-100">
-                <span class="text-slate-600">流通股數</span>
-                <span class="font-mono">1,500.00 萬股 (無稀釋)</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-emerald-100">
-                <span class="text-slate-600">每股股票價格</span>
-                <span id="dyn-planB-price" class="font-mono font-bold text-emerald-700">$37.43</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-emerald-100">
-                <span class="text-slate-600">利息稅盾</span>
-                <span id="dyn-planB-ts" class="font-mono text-emerald-600 font-bold">$44.00M</span>
-              </div>
-              <div class="flex justify-between py-1">
-                <span class="text-slate-600">舊股東財富</span>
-                <span id="dyn-planB-wealth" class="font-mono font-bold text-emerald-700">$561.50M (+44M)</span>
-              </div>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <strong class="text-brand-500">問題二（市場價值資產負債表）：</strong>編制宣告前市場價值資產負債表，說明為何評估資本結構重組必須使用市場價值而非會計帳面價值。
+            </div>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <strong class="text-brand-500">問題三（方案 A 增發新股精算）：</strong>計算專案 NPV、宣告後股價、需增發的新股股數（318.84萬股），編制增發後市場價值資產負債表並分析股權稀釋效應。
+            </div>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <strong class="text-brand-500">問題四（方案 B 發行債券精算）：</strong>計算 4,400 萬美元利息稅盾現值、宣告後每股股價（$37.43）與淨增幅（+$2.93），證明股東財富增加額與稅盾的等價性。
+            </div>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <strong class="text-brand-500">問題五（MM第二定理與代理衝突）：</strong>深入證明為何負債提高股權成本（Re 上升）但 WACC 反而下降？剖析執行長創傷偏誤與董事會信託責任。
             </div>
           </div>
         </div>
@@ -287,253 +333,899 @@
 
     </div>
 
-    <!-- Market Value Balance Sheet Comparison -->
-    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-      <h3 class="text-base font-bold text-brand-500 mb-4 flex items-center">
-        <svg class="w-5 h-5 mr-2 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
-        </svg>
-        動態市場價值資產負債表（Market Value Balance Sheet）即時核算
-      </h3>
-
-      <div class="overflow-x-auto">
-        <table class="min-w-full text-sm divide-y divide-slate-200 border border-slate-200 rounded-lg">
-          <thead class="bg-brand-500 text-white">
-            <tr>
-              <th class="px-4 py-3 text-left font-semibold">資產端 (Assets)</th>
-              <th class="px-4 py-3 text-right font-semibold">市場價值 (USD)</th>
-              <th class="px-4 py-3 text-left font-semibold">負債與股權端 (Liabilities & Equity)</th>
-              <th class="px-4 py-3 text-right font-semibold">市場價值 (USD)</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-200 font-mono">
-            <tr>
-              <td class="px-4 py-3 font-sans text-slate-700">既有營運房地產資產 (Existing Assets)</td>
-              <td class="px-4 py-3 text-right text-slate-800">$517,500,000</td>
-              <td class="px-4 py-3 font-sans text-slate-700">長期公司債券 (Debt, D)</td>
-              <td id="bs-debt" class="px-4 py-3 text-right text-slate-800">$110,000,000</td>
-            </tr>
-            <tr class="bg-slate-50">
-              <td class="px-4 py-3 font-sans text-slate-700">新購置高科技商業地塊 (New Land)</td>
-              <td class="px-4 py-3 text-right text-slate-800">$110,000,000</td>
-              <td class="px-4 py-3 font-sans text-slate-700">股東權益總市值 (Equity, S: 1,500 萬股)</td>
-              <td id="bs-equity" class="px-4 py-3 text-right text-emerald-700 font-bold">$561,500,000</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 font-sans text-emerald-700 font-semibold">利息稅盾折現現值 (PV of Tax Shield)</td>
-              <td id="bs-taxshield" class="px-4 py-3 text-right text-emerald-600 font-bold">$44,000,000</td>
-              <td class="px-4 py-3 font-sans text-slate-400 italic">（每股定價對應）</td>
-              <td id="bs-pershare" class="px-4 py-3 text-right text-slate-500 font-sans">每股 $37.43</td>
-            </tr>
-            <tr class="bg-slate-100 font-bold border-t-2 border-brand-500">
-              <td class="px-4 py-3 font-sans text-brand-900">總資產市場價值 (Total Assets)</td>
-              <td id="bs-total-assets" class="px-4 py-3 text-right text-brand-900">$671,500,000</td>
-              <td class="px-4 py-3 font-sans text-brand-900">負債與股權總額 (Total L & E)</td>
-              <td id="bs-total-le" class="px-4 py-3 text-right text-brand-900">$671,500,000</td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- ============================================================== -->
+    <!-- PILLAR 2: 教學指引                                              -->
+    <!-- ============================================================== -->
+    <div id="pillar-tn" class="pillar-section hidden space-y-8 animate-fadeIn">
+      
+      <div class="bg-gradient-to-r from-teal-900 to-emerald-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-teal-800">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/30 border border-teal-400/40 text-teal-200 text-xs font-bold mb-4">
+          <i class="fa-solid fa-graduation-cap text-amber-300"></i> 哈佛商學院個案教學指引 ‧ 文件編號 HBS-FIN-11501-TN03
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-black tracking-tight leading-tight mb-4">
+          《Stephenson Real Estate Company》教學指引與課堂規劃
+        </h2>
+        <p class="text-sm sm:text-base text-teal-100 max-w-3xl leading-relaxed">
+          專為商管學院 MBA、EMBA 及高階公司金融課程設計。本指引提供 90 分鐘與 180 分鐘課堂時間表、黑板板書四象限（Board Plan）、蘇格拉底式提問引導與破題策略。
+        </p>
       </div>
+
+      <!-- Pedagogical Objectives -->
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-bullseye text-teal-600"></i> 五大核心教學目標（Pedagogical Objectives）
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-700">
+          <div class="p-4 rounded-xl bg-teal-50/60 border border-teal-200">
+            <strong class="text-teal-900 block mb-1">1. 掌握 MM 定理有稅模型與利息稅盾</strong>
+            透徹理解所得稅體系下利息稅前扣除帶來的政府補貼（$PV(TS) = T_c \times D$），破除負債必然有害的直覺迷思。
+          </div>
+          <div class="p-4 rounded-xl bg-teal-50/60 border border-teal-200">
+            <strong class="text-teal-900 block mb-1">2. 熟練編制市場價值資產負債表</strong>
+            跳脫會計歷史成本框架，從未來現金流折現與公允市價維度動態追蹤增資與發債對公司價值的衝擊。
+          </div>
+          <div class="p-4 rounded-xl bg-teal-50/60 border border-teal-200">
+            <strong class="text-teal-900 block mb-1">3. 精準量化融資對每股股價的定價衝擊</strong>
+            證明在有效市場假說下，負債稅盾財富由既有舊股東獨享，推動每股股價自 $34.50 跳升至 $37.43。
+          </div>
+          <div class="p-4 rounded-xl bg-teal-50/60 border border-teal-200">
+            <strong class="text-teal-900 block mb-1">4. 解析 MM 第二定理與 WACC 下降機制</strong>
+            理解財務槓桿提高推升股權風險（Re 上升）的同時，低成本負債的權重效應反而拉低 WACC 的精妙動態。
+          </div>
+          <div class="p-4 rounded-xl bg-teal-50/60 border border-teal-200 md:col-span-2">
+            <strong class="text-teal-900 block mb-1">5. 剖析經理人個人創傷偏誤（Trauma Bias）與代理衝突</strong>
+            診斷創辦人早年破產創傷如何轉化為過度風險厭惡，損害股東利益，並探討董事會如何落實法定信託義務。
+          </div>
+        </div>
+
+        <!-- Board Plan -->
+        <div class="space-y-3 pt-6 border-t border-slate-200">
+          <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-chalkboard text-teal-600"></i> 黑板板書四象限規劃圖（Board Plan）
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+            <div class="p-5 rounded-xl bg-slate-900 text-slate-200 space-y-2 border border-slate-800">
+              <span class="text-amber-400 font-bold block">【板書第一區：SRE 現況與購地機會】</span>
+              <p>• 股數 N0 = 15.0M 股 ； 股價 P0 = $34.50 ； 市值 VU = $517.5M<br>
+              • 稅率 Tc = 40.0% ； 購地支出 I = $110.0M ； 專案無槓桿 NPV = $0<br>
+              • 核心死結：執行長 1980 年代承包商破產創傷 → 堅持零負債</p>
+            </div>
+            <div class="p-5 rounded-xl bg-slate-900 text-slate-200 space-y-2 border border-slate-800">
+              <span class="text-sky-400 font-bold block">【板書第二區：方案 A 全額增發新股】</span>
+              <p>• 專案 NPV = $0（無稅盾，無超額價值）<br>
+              • 新股價維持 P1 = $34.50 ； 增發新股 = $110M / $34.50 = 3.19M 股<br>
+              • 總股數膨脹至 18.19M 股 ； 舊股東財富零增長 ($517.5M)</p>
+            </div>
+            <div class="p-5 rounded-xl bg-slate-900 text-slate-200 space-y-2 border border-slate-800">
+              <span class="text-emerald-400 font-bold block">【板書第三區：方案 B 全額發行長期債券】</span>
+              <p>• 利息稅盾現值 PV(TS) = Tc × D = 40% × $110M = $44,000,000 美元！<br>
+              • 總市值 VL = $671.5M ； 股權市值 S = $561.5M ； 股數維持 15M 股<br>
+              • 新股價 P1 = $37.43 ； 每股淨漲 +$2.93 (+8.50%) ； 舊股東獨享44M</p>
+            </div>
+            <div class="p-5 rounded-xl bg-slate-900 text-slate-200 space-y-2 border border-slate-800">
+              <span class="text-purple-400 font-bold block">【板書第四區：資本成本演化與公司治理】</span>
+              <p>• MM 第二定理：Re 從 10.0% 微升至 10.24%<br>
+              • 稅後債務成本僅 4.80% → 綜合 WACC 從 10.0% 驟降至 9.34%<br>
+              • 治理建言：董事會堅守 Fiduciary Duty，通過發債並給予股權激勵</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- Governance Section -->
-    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
-      <h3 class="text-base font-bold text-slate-900">董事會信託責任與公司治理核心決策矩陣</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-        <div class="p-4 rounded-lg bg-red-50 border border-red-100">
-          <div class="font-bold text-red-800 mb-1">創辦人個人偏誤 (Trauma Bias)</div>
-          <p class="text-xs text-red-700 leading-relaxed">
-            1980 年代承包商破產痛苦記憶使執行長產生強烈「損失厭惡」，將個人「追求無債的安全感」凌駕於股東財富之上，造成 4,400 萬美元代理損失。
-          </p>
+    <!-- ============================================================== -->
+    <!-- PILLAR 3: 個案解析與試算                                        -->
+    <!-- ============================================================== -->
+    <div id="pillar-sm" class="pillar-section hidden space-y-8 animate-fadeIn">
+      
+      <div class="bg-gradient-to-r from-hbs-dark to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-red-900">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-hbs-crimson/50 border border-red-400/40 text-red-100 text-xs font-bold mb-4">
+          <i class="fa-solid fa-calculator text-amber-300"></i> 哈佛商學院個案解析手冊 ‧ 文件編號 HBS-FIN-11501-SM03
         </div>
-        <div class="p-4 rounded-lg bg-amber-50 border border-amber-100">
-          <div class="font-bold text-amber-800 mb-1">商業地產低風險特質</div>
-          <p class="text-xs text-amber-700 leading-relaxed">
-            SRE 出租率長年高達 96%，現金流極為平穩。發債後負債比率僅 16.38%，遠低於同業 50% 之平均，根本不存在破產違約風險。
-          </p>
-        </div>
-        <div class="p-4 rounded-lg bg-emerald-50 border border-emerald-100">
-          <div class="font-bold text-emerald-800 mb-1">董事會法定信託義務 (Fiduciary Duty)</div>
-          <p class="text-xs text-emerald-700 leading-relaxed">
-            董事會必須以客觀量化模型引導決策，果斷表決通過方案 B，並透過股票增值紅利與管理層達成共贏，履行對全體股東的信託承諾！
-          </p>
-        </div>
+        <h2 class="text-2xl sm:text-4xl font-black tracking-tight leading-tight mb-4">
+          《Stephenson Real Estate Company》個案解析與量化精算
+        </h2>
+        <p class="text-sm sm:text-base text-red-100 max-w-3xl leading-relaxed">
+          完整呈現董事會財務決策備忘錄、MM 定理有稅模型數學證明、三套市場價值資產負債表動態切換，以及 WACC 敏感度曲線分析。
+        </p>
       </div>
+
+      <!-- Side-by-Side Comparison Full Table -->
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+        <h3 class="text-xl font-bold text-slate-900 flex items-center justify-between">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-table-list text-hbs-crimson"></i> 方案 A 與方案 B 核心財務指標對比全景表</span>
+          <a href="個案三解析.html" class="text-xs font-bold text-hbs-crimson hover:underline flex items-center gap-1">
+            閱讀完整解析講義網頁版 <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-xs sm:text-sm divide-y divide-slate-200 border border-slate-200 rounded-lg">
+            <thead class="bg-brand-500 text-white font-bold">
+              <tr>
+                <th class="px-4 py-3 text-left">財務比較維度</th>
+                <th class="px-4 py-3 text-right">宣告前現況 (零負債)</th>
+                <th class="px-4 py-3 text-right">方案 A (全額發股)</th>
+                <th class="px-4 py-3 text-right">方案 B (全額發債)</th>
+                <th class="px-4 py-3 text-left">方案 B 帶來之優勢 / 差異</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 font-mono">
+              <tr>
+                <td class="px-4 py-2.5 font-sans font-bold">公司總市場價值 (VL)</td>
+                <td class="px-4 py-2.5 text-right">$517.5M</td>
+                <td class="px-4 py-2.5 text-right">$627.5M</td>
+                <td class="px-4 py-2.5 text-right text-emerald-700 font-bold">$671.5M</td>
+                <td class="px-4 py-2.5 font-sans text-emerald-700 font-bold">+$44,000,000 (稅盾現值)</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2.5 font-sans font-bold">長期公司債券規模 (D)</td>
+                <td class="px-4 py-2.5 text-right">$0</td>
+                <td class="px-4 py-2.5 text-right">$0</td>
+                <td class="px-4 py-2.5 text-right">$110.0M</td>
+                <td class="px-4 py-2.5 font-sans">+$1.10 億美元優質長期債券</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-sans font-bold">股權市場總價值 (S)</td>
+                <td class="px-4 py-2.5 text-right">$517.5M</td>
+                <td class="px-4 py-2.5 text-right">$627.5M</td>
+                <td class="px-4 py-2.5 text-right">$561.5M</td>
+                <td class="px-4 py-2.5 font-sans">資本結構精實，避免股本虛胖</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2.5 font-sans font-bold">流通在外總股數</td>
+                <td class="px-4 py-2.5 text-right">15.00M 股</td>
+                <td class="px-4 py-2.5 text-right">18.19M 股</td>
+                <td class="px-4 py-2.5 text-right text-emerald-700 font-bold">15.00M 股</td>
+                <td class="px-4 py-2.5 font-sans text-emerald-700 font-bold">維持原股數，完全零股權稀釋</td>
+              </tr>
+              <tr class="bg-emerald-50/60 font-bold">
+                <td class="px-4 py-2.5 font-sans text-emerald-900">每股公開股票價格</td>
+                <td class="px-4 py-2.5 text-right text-slate-800">$34.50</td>
+                <td class="px-4 py-2.5 text-right text-slate-800">$34.50</td>
+                <td class="px-4 py-2.5 text-right text-emerald-700 text-base">$37.43</td>
+                <td class="px-4 py-2.5 font-sans text-emerald-700 font-black">+$2.93 美元 / 股 (+8.50%)</td>
+              </tr>
+              <tr class="bg-amber-50/60 font-bold">
+                <td class="px-4 py-2.5 font-sans text-amber-900">既有 15M 舊股東總財富</td>
+                <td class="px-4 py-2.5 text-right text-slate-800">$517.5M</td>
+                <td class="px-4 py-2.5 text-right text-slate-800">$517.5M</td>
+                <td class="px-4 py-2.5 text-right text-emerald-700 text-base">$561.5M</td>
+                <td class="px-4 py-2.5 font-sans text-emerald-700 font-black">實質淨增 4,400 萬美元純財富！</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2.5 font-sans font-bold">加權平均資金成本 (WACC)</td>
+                <td class="px-4 py-2.5 text-right">10.00%</td>
+                <td class="px-4 py-2.5 text-right">10.00%</td>
+                <td class="px-4 py-2.5 text-right text-blue-700 font-bold">9.34%</td>
+                <td class="px-4 py-2.5 font-sans text-blue-700 font-bold">有效壓低資金成本 66 個基點 (bps)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-xs sm:text-sm text-slate-700">
+          <h4 class="font-bold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-lightbulb text-amber-500"></i> MM 第二定理之理論證明（為何 Re 上升，股價反而上漲？）
+          </h4>
+          <p>
+            $$R_e = R_U + (R_U - R_d)(1 - T_c)\left(\frac{D}{S}\right) = 10.0\% + (10.0\% - 8.0\%)(1 - 0.40)(0.1959) = 10.24\%$$
+            雖然股東要求的必要報酬率因承擔財務風險由 10.0% 微升至 10.24%，但因為新增負債的稅後邊際成本僅為 <strong>$R_d(1 - T_c) = 8.0\% \times 0.6 = 4.80\%$</strong>。
+            低成本負債的權重效應壓倒性拉低了加權平均資金成本：
+            $$\text{WACC} = \left(\frac{561.5}{671.5}\right) \times 10.24\% + \left(\frac{110.0}{671.5}\right) \times 4.80\% = 9.34\%!$$
+            折現率下降，公司市場總價值自然暴增，推動每股股價由 $34.50 飆升至 $37.43！
+          </p>
+        </div>
+
+      </div>
+
     </div>
 
   </main>
 
+  <!-- ============================================================== -->
+  <!-- 90m / 180m CLASSROOM TIMER MODAL                               -->
+  <!-- ============================================================== -->
+  <div id="timer-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6 animate-fadeIn">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-stopwatch text-amber-500"></i> 課堂教學研討計時器
+        </h3>
+        <button onclick="toggleTimerModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="text-center py-4">
+        <div id="timer-modal-display" class="font-mono text-5xl font-black text-slate-900 tracking-tight">90:00</div>
+        <p class="text-xs text-slate-500 mt-2" id="timer-status-label">準備就緒 ‧ 點擊開始</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 text-xs font-bold">
+        <button onclick="setTimerMinutes(90)" class="py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+          90 分鐘標準版
+        </button>
+        <button onclick="setTimerMinutes(180)" class="py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+          180 分鐘 EMBA 版
+        </button>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="startTimer()" id="timer-start-btn" class="flex-1 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-sm shadow transition">
+          開始計時
+        </button>
+        <button onclick="pauseTimer()" class="py-3 px-5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition">
+          暫停
+        </button>
+        <button onclick="resetTimer()" class="py-3 px-5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition">
+          重設
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- FULLSCREEN PRESENTATION OVERLAY                                -->
+  <!-- ============================================================== -->
+  <div id="presentation-overlay" class="hidden fixed inset-0 z-50 bg-slate-950 text-white flex flex-col">
+    <!-- Top PPT Nav -->
+    <div class="h-14 bg-slate-900/90 border-b border-slate-800 px-4 flex items-center justify-between shrink-0">
+      <div class="flex items-center space-x-3">
+        <span class="text-xs font-bold text-amber-400 font-mono" id="slide-number-indicator">Slide 1 / 28</span>
+        <div class="hidden sm:flex items-center space-x-1 text-xs">
+          <span id="ppt-tab-case" class="px-2.5 py-1 rounded-lg font-bold bg-brand-500 text-white">個案內容</span>
+          <span id="ppt-tab-tn" class="px-2.5 py-1 rounded-lg font-bold text-slate-400">教學指引</span>
+          <span id="ppt-tab-sm" class="px-2.5 py-1 rounded-lg font-bold text-slate-400">個案解析</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <select id="slide-jump-select" onchange="jumpToSlide(this.value)" class="bg-slate-800 text-slate-200 text-xs rounded px-2 py-1 border border-slate-700 font-mono">
+        </select>
+        <button onclick="closePresentationMode()" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-bold transition">
+          <i class="fa-solid fa-xmark mr-1"></i> 退出全螢幕
+        </button>
+      </div>
+    </div>
+
+    <!-- PPT Stage -->
+    <div class="flex-1 flex items-center justify-center p-4 sm:p-8 overflow-y-auto" id="slide-content-stage">
+      <div class="slide-card bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl text-slate-100 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div>
+            <span class="text-xs font-mono font-bold uppercase text-amber-400 tracking-wider" id="ppt-cat-label">區塊一：個案內容</span>
+            <h3 class="text-xl sm:text-3xl font-black text-white mt-1" id="ppt-title-label">載入中...</h3>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1" id="ppt-sub-label">載入中...</p>
+          </div>
+        </div>
+        <div id="ppt-body-container" class="py-4 text-sm sm:text-base leading-relaxed">
+        </div>
+        <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+          <span id="ppt-notes-label">💡 提示：使用鍵盤左右方向鍵或空白鍵翻頁</span>
+          <div class="flex items-center gap-2">
+            <button onclick="prevSlide()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold transition">
+              <i class="fa-solid fa-chevron-left mr-1"></i> 上一頁
+            </button>
+            <button onclick="nextSlide()" class="px-3 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-bold transition">
+              下一頁 <i class="fa-solid fa-chevron-right ml-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
-  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs border-t border-slate-800">
-    Stephenson Real Estate Company (SRE) 互動式財務決策平台 ｜ 國立大學商管碩士在職專班 領導與管理課程 ｜ 版權所有 © 2026
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-auto">
+    Stephenson Real Estate Company (SRE) 財務個案教學網站 ｜ 國立大學商管碩士在職專班 領導與管理課程 ｜ 版權所有 © 2026
   </footer>
 
-  <!-- Simulation Logic Script -->
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT CONTROLLERS                                          -->
+  <!-- ============================================================== -->
   <script>
-    const N0 = 15000000; // 15 million shares
-    const P0 = 34.50;
-    const VU = N0 * P0; // $517,500,000
-    const LandCost = 110000000; // $110,000,000
-
-    let chartInstance = null;
-
-    function formatMoney(num) {
-      return '$' + Math.round(num).toLocaleString('en-US');
+    // 1. Pillar Switcher Logic
+    let currentPillar = 'case';
+    function switchPillar(pillar) {
+      currentPillar = pillar;
+      ['case', 'tn', 'sm'].forEach(p => {
+        const sec = document.getElementById('pillar-' + p);
+        const btn = document.getElementById('nav-btn-' + p);
+        if (p === pillar) {
+          sec.classList.remove('hidden');
+          btn.className = 'px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-2 tab-active-' + p;
+        } else {
+          sec.classList.add('hidden');
+          btn.className = 'px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-white flex items-center gap-2';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function formatNumber(num, decimals = 2) {
-      return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-    }
-
-    function updateCalculations() {
-      const tc = parseFloat(document.getElementById('input-tax').value) / 100.0;
-      const debtM = parseFloat(document.getElementById('input-debt').value);
-      const D = debtM * 1000000.0;
-      const rd = parseFloat(document.getElementById('input-rd').value) / 100.0;
-      const ru = parseFloat(document.getElementById('input-ru').value) / 100.0;
-
-      // Update Labels
-      document.getElementById('label-tax').textContent = (tc * 100).toFixed(1) + '%';
-      document.getElementById('label-debt').textContent = '$' + debtM.toFixed(0) + 'M';
-      document.getElementById('label-rd').textContent = (rd * 100).toFixed(2) + '%';
-      document.getElementById('label-ru').textContent = (ru * 100).toFixed(1) + '%';
-
-      // 1. Tax Shield
-      const pvTS = tc * D;
-
-      // 2. Firm Value & Equity
-      const VL = VU + LandCost + pvTS;
-      const S = VL - D;
-
-      // 3. Stock Price
-      const P1 = S / N0;
-      const deltaP = P1 - P0;
-      const pctGain = (deltaP / P0) * 100.0;
-
-      // 4. Wealth Gain
-      const totalWealthGain = N0 * deltaP;
-
-      // 5. Cost of Equity & WACC
-      const debtToEquity = S > 0 ? (D / S) : 0;
-      const Re = ru + (ru - rd) * (1 - tc) * debtToEquity;
-      const we = VL > 0 ? (S / VL) : 0;
-      const wd = VL > 0 ? (D / VL) : 0;
-      const afterTaxRd = rd * (1 - tc);
-      const wacc = (we * Re) + (wd * afterTaxRd);
-
-      // Update KPIs
-      document.getElementById('kpi-tax-shield').textContent = formatMoney(pvTS);
-      document.getElementById('kpi-stock-price').textContent = '$' + formatNumber(P1, 2);
-      document.getElementById('kpi-stock-delta').textContent = (deltaP >= 0 ? '+' : '') + '$' + formatNumber(deltaP, 2) + ' (' + (pctGain >= 0 ? '+' : '') + formatNumber(pctGain, 2) + '%)';
-      document.getElementById('kpi-wealth-gain').textContent = (totalWealthGain >= 0 ? '+' : '') + formatMoney(totalWealthGain);
-      document.getElementById('kpi-wacc').textContent = formatNumber(wacc * 100, 2) + '%';
-
-      // Update Dynamic Cards
-      document.getElementById('dyn-planB-vl').textContent = '$' + formatNumber(VL / 1e6, 2) + 'M';
-      document.getElementById('dyn-planB-price').textContent = '$' + formatNumber(P1, 2);
-      document.getElementById('dyn-planB-ts').textContent = '$' + formatNumber(pvTS / 1e6, 2) + 'M';
-      document.getElementById('dyn-planB-wealth').textContent = '$' + formatNumber((N0 * P1) / 1e6, 2) + 'M (+' + formatNumber(totalWealthGain / 1e6, 1) + 'M)';
-
-      // Update Balance Sheet
-      document.getElementById('bs-debt').textContent = formatMoney(D);
-      document.getElementById('bs-equity').textContent = formatMoney(S);
-      document.getElementById('bs-taxshield').textContent = formatMoney(pvTS);
-      document.getElementById('bs-pershare').textContent = '每股 $' + formatNumber(P1, 2);
-      document.getElementById('bs-total-assets').textContent = formatMoney(VL);
-      document.getElementById('bs-total-le').textContent = formatMoney(VL);
-
-      // Update Chart
-      updateChart(tc, rd, ru);
-    }
-
-    function updateChart(tc, rd, ru) {
-      const labels = [];
-      const waccList = [];
-      const reList = [];
-
-      for (let dRatio = 0; dRatio <= 0.60; dRatio += 0.05) {
-        labels.push((dRatio * 100).toFixed(0) + '%');
-        const d_val = dRatio * (VU + LandCost);
-        const pv_ts = tc * d_val;
-        const cur_VL = VU + LandCost + pv_ts;
-        const cur_S = cur_VL - d_val;
-        const de_ratio = cur_S > 0 ? (d_val / cur_S) : 0;
-        const cur_Re = ru + (ru - rd) * (1 - tc) * de_ratio;
-        const cur_WACC = ru * (1 - tc * dRatio);
-
-        waccList.push((cur_WACC * 100).toFixed(2));
-        reList.push((cur_Re * 100).toFixed(2));
-      }
-
-      if (chartInstance) {
-        chartInstance.data.labels = labels;
-        chartInstance.data.datasets[0].data = waccList;
-        chartInstance.data.datasets[1].data = reList;
-        chartInstance.update();
+    // 2. Resource Dropdown Menu Toggle
+    function toggleResourceMenu() {
+      const dd = document.getElementById('resource-menu-dropdown');
+      const chev = document.getElementById('resource-menu-chevron');
+      dd.classList.toggle('hidden');
+      if (!dd.classList.contains('hidden')) {
+        chev.style.transform = 'rotate(180deg)';
       } else {
-        const ctx = document.getElementById('waccChart').getContext('2d');
-        chartInstance = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: '加權平均資金成本 (WACC %)',
-                data: waccList,
-                borderColor: '#2563EB',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                borderWidth: 3,
-                tension: 0.3,
-                fill: true,
-              },
-              {
-                label: '股權資本成本 (Re %)',
-                data: reList,
-                borderColor: '#DC2626',
-                borderWidth: 2,
-                borderDash: [5, 5],
-                tension: 0.3,
-                fill: false,
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                title: { display: true, text: '負債比率 (Debt Ratio D / VL)' }
-              },
-              y: {
-                title: { display: true, text: '資本成本 (%)' },
-                min: 4,
-                max: 16
-              }
-            },
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    return context.dataset.label + ': ' + context.parsed.y + '%';
-                  }
-                }
-              }
-            }
-          }
-        });
+        chev.style.transform = 'rotate(0deg)';
+      }
+    }
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('resource-menu-container');
+      if (container && !container.contains(e.target)) {
+        const dd = document.getElementById('resource-menu-dropdown');
+        if (dd && !dd.classList.contains('hidden')) {
+          dd.classList.add('hidden');
+          document.getElementById('resource-menu-chevron').style.transform = 'rotate(0deg)';
+        }
+      }
+    });
+
+    // 3. Timer Modal Logic
+    let timerDuration = 90 * 60;
+    let timerRemaining = timerDuration;
+    let timerInterval = null;
+    let timerRunning = false;
+
+    function toggleTimerModal() {
+      document.getElementById('timer-modal').classList.toggle('hidden');
+    }
+    function updateTimerDisplay() {
+      const m = Math.floor(timerRemaining / 60);
+      const s = timerRemaining % 60;
+      const str = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      document.getElementById('timer-display-mini').innerText = str;
+      document.getElementById('timer-modal-display').innerText = str;
+    }
+    function setTimerMinutes(mins) {
+      pauseTimer();
+      timerDuration = mins * 60;
+      timerRemaining = timerDuration;
+      updateTimerDisplay();
+      document.getElementById('timer-status-label').innerText = `已設定為 ${mins} 分鐘 ‧ 點擊開始`;
+    }
+    function startTimer() {
+      if (timerRunning) return;
+      timerRunning = true;
+      document.getElementById('timer-start-btn').innerText = '計時中...';
+      document.getElementById('timer-status-label').innerText = '計時進行中 ‧ 專注課堂研討';
+      timerInterval = setInterval(() => {
+        if (timerRemaining > 0) {
+          timerRemaining--;
+          updateTimerDisplay();
+        } else {
+          pauseTimer();
+          alert('課堂研討時間結束！');
+        }
+      }, 1000);
+    }
+    function pauseTimer() {
+      timerRunning = false;
+      clearInterval(timerInterval);
+      document.getElementById('timer-start-btn').innerText = '繼續計時';
+      document.getElementById('timer-status-label').innerText = '已暫停';
+    }
+    function resetTimer() {
+      pauseTimer();
+      timerRemaining = timerDuration;
+      updateTimerDisplay();
+      document.getElementById('timer-start-btn').innerText = '開始計時';
+      document.getElementById('timer-status-label').innerText = '準備就緒 ‧ 點擊開始';
+    }
+
+    // 4. Slide Deck Presentation (28 Slides)
+    const sreSlideDeck = [
+      // PART 1: 個案內容 (1-10)
+      {
+        num: 1, pillar: 'case', cat: '區塊一：個案內容｜封面',
+        title: 'Stephenson Real Estate Company（SRE）',
+        sub: '資本結構重組、利息稅盾價值與融資決策抉擇（HBS-FIN-11501-C03）',
+        body: `<div class="text-center py-6 space-y-4 max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/20 border border-brand-500/40 text-sky-400 text-xs font-bold">
+            <i class="fa-solid fa-building"></i> HARVARD BUSINESS SCHOOL CASE METHOD ‧ 經典公司財務教案
+          </div>
+          <h3 class="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-amber-300 to-rose-300">
+            高科技走廊 1.1 億美元地塊收購<br>與 25 年「零負債」哲學的終極攤牌
+          </h3>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            企業主角：創辦人兼執行長 <strong>羅伯特·史蒂芬森（Robert Stephenson）</strong> ｜ 財務長 <strong>馬克·普萊斯（Mark Price）</strong><br>
+            決策標的：<strong>1.1 億美元優質商業地塊融資方案抉擇（增發新股 vs. 發行長期債券）</strong>
+          </p>
+        </div>`,
+        notes: '歡迎進入財務個案(三)教學簡報。全套簡報依循哈佛教學法分為三大區塊：P.1–10 個案內容、P.11–18 教學指引、P.19–28 個案解析。'
+      },
+      {
+        num: 2, pillar: 'case', cat: '區塊一：個案內容｜決策現場',
+        title: '十月下旬董事會：1.1 億美元專案的融資交鋒',
+        sub: '全美商業房地產龍頭企業 ‧ 總部頂層會議室',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs sm:text-sm">
+          <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3">
+            <span class="text-amber-400 font-bold flex items-center gap-2"><i class="fa-solid fa-city"></i> 1.1 億美元重大商業土地投資案</span>
+            <h4 class="font-bold text-white text-base">高科技產業走廊核心 120 英畝地塊</h4>
+            <p class="text-slate-300 leading-relaxed">周邊環繞半導體晶圓廠、AI 雲端資料中心與大型跨國物流園區，具備無可替代的戰略卡位價值。法拍總價確定為 1.1 億美元。</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3">
+            <span class="text-sky-400 font-bold flex items-center gap-2"><i class="fa-solid fa-cash-register"></i> 專案現金流折現特徵</span>
+            <h4 class="font-bold text-white text-base">無槓桿淨現值 NPV 剛好等於零！</h4>
+            <p class="text-slate-300 leading-relaxed">在純股權架構下，未來永續租金現金流現值恰為 1.1 億美元。專案本身定價公允，超額財富創造完全取決於<strong>融資架構的頂層設計</strong>！</p>
+          </div>
+        </div>`,
+        notes: '引導學生理解：這不是一筆暴利投資，而是一筆公平定價投資，其價值完全由融資結構釋放。'
+      },
+      {
+        num: 3, pillar: 'case', cat: '區塊一：個案內容｜創辦人背景',
+        title: '執行長史蒂芬森的痛苦創傷：零負債防線的由來',
+        sub: '1980 年代暴力升息破產陰影 ‧ 個人創傷偏誤（Trauma Bias）',
+        body: `<div class="p-6 rounded-2xl bg-amber-950/40 border border-amber-500/40 space-y-4 text-xs sm:text-sm">
+          <p class="text-amber-200 italic leading-relaxed text-sm">
+            「各位董事，四十年前盲信財務槓桿讓我創立的第一家營造公司破產，利息像絞索一樣勒死了我的心血。二十五年來，SRE 堅持零負債運作！增發股票雖然增加股數，但永遠不需還本付息，絕無違約破產風險！」
+          </p>
+          <div class="border-t border-amber-500/30 pt-3 text-slate-300 leading-relaxed">
+            • <strong>行為財務學診斷：</strong>史蒂芬森將個人早年破產的強烈情緒烙印，非理性地等同於當前成熟物業低負債下的風險。<br>
+            • <strong>代理問題隱憂：</strong>執行長為了個人心理安全感，寧可放棄數千萬美元稅盾，損害外部公眾股東利益。
+          </div>
+        </div>`,
+        notes: '請學生思考：經理人的個人心理偏好是否應該凌駕於全體股東的財富最大化之上？'
+      },
+      {
+        num: 4, pillar: 'case', cat: '區塊一：個案內容｜現況數據',
+        title: 'Stephenson Real Estate 現行資本市場基準數據',
+        sub: '流通股數、公開市價與 40% 企業所得稅率',
+        body: `<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full text-center">
+          <div class="p-5 rounded-2xl bg-slate-800 border border-slate-700">
+            <div class="text-xs text-slate-400">流通在外普通股</div>
+            <div class="text-2xl font-bold text-white mt-1">1,500 萬股</div>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-800 border border-slate-700">
+            <div class="text-xs text-slate-400">當前公開市價</div>
+            <div class="text-2xl font-bold text-sky-400 mt-1">$34.50</div>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-800 border border-slate-700">
+            <div class="text-xs text-slate-400">無負債總市值 (VU)</div>
+            <div class="text-2xl font-bold text-amber-400 mt-1">$5.175 億</div>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-800 border border-slate-700">
+            <div class="text-xs text-slate-400">綜合企業所得稅率</div>
+            <div class="text-2xl font-bold text-emerald-400 mt-1">40.0%</div>
+          </div>
+        </div>`,
+        notes: '強調：40% 稅率是利息稅盾的巨大槓桿來源。'
+      },
+      {
+        num: 5, pillar: 'case', cat: '區塊一：個案內容｜方案衝突',
+        title: '董事會兩大融資方案正面對決',
+        sub: '方案 A（全額增發新股）vs. 方案 B（全額發行債券）',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs sm:text-sm">
+          <div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 space-y-2">
+            <span class="text-amber-400 font-bold">方案 A：全額增發新股 (Equity Issue)</span>
+            <p class="text-slate-300">• 以每股 $34.50 增發 318.84 萬股新股<br>• 資本結構維持 100% 全股權 (零負債)<br>• 利息稅盾 = $0 美元<br>• 股價維持 $34.50，舊股東財富零增長</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 space-y-2">
+            <span class="text-emerald-400 font-bold">方案 B：全額發行債券 (Debt Issue)</span>
+            <p class="text-slate-300">• 公開發行 1.1 億美元長期公司債<br>• 負債比率僅 16.38%（安全邊際充裕）<br>• 利息稅盾現值 = 40% × $110M = <strong>$44,000,000 美元</strong><br>• 股價飆升至 <strong>$37.43</strong>，每股淨賺 <strong>+$2.93</strong>！</p>
+          </div>
+        </div>`,
+        notes: '清楚列出兩大方案核心差異，為後續精算奠定基礎。'
+      },
+      {
+        num: 6, pillar: 'case', cat: '區塊一：個案內容｜營運特質',
+        title: 'SRE 營運特質：96% 出租率與抗景氣現金流',
+        sub: '商業地產的穩定租金收入與低違約風險',
+        body: `<div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 text-xs sm:text-sm space-y-3">
+          <h4 class="font-bold text-white text-base">為什麼發債 1.1 億美元根本不會引發破產？</h4>
+          <p class="text-slate-300 leading-relaxed">
+            • 租戶多為大型跨國科技巨頭與連鎖零售龍頭，租約期長達 10–15 年。<br>
+            • 過去 25 年出租率長年保持在 96% 以上，抗通膨聯動條款（CPI 租金調升機制）完善。<br>
+            • 發債後公司的負債比率僅為 16.38%，遠低於全美商業房地產同業平均的 50%！利息保障倍數充沛。
+          </p>
+        </div>`,
+        notes: '化解學生對「負債等於破產」的刻板印象。'
+      },
+      {
+        num: 7, pillar: 'case', cat: '區塊一：個案內容｜作業問題',
+        title: '個案問題一與問題二',
+        sub: '融資建議與宣告前市場價值資產負債表',
+        body: `<div class="space-y-4 text-xs sm:text-sm">
+          <div class="p-5 rounded-2xl bg-slate-800 border border-slate-700">
+            <strong class="text-sky-400">問題一：</strong>若首要目標為最大化股東財富，應採納哪一方案？詳細闡述 MM 定理利息稅盾之經濟本質。
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-800 border border-slate-700">
+            <strong class="text-sky-400">問題二：</strong>編制宣告前市場價值資產負債表，並深入論述評估資本結構為何必須基於市場價值而非會計帳面價值。
+          </div>
+        </div>`,
+        notes: '點名冷問學生：宣告前公司的市場價值資產負債表左右兩端各是多少？'
+      },
+      {
+        num: 8, pillar: 'case', cat: '區塊一：個案內容｜作業問題',
+        title: '個案問題三：方案 A 增發新股精算',
+        sub: 'NPV、每股股價、需發行股數與稀釋效應',
+        body: `<div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 text-xs sm:text-sm space-y-3">
+          <strong class="text-amber-400 text-base">問題三核心精算要求：</strong>
+          <p class="text-slate-300 leading-relaxed">
+            1. 計算購地案在全股權融資下的淨現值（NPV = $0）。<br>
+            2. 正式向市場宣告後，公司的股票價格將是多少？（$34.50 持平）。<br>
+            3. 公司需發行多少股新股？（3,188,406 股）；發行後總股數是多少？（18,188,406 股）。<br>
+            4. 編制方案 A 完成後之市場價值資產負債表並評估股權稀釋。
+          </p>
+        </div>`,
+        notes: '引導學生算出增發新股數量與每股市值不變的經濟邏輯。'
+      },
+      {
+        num: 9, pillar: 'case', cat: '區塊一：個案內容｜作業問題',
+        title: '個案問題四：方案 B 發行債券精算',
+        sub: '稅盾現值、每股跳升、股東財富增量與資產負債表',
+        body: `<div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 text-xs sm:text-sm space-y-3">
+          <strong class="text-emerald-400 text-base">問題四核心精算要求：</strong>
+          <p class="text-slate-300 leading-relaxed">
+            1. 計算 1.1 億美元債務為公司創造的利息稅盾現值（$44,000,000 美元）與 APV。<br>
+            2. 宣告後公司總市值（$671.5M）與股權總市值（$561.5M）。<br>
+            3. 宣告當下每股股票價格（$37.43）與淨增幅（+$2.93，+8.50%）。<br>
+            4. 證明股東財富增加額（$44M）恰好等於全數利息稅盾現值！
+          </p>
+        </div>`,
+        notes: '本案最震撼的計算成果：4,400 萬美元純現金財富的誕生。'
+      },
+      {
+        num: 10, pillar: 'case', cat: '區塊一：個案內容｜作業問題',
+        title: '個案問題五：MM 第二定理與公司治理',
+        sub: 'Re 演化、WACC 下降悖論與經理人代理衝突',
+        body: `<div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 text-xs sm:text-sm space-y-3">
+          <strong class="text-purple-400 text-base">問題五核心深度思考：</strong>
+          <p class="text-slate-300 leading-relaxed">
+            1. 比較兩方案核心指標，明確向董事會建言最優選擇。<br>
+            2. 根據 MM 第二定理，發債提高股權風險使 Re 上升，為何綜合 WACC 反而下降、股價反而上漲？<br>
+            3. 執行長堅持零負債反映何種認知偏誤？董事會應如何履行法定信託義務？
+          </p>
+        </div>`,
+        notes: '課堂辯論的高潮：理論推導與公司治理現實的結合。'
+      },
+
+      // PART 2: 教學指引 (11-18)
+      {
+        num: 11, pillar: 'tn', cat: '區塊二：教學指引｜教學定位',
+        title: '個案教學定位與適用課程',
+        sub: 'MBA / EMBA 財務管理、公司金融策略與公司治理',
+        body: `<div class="p-6 rounded-2xl bg-teal-950/50 border border-teal-500/40 text-xs sm:text-sm space-y-3 text-slate-300">
+          <h4 class="font-bold text-teal-300 text-base">經典教學地位：</h4>
+          <p class="leading-relaxed">本個案改編自 Ross, Westerfield, Jaffe《Corporate Finance》經典資本結構教案，是講授 MM 定理、利息稅盾、市場價值資產負債表與行為金融學個人偏誤的最佳載體。</p>
+        </div>`,
+        notes: '本個案適合作為資本結構模組的第一堂旗艦個案。'
+      },
+      {
+        num: 12, pillar: 'tn', cat: '區塊二：教學指引｜五大目標',
+        title: '五大核心教學目標複盤',
+        sub: '從公式推導到管理判斷的五維能力構建',
+        body: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-slate-800 border border-slate-700">1. 理解所得稅體系下利息稅盾本質 (Tc × D)</div>
+          <div class="p-4 rounded-xl bg-slate-800 border border-slate-700">2. 熟練編制與運用市場價值資產負債表</div>
+          <div class="p-4 rounded-xl bg-slate-800 border border-slate-700">3. 量化融資宣告對每股股價的定價衝擊</div>
+          <div class="p-4 rounded-xl bg-slate-800 border border-slate-700">4. 破解 Re 上升與 WACC 下降之金融悖論</div>
+          <div class="p-4 rounded-xl bg-slate-800 border border-slate-700 md:col-span-2">5. 剖析創傷偏誤與董事會信託防線治理</div>
+        </div>`,
+        notes: '課堂結束時，教師應逐一檢視這五大目標是否達成。'
+      },
+      {
+        num: 13, pillar: 'tn', cat: '區塊二：教學指引｜經典文獻',
+        title: '核心財務理論與經典文獻映射',
+        sub: 'Modigliani & Miller, Jensen & Meckling, Malmendier',
+        body: `<div class="space-y-2 text-xs font-mono">
+          <div class="p-3 rounded-lg bg-slate-800">MM (1963 AER)：VL = VU + Tc × D ； 利息稅盾現值模型</div>
+          <div class="p-3 rounded-lg bg-slate-800">Jensen & Meckling (1976)：代理成本與管理層現金流怠惰</div>
+          <div class="p-3 rounded-lg bg-slate-800">Jensen (1986)：債務的鐵的紀律（Disciplining Role of Debt）</div>
+          <div class="p-3 rounded-lg bg-slate-800">Malmendier & Nagel (2011 QJE)：蕭條嬰兒與經理人創傷烙印</div>
+        </div>`,
+        notes: '供 EMBA 學員進一步閱讀頂級期刊論文。'
+      },
+      {
+        num: 14, pillar: 'tn', cat: '區塊二：教學指引｜課堂節奏',
+        title: '90 分鐘課堂時間推進表',
+        sub: '五幕結構教學節奏掌握',
+        body: `<div class="space-y-2 text-xs">
+          <div class="flex justify-between p-2.5 bg-slate-800 rounded"><span>00-15m 第一幕：破冰與死結</span><span class="text-amber-400">執行長為何拒絕負債？</span></div>
+          <div class="flex justify-between p-2.5 bg-slate-800 rounded"><span>15-35m 第二幕：方案 A 精算</span><span class="text-sky-400">增發新股與稀釋分析</span></div>
+          <div class="flex justify-between p-2.5 bg-slate-800 rounded"><span>35-60m 第三幕：方案 B 精算</span><span class="text-emerald-400">4400萬稅盾與股價跳升</span></div>
+          <div class="flex justify-between p-2.5 bg-slate-800 rounded"><span>60-75m 第四幕：理論演化</span><span class="text-purple-400">MM第二定理與WACC</span></div>
+          <div class="flex justify-between p-2.5 bg-slate-800 rounded"><span>75-90m 第五幕：治理總結</span><span class="text-rose-400">董事會信託決策決議</span></div>
+        </div>`,
+        notes: '嚴格控時，確保有充足時間進行第四與第五幕的深度辯論。'
+      },
+      {
+        num: 15, pillar: 'tn', cat: '區塊二：教學指引｜板書規劃',
+        title: '黑板板書四象限（Board Plan）',
+        sub: '四象限黑板板書佈局指引',
+        body: `<div class="grid grid-cols-2 gap-3 text-xs font-mono">
+          <div class="p-3 bg-slate-800 rounded border border-slate-700"><span class="text-amber-400">象限 I（左上）：</span>SRE 現況、購地機會與零負債傳統</div>
+          <div class="p-3 bg-slate-800 rounded border border-slate-700"><span class="text-sky-400">象限 II（右上）：</span>方案 A 增發 3.19M 股，NPV=0，P1=$34.50</div>
+          <div class="p-3 bg-slate-800 rounded border border-slate-700"><span class="text-emerald-400">象限 III（左下）：</span>方案 B 稅盾 $44M，P1=$37.43，舊股東賺44M</div>
+          <div class="p-3 bg-slate-800 rounded border border-slate-700"><span class="text-purple-400">象限 IV（右下）：</span>Re 升至 10.24%，WACC 降至 9.34%，治理防線</div>
+        </div>`,
+        notes: '板書應在課堂推進過程中逐步填滿四個象限。'
+      },
+      {
+        num: 16, pillar: 'tn', cat: '區塊二：教學指引｜破題秘笈',
+        title: '學生常見四大盲點與教師破題秘笈',
+        sub: '從直覺誤區導向理性財務思維',
+        body: `<div class="space-y-2 text-xs">
+          <div class="p-3 bg-slate-800 rounded"><strong>盲點一：發行新股無成本？</strong> 破題：股權必要報酬率高達 10%，遠高於負債稅後 4.8%。</div>
+          <div class="p-3 bg-slate-800 rounded"><strong>盲點二：負債必破產？</strong> 破題：發債後槓桿僅 16.4%，出租率 96%，違約概率趨近零。</div>
+          <div class="p-3 bg-slate-800 rounded"><strong>盲點三：Re 上升股價為何上漲？</strong> 破題：低成本負債權重拉低綜合 WACC，推升總市值。</div>
+          <div class="p-3 bg-slate-800 rounded"><strong>盲點四：創辦人創傷等於審慎？</strong> 破題：個人心理偏好損害股東利益，屬典型代理失靈。</div>
+        </div>`,
+        notes: '預先準備針對這四大盲點的追問問題。'
+      },
+      {
+        num: 17, pillar: 'tn', cat: '區塊二：教學指引｜提問技巧',
+        title: '課堂引導與蘇格拉底式提問技巧',
+        sub: '點名冷問、衝突推進與理論收斂',
+        body: `<div class="space-y-3 text-xs sm:text-sm text-slate-300">
+          <p>• <strong>冷問（Cold Call）：</strong>「張同學，如果你是史蒂芬森，你早年破產過，你今天為什麼不敢借錢？」</p>
+          <p>• <strong>追問（Probing）：</strong>「李同學，如果你是外部公眾股東，你願意為了執行長的安全感放棄 4,400 萬美元嗎？」</p>
+          <p>• <strong>收斂（Synthesis）：</strong>「全體請看黑板：這 4,400 萬美元究竟是誰給的？答案是國稅局！」</p>
+        </div>`,
+        notes: '透過角色扮演激發學員強烈的情緒投入與理性思考。'
+      },
+      {
+        num: 18, pillar: 'tn', cat: '區塊二：教學指引｜小結',
+        title: '教學指引精華總結',
+        sub: '破除迷思、回歸價值創造',
+        body: `<div class="p-6 rounded-2xl bg-teal-950/60 border border-teal-500/40 text-center space-y-3">
+          <h4 class="text-xl font-bold text-teal-300">融資決策絕非單純會計做帳，而是企業頂層戰略設計</h4>
+          <p class="text-xs sm:text-sm text-slate-300">
+            本個案讓學員深刻體會：審慎不等於最優，過度保守往往伴隨著巨大的機會成本。
+          </p>
+        </div>`,
+        notes: '準備切入第三區塊：個案解析與試算。'
+      },
+
+      // PART 3: 個案解析與試算 (19-28)
+      {
+        num: 19, pillar: 'sm', cat: '區塊三：個案解析｜問題一',
+        title: '問題一解答：總市值最大化之融資建議',
+        sub: 'MM 第一定理（有稅）：政府稅盾補貼機制',
+        body: `<div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 text-xs sm:text-sm space-y-3">
+          <strong class="text-emerald-400 text-base">強烈建言：堅決採納方案 B 發債融資！</strong>
+          <p class="text-slate-300 leading-relaxed">
+            利息支出可自稅前全額扣抵，產生每年 (D × Rd) × Tc 之現金節稅。<br>
+            以債務成本 Rd 折現後，永續利息稅盾現值為：<br>
+            <strong>PV(Tax Shield) = Tc × D = 40.0% × $110,000,000 = $44,000,000 美元！</strong><br>
+            這 4,400 萬美元由原有股東獨享，推動每股股價淨增 $2.93 美元。
+          </p>
+        </div>`,
+        notes: '展示利息稅盾的數學簡化公式 Tc × D。'
+      },
+      {
+        num: 20, pillar: 'sm', cat: '區塊三：個案解析｜問題二',
+        title: '問題二解答：宣告前市場價值資產負債表',
+        sub: '資產端 $517.5M = 負債 $0 + 股權 $517.5M',
+        body: `<div class="overflow-x-auto text-xs font-mono">
+          <table class="min-w-full divide-y divide-slate-700 border border-slate-700 rounded-lg">
+            <thead class="bg-slate-800 text-slate-300">
+              <tr><th class="p-2 text-left">資產端 (Assets)</th><th class="p-2 text-right">市值</th><th class="p-2 text-left">負債與權益端</th><th class="p-2 text-right">市值</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="p-2">既有房產物業資產</td><td class="p-2 text-right">$517.5M</td><td class="p-2">長期負債 (D)</td><td class="p-2 text-right">$0</td></tr>
+              <tr><td class="p-2">新購商業地塊</td><td class="p-2 text-right">$0</td><td class="p-2">股東權益 (15M 股 @ $34.50)</td><td class="p-2 text-right">$517.5M</td></tr>
+              <tr class="font-bold text-white bg-slate-800"><td class="p-2">總資產市場價值</td><td class="p-2 text-right">$517.5M</td><td class="p-2">負債與權益總額</td><td class="p-2 text-right">$517.5M</td></tr>
+            </tbody>
+          </table>
+        </div>`,
+        notes: '說明市場價值反映未來現金流折現，會計帳面價值反映歷史成本。'
+      },
+      {
+        num: 21, pillar: 'sm', cat: '區塊三：個案解析｜問題三',
+        title: '問題三解答：方案 A 增發新股精算',
+        sub: '增發 3,188,406 股 ； 總股數 18,188,406 股 ； 股價 $34.50',
+        body: `<div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 text-xs sm:text-sm space-y-3">
+          <p>• 專案無槓桿 NPV = $0 美元。<br>
+          • 宣告後每股股價保持 <strong>P1 = $34.50 美元</strong> 不變。<br>
+          • 需增發股數 = $110,000,000 / $34.50 = <strong>3,188,406 股</strong>。<br>
+          • 增發後總股數 = 15,000,000 + 3,188,406 = <strong>18,188,406 股</strong>。<br>
+          • 舊股東持股佔比被稀釋至 82.47%，但每股市值維持 $34.50，財富零成長！</p>
+        </div>`,
+        notes: '證明發行股票融資的「無增值性」。'
+      },
+      {
+        num: 22, pillar: 'sm', cat: '區塊三：個案解析｜資產負債表A',
+        title: '方案 A 完成後之市場價值資產負債表',
+        sub: '總資產 $627.5M = 舊股權 $517.5M + 新股權 $110.0M',
+        body: `<div class="overflow-x-auto text-xs font-mono">
+          <table class="min-w-full divide-y divide-slate-700 border border-slate-700 rounded-lg">
+            <thead class="bg-slate-800 text-slate-300">
+              <tr><th class="p-2 text-left">資產端 (Assets)</th><th class="p-2 text-right">市值</th><th class="p-2 text-left">負債與權益端</th><th class="p-2 text-right">市值</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="p-2">既有房產物業資產</td><td class="p-2 text-right">$517.5M</td><td class="p-2">長期負債 (D)</td><td class="p-2 text-right">$0</td></tr>
+              <tr><td class="p-2">新購商業地塊</td><td class="p-2 text-right">$110.0M</td><td class="p-2">舊股東權益 (15.00M 股)</td><td class="p-2 text-right">$517.5M</td></tr>
+              <tr><td class="p-2">專案超額 NPV</td><td class="p-2 text-right">$0</td><td class="p-2">新股東權益 (3.19M 股)</td><td class="p-2 text-right">$110.0M</td></tr>
+              <tr class="font-bold text-white bg-slate-800"><td class="p-2">總資產市場價值</td><td class="p-2 text-right">$627.5M</td><td class="p-2">負債與權益總額</td><td class="p-2 text-right">$627.5M</td></tr>
+            </tbody>
+          </table>
+        </div>`,
+        notes: '說明方案 A 下，新增的 1.1 億美元資產完全由新股東的股款所對應。'
+      },
+      {
+        num: 23, pillar: 'sm', cat: '區塊三：個案解析｜問題四',
+        title: '問題四解答：方案 B 發行債券精算',
+        sub: '稅盾 $44M ； 股價跳升至 $37.43 (+8.50%)',
+        body: `<div class="p-6 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-xs sm:text-sm space-y-3">
+          <p>• 利息稅盾現值 PV(TS) = 40.0% × $110M = <strong>$44,000,000 美元</strong>。<br>
+          • 公司總市值 VL = $517.5M + $110.0M + $44.0M = <strong>$671,500,000 美元</strong>。<br>
+          • 股權總市值 S = $671.5M - $110.0M = <strong>$561,500,000 美元</strong>。<br>
+          • 每股股價 P1 = $561.5M / 15M 股 = <strong>$37.43 美元！</strong><br>
+          • 舊股東每股淨賺：<strong>+$2.93 美元 (+8.50%)</strong> ； 總財富增加 <strong>$44,000,000 美元！</strong></p>
+        </div>`,
+        notes: '引導學生觀察：每股增值恰好等於 4400萬 / 1500萬股 = 2.9333 美元。'
+      },
+      {
+        num: 24, pillar: 'sm', cat: '區塊三：個案解析｜資產負債表B',
+        title: '方案 B 完成後之市場價值資產負債表',
+        sub: '總資產 $671.5M = 債券 $110.0M + 股權 $561.5M',
+        body: `<div class="overflow-x-auto text-xs font-mono">
+          <table class="min-w-full divide-y divide-slate-700 border border-slate-700 rounded-lg">
+            <thead class="bg-slate-800 text-slate-300">
+              <tr><th class="p-2 text-left">資產端 (Assets)</th><th class="p-2 text-right">市值</th><th class="p-2 text-left">負債與權益端</th><th class="p-2 text-right">市值</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="p-2">既有房產物業資產</td><td class="p-2 text-right">$517.5M</td><td class="p-2">長期公司債券 (Debt)</td><td class="p-2 text-right">$110.0M</td></tr>
+              <tr><td class="p-2">新購商業地塊</td><td class="p-2 text-right">$110.0M</td><td class="p-2">股東權益 (15.00M 股 @ $37.43)</td><td class="p-2 text-right text-emerald-400 font-bold">$561.5M</td></tr>
+              <tr class="text-emerald-400 font-bold"><td class="p-2">利息稅盾折現現值</td><td class="p-2 text-right">$44.0M</td><td class="p-2">（流通股數零稀釋）</td><td class="p-2 text-right">-</td></tr>
+              <tr class="font-bold text-white bg-slate-800"><td class="p-2">總資產市場價值</td><td class="p-2 text-right">$671.5M</td><td class="p-2">負債與權益總額</td><td class="p-2 text-right">$671.5M</td></tr>
+            </tbody>
+          </table>
+        </div>`,
+        notes: '對比資產負債表 A 與 B，展示稅盾如何實體化為資產負債表上的價值。'
+      },
+      {
+        num: 25, pillar: 'sm', cat: '區塊三：個案解析｜問題五',
+        title: '問題五解答：MM 第二定理與資本成本演化',
+        sub: 'Re 升至 10.24% ； 稅後 Rd 僅 4.80% ； WACC 降至 9.34%',
+        body: `<div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 text-xs sm:text-sm space-y-3">
+          <p>• 股權成本 Re = 10.0% + (10.0% - 8.0%)(1 - 0.40)(110/561.5) = <strong>10.24%</strong>。<br>
+          • 負債稅後邊際成本 = 8.0% × (1 - 0.40) = <strong>4.80%</strong>。<br>
+          • 綜合 WACC = (561.5/671.5) × 10.24% + (110/671.5) × 4.80% = <strong>9.34%！</strong><br>
+          • 結論：低成本負債的權重效應壓倒性拉低綜合折現率，創造了 4,400 萬美元的新增價值！</p>
+        </div>`,
+        notes: '化解學生「Re 上升必然導致公司變差」的錯誤直覺。'
+      },
+      {
+        num: 26, pillar: 'sm', cat: '區塊三：個案解析｜治理衝突',
+        title: '問題五解答：公司治理與代理防線',
+        sub: '創傷偏誤診斷與董事會信託義務落實',
+        body: `<div class="p-6 rounded-2xl bg-slate-800 border border-slate-700 text-xs sm:text-sm space-y-3">
+          <p>• <strong>個人創傷偏誤：</strong>執行長將個人追求無債的心理舒適度置於股東財富之上，屬典型代理失靈。<br>
+          • <strong>董事會信託義務（Fiduciary Duty）：</strong>董事會必須以全體股東利益最大化為依歸，堅決通過方案 B。<br>
+          • <strong>激勵機制綁定：</strong>透過股票增值紅利讓執行長個人亦獲得數百萬美元利益，實現公司治理共贏！</p>
+        </div>`,
+        notes: '強調現代公司治理的核心是維護股東的受託責任。'
+      },
+      {
+        num: 27, pillar: 'sm', cat: '區塊三：個案解析｜決策矩陣',
+        title: '董事會最終決議與落地行動方案',
+        sub: '發行 1.1 億美元長期公司債 ； 鎖定歷史性價值躍升',
+        body: `<div class="p-6 rounded-2xl bg-emerald-950/60 border border-emerald-500/50 text-center space-y-3">
+          <div class="text-xs font-bold uppercase text-emerald-400">董事會正式決議</div>
+          <h4 class="text-2xl font-black text-white">否決方案 A ‧ 一致表決通過方案 B！</h4>
+          <p class="text-xs sm:text-sm text-slate-300">
+            全額公開發行 1.1 億美元長期公司債，收購科技走廊地塊，實現每股股價自 $34.50 飆升至 $37.43，為股東創造 4,400 萬美元純現金價值！
+          </p>
+        </div>`,
+        notes: '倒數第二頁，引導全體學員達成共識。'
+      },
+      {
+        num: 28, pillar: 'sm', cat: '區塊三：個案解析｜課程結語',
+        title: '個案三學習成果總結',
+        sub: 'MM 定理 ‧ 利息稅盾 ‧ 市場價值 ‧ 領導治理',
+        body: `<div class="text-center py-6 space-y-4 max-w-2xl mx-auto">
+          <i class="fa-solid fa-award text-amber-400 text-4xl"></i>
+          <h4 class="text-2xl font-black text-white">恭喜完成財務個案三研討！</h4>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            您已完全掌握現代公司金融學核心基石：莫迪利安尼-米勒定理、利息稅盾價值、市場價值資產負債表與行為金融治理。
+          </p>
+        </div>`,
+        notes: '最後一頁，觸發彩帶慶祝特效！'
+      }
+    ];
+
+    let curSlide = 0;
+
+    function initSlideSelect() {
+      const sel = document.getElementById('slide-jump-select');
+      if (!sel) return;
+      sel.innerHTML = '';
+      sreSlideDeck.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.num;
+        opt.text = `P.${s.num} ${s.title.substring(0, 16)}...`;
+        sel.appendChild(opt);
+      });
+    }
+
+    function openPresentationMode(slideNum = 1) {
+      curSlide = Math.max(0, Math.min(sreSlideDeck.length - 1, slideNum - 1));
+      renderSlide();
+      document.getElementById('presentation-overlay').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePresentationMode() {
+      document.getElementById('presentation-overlay').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function nextSlide() {
+      if (curSlide < sreSlideDeck.length - 1) {
+        curSlide++;
+        renderSlide();
+        if (curSlide === sreSlideDeck.length - 1 && window.confetti) {
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
       }
     }
 
-    function resetDefaults() {
-      document.getElementById('input-tax').value = 40;
-      document.getElementById('input-debt').value = 110;
-      document.getElementById('input-rd').value = 8.0;
-      document.getElementById('input-ru').value = 10.0;
-      updateCalculations();
+    function prevSlide() {
+      if (curSlide > 0) {
+        curSlide--;
+        renderSlide();
+      }
     }
+
+    function jumpToSlide(num) {
+      curSlide = parseInt(num) - 1;
+      renderSlide();
+    }
+
+    function renderSlide() {
+      const s = sreSlideDeck[curSlide];
+      document.getElementById('slide-number-indicator').innerText = `Slide ${s.num} / ${sreSlideDeck.length}`;
+      const sel = document.getElementById('slide-jump-select');
+      if (sel) sel.value = s.num;
+
+      const tCase = document.getElementById('ppt-tab-case');
+      const tTn = document.getElementById('ppt-tab-tn');
+      const tSm = document.getElementById('ppt-tab-sm');
+      if (tCase && tTn && tSm) {
+        tCase.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'case' ? 'bg-brand-500 text-white' : 'text-slate-400');
+        tTn.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'tn' ? 'bg-teal-600 text-white' : 'text-slate-400');
+        tSm.className = 'px-2.5 py-1 rounded-lg font-bold transition ' + (s.pillar === 'sm' ? 'bg-hbs-crimson text-white' : 'text-slate-400');
+      }
+
+      document.getElementById('ppt-cat-label').innerText = s.cat;
+      document.getElementById('ppt-title-label').innerText = s.title;
+      document.getElementById('ppt-sub-label').innerText = s.sub;
+      document.getElementById('ppt-body-container').innerHTML = s.body;
+      document.getElementById('ppt-notes-label').innerText = s.notes || '💡 提示：使用鍵盤左右方向鍵或空白鍵翻頁';
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise();
+      }
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      const overlay = document.getElementById('presentation-overlay');
+      if (!overlay.classList.contains('hidden')) {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          prevSlide();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closePresentationMode();
+        }
+      }
+    });
 
     window.addEventListener('DOMContentLoaded', () => {
-      updateCalculations();
+      initSlideSelect();
+      updateTimerDisplay();
     });
   </script>
 </body>

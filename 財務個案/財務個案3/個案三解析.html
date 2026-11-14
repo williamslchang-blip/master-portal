@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>《Stephenson Real Estate Company：資本結構重組與融資決策抉擇》個案解析與財務推導詳解｜教學講義網頁版</title>
+  
+  <!-- MathJax Configuration for Word Equation Editor Style -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      },
+      chtml: {
+        fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+
+  <style>
+    /* 全文採用頂級學術/管理顧問規範字型：中文標楷體，英文與數字 Times New Roman */
+    body {
+      font-family: 'Times New Roman', '標楷體', 'DFKai-SB', 'BiauKai', serif;
+      line-height: 1.85;
+      color: #1a1a1a;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      font-size: 17px;
+    }
+
+    /* Word 頁面紙張容器佈局 (標準 A4 閱讀體驗) */
+    .page-wrapper {
+      max-width: 1080px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 55px 75px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+      border: 1px solid #d9e2ec;
+    }
+
+    /* 頂部導航列 (含 Master Portal 快捷連結與工具按鈕) */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: #143652;
+      color: #ffffff;
+      border-radius: 6px;
+      margin-bottom: 35px;
+      font-size: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .top-nav .nav-brand {
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+    .top-nav .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .top-nav a.btn-link {
+      color: #e2e8f0;
+      background: rgba(255, 255, 255, 0.12);
+      text-decoration: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .top-nav a.btn-link:hover {
+      background: #ffffff;
+      color: #143652;
+      border-color: #ffffff;
+      text-decoration: none;
+    }
+    .top-nav a.btn-link.highlight {
+      background: #ea580c;
+      border-color: #ea580c;
+      color: #ffffff;
+      font-weight: bold;
+    }
+    .top-nav a.btn-link.highlight:hover {
+      background: #c2410c;
+    }
+
+    /* 哈佛式表頭飾板 */
+    .hbs-banner-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+      border-top: 3px solid #143652;
+      border-bottom: 1px solid #cbd5e1;
+    }
+    .hbs-banner-table td {
+      padding: 10px 0;
+      font-size: 13.5px;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hbs-banner-table td.right {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    /* 標題體系 */
+    h1.doc-title {
+      font-size: 29px;
+      color: #143652;
+      text-align: center;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      line-height: 1.4;
+    }
+    .doc-subtitle {
+      font-size: 18px;
+      color: #1f4e79;
+      text-align: center;
+      margin-bottom: 8px;
+      font-weight: normal;
+      font-style: italic;
+    }
+    .doc-meta {
+      font-size: 14.5px;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    /* 財務決策備忘錄卡片 (Executive Memorandum) */
+    .memo-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 6px solid #1f4e79;
+      border-radius: 6px;
+      padding: 24px 28px;
+      margin-bottom: 35px;
+    }
+    .memo-header {
+      font-size: 18px;
+      font-weight: bold;
+      color: #143652;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .memo-field-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 8px 20px;
+      margin-bottom: 16px;
+      font-size: 15.5px;
+    }
+    .memo-summary-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-top: 14px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .memo-summary-list {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 15px;
+      color: #334155;
+    }
+    .memo-summary-list li {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+
+    /* 章節大標題與次標題 */
+    h2.heading-1 {
+      font-size: 22px;
+      color: #143652;
+      border-bottom: 2px solid #143652;
+      padding-bottom: 8px;
+      margin-top: 45px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3.heading-2 {
+      font-size: 18.5px;
+      color: #1F5C81;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      font-weight: bold;
+      border-left: 4px solid #1F5C81;
+      padding-left: 12px;
+    }
+    h4.heading-3 {
+      font-size: 17px;
+      color: #0f172a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    /* 段落與清單 */
+    p {
+      margin-bottom: 14px;
+      text-align: justify;
+      text-justify: inter-ideograph;
+    }
+    ul.bullet-list {
+      margin: 12px 0 16px 25px;
+      padding: 0;
+    }
+    ul.bullet-list li {
+      margin-bottom: 8px;
+      line-height: 1.75;
+    }
+
+    /* Word 方程式編輯器風格展示框 (Office Equation Look & Feel) */
+    .word-equation-box {
+      background-color: #fbfcfe;
+      border: 1px solid #dbe2ea;
+      border-left: 5px solid #1F5C81;
+      border-radius: 6px;
+      padding: 16px 24px;
+      margin: 22px 0;
+      text-align: center;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.03);
+      overflow-x: auto;
+      position: relative;
+    }
+    .word-equation-box .eq-number {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #64748b;
+      font-family: 'Times New Roman', serif;
+    }
+    .word-equation-box .mjx-chtml {
+      font-size: 1.22em !important;
+      color: #0f172a;
+    }
+
+    /* 表格樣式 (專業 Light Shading Accent 1) */
+    .table-container {
+      overflow-x: auto;
+      margin: 24px 0 35px 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+    }
+    .table-caption {
+      font-weight: bold;
+      color: #143652;
+      font-size: 16px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      background-color: #ffffff;
+    }
+    table.data-table th {
+      background-color: #1F4E79;
+      color: #ffffff;
+      font-weight: bold;
+      padding: 11px 13px;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+      font-size: 14.5px;
+      letter-spacing: 0.3px;
+    }
+    table.data-table td {
+      padding: 10px 13px;
+      border: 1px solid #e2e8f0;
+      line-height: 1.6;
+    }
+    table.data-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    table.data-table tr:hover {
+      background-color: #f1f5f9;
+    }
+    table.data-table td.text-right {
+      text-align: right;
+      font-family: 'Times New Roman', serif;
+    }
+    table.data-table td.text-center {
+      text-align: center;
+    }
+    table.data-table td.highlight-cell {
+      background-color: #eff6ff;
+      font-weight: bold;
+      color: #1e40af;
+    }
+    table.data-table td.success-cell {
+      background-color: #f0fdf4;
+      font-weight: bold;
+      color: #166534;
+    }
+    table.data-table td.danger-cell {
+      background-color: #fef2f2;
+      font-weight: bold;
+      color: #b91c1c;
+    }
+
+    /* 觀點比較卡片與提示方塊 */
+    .view-card {
+      background: #fdfefe;
+      border: 1px solid #dbe2ea;
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .view-card.view-2 {
+      border-top: 4px solid #0284c7;
+    }
+    .view-card.view-3 {
+      border-top: 4px solid #16a34a;
+    }
+    .view-card-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .view-card.view-2 .view-card-title { color: #0284c7; }
+    .view-card.view-3 .view-card-title { color: #16a34a; }
+
+    /* 警示與教學提要方塊 */
+    .teaching-box {
+      background-color: #f0fdf4;
+      border-left: 5px solid #16a34a;
+      border-radius: 0 6px 6px 0;
+      padding: 16px 20px;
+      margin: 22px 0;
+      font-size: 15.5px;
+    }
+    .teaching-box.warning {
+      background-color: #fffbeb;
+      border-left-color: #d97706;
+    }
+    .teaching-box.danger {
+      background-color: #fef2f2;
+      border-left-color: #dc2626;
+    }
+    .teaching-box-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 目錄導覽盒 (Table of Contents) */
+    .toc-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 22px 30px;
+      margin: 28px 0 38px 0;
+    }
+    .toc-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #143652;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 10px 25px;
+      font-size: 15px;
+    }
+    .toc-grid a {
+      color: #1f5c81;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .toc-grid a:hover {
+      text-decoration: underline;
+      color: #0c4a6e;
+    }
+
+    /* 互動試算模型專屬樣式 (Interactive Simulator Styles) */
+    .sim-container {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 26px 30px;
+      margin: 32px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+    .sim-header {
+      border-bottom: 2px solid #1f4e79;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .sim-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #143652;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sim-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .sim-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 28px;
+    }
+    @media (max-width: 860px) {
+      .sim-grid { grid-template-columns: 1fr; }
+    }
+    .control-group {
+      margin-bottom: 16px;
+    }
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14.5px;
+      font-weight: bold;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .control-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      outline: none;
+    }
+    .sim-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .sim-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .kpi-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+    .kpi-title {
+      font-size: 12.5px;
+      color: #64748b;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .kpi-val {
+      font-size: 20px;
+      font-weight: bold;
+      color: #143652;
+      font-family: 'Times New Roman', serif;
+      margin-top: 4px;
+    }
+    .kpi-val.highlight { color: #ea580c; }
+    .kpi-val.success { color: #16a34a; }
+
+    /* 頁尾 */
+    .doc-footer {
+      margin-top: 60px;
+      padding-top: 22px;
+      border-top: 1px solid #cbd5e1;
+      text-align: center;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    @media print {
+      body { background: #ffffff; font-size: 12pt; }
+      .page-wrapper { box-shadow: none; border: none; padding: 0; max-width: 100%; margin: 0; }
+      .top-nav { display: none; }
+      .toc-box { display: none; }
+      .sim-container { display: none; }
+      .word-equation-box { border: 1px solid #000; box-shadow: none; }
+      table.data-table th { background-color: #ddd !important; color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- 頂部導航條 -->
+  <div class="top-nav">
+    <div class="nav-brand">
+      <i class="fa-solid fa-graduation-cap"></i> HARVARD BUSINESS SCHOOL CASE METHOD ‧ FINANCIAL MANAGEMENT
+    </div>
+    <div class="nav-links">
+      <a href="https://williamslchang-blip.github.io/master-portal/" class="btn-link">
+        <i class="fa-solid fa-house"></i> Master Portal 首頁
+      </a>
+      <a href="index.html" class="btn-link">
+        <i class="fa-solid fa-desktop"></i> 個案三主網站
+      </a>
+      <a href="教學簡報網站：Stephenson_Real_Estate.html" class="btn-link highlight">
+        <i class="fa-solid fa-chalkboard"></i> 28頁 全螢幕簡報
+      </a>
+      <a href="SRE_財務個案_財務理論與實證應用_資本結構與MM定理強化版.html" class="btn-link">
+        <i class="fa-solid fa-book-bookmark"></i> 理論講義
+      </a>
+      <a href="財務個案3_Stephenson_Real_Estate_互動式財務模型.html" class="btn-link">
+        <i class="fa-solid fa-calculator"></i> 財務模型
+      </a>
+      <a href="財務個案3_Stephenson_Real_Estate_完整解析財務模型.xlsx" class="btn-link">
+        <i class="fa-solid fa-file-excel"></i> 下載 Excel
+      </a>
+    </div>
+  </div>
+
+  <!-- 哈佛商學院表頭飾板 -->
+  <table class="hbs-banner-table">
+    <tr>
+      <td>HARVARD BUSINESS SCHOOL STYLE SOLUTION MANUAL</td>
+      <td class="right">文件編號：HBS-FIN-11501-SM03 ‧ 2026年11月 正式修訂版</td>
+    </tr>
+  </table>
+
+  <!-- 文件大標題 -->
+  <h1 class="doc-title">《Stephenson Real Estate Company：資本結構重組與融資決策抉擇》<br>個案解析與財務推導詳解</h1>
+  <div class="doc-subtitle">Analytical Solutions & Quantitative Exhibits — Stephenson Real Estate Company: Capital Restructuring, MM Proposition, and Interest Tax Shield</div>
+  <div class="doc-meta">
+    本文件為《Stephenson Real Estate Company》個案之標準財務解析手冊（Solutions Manual）。內容涵蓋五大核心問題之完整數學推導、市場價值資產負債表編制、MM 定理有稅模型量化證明、加權平均資金成本（WACC）敏感度分析及公司治理代理衝突解析。
+  </div>
+
+  <!-- 決策備忘錄卡片 -->
+  <div class="memo-card">
+    <div class="memo-header">
+      <span>📄 財務決策備忘錄（EXECUTIVE DECISION MEMORANDUM）</span>
+      <span style="font-size: 13.5px; font-weight: normal; color: #64748b;">CONFIDENTIAL & PRIVILEGED</span>
+    </div>
+    <div class="memo-field-grid">
+      <div><strong>受文者（TO）：</strong>羅伯特·史蒂芬森（Robert Stephenson），執行長 暨 董事會全體成員</div>
+      <div><strong>發文者（FROM）：</strong>董事會特別財務顧問團隊（特別諮詢小組）</div>
+      <div><strong>發文日期（DATE）：</strong>2026年11月</div>
+      <div><strong>主旨（SUBJECT）：</strong>【重大決策建言】商業地塊收購案之融資結構精算、每股價值最大化評估與治理分析備忘錄</div>
+    </div>
+    <div class="memo-summary-title">【執行摘要與核心財務建言】：</div>
+    <ul class="memo-summary-list">
+      <li><strong>唯一決策方向：</strong>特別財務顧問團隊在經過詳盡之現金流量折現模型（DCF）、莫迪利安尼-米勒資本結構定理（MM Theorem）驗算與代理成本評估後，一致且明確地向董事會建言：<strong>【公司必須堅決採納方案 B，全額公開發行 1.1 億美元長期公司債券進行融資】！</strong></li>
+      <li><strong>利息稅盾創造巨大價值：</strong>在 40.0% 的企業綜合所得稅率下，發行 1.1 億美元長期債券將為公司憑空創造高達 <strong>4,400 萬美元（$44,000,000）</strong>的利息稅盾折現現值（$PV = T_c \times D = 40\% \times \$110\text{M}$）。此稅盾現值 100% 完全歸屬於公司既有股東。</li>
+      <li><strong>每股股價跳升 +8.50%：</strong>方案 B 下，由於流通在外股數保持 1,500 萬股不變，宣告後每股股價將從原本的 <strong>$34.50 美元躍升至 $37.4333 美元</strong>，每股增值高達 <strong>+$2.9333 美元</strong>；反觀方案 A（全額增發新股），專案基本 NPV 為零且毫無稅盾，股價將停留在 $34.50 不動，股權更被稀釋 17.53%，既有股東平白喪失 4,400 萬美元的財富增值機會。</li>
+      <li><strong>破除資金成本迷思：</strong>雖然債務財務風險使股權成本（$R_e$）從 10.00% 微升至 10.24%，但由於新增負債之稅後實質成本僅 <strong>4.80%</strong>（$8.0\% \times (1 - 0.40)$），在總資本中佔 16.38% 權重，使得公司整體加權平均資金成本（WACC）由 <strong>10.00% 顯著下降至 9.34%</strong>！折現率之降低，正是推升企業總價值暴增至 6.715 億美元之根本財務驅動力。</li>
+      <li><strong>克服經理人創傷偏誤：</strong>執行長羅伯特·史蒂芬森出於四十年前承包商破產的個人創傷記憶，堅持「零負債」方針，已構成典型的行為財務學損失厭惡（Loss Aversion）與代理衝突（Agency Dilemma）。董事會作為全體股東的信託防線（Fiduciary Duty），有法律與道德義務糾正此一損害股東利益之保守偏誤。</li>
+    </ul>
+  </div>
+
+  <!-- 目錄導覽盒 -->
+  <div class="toc-box">
+    <div class="toc-title"><i class="fa-solid fa-list-ol"></i> 本解析手冊章節導覽（Table of Contents）</div>
+    <div class="toc-grid">
+      <a href="#sec-q1"><i class="fa-solid fa-angle-right"></i> 問題一：總市場價值最大化之融資建議與 MM 定理利息稅盾原理</a>
+      <a href="#sec-q2"><i class="fa-solid fa-angle-right"></i> 問題二：宣告前市場價值資產負債表編制與經濟實質剖析</a>
+      <a href="#sec-q3"><i class="fa-solid fa-angle-right"></i> 問題三：方案 A（全額增發新股）完整精算分析與稀釋評估</a>
+      <a href="#sec-q4"><i class="fa-solid fa-angle-right"></i> 問題四：方案 B（全額發行債券）完整精算分析與股價跳升推導</a>
+      <a href="#sec-q5"><i class="fa-solid fa-angle-right"></i> 問題五：方案 A vs. B 核心財務指標對比與 MM 第二定理深究</a>
+      <a href="#sec-gov"><i class="fa-solid fa-angle-right"></i> 行為財務學解析：經理人個人創傷偏誤與董事會信託責任</a>
+      <a href="#sec-sim"><i class="fa-solid fa-angle-right"></i> 互動試算模型：SRE 資本結構與 MM 定理即時試算器</a>
+      <a href="#sec-sens"><i class="fa-solid fa-angle-right"></i> 延伸分析：多維度敏感度矩陣與動態情境精算</a>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 問題一解析                                                     -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1" id="sec-q1">
+    <i class="fa-solid fa-chart-line"></i> 問題一解析：總市場價值最大化之融資建議與 MM 定理利息稅盾原理
+  </h2>
+  
+  <div class="teaching-box">
+    <div class="teaching-box-title"><i class="fa-solid fa-bullhorn"></i> 核心作業題目：</div>
+    如果 Stephenson Real Estate 董事會的首要治理目標是【最大化公司總市場價值與股東每股財富】，你會建議公司發行債券還是發行股票來為此土地購置案籌資？請依據現代公司財務學理論闡明你的核心論據。
+  </div>
+
+  <h3 class="heading-2">1. 結論先行：特別財務顧問團隊之明確建言</h3>
+  <p>特別財務顧問團隊給董事會的明確建言是——<strong>【公司必須堅決採納方案 B，全額公開發行 1.1 億美元長期公司債券進行融資】！</strong></p>
+  <p>若公司採納執行長的主張發行新股，將直接使股東喪失高達 <strong>4,400 萬美元</strong> 的實質財富。只有透過發債融資，才能最大化公司市場總價值並將每股股價推升至極致。</p>
+
+  <h3 class="heading-2">2. 核心理論基石：莫迪利安尼-米勒定理（MM Proposition I with Corporate Taxes）</h3>
+  <p>根據現代公司財務學奠基人、諾貝爾經濟學獎得主莫迪利安尼與米勒（Modigliani & Miller, 1963）的資本結構有稅模型：在存在企業所得稅制度下，公司支付給債權人的利息支出可以在計算企業所得稅時作為費用自稅前營業利潤（EBIT）中全額扣除（Tax Deductible）。這項稅法規定實質上賦予了舉債企業一項巨大的政府補貼——<strong>【利息稅盾（Interest Tax Shield）】</strong>。</p>
+
+  <div class="word-equation-box">
+    $$V_L = V_U + \text{PV}(\text{Interest Tax Shield}) = V_U + (T_c \times D)$$
+    <div class="eq-number">(Eq. 1)</div>
+  </div>
+
+  <p>其中各項財務參數之定義與數值如下：</p>
+  <ul class="bullet-list">
+    <li>$V_L$（Value of Levered Firm）：採納負債融資後之公司總市場價值。</li>
+    <li>$V_U$（Value of Unlevered Firm）：無負債營運狀態下之公司總市場價值。在收購土地前為 $517,500,000 美元；加上新土地之基本無槓桿現值 $110,000,000 美元後，$V_U = \$627,500,000 美元。</li>
+    <li>$T_c$（Corporate Marginal Tax Rate）：Stephenson Real Estate 面臨的聯邦與地方綜合邊際企業所得稅率，個案設定為 <strong>40.0%</strong>。</li>
+    <li>$D$（Market Value of Debt）：新發行長期公司債券的市場價值，設定為 <strong>$110,000,000 美元（1.1 億美元）</strong>。</li>
+  </ul>
+
+  <h3 class="heading-2">3. 現金流重分配本質：縮小上繳政府的餅，擴大投資人的餅</h3>
+  <p>為使董事會非財務背景成員徹底理解此原理，顧問團隊以現金流量分配結構進行解構：</p>
+  <ul class="bullet-list">
+    <li><strong>全股權架構的稅務劣勢：</strong>若公司維持 100% 全股權，每一塊錢的營業利潤在扣除 40.0% 的所得稅後，只有 60 美分能分配給股東，其餘 40 美分全部作為稅款繳交給國稅局。政府實質上成為公司享有 40% 盈餘索取權的「隱形優先股東」。</li>
+    <li><strong>負債融資的稅盾奇蹟：</strong>當公司發行 1.1 億美元、票面利率 8.0% 的債券時，每年產生利息支出：
+      $$\text{每年利息支出} = \$110,000,000 \times 8.0\% = \$8,800,000 \text{ 美元（880 萬美元）}$$
+      由於利息在稅前扣除，每年為公司直接減少應納所得稅款：
+      $$\text{每年節省稅款} = \$8,800,000 \times 40.0\% = \$3,520,000 \text{ 美元（352 萬美元）}$$
+    </li>
+    <li><strong>永續年金折現：</strong>假設該長期債務隨物業永續展期，且利息稅盾的現金流風險與債券本金相近，適用折現率為債務利率 $R_d = 8.0\%$：
+      $$\text{PV}(\text{Tax Shield}) = \frac{\text{每年節稅額}}{R_d} = \frac{T_c \times (D \times R_d)}{R_d} = T_c \times D = 40.0\% \times \$110,000,000 = \$44,000,000 \text{ 美元（4,400 萬美元）！}$$
+    </li>
+  </ul>
+
+  <div class="teaching-box warning">
+    <div class="teaching-box-title"><i class="fa-solid fa-lightbulb"></i> 顧問團隊對董事會之關鍵提示：</div>
+    負債融資並非魔術，它並未改變土地物業本身的物理產能與租金回報，而是<strong>透過合法的稅法機制，將原本每年必須無償奉送給國稅局的 352 萬美元現金流，硬生生攔截並留在企業內部，化為 4,400 萬美元的資本現值！</strong> 
+    若採納發行新股，這筆高達 4,400 萬美元的政府補貼將徹底灰飛煙滅，形同主動替國稅局打工。
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 問題二解析                                                     -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1" id="sec-q2">
+    <i class="fa-solid fa-scale-balanced"></i> 問題二解析：宣告前市場價值資產負債表編制與經濟實質剖析
+  </h2>
+
+  <div class="teaching-box">
+    <div class="teaching-box-title"><i class="fa-solid fa-bullhorn"></i> 核心作業題目：</div>
+    請編制 Stephenson Real Estate 在正式向公開資本市場宣告購地計劃之前的【市場價值資產負債表】（Market Value Balance Sheet），並從現代公司財務學觀點，論證為何在評估重大融資決策時，必須採用市場價值而非會計帳面價值（Book Value）。
+  </div>
+
+  <h3 class="heading-2">1. 宣告前市場價值資產負債表（Pre-Announcement Market Value Balance Sheet）</h3>
+  <p>在董事會正式對外公告購地案之前，Stephenson Real Estate 是一家純股權、零負債的房地產投資公司。其公開交易之資本市場指標如下：</p>
+  <ul class="bullet-list">
+    <li>流通在外普通股股數（$N_0$）：<strong>15,000,000 股（1,500 萬股）</strong></li>
+    <li>當前每股市場交易價格（$P_0$）：<strong>$34.50 美元/股</strong></li>
+    <li>公司股權總市場價值（Equity Value, $S_0$）：
+      $$S_0 = N_0 \times P_0 = 15,000,000 \text{ 股} \times \$34.50 = \$517,500,000 \text{ 美元（5.175 億美元）}$$
+    </li>
+    <li>長期債務市場價值（Debt Value, $D_0$）：<strong>$0 美元（零負債）</strong></li>
+  </ul>
+
+  <div class="table-container">
+    <div class="table-caption"><i class="fa-solid fa-table"></i> 表 1：Stephenson Real Estate Company 宣告前市場價值資產負債表（基準日：2026年10月）</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 32%;">資產端項目 (Assets)</th>
+          <th style="width: 18%;">市場價值 (USD)</th>
+          <th style="width: 32%;">負債與股東權益項目 (Liabilities & Equity)</th>
+          <th style="width: 18%;">市場價值 (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>既有房地產物業營運資產 (Existing Assets in Place)</td>
+          <td class="text-right">$517,500,000</td>
+          <td>長期有息負債 (Long-term Debt, $D_0$)</td>
+          <td class="text-right">$0</td>
+        </tr>
+        <tr>
+          <td>待購置科技走廊新商業地塊 (New Land Asset)</td>
+          <td class="text-right">$0</td>
+          <td>股東權益 (Equity, $S_0$: 15.00M 股 @ $34.50)</td>
+          <td class="text-right highlight-cell">$517,500,000</td>
+        </tr>
+        <tr style="font-weight: bold; background-color: #f1f5f9;">
+          <td>資產端總計 (Total Assets)</td>
+          <td class="text-right">$517,500,000</td>
+          <td>負債與權益總計 (Total Claims)</td>
+          <td class="text-right">$517,500,000</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="heading-2">2. 為何必須採用市場價值（Market Value）而非會計帳面價值（Book Value）？</h3>
+  <p>在實務董事會討論中，會計長與執行長往往習慣援引會計帳面價值。顧問團隊特別強調：<strong>在資本結構、資本預算與融資決策中，會計帳面價值毫無經濟指導意義，市場價值具有唯一的理論合法性與實務必然性</strong>，原因有三：</p>
+  
+  <ul class="bullet-list">
+    <li><strong>1. 歷史成本的沉沒性（Sunk Historical Costs）：</strong>會計帳面價值反映的是資產過去購入時的歷史成本扣除累計折舊。對於創立已 25 年的 SRE 而言，許多早期持有的精華商業地產在帳面上可能僅記錄數百萬美元，但在當前繁榮市場中的重置價值與現金流產生能力已達數億美元。使用帳面價值會嚴重低估資產的真實擔保與營運實力。</li>
+    <li><strong>2. 資本市場的定價邏輯（Market Pricing of Claims）：</strong>投資人購買股票或銀行發放貸款時，所依據的是企業未來產生之自由現金流量的現值（即市場價格）。股東要求的權益報酬率（$R_e$）與債權人要求的利率（$R_d$）均直接反映在市場價格中。若以帳面價值計算權重，將得出完全失真的資本結構比例與錯誤的 WACC。</li>
+    <li><strong>3. 資本機會成本的一致性（Opportunity Cost Principle）：</strong>既有股東若在今天清算其投資，在市場上每股可換得 $34.50 現金，而非會計帳面淨值。因此，任何增資或舉債決策，其機會成本基準都必須是市場價值。</li>
+  </ul>
+
+  <!-- ============================================================== -->
+  <!-- 問題三解析                                                     -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1" id="sec-q3">
+    <i class="fa-solid fa-users"></i> 問題三解析：方案 A（全額增發新股）完整精算分析
+  </h2>
+
+  <div class="teaching-box">
+    <div class="teaching-box-title"><i class="fa-solid fa-bullhorn"></i> 核心作業題目：</div>
+    假設董事會採納執行長史蒂芬森的保守主張，決定全額以公開增發普通股方式籌措 1.1 億美元購地資金：<br>
+    1. 計算此一投資案對公司的淨現值（NPV）。<br>
+    2. 正式宣告購地並發行新股後，公司的每股股票價格為多少？<br>
+    3. 公司必須增發多少股新股才能募集足夠的 1.1 億美元現金？<br>
+    4. 編制增發完成後公司的【市場價值資產負債表】。<br>
+    5. 評估增發新股對舊股東權益的實質影響（是否稀釋？財富如何變化？）。
+  </div>
+
+  <h3 class="heading-2">1. 專案淨現值（NPV）計算：零附加價值投資（Zero-NPV Project）</h3>
+  <p>根據實地查核與現金流模型，在純股權假設下，該 120 英畝土地未來由高品質租戶帶來的永續租金淨現金流折現值恰好為 1.1 億美元。因此，在不產生任何融資稅盾的前提下：</p>
+  <div class="word-equation-box">
+    $$\text{NPV}_{\text{Base}} = \text{未來現金流量折現現值} - \text{土地收購資本支出} = \$110,000,000 - \$110,000,000 = \$0 \text{ 美元}$$
+    <div class="eq-number">(Eq. 2)</div>
+  </div>
+  <p>這項收購在未加槓桿時是一項標準的<strong>零淨現值（Zero-NPV）</strong>投資：它產生的回報率剛好等於投資人的要求報酬率，既未摧毀價值，也未創造任何超額經濟租金（Economic Rents）。</p>
+
+  <h3 class="heading-2">2. 宣告後每股股票價格（$P_{1, \text{Equity}}$）</h3>
+  <p>根據有效市場假說（Efficient Market Hypothesis, EMH），在半強式有效市場中，股票價格立即且無偏地反映所有公開資訊。股價只有在投資案創造正 NPV（$\Delta P = \text{NPV} / N$）或產生融資增值時才會變動。</p>
+  <p>在方案 A 下，專案 $\text{NPV} = \$0$，且無任何負債利息稅盾（$\text{PV}(\text{Tax Shield}) = \$0$）。因此，市場在獲悉此購地宣告後，每股價格將保持原狀，完全不變：</p>
+  <div class="word-equation-box">
+    $$P_{1, \text{Equity}} = P_0 + \frac{\text{NPV}_{\text{Base}}}{N_0} = \$34.50 + \frac{\$0}{15,000,000} = \$34.50 \text{ 美元/股}$$
+    <div class="eq-number">(Eq. 3)</div>
+  </div>
+
+  <h3 class="heading-2">3. 需增發之新股股數（$N_{\text{new}}$）與總股數（$N_{\text{total}}$）</h3>
+  <p>為籌措 1.1 億美元現金，公司必須以每股 $34.50 的公平市場價格公開發售新股：</p>
+  <div class="word-equation-box">
+    $$N_{\text{new}} = \frac{\text{募集資金需求}}{\text{增發每股價格}} = \frac{\$110,000,000}{\$34.50} = 3,188,405.797 \approx 3,188,406 \text{ 股}$$
+    <div class="eq-number">(Eq. 4)</div>
+  </div>
+  <p>發行完成後，公司流通在外總股數將擴充至：</p>
+  <div class="word-equation-box">
+    $$N_{\text{total, A}} = N_0 + N_{\text{new}} = 15,000,000 + 3,188,406 = 18,188,406 \text{ 股（約 1,818.84 萬股）}$$
+    <div class="eq-number">(Eq. 5)</div>
+  </div>
+
+  <h3 class="heading-2">4. 方案 A 完成後之市場價值資產負債表</h3>
+  <div class="table-container">
+    <div class="table-caption"><i class="fa-solid fa-table"></i> 表 2：Stephenson Real Estate 方案 A（全額增發新股）後市場價值資產負債表</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 32%;">資產端項目 (Assets)</th>
+          <th style="width: 18%;">市場價值 (USD)</th>
+          <th style="width: 32%;">負債與股東權益項目 (Liabilities & Equity)</th>
+          <th style="width: 18%;">市場價值 (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>既有房地產營運資產 (Existing Assets in Place)</td>
+          <td class="text-right">$517,500,000</td>
+          <td>長期有息負債 (Long-term Debt, $D$)</td>
+          <td class="text-right">$0</td>
+        </tr>
+        <tr>
+          <td>新購置商業地塊資產 (New Land Asset)</td>
+          <td class="text-right">$110,000,000</td>
+          <td>既有舊股東權益 (Old Equity: 15.00M 股 @ $34.50)</td>
+          <td class="text-right">$517,500,000</td>
+        </tr>
+        <tr>
+          <td>利息稅盾現值 (PV of Tax Shield)</td>
+          <td class="text-right" style="color: #64748b;">$0</td>
+          <td>新股東增資權益 (New Equity: 3.188M 股 @ $34.50)</td>
+          <td class="text-right">$110,000,000</td>
+        </tr>
+        <tr style="font-weight: bold; background-color: #f1f5f9;">
+          <td>資產端總計 (Total Assets, $V_A$)</td>
+          <td class="text-right highlight-cell">$627,500,000</td>
+          <td>負債與權益總計 (Total Claims, $V_A$)</td>
+          <td class="text-right highlight-cell">$627,500,000</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="heading-2">5. 股權稀釋效應之嚴謹評估：控制權稀釋 vs. 財富機會成本損失</h3>
+  <ul class="bullet-list">
+    <li><strong>所有權與投票權稀釋（Dilution of Ownership）：</strong>增發新股後，既有股東在公司的股權佔比由原本的 100.0% 驟降至：
+      $$\text{舊股東持股比例} = \frac{15,000,000}{18,188,406} = 82.47\% \quad (\text{股權稀釋了 } 17.53\%)$$
+    </li>
+    <li><strong>名目每股財富未受損（No Wealth Destruction）：</strong>由於新股嚴格按照公允市價 $34.50 發行，且籌措的 1.1 億美元 100% 購買了等值的優質土地資產，舊股東持有的每股財富依然保持 $34.50，舊股東總財富亦保持為 $517,500,000 美元。因此在名目上並未發生「不當財富掠奪」。</li>
+    <li><strong>致命的機會成本損失（Huge Opportunity Loss）：</strong>然而，由下文之問題四可證，若公司採納方案 B，每股股價可漲至 $37.4333，舊股東總財富可增長 4,400 萬美元。因此，<strong>採納方案 A 等同於強迫舊股東平白放棄每股 $2.9333 美元的巨額獲利</strong>，這是管理層嚴重的失職！</li>
+  </ul>
+
+  <!-- ============================================================== -->
+  <!-- 問題四解析                                                     -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1" id="sec-q4">
+    <i class="fa-solid fa-file-invoice-dollar"></i> 問題四解析：方案 B（全額發行債券）完整精算分析
+  </h2>
+
+  <div class="teaching-box">
+    <div class="teaching-box-title"><i class="fa-solid fa-bullhorn"></i> 核心作業題目：</div>
+    假設公司採納財務長普萊斯與顧問團隊的建議，決定全額公開發行長期公司債券籌措 1.1 億美元購地資金：<br>
+    1. 根據 MM 定理（考慮 40.0% 公司所得稅環境），計算該土地購置案的利息稅盾現值（PV of Tax Shield）及調整後淨現值（APV）。<br>
+    2. 正式宣告發債購地後，公司的總市場價值（$V_L$）與股權市場價值（$S_L$）為多少？<br>
+    3. 計算宣告當下公司的每股股票價格（$P_{1, \text{Debt}}$）及每股漲幅。<br>
+    4. 驗算舊股東的總財富增加額，並證明其與利息稅盾現值的數學等價性。<br>
+    5. 編制發債完成後公司的【市場價值資產負債表】。
+  </div>
+
+  <h3 class="heading-2">1. 利息稅盾現值（PV of Tax Shield）與調整後淨現值（APV）精算</h3>
+  <p>公司發行 1.1 億美元長期公司債券（利率 $R_d = 8.0\%$），在 40.0% 稅率下，每年的利息節稅額為：</p>
+  <div class="word-equation-box">
+    $$\text{年度利息節稅額} = (D \times R_d) \times T_c = (\$110,000,000 \times 8.0\%) \times 40.0\% = \$8,800,000 \times 40.0\% = \$3,520,000 \text{ 美元}$$
+    <div class="eq-number">(Eq. 6)</div>
+  </div>
+  <p>以債務成本 $R_d = 8.0\%$ 作為折現率，利息稅盾折現現值為：</p>
+  <div class="word-equation-box">
+    $$\text{PV}(\text{Tax Shield}) = \frac{\text{年度利息節稅額}}{R_d} = \frac{T_c \times D \times R_d}{R_d} = T_c \times D = 40.0\% \times \$110,000,000 = \$44,000,000 \text{ 美元（4,400 萬美元）}$$
+    <div class="eq-number">(Eq. 7)</div>
+  </div>
+  <p>計入融資稅盾後，根據邁爾斯（Myers, 1974）調整後淨現值架構（Adjusted Present Value, APV）：</p>
+  <div class="word-equation-box">
+    $$\text{APV} = \text{專案基本無槓桿 NPV} + \text{PV}(\text{Tax Shield}) = \$0 + \$44,000,000 = +\$44,000,000 \text{ 美元！}$$
+    <div class="eq-number">(Eq. 8)</div>
+  </div>
+
+  <h3 class="heading-2">2. 宣告後公司總市場價值（$V_L$）與股權市值（$S_L$）</h3>
+  <p>在公開市場獲悉公司將全額發債收購該土地的當下，4,400 萬美元的稅盾現值立即資本化計入公司價值中：</p>
+  <div class="word-equation-box">
+    $$V_L = V_U + \text{PV}(\text{Tax Shield}) = (\$517,500,000 + \$110,000,000) + \$44,000,000 = \$671,500,000 \text{ 美元（6.715 億美元）}$$
+    <div class="eq-number">(Eq. 9)</div>
+  </div>
+  <p>根據資產負債表恆等式，扣除新發行的 1.1 億美元長期債券後，剩餘的股權總市場價值（$S_L$）為：</p>
+  <div class="word-equation-box">
+    $$S_L = V_L - D = \$671,500,000 - \$110,000,000 = \$561,500,000 \text{ 美元（5.615 億美元）}$$
+    <div class="eq-number">(Eq. 10)</div>
+  </div>
+
+  <h3 class="heading-2">3. 宣告當下每股股票價格（$P_{1, \text{Debt}}$）與漲幅推導</h3>
+  <p>極為關鍵的是：<strong>本次融資完全依賴發行債券，公司沒有增發任何一股新股票！</strong> 流通在外普通股股數依然嚴格保持在原本的 1,500 萬股（$N_0 = 15,000,000$ 股）。</p>
+  <p>整整 4,400 萬美元的新增淨價值，全數由既有的 1,500 萬股股東獨享：</p>
+  <div class="word-equation-box">
+    $$P_{1, \text{Debt}} = \frac{S_L}{N_0} = \frac{\$561,500,000}{15,000,000 \text{ 股}} = \$37.433333... \approx \$37.43 \text{ 美元/股！}$$
+    <div class="eq-number">(Eq. 11)</div>
+  </div>
+  <p>每股價格淨增長額為：</p>
+  <div class="word-equation-box">
+    $$\Delta P = P_{1, \text{Debt}} - P_0 = \$37.433333 - \$34.50 = +\$2.933333 \text{ 美元/股（漲幅 } +8.50\% \text{！）}$$
+    <div class="eq-number">(Eq. 12)</div>
+  </div>
+
+  <h3 class="heading-2">4. 舊股東總財富增值驗算與嚴謹數學證明</h3>
+  <p>我們對舊股東在宣告前後的財富總量進行驗算：</p>
+  <div class="word-equation-box">
+    $$\text{舊股東總財富增加額} = 15,000,000 \text{ 股} \times \$2.933333 \text{ 美元/股} = \$44,000,000 \text{ 美元！}$$
+    <div class="eq-number">(Eq. 13)</div>
+  </div>
+  <div class="teaching-box">
+    <div class="teaching-box-title"><i class="fa-solid fa-square-root-variable"></i> 理論等價性數學證明：</div>
+    $$\Delta P = \frac{S_L}{N_0} - P_0 = \frac{(V_U + T_c D - D)}{N_0} - \frac{S_0}{N_0} = \frac{(S_0 + I + T_c D - D) - S_0}{N_0} = \frac{T_c D}{N_0} = \frac{\text{PV}(\text{Tax Shield})}{N_0}$$
+    這證明了：<strong>每股增加的市場價值，分毫不差地恰好等於每股所分配到的利息稅盾現值！</strong> 債權人獲得固定利息，而全體股東獲得了政府補貼帶來的全部超額資本利得。
+  </div>
+
+  <h3 class="heading-2">5. 方案 B 完成後之市場價值資產負債表</h3>
+  <div class="table-container">
+    <div class="table-caption"><i class="fa-solid fa-table"></i> 表 3：Stephenson Real Estate 方案 B（全額發行債券）後市場價值資產負債表</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 32%;">資產端項目 (Assets)</th>
+          <th style="width: 18%;">市場價值 (USD)</th>
+          <th style="width: 32%;">負債與股東權益項目 (Liabilities & Equity)</th>
+          <th style="width: 18%;">市場價值 (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>既有房地產營運資產 (Existing Assets in Place)</td>
+          <td class="text-right">$517,500,000</td>
+          <td>新發行長期公司債券 (New Debt, $D$)</td>
+          <td class="text-right danger-cell">$110,000,000</td>
+        </tr>
+        <tr>
+          <td>新購置商業地塊資產 (New Land Asset)</td>
+          <td class="text-right">$110,000,000</td>
+          <td>既有股東權益 (Equity, $S$: 15.00M 股 @ $37.433)</td>
+          <td class="text-right success-cell">$561,500,000</td>
+        </tr>
+        <tr>
+          <td>利息稅盾折現現值 (PV of Interest Tax Shield)</td>
+          <td class="text-right success-cell">$44,000,000</td>
+          <td>新股東權益 (New Equity)</td>
+          <td class="text-right" style="color: #64748b;">$0</td>
+        </tr>
+        <tr style="font-weight: bold; background-color: #f1f5f9;">
+          <td>資產端總計 (Total Assets, $V_L$)</td>
+          <td class="text-right highlight-cell">$671,500,000</td>
+          <td>負債與權益總計 (Total Claims, $V_L$)</td>
+          <td class="text-right highlight-cell">$671,500,000</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 問題五解析                                                     -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1" id="sec-q5">
+    <i class="fa-solid fa-code-compare"></i> 問題五解析：融資方案深度比較、資本成本演化與治理衝突探討
+  </h2>
+
+  <h3 class="heading-2">1. 方案 A 與方案 B 核心財務指標全景對比</h3>
+  <div class="table-container">
+    <div class="table-caption"><i class="fa-solid fa-table"></i> 表 4：Stephenson Real Estate 兩大融資方案核心財務維度綜合對照表</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 28%;">財務比較維度</th>
+          <th style="width: 24%;">方案 A：全額發行新股 (Equity)</th>
+          <th style="width: 24%;">方案 B：全額發行債券 (Debt)</th>
+          <th style="width: 24%;">方案 B 相對優勢 / 差異</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>公司總市場價值 ($V_L$)</strong></td>
+          <td class="text-right">$627,500,000</td>
+          <td class="text-right success-cell">$671,500,000</td>
+          <td class="text-right success-cell">+$44,000,000 (+7.01%)</td>
+        </tr>
+        <tr>
+          <td><strong>長期有息負債規模 ($D$)</strong></td>
+          <td class="text-right">$0</td>
+          <td class="text-right danger-cell">$110,000,000</td>
+          <td class="text-right">+$110,000,000</td>
+        </tr>
+        <tr>
+          <td><strong>股權總市場價值 ($S$)</strong></td>
+          <td class="text-right">$627,500,000</td>
+          <td class="text-right success-cell">$561,500,000</td>
+          <td class="text-right">-$66,000,000 (舊股東獨佔)</td>
+        </tr>
+        <tr>
+          <td><strong>流通在外總股數 ($N$)</strong></td>
+          <td class="text-right">18,188,406 股</td>
+          <td class="text-right highlight-cell">15,000,000 股</td>
+          <td class="text-right highlight-cell">完全不稀釋舊股東股權</td>
+        </tr>
+        <tr>
+          <td><strong>宣告後每股股票價格 ($P_1$)</strong></td>
+          <td class="text-right">$34.50 美元</td>
+          <td class="text-right success-cell">$37.4333 美元</td>
+          <td class="text-right success-cell"><strong>+$2.9333 / 股 (+8.50%)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>舊股東持股佔比</strong></td>
+          <td class="text-right danger-cell">82.47% (稀釋 17.53%)</td>
+          <td class="text-right success-cell">100.00% (無稀釋)</td>
+          <td class="text-right success-cell">完整保留經營控制權</td>
+        </tr>
+        <tr>
+          <td><strong>舊股東總財富增值</strong></td>
+          <td class="text-right">$0 美元</td>
+          <td class="text-right success-cell"><strong>+$44,000,000 美元</strong></td>
+          <td class="text-right success-cell"><strong>釋放全額 4,400 萬美元稅盾</strong></td>
+        </tr>
+        <tr>
+          <td><strong>負債佔總資本比率 ($D/V$)</strong></td>
+          <td class="text-right">0.00%</td>
+          <td class="text-right">16.38%</td>
+          <td class="text-right">槓桿健康，償債極具餘裕</td>
+        </tr>
+        <tr>
+          <td><strong>股權資本成本 ($R_e$)</strong></td>
+          <td class="text-right">10.00%</td>
+          <td class="text-right">10.24%</td>
+          <td class="text-right">+0.24% (反映財務風險)</td>
+        </tr>
+        <tr>
+          <td><strong>加權平均資金成本 (WACC)</strong></td>
+          <td class="text-right danger-cell">10.00%</td>
+          <td class="text-right success-cell"><strong>9.34%</strong></td>
+          <td class="text-right success-cell"><strong>-0.66% (-66 個基點！)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="heading-2">2. MM 第二定理之理論解析：為何股權成本上升，每股股價反而上漲？</h3>
+  <p>這是哈佛課堂研討中最具深度的理論思辨！許多學生直覺認為：『既然發債會提高財務槓桿風險，使股權要求回報率 $R_e$ 由 10.00% 上升至 10.24%，這對股東不是壞事嗎？為什麼股價反而會暴漲？』</p>
+  
+  <p>根據莫迪利安尼-米勒第二定理（MM Proposition II with Corporate Taxes）：</p>
+  <div class="word-equation-box">
+    $$R_e = R_U + (R_U - R_d) \times (1 - T_c) \times \left(\frac{D}{S}\right)$$
+    <div class="eq-number">(Eq. 14)</div>
+  </div>
+
+  <p>假設 SRE 既有無負債資產成本 $R_U = 10.0\%$，新債務利率 $R_d = 8.0\%$。在方案 B 下：</p>
+  <ul class="bullet-list">
+    <li>市場價值負債權益比：$D/S = \$110,000,000 / \$561,500,000 = 0.195904$（19.59%）</li>
+    <li>代入 MM 第二定理公式精算：
+      $$R_e = 10.0\% + (10.0\% - 8.0\%) \times (1 - 0.40) \times 0.195904 = 10.0\% + 2.0\% \times 0.60 \times 0.195904 = 10.0\% + 0.2351\% = 10.2351\% \approx 10.24\%$$
+    </li>
+  </ul>
+
+  <div class="view-card view-3">
+    <div class="view-card-title"><i class="fa-solid fa-unlock-keyhole"></i> 核心悖論化解：WACC 下降推升公司價值與股價</div>
+    <p>雖然股權投資人要求更高的風險補償（$R_e$ 增加了 24 個基點），但因為新增的負債資金成本極低，其稅後實質成本僅為：</p>
+    <div style="text-align: center; margin: 12px 0; font-size: 18px; font-weight: bold; color: #166534;">
+      $$\text{稅後負債成本 } R_d \times (1 - T_c) = 8.0\% \times (1 - 0.40) = 4.80\%！$$
+    </div>
+    <p>這筆成本僅 4.80% 的廉價資金在總資本中佔了整整 16.38%（$110.0 / 671.5$）的權重！低成本負債的權重效應，遠遠壓倒了股權成本微幅上升 0.24% 的負面影響：</p>
+    <div class="word-equation-box">
+      $$\text{WACC} = \left(\frac{S}{V_L}\right) R_e + \left(\frac{D}{V_L}\right) R_d(1 - T_c) = \left(\frac{561.5}{671.5}\right) \times 10.2351\% + \left(\frac{110.0}{671.5}\right) \times 4.80\%$$
+      $$\text{WACC} = (83.6188\% \times 10.2351\%) + (16.3812\% \times 4.80\%) = 8.5585\% + 0.7863\% = 9.3448\% \approx 9.34\%！$$
+      <div class="eq-number">(Eq. 15)</div>
+    </div>
+    <p><strong>結論：</strong>公司的整體綜合資本成本由 10.00% 顯著下降至 9.34%（降幅達 66 個基點）。由於企業總市場價值是未來所有自由現金流量以 WACC 折現的結果，折現率的分母變小，公司整體價值自然暴增，推動每股股價飆升至 $37.43！</p>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 行為財務與公司治理                                             -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1" id="sec-gov">
+    <i class="fa-solid fa-brain"></i> 行為財務學解析：經理人個人創傷偏誤與董事會信託責任
+  </h2>
+
+  <h3 class="heading-2">1. 經理人創傷烙印偏誤（Trauma-Induced Debt Phobia）</h3>
+  <p>個案中最引人深思的人性衝突，在於創辦人兼執行長羅伯特·史蒂芬森對負債的頑固抗拒：</p>
+  <ul class="bullet-list">
+    <li><strong>個人歷史創傷烙印（Historical Imprinting Effect）：</strong>史蒂芬森在四十年前（1980 年代初）經歷過個人建築承包商在聯邦基準利率高達 18%–20% 的惡劣環境下破產清算。那次慘痛的失敗給他留下了極深的心理陰影，形成了心理學上的「創傷後應激（PTSD）」式財務防衛機制。</li>
+    <li><strong>損失厭惡（Loss Aversion）與現狀偏誤（Status Quo Bias）：</strong>根據康納曼與特沃斯基（Kahneman & Tversky, 1979）前景理論，人們面對潛在損失的痛苦程度是獲得同等收益快樂程度的 2 至 2.5 倍。史蒂芬森將「零負債」等同於「絕對安全」，將任何微小債務視為毀滅性風險，完全無視當前公司早已從脆弱的建築包商轉型為擁有穩定 96% 出租率的優質商用不動產帝國。</li>
+  </ul>
+
+  <h3 class="heading-2">2. 代理問題（Agency Dilemma）與自由現金流假說</h3>
+  <p>根據詹森與麥克林（Jensen & Meckling, 1976）以及詹森（Jensen, 1986）的自由現金流量理論（Free Cash Flow Hypothesis）：</p>
+  <ul class="bullet-list">
+    <li><strong>經理人自私效用 vs 股東財富最大化：</strong>專業經理人即使持有股份，其個人利益往往更傾向於追求「平穩安逸、免受債權人監管、免除違約壓力」。零負債讓管理層生活在毫無外界償債壓力的舒適圈內，但代價是讓企業背負「怠惰的資產負債表（Lazy Balance Sheet）」，每年白白浪費 352 萬美元的利息節稅額。</li>
+    <li><strong>負債的治理監督紀律（Disciplinary Role of Debt）：</strong>發行 1.1 億美元長期債券，每年固定支付 880 萬美元利息，能夠形成強大的財務紀律，促使管理團隊戰戰兢兢維護物業品質、維持租金回報，遏制管理層過度擴張與低效支出的潛在衝動。</li>
+  </ul>
+
+  <h3 class="heading-2">3. 董事會的信託防線（Fiduciary Duty of the Board）</h3>
+  <p>商業房地產的現金流特徵高度支持舉債：SRE 擁有超過 25 年穩定營運歷史，全美商辦出租率長年高達 96%，租金現金流防禦性極高。收購新土地後，公司的負債佔總資產比率（$D/V$）僅 <strong>16.38%</strong>，利息保障倍數（Interest Coverage Ratio）長年在 6.5 倍以上，實質違約破產風險近乎於零。</p>
+  <p>董事會獨立董事必須履行對全體公眾股東的信託義務（Fiduciary Duty），堅決否決執行長過度情緒化的發股提案，投票通過發債融資方案，捍衛股東應得的 4,400 萬美元財富！</p>
+
+  <!-- ============================================================== -->
+  <!-- 互動試算模型                                                   -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1" id="sec-sim">
+    <i class="fa-solid fa-sliders"></i> 互動試算模型：SRE 資本結構與 MM 定理即時試算器
+  </h2>
+  
+  <p>授課教師與學生可直接於下方互動控制台調節融資規模、企業所得稅率、債務利率及無負債資產成本，即時觀察公司市場總價值、每股股價跳升額度、股權成本與 WACC 的動態連動反應：</p>
+
+  <div class="sim-container">
+    <div class="sim-header">
+      <div class="sim-title"><i class="fa-solid fa-calculator text-amber-500"></i> Stephenson Real Estate Company 資本結構重組即時模擬器</div>
+      <div class="sim-subtitle">實時驗算 MM 第一定理（利息稅盾現值）與 MM 第二定理（資本成本結構演變）</div>
+    </div>
+    
+    <div class="sim-grid">
+      <!-- 控制滑桿區 -->
+      <div class="sim-controls">
+        <div class="control-group">
+          <div class="control-label">
+            <span>債務融資規模 (Debt, $D$)</span>
+            <span id="disp-debt" class="font-mono text-blue-700 font-bold">$110 M</span>
+          </div>
+          <input type="range" id="slider-debt" min="0" max="200" step="5" value="110" class="control-slider" oninput="calcSim()">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; margin-top: 2px;">
+            <span>$0M (全股權)</span>
+            <span>$110M (基準)</span>
+            <span>$200M (高槓桿)</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>企業所得稅率 ($T_c$)</span>
+            <span id="disp-tax" class="font-mono text-emerald-700 font-bold">40.0%</span>
+          </div>
+          <input type="range" id="slider-tax" min="0" max="50" step="1" value="40" class="control-slider" oninput="calcSim()">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; margin-top: 2px;">
+            <span>0% (無稅環境)</span>
+            <span>40% (基準)</span>
+            <span>50% (高稅率)</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>債券發行利率 ($R_d$)</span>
+            <span id="disp-rd" class="font-mono text-amber-700 font-bold">8.0%</span>
+          </div>
+          <input type="range" id="slider-rd" min="4" max="14" step="0.5" value="8.0" class="control-slider" oninput="calcSim()">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; margin-top: 2px;">
+            <span>4.0%</span>
+            <span>8.0% (基準)</span>
+            <span>14.0%</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>無負債資產成本 ($R_U$)</span>
+            <span id="disp-ru" class="font-mono text-indigo-700 font-bold">10.0%</span>
+          </div>
+          <input type="range" id="slider-ru" min="7" max="15" step="0.5" value="10.0" class="control-slider" oninput="calcSim()">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; margin-top: 2px;">
+            <span>7.0%</span>
+            <span>10.0% (基準)</span>
+            <span>15.0%</span>
+          </div>
+        </div>
+
+        <button onclick="resetSimDefaults()" style="width: 100%; padding: 8px; font-size: 13px; font-weight: bold; background: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; color: #334155;">
+          <i class="fa-solid fa-rotate-left"></i> 重置回個案基準參數 (SRE Base Case)
+        </button>
+      </div>
+
+      <!-- 即時精算結果輸出 -->
+      <div class="sim-outputs">
+        <div class="sim-kpi-grid">
+          <div class="kpi-box">
+            <div class="kpi-title">利息稅盾折現現值</div>
+            <div class="kpi-val success" id="res-pv-tax">$44.00 M</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-title">公司總市場價值 ($V_L$)</div>
+            <div class="kpi-val" id="res-vl">$671.50 M</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-title">宣告後每股股價 ($P_1$)</div>
+            <div class="kpi-val highlight" id="res-p1">$37.43</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-title">每股增值 / 漲幅</div>
+            <div class="kpi-val success" id="res-gain">+$2.93 (+8.5%)</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-title">股權資本成本 ($R_e$)</div>
+            <div class="kpi-val" id="res-re">10.24%</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-title">加權平均資金成本 (WACC)</div>
+            <div class="kpi-val success" id="res-wacc">9.34%</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; color: #475569; line-height: 1.6;">
+          <strong style="color: #143652;">即時計算診斷：</strong><br>
+          <span id="sim-diagnostic">
+            當前負債比率 $D/V = 16.38\%$，稅盾為既有股東創造了 <strong>$4,400 萬美元</strong> 的超額淨價值。加權平均資金成本 (WACC) 比無槓桿成本下降了 66 個基點，股票價值達到最大化。
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 多維度敏感度矩陣                                               -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1" id="sec-sens">
+    <i class="fa-solid fa-table-cells"></i> 延伸分析：多維度敏感度矩陣與動態情境精算
+  </h2>
+
+  <p>為了向董事會提供最高標準的壓力測試，顧問團隊進一步建置了「融資規模」與「所得稅率」交互影響之二維敏感度分析矩陣：</p>
+
+  <div class="table-container">
+    <div class="table-caption"><i class="fa-solid fa-matrix"></i> 表 5：不同所得稅率與融資規模下之每股股票價格 ($P_1$) 與稅盾現值敏感度矩陣</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>債務融資規模 (Debt, $D$)</th>
+          <th>稅率 $T_c = 0.0\%$ (無稅)</th>
+          <th>稅率 $T_c = 25.0\%$ (減稅)</th>
+          <th>稅率 $T_c = 40.0\%$ (個案基準)</th>
+          <th>稅率 $T_c = 50.0\%$ (高稅負)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>$0 M (方案 A 全股權)</strong></td>
+          <td class="text-center">$34.50 (+$0.0M)</td>
+          <td class="text-center">$34.50 (+$0.0M)</td>
+          <td class="text-center">$34.50 (+$0.0M)</td>
+          <td class="text-center">$34.50 (+$0.0M)</td>
+        </tr>
+        <tr>
+          <td><strong>$50 M (輕度舉債)</strong></td>
+          <td class="text-center">$34.50 (+$0.0M)</td>
+          <td class="text-center">$35.33 (+$12.5M)</td>
+          <td class="text-center">$35.83 (+$20.0M)</td>
+          <td class="text-center">$36.17 (+$25.0M)</td>
+        </tr>
+        <tr>
+          <td><strong>$80 M (中度舉債)</strong></td>
+          <td class="text-center">$34.50 (+$0.0M)</td>
+          <td class="text-center">$35.83 (+$20.0M)</td>
+          <td class="text-center">$36.63 (+$32.0M)</td>
+          <td class="text-center">$37.17 (+$40.0M)</td>
+        </tr>
+        <tr>
+          <td><strong>$110 M (方案 B 個案基準)</strong></td>
+          <td class="text-center">$34.50 (+$0.0M)</td>
+          <td class="text-center">$36.33 (+$27.5M)</td>
+          <td class="text-center highlight-cell"><strong>$37.43 (+$44.0M)</strong></td>
+          <td class="text-center success-cell"><strong>$38.17 (+$55.0M)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>$140 M (積極融資)</strong></td>
+          <td class="text-center">$34.50 (+$0.0M)</td>
+          <td class="text-center">$36.83 (+$35.0M)</td>
+          <td class="text-center success-cell">$38.23 (+$56.0M)</td>
+          <td class="text-center success-cell">$39.17 (+$70.0M)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="heading-2">敏感度分析重要管理意涵：</h3>
+  <ul class="bullet-list">
+    <li><strong>若無所得稅（$T_c = 0\%$），資本結構完全無關：</strong>如表 5 第一欄所示，在所得稅率為 0 的環境下，不論公司舉債 $0M 還是 $140M，每股股價永遠被錨定在 $34.50 美元，稅盾現值永遠為 $0。這完美印證了 MM (1958) 無稅第一定理！</li>
+    <li><strong>稅率越高，負債的價值創造效能越驚人：</strong>當所得稅率達到 40% 時，每一美元的負債能夠立即憑空轉化為 40 美分的股東權益價值；在 1.1 億美元融資下，每股直接彈跳 $2.93 美元。所得稅率正是開啟利息稅盾金庫的唯一鑰匙。</li>
+  </ul>
+
+  <!-- ============================================================== -->
+  <!-- 經典文獻與學術錨點                                             -->
+  <!-- ============================================================== -->
+  <h2 class="heading-1">
+    <i class="fa-solid fa-book"></i> 經典公司金融學文獻與理論錨點
+  </h2>
+  
+  <ul class="bullet-list">
+    <li><strong>Modigliani, F., & Miller, M. H. (1958).</strong> "The Cost of Capital, Corporation Finance and the Theory of Investment." <em>American Economic Review</em>, 48(3), 261-297. （奠定無稅環境下資本結構無關論與套利均衡基礎）</li>
+    <li><strong>Modigliani, F., & Miller, M. H. (1963).</strong> "Corporate Income Taxes and the Cost of Capital: A Correction." <em>American Economic Review</em>, 53(3), 433-443. （修正加入企業所得稅扣抵利息，推導出利息稅盾現值公式 $V_L = V_U + T_c D$ 與 MM 第二定理）</li>
+    <li><strong>Jensen, M. C., & Meckling, W. H. (1976).</strong> "Theory of the Firm: Managerial Behavior, Agency Costs and Ownership Structure." <em>Journal of Financial Economics</em>, 3(4), 305-360. （提出經理人自私效用與股東目標脫節之代理成本框架）</li>
+    <li><strong>Jensen, M. C. (1986).</strong> "Agency Costs of Free Cash Flow, Corporate Finance, and Takeovers." <em>American Economic Review</em>, 76(2), 323-329. （論證舉債之硬性還本付息承諾具有約束經理人、減少過度投資之關鍵治理紀律）</li>
+    <li><strong>Myers, S. C. (1974).</strong> "Interactions of Corporate Financing and Investment Decisions — Capital Budgeting and the WACC." <em>Journal of Finance</em>, 29(1), 1-25. （首創調整後淨現值 APV 方法，將實體專案價值與融資稅盾價值拆解評估）</li>
+    <li><strong>Myers, S. C. (1984).</strong> "The Capital Structure Puzzle." <em>Journal of Finance</em>, 39(3), 575-592. （權衡理論 Trade-off Theory 與融資順位理論 Pecking Order Theory 之集大成）</li>
+    <li><strong>Kahneman, D., & Tversky, A. (1979).</strong> "Prospect Theory: An Analysis of Decision under Risk." <em>Econometrica</em>, 47(2), 263-291. （行為經濟學奠基之作，揭示損失厭惡與經理人創傷烙印之認知偏誤）</li>
+  </ul>
+
+  <!-- 頁尾 -->
+  <div class="doc-footer">
+    <p>© 2026 國立臺灣大學 / 國立清華大學 EMBA 碩士在職專班 ‧ 11501 領導與管理課程教材庫</p>
+    <p>案例設計源自 Harvard Business School 經典教案；本全套解析網頁由特別財務顧問教學團隊統籌編製，保留所有著作權。</p>
+  </div>
+
+</div>
+
+<!-- 模擬器腳本 -->
+<script>
+  function calcSim() {
+    const D = parseFloat(document.getElementById('slider-debt').value);
+    const tc = parseFloat(document.getElementById('slider-tax').value) / 100.0;
+    const rd = parseFloat(document.getElementById('slider-rd').value) / 100.0;
+    const ru = parseFloat(document.getElementById('slider-ru').value) / 100.0;
+
+    // 更新滑桿數字標籤
+    document.getElementById('disp-debt').innerText = '$' + D.toFixed(0) + ' M';
+    document.getElementById('disp-tax').innerText = (tc * 100).toFixed(1) + '%';
+    document.getElementById('disp-rd').innerText = (rd * 100).toFixed(1) + '%';
+    document.getElementById('disp-ru').innerText = (ru * 100).toFixed(1) + '%';
+
+    // 基準常數
+    const S0 = 517.5; // 百萬美元
+    const NewLand = 110.0; // 百萬美元
+    const N0 = 15.0; // 百萬股
+    const P0 = 34.50; // 美元
+
+    // 核心 MM 計算
+    const pvTaxShield = tc * D; // 百萬美元
+    const Vu = S0 + NewLand; // 627.5 百萬美元
+    const Vl = Vu + pvTaxShield; // 百萬美元
+    const S = Vl - D; // 股權市值 (百萬美元)
+
+    // 股價
+    const p1 = S / N0;
+    const gainPerShare = p1 - P0;
+    const gainPct = (gainPerShare / P0) * 100.0;
+
+    // 資本成本
+    const debtRatio = Vl > 0 ? (D / Vl) : 0;
+    const eqRatio = Vl > 0 ? (S / Vl) : 1;
+    const deRatio = S > 0 ? (D / S) : 0;
+
+    // MM 第二定理有稅 Re
+    const re = ru + (ru - rd) * (1.0 - tc) * deRatio;
+    const rdAfterTax = rd * (1.0 - tc);
+    const wacc = (eqRatio * re) + (debtRatio * rdAfterTax);
+
+    // 更新 KPI 顯示
+    document.getElementById('res-pv-tax').innerText = '$' + pvTaxShield.toFixed(2) + ' M';
+    document.getElementById('res-vl').innerText = '$' + Vl.toFixed(2) + ' M';
+    document.getElementById('res-p1').innerText = '$' + p1.toFixed(2);
+    
+    const gainSign = gainPerShare >= 0 ? '+' : '';
+    document.getElementById('res-gain').innerText = gainSign + '$' + gainPerShare.toFixed(2) + ' (' + gainSign + gainPct.toFixed(1) + '%)';
+    document.getElementById('res-re').innerText = (re * 100).toFixed(2) + '%';
+    document.getElementById('res-wacc').innerText = (wacc * 100).toFixed(2) + '%';
+
+    // 更新診斷文字
+    const diffWaccBps = ((wacc - ru) * 10000).toFixed(0);
+    const waccDir = diffWaccBps <= 0 ? '下降了 ' + Math.abs(diffWaccBps) : '上升了 ' + diffWaccBps;
+    document.getElementById('sim-diagnostic').innerHTML = 
+      `當前負債佔比 $D/V_L = ${(debtRatio * 100).toFixed(2)}\\%$，稅盾為既有股東創造了 <strong>$${pvTaxShield.toFixed(2)} 萬美元</strong> 的超額淨價值。` +
+      `加權平均資金成本 (WACC) 比無槓桿成本 ${waccDir} 個基點，每股實質增值 <strong>${gainSign}$${gainPerShare.toFixed(2)} 美元</strong>。`;
+  }
+
+  function resetSimDefaults() {
+    document.getElementById('slider-debt').value = 110;
+    document.getElementById('slider-tax').value = 40;
+    document.getElementById('slider-rd').value = 8.0;
+    document.getElementById('slider-ru').value = 10.0;
+    calcSim();
+  }
+
+  // 初始化執行
+  window.addEventListener('DOMContentLoaded', () => {
+    calcSim();
+  });
+</script>
+
+</body>
+</html>
