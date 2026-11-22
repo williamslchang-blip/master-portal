@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>四次工業革命 | 產值演變、台灣追趕與K型資本市場全解讀</title>
+  <meta name="description" content="從蒸氣機到算力霸權：涵蓋歷史生產力演進、美台產值對照、台灣 K 型產業結構與 ROIC 分化，以及台股指數集中度與 ETF 編製邏輯分析">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- 外部樣式 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- 頂部導航欄 (Sticky Glass Header) -->
+  <header class="glass-header sticky top-0 z-50 px-4 md:px-8 py-3.5 flex items-center justify-between border-b border-slate-200">
+    <div class="flex items-center gap-3">
+      <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg border border-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="navigateTo('ch1')">
+        <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-md font-bold text-lg">
+          K
+        </div>
+        <div>
+          <span class="font-extrabold text-sm md:text-base tracking-tight text-slate-900 block leading-tight">
+            工業革命產值與台灣K型結構
+          </span>
+          <span class="text-[10px] text-slate-500 tracking-wider uppercase block font-semibold">
+            Macroeconomics & Capital Markets
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 頂部搜尋與功能 -->
+    <div class="flex items-center gap-4">
+      <div class="relative hidden sm:block w-52 md:w-64">
+        <input type="text" id="search-input" placeholder="搜尋章節、術語、數據..." 
+          class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+        <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <div id="search-results" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden max-h-80 overflow-y-auto"></div>
+      </div>
+
+      <!-- 進度指示器 -->
+      <div class="hidden lg:flex items-center gap-2.5 text-xs text-slate-600 bg-white px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-sm">
+        <span>閱讀進度</span>
+        <div class="w-24 bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
+          <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+        <span id="progress-text" class="font-mono font-bold text-blue-600">0%</span>
+      </div>
+
+      <button onclick="window.print()" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 flex items-center gap-1.5 font-medium transition-all shadow-sm" title="列印或匯出講義 PDF">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        <span>列印筆記</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 主體區域：側邊欄 + 主內容 -->
+  <div class="flex-1 flex max-w-7xl w-full mx-auto px-4 md:px-8 py-6 gap-8">
+    
+    <!-- 桌面側邊欄導航 (Sticky Aside) -->
+    <aside id="sidebar" class="hidden md:block w-72 flex-shrink-0">
+      <div class="sticky top-20 space-y-6">
+        
+        <!-- 核心章節目錄 -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">
+            課程系統架構 (Syllabus)
+          </div>
+          <nav class="space-y-1 text-sm">
+            <a href="#ch1" data-nav-target="ch1" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all nav-item-active">
+              <span class="w-5 h-5 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-mono font-bold">1</span>
+              <span>四次工業革命脈絡</span>
+            </a>
+            <a href="#ch2" data-nav-target="ch2" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="w-5 h-5 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-mono font-bold">2</span>
+              <span>美台追趕與結構分歧</span>
+            </a>
+            <a href="#ch3" data-nav-target="ch3" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="w-5 h-5 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-mono font-bold">3</span>
+              <span>台灣 K 型產業與 ROIC</span>
+            </a>
+            <a href="#ch4" data-nav-target="ch4" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="w-5 h-5 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-mono font-bold">4</span>
+              <span>資產定價與 CAPM 失靈</span>
+            </a>
+            <a href="#ch5" data-nav-target="ch5" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="w-5 h-5 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-mono font-bold">5</span>
+              <span>ETF 邏輯與台積電條款</span>
+            </a>
+            <a href="#ch6" data-nav-target="ch6" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="w-5 h-5 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-mono font-bold">6</span>
+              <span>未來轉型與政策展望</span>
+            </a>
+          </nav>
+        </div>
+
+        <!-- 互動與檢定功能模組 -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">
+            量化工具與評量 (Interactive)
+          </div>
+          <nav class="space-y-1 text-sm">
+            <a href="#lab" data-nav-target="lab" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="text-base">🔬</span>
+              <span>互動量化實驗室</span>
+            </a>
+            <a href="#quiz" data-nav-target="quiz" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="text-base">📝</span>
+              <span>知識檢定與通關測驗</span>
+            </a>
+            <a href="#charts" data-nav-target="charts" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="text-base">📊</span>
+              <span>總經數據圖表中心</span>
+            </a>
+            <a href="#glossary" data-nav-target="glossary" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 font-medium transition-all">
+              <span class="text-base">📖</span>
+              <span>經濟金融名詞全書</span>
+            </a>
+          </nav>
+        </div>
+
+        <!-- 學術文獻引用資訊 -->
+        <div class="bg-blue-50/60 p-4 rounded-2xl border border-blue-100 text-xs text-slate-600 leading-relaxed">
+          <div class="font-bold text-blue-800 mb-1 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            數據權威引用
+          </div>
+          涵蓋 Maddison Project Database 2011 基準、IMF WEO 2026.10、行政院主計總處、臺灣證券交易所與金管會法規公告。
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- 主展示區 -->
+    <main class="flex-1 min-w-0">
+      <div id="view-container">
+        <!-- 動態 JavaScript 渲染區塊 -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- 頁尾 -->
+  <footer class="bg-white border-t border-slate-200 mt-auto py-8 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p class="font-medium text-slate-700">
+        工業革命產值演變、台灣追趕軌跡與資本市場影響專題教學平台
+      </p>
+      <p>
+        深入解析全要素生產力 (TFP)、美台大分流與大趨同、ROIC-WACC 資本馬太效應、拉積盤 CAPM 失靈與 ETF 台積電條款
+      </p>
+      <p class="text-slate-400">
+        協同開發：DeepMind Agent & Codex Quant Specialist • 2026 年最新編修版
+      </p>
+    </div>
+  </footer>
+
+  <!-- 核心腳本載入 -->
+  <script src="course_data.js"></script>
+  <script src="simulators.js"></script>
+  <script src="app.js"></script>
+
+  <!-- 行動版選單切換邏輯 -->
+  <script>
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      const sb = document.getElementById('sidebar');
+      if (sb) {
+        sb.classList.toggle('hidden');
+        sb.classList.toggle('fixed');
+        sb.classList.toggle('inset-0');
+        sb.classList.toggle('z-50');
+        sb.classList.toggle('bg-white');
+        sb.classList.toggle('p-6');
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -528,7 +528,16 @@
               { code: '第15週', title: '綠色金融ESG永續投資與碳定價經濟學', desc: '綠色通膨（Greenflation）、歐盟 CBAM 碳關稅衝擊、碳定價與企業 ESG 轉型商機。', html: '11501 管理探索二NEW/W15_綠色金融ESG永續投資與碳定價經濟學.html', docx: '11501 管理探索二NEW/第十五週_課程教學指引_綠色金融ESG永續投資與碳定價經濟學.docx' },
               { code: '第16週', title: '加密貨幣區塊鏈基礎Web3與數位資產風險', desc: '比特幣與以太坊本質、去中心化概念、冷溫錢包安全、詐騙防制與資產風險控管。', html: '11501 管理探索二NEW/W16_加密貨幣區塊鏈基礎Web3與數位資產風險.html', docx: '11501 管理探索二NEW/第十六週_課程教學指引_加密貨幣區塊鏈基礎Web3與數位資產風險.docx' },
               { code: '第17週', title: '期末專案發表實戰財經簡報與總評量', desc: '分組商業企劃發表、財經簡報表達演練、課堂同儕互評與教授實戰講評。', html: '11501 管理探索二NEW/W17_期末專案發表實戰財經簡報與總評量.html', docx: '11501 管理探索二NEW/第十七週_課程教學指引_期末專案發表實戰財經簡報與總評量.docx' },
-              { code: '第18週', title: '學期總結財經探索藍圖與大一新鮮人終身宣言', desc: '全學期 18 週知識地圖閉環、大一新鮮人終身財務宣言與個人職涯起飛藍圖。', html: '11501 管理探索二NEW/W18_學期總結財經探索藍圖與大一新鮮人終身宣言.html', docx: '11501 管理探索二NEW/第十八週_課程教學指引_學期總結財經探索藍圖與大一新鮮人終身宣言.docx' }
+              {
+                code: '第18週',
+                title: '四次工業革命：產值演變、台灣追趕與K型資本市場全解讀',
+                desc: '全學期宏觀經濟與資本市場終極專題：涵蓋第1至4次工業革命生產力演進、美台產值追趕、台灣 K 型產業結構與 ROIC 分化、拉積盤 CAPM 失靈與金管會 ETF 台積電條款全解讀。含完整互動量化實驗室、總經圖表中心與評量測驗。',
+                html: '四次工業革命/index.html',
+                interactiveTool: '四次工業革命/index.html#lab',
+                docx: '四次工業革命/工業革命產值演變與台灣K型結構資本市場分析.docx',
+                htmlTheory: '11501 管理探索二NEW/W18_學期總結財經探索藍圖與大一新鮮人終身宣言.html',
+                docxTheory: '11501 管理探索二NEW/第十八週_課程教學指引_學期總結財經探索藍圖與大一新鮮人終身宣言.docx'
+              }
             ]
           }
         }
@@ -964,6 +973,8 @@
         cleanPath = cleanPath.slice('11501 領導與管理/'.length);
       } else if (cleanPath.startsWith('11501 企業倫理與永續經營/')) {
         cleanPath = cleanPath.slice('11501 企業倫理與永續經營/'.length);
+      } else if (cleanPath.startsWith('四次工業革命/')) {
+        return (isOnline ? 'https://williamslchang-blip.github.io/master-portal/' : '') + cleanPath;
       } else if (cleanPath.startsWith('11501 管理探索二NEW/')) {
         cleanPath = cleanPath.slice('11501 管理探索二NEW/'.length);
       }
@@ -1436,7 +1447,7 @@
                   title="在新分頁開啟互動運算模型或模擬器"
                 >
                   <i class="fa-solid fa-calculator"></i>
-                  <span>${currentTier2 === 'trust' ? '開啟管理矩陣模擬器' : '五大決策互動試算系統'}</span>
+                  <span>${currentTier2 === 'trust' ? '開啟管理矩陣模擬器' : (currentTier2 === 'explore' && item.code === '第18週' ? '開啟互動量化實驗室' : '五大決策互動試算系統')}</span>
                   <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
                 </a>
               ` : ''}

@@ -1,0 +1,187 @@
+/* 互動教學網站專用樣式表 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+  --secondary: #0f172a;
+  --accent: #06b6d4;
+  --accent-light: #ecfeff;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg-main: #f8fafc;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --font-sans: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-mono);
+}
+
+/* 玻璃擬態與陰影 */
+.glass-header {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.card-elevation {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease-in-out;
+}
+
+.card-elevation:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+/* 導航側邊欄 active 效果 */
+.nav-item-active {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.nav-item-active svg {
+  color: #ffffff !important;
+}
+
+/* 數據表格樣式 */
+.edu-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.edu-table th {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.edu-table td {
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #f1f5f9;
+  background-color: #ffffff;
+}
+
+.edu-table tr:last-child td {
+  border-bottom: none;
+}
+
+.edu-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* 經濟學公式卡片 */
+.formula-box {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #f8fafc;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin: 1.25rem 0;
+  box-shadow: 0 8px 16px -4px rgba(15, 23, 42, 0.2);
+  border-left: 4px solid #38bdf8;
+}
+
+/* 模擬計算機滑桿 */
+input[type=range] {
+  accent-color: #2563eb;
+}
+
+/* 滾動條優化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 測驗題目選項效果 */
+.quiz-option {
+  border: 2px solid #e2e8f0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.quiz-option:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.quiz-option.selected {
+  border-color: #2563eb;
+  background-color: #dbeafe;
+}
+
+.quiz-option.correct {
+  border-color: #10b981 !important;
+  background-color: #d1fae5 !important;
+  color: #065f46;
+}
+
+.quiz-option.wrong {
+  border-color: #ef4444 !important;
+  background-color: #fee2e2 !important;
+  color: #991b1b;
+}
+
+/* 徽章 Badge */
+.badge-tech {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+@media print {
+  aside, header, #interactive-lab, #quiz-section {
+    display: none !important;
+  }
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
