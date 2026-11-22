@@ -935,7 +935,7 @@ function generateSVGLineChart1() {
   }
 
   return `
-    <svg viewBox="0 0 ${w} ${h}" class="w-full h-auto max-h-[350px] font-sans">
+    <svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" style="display:block; width:100%; min-height:300px;" class="w-full font-sans" xmlns="http://www.w3.org/2000/svg">
       ${gridSvg}
       <polyline fill="none" stroke="#94a3b8" stroke-width="2.5" points="${usPoints}" />
       <polyline fill="none" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round" points="${twPoints}" />
@@ -1000,7 +1000,7 @@ function generateSVGBarChart2() {
   });
 
   return `
-    <svg viewBox="0 0 ${w} ${h}" class="w-full h-auto max-h-[320px] font-sans">
+    <svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" style="display:block; width:100%; min-height:280px;" class="w-full font-sans" xmlns="http://www.w3.org/2000/svg">
       ${gridSvg}
       ${barsSvg}
     </svg>
@@ -1072,7 +1072,7 @@ function generateSVGAreaChart3() {
   });
 
   return `
-    <svg viewBox="0 0 ${w} ${h}" class="w-full h-auto max-h-[350px] font-sans">
+    <svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" style="display:block; width:100%; min-height:300px;" class="w-full font-sans" xmlns="http://www.w3.org/2000/svg">
       ${alertBand}
       ${gridSvg}
       <polyline fill="none" stroke="#2563eb" stroke-width="3" points="${taiexCoords}" />
