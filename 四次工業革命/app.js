@@ -1,3 +1,62 @@
+
+// 內建總經圖表自體完備資料庫 (保證零依賴、即使舊版快取也絕對不報錯)
+const CHARTS_DATA_FALLBACK = {
+  gdpCatchup: {
+    title: '1960–2026 美台人均實質 GDP (國際美元) 與追趕比率',
+    source: 'Maddison Project Database (2011 基準國際美元) 與 IMF 世界經濟展望 (2026.10)',
+    labels: ['1960', '1980', '2001', '2010', '2026 (PPP)'],
+    usData: [18057, 29611, 45878, 49267, 95210],
+    twData: [2157, 8384, 26204, 37385, 103740],
+    ratios: ['11.9%', '28.3%', '57.1%', '75.9%', '109.0%'],
+    tableRows: [
+      ['1960 年', '二次工業革命尾聲', '$18,057 美元', '$2,157 國際美元', '11.9%', '勞力密集輕工業、加工出口區、進口替代轉出口導向'],
+      ['1980 年', '三次工業革命啟動', '$29,611 美元', '$8,384 國際美元', '28.3%', '十大建設完成重工業，新竹科學園區成立切入 PC 與零組件 OEM'],
+      ['2001 年', '三次工業革命成熟', '$45,878 美元', '$26,204 國際美元', '57.1%', '網際網路與全球化外包，台積電開創晶圓代工 Foundry 模式'],
+      ['2010 年', '四次工業革命前夕', '$49,267 美元', '$37,385 國際美元', '75.9%', '智慧型手機與行動晶片，先進封裝與高階製程逼近歐美'],
+      ['2026 年', '四次工業革命深化', '$95,210 美元', '$103,740 國際美元', '109.0%', '生成式 AI 爆發，先進製程與 AI 伺服器成為全球算力硬瓶頸']
+    ],
+    insights: [
+      '追趕速度超常速：六十餘年間台灣相對於美國的人均產值比例由約 1/9 逆轉至 109%，實現東亞奇蹟中的「大趨同」。',
+      '第四次工業革命成為關鍵反超點：受惠於全球算力基礎設施爆發，台灣先進晶圓與高階伺服器取得硬瓶頸自然壟斷。',
+      '名目 vs PPP 落差：雖然 PPP 人均超越美國，但名目匯率換算值（約 4.4 萬美元）仍不及美國一半，反映國內非貿易財價格與薪資結構性偏低。'
+    ]
+  },
+
+  manufacturingShare: {
+    title: '台灣製造業佔 GDP 比重逆勢攀升 (製造業高值化)',
+    source: '行政院主計總處 (DGBAS) 2025-2026 國民所得統計年報與美國 BEA 資料庫',
+    tableRows: [
+      ['美國製造業 (2025)', '10.50%', '去工業化完成，專注大模型演算法、軟體生態與無形資產攫取超額利潤'],
+      ['台灣製造業 (2020)', '33.20%', '疫情前資通訊硬體出口導向，維持製造業基底'],
+      ['台灣製造業 (2025/2026)', '38.54%', '製造業高值化逆勢回升，整體工業產值佔比達 43.45%，罕見反全球去工業化潮流'],
+      ['台灣服務業 (2025)', '55.11%', '佔比相對萎縮，承載多數就業人口，面臨生產力停滯與薪資體感溫差']
+    ],
+    insights: [
+      '逆向工業化現象：不同於英美及多數 OECD 國家製造業持續降至 10%–15%，台灣製造業比重逆勢攀升逼近四成。',
+      '就業與產值高度錯配：半導體業以不到 35 萬人（佔總就業約 3%）創造逾兩成 GDP，服務業吸納逾六成人口卻僅創造 55% 產值。'
+    ]
+  },
+
+  tsmcWeightTimeline: {
+    title: '台積電（2330）權重演變與「台積電條款」放寬歷史點位',
+    source: '臺灣證券交易所 (TWSE) 與金管會證券期貨局公告',
+    tableRows: [
+      ['2016 年', '17.5%', '32.0%', '智慧型手機旗艦晶片大量出貨，奠定先進製程領導地位'],
+      ['2019 年', '23.0%', '38.0%', '7 奈米 EUV 率先量產，與競爭對手拉開代際差距'],
+      ['2021 年', '28.5%', '47.0%', '全球晶片缺貨潮，台積電在加權指數權重逼近三成門檻'],
+      ['2023 年', '30.2%', '49.5%', '生成式 AI 與高效能運算 (HPC) 爆發，臺灣 50 權重逼近五成'],
+      ['2025 年 5 月', '35.8%', '54.0%', '【法規第一波】：金管會宣布被動式 ETF 追蹤指數不再受 30% 單一持股上限約束'],
+      ['2026 年 4 月', '41.5%', '58.5%', '【法規第二波】：主動型基金與主動式 ETF 單一個股上限由 10% 鬆綁至 25% (台積電條款)'],
+      ['2026 年下半年', '43.2%', '60.5%', '指數「單一因子化」，HHI 指數破 0.33，有效持股數 Neff 跌破 3 檔']
+    ],
+    insights: [
+      '單一因子化常態：加權指數權重逾 40%、臺灣 50 逾 60%，非系統性風險無法被分散，拉積盤成為統計必然。',
+      '制度被迫適應現實：舊法規 10% 與 30% 限制導致巨大追蹤誤差與經理人操作扭曲，促成金管會兩波歷史性鬆綁。'
+    ]
+  }
+};
+
+
 /**
  * 核心應用邏輯與互動事件控制器
  */
@@ -45,7 +104,7 @@ function initNavigation() {
 
 function navigateTo(viewId) {
   state.activeView = viewId;
-  window.location.hash = viewId;
+  try { window.location.hash = viewId; } catch(e){}
 
   // 更新側邊欄 highlight
   document.querySelectorAll('[data-nav-target]').forEach(el => {
@@ -700,9 +759,10 @@ function displayQuizResult() {
 
 // 總經數據圖表中心視圖 (原生響應式向量 SVG 與結構化明細表，保證 100% 離線可用)
 function renderChartsView(container) {
-  const gdp = COURSE_DATA.chartsData.gdpCatchup;
-  const mfg = COURSE_DATA.chartsData.manufacturingShare;
-  const tsmc = COURSE_DATA.chartsData.tsmcWeightTimeline;
+  const cd = (typeof COURSE_DATA !== 'undefined' && COURSE_DATA && COURSE_DATA.chartsData) ? COURSE_DATA.chartsData : CHARTS_DATA_FALLBACK;
+  const gdp = (cd && cd.gdpCatchup) ? cd.gdpCatchup : CHARTS_DATA_FALLBACK.gdpCatchup;
+  const mfg = (cd && cd.manufacturingShare) ? cd.manufacturingShare : CHARTS_DATA_FALLBACK.manufacturingShare;
+  const tsmc = (cd && cd.tsmcWeightTimeline) ? cd.tsmcWeightTimeline : CHARTS_DATA_FALLBACK.tsmcWeightTimeline;
 
   container.innerHTML = `
     <div class="animate-fade-in max-w-4xl mx-auto pb-16">
