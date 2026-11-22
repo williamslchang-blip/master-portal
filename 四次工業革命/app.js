@@ -124,16 +124,18 @@ function renderCurrentView() {
   const container = document.getElementById('view-container');
   if (!container) return;
 
-  if (state.activeView.startsWith('ch')) {
-    renderChapterView(state.activeView, container);
+  if (state.activeView === 'charts') {
+    renderChartsView(container);
   } else if (state.activeView === 'lab') {
     renderLabView(container);
   } else if (state.activeView === 'quiz') {
     renderQuizView(container);
-  } else if (state.activeView === 'charts') {
-    renderChartsView(container);
   } else if (state.activeView === 'glossary') {
     renderGlossaryView(container);
+  } else if (/^ch\d+$/.test(state.activeView)) {
+    renderChapterView(state.activeView, container);
+  } else {
+    renderChapterView('ch1', container);
   }
 }
 
